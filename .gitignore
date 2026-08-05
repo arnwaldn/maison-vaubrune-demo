@@ -3,6 +3,7 @@ node_modules/
 .next/
 out/
 .vercel/
+*.tsbuildinfo
 
 # Secrets : seuls les exemples vides sont versionnés
 .env*
