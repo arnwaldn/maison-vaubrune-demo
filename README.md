@@ -31,14 +31,74 @@ entreprises actives, web) sont documentés dans
 
 ## Lancer en local
 
-Le socle applicatif arrive à la tranche C1 — cette section sera complétée
-avec les commandes exactes (`npm install`, `npm run dev`, `npm run controle`).
+Il faut Node 20 ou plus (le socle est vérifié sur Node 24).
+
+```bash
+npm install     # installe les dépendances
+npm run dev     # serveur de développement sur http://localhost:3000
+npm run build   # construction de production
+npm run start   # sert la construction de production sur le port 3000
+npm run typecheck   # tsc --noEmit, zéro erreur attendue
+```
+
+Aucune variable d'environnement n'est nécessaire pour construire ou lancer le
+projet : `NEXT_PUBLIC_URL_SITE` sert uniquement à écrire des adresses absolues
+dans les métadonnées, le plan du site et le fichier robots, et retombe sur
+`http://localhost:3000` quand elle n'est pas définie.
 
 ## Refaire les mesures
 
 Les quatre notes (rapidité, accessibilité, bonnes pratiques, référencement)
-sont mesurées, datées et versionnées dans `mesures/`. La commande exacte pour
-les refaire sera documentée ici à la tranche C8.
+sont mesurées, datées et versionnées dans `mesures/`. La mesure se fait sur la
+construction de production, pas sur le serveur de développement :
+
+```bash
+npm run build
+npm run start &                       # sert le site sur le port 3000
+npx lighthouse http://localhost:3000 \
+  --output=json \
+  --output-path=./mesures/lighthouse-a-blanc-AAAA-MM-JJ.json \
+  --only-categories=performance,accessibility,best-practices,seo \
+  --chrome-flags=--headless
+```
+
+Mesure de référence du socle (2026-08-06, Lighthouse 13.4.1, profil mobile,
+page d'accueil) : **rapidité 98, accessibilité 100, bonnes pratiques 100,
+référencement 100**. Décalage de mise en page cumulé 0,0001 ; premier affichage
+de contenu 1,54 s ; plus grand affichage de contenu 2,29 s ; JavaScript de
+premier chargement 103 ko.
+
+Ces notes sont relevées **hors ligne, sur la machine de développement**. Elles
+donnent la santé du socle, pas la performance servie aux visiteurs : la mesure
+qui engage commercialement sera refaite sur le déploiement réel.
+
+## En-têtes de sécurité
+
+Ils vivent dans `vercel.json` et reprennent le jeu du site portfolio. Deux
+points méritent d'être compris avant d'y toucher — `vercel.json` est du JSON
+strict, il ne peut pas porter de commentaire, d'où cette section.
+
+**`Permissions-Policy: payment=()` est conservé, volontairement** (décision
+D8). L'encaissement passe par une page de paiement hébergée chez le
+prestataire : le visiteur quitte le site, paie chez lui, revient. La boutique
+n'a donc jamais besoin de l'API `PaymentRequest` du navigateur, et le dire
+dans un en-tête est une preuve vérifiable de plus. Si un jour on veut le
+formulaire de carte **embarqué dans la page** (les « Elements » de Stripe), il
+faudra ouvrir trois choses : `payment=(self "https://js.stripe.com")` dans
+`Permissions-Policy`, `frame-src https://js.stripe.com` et
+`script-src https://js.stripe.com` dans la politique de sécurité du contenu.
+Tant que la redirection suffit, on ne les ouvre pas.
+
+**Alerte ouverte : `script-src 'self'` et Next.** La politique interdit tout
+script en ligne. Or l'App Router de Next dépose le contenu de la page dans des
+balises `<script>` sans `src` (15 sur l'accueil au 2026-08-06). Sur le
+portfolio, écrit en Astro sans script en ligne, cette politique passe ; ici,
+elle bloquerait l'hydratation dès le premier déploiement. La tranche C1 ne
+déploie pas, donc rien n'est cassé aujourd'hui, mais **il faut trancher avant
+la mise en ligne** entre trois voies : jetons à usage unique posés par un
+intercepteur (correct, mais rend toutes les pages dynamiques), `'unsafe-inline'`
+sur `script-src` (l'en-tête cesse d'être une preuve), ou export entièrement
+statique. Le choix appartient à la tranche de déploiement.
 
 ## Les décisions et pourquoi
 
