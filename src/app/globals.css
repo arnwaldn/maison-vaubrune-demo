@@ -1,0 +1,159 @@
+@import "tailwindcss";
+
+/* ===========================================================================
+   POLICES — deux familles, auto-hébergées, sous-ensemble latin uniquement
+   ===========================================================================
+
+   Choix : Newsreader Variable (titres) + Work Sans Variable (texte courant).
+   Volontairement différent du site portfolio (Fraunces + Bricolage Grotesque)
+   pour que les deux vitrines ne se ressemblent pas.
+
+   Pourquoi Newsreader pour les titres. C'est une serif de labeur à
+   modulation marquée et terminaisons franches, dessinée pour l'écran : elle
+   évoque l'étiquette gravée et la carte imprimée, registre juste pour une
+   épicerie fine. Là où Fraunces joue la douceur et l'excentricité (axes
+   SOFT et WONK), Newsreader tient une élégance sobre qui ne fatigue pas sur
+   une fiche produit longue. Un seul fichier variable couvre 200 à 800.
+
+   Pourquoi Work Sans pour le texte. Grotesque humaniste à faible contraste,
+   dessinée pour les tailles moyennes d'écran : elle se tait à côté de la
+   serif et reste lisible à 16 px, y compris sur les mentions légales qui
+   font le gros du volume de ce projet. Bricolage Grotesque, à l'inverse,
+   est une display expressive — parfaite en titre sur le portfolio, mauvaise
+   idée en corps de texte ici.
+
+   Deux familles, pas trois : chaque famille supplémentaire est un aller-
+   retour réseau de plus avant le premier rendu, et la note de rapidité
+   est un engagement commercial sur ce projet.
+
+   Auto-hébergement : les fichiers viennent de @fontsource-variable et sont
+   empaquetés par Next dans /_next/static/media (empreinte dans le nom, donc
+   cache immuable — voir vercel.json). Aucun appel à un domaine tiers, ce qui
+   permet une CSP `font-src 'self'` et zéro cookie tiers.
+
+   Sous-ensemble : la version 5.3.0 de @fontsource-variable ne publie plus de
+   feuille par sous-ensemble (index.css et wght.css déclarent les trois
+   sous-ensembles : latin, latin-ext et vietnamese dans le même fichier). On
+   ne se sert donc pas de ces feuilles : on désigne directement le seul
+   fichier latin. Le français y est entièrement couvert — lettres accentuées,
+   ligature oe (U+0153), guillemets (U+00AB/U+00BB), apostrophe typographique
+   (U+2019) et espace insécable (U+00A0).
+
+   Déclaration : les deux @font-face ne sont pas écrites ici mais engendrées
+   par `next/font/local` (voir src/app/polices.ts, qui explique pourquoi —
+   décalage de mise en page mesuré). Ce fichier ne fait que brancher les
+   variables CSS produites sur les jetons de Tailwind.
+   =========================================================================== */
+
+/* ===========================================================================
+   JETONS DE DESIGN — palette « épicerie fine chaleureuse »
+   ===========================================================================
+
+   Cinq matières : encre profonde, crème et papier, vert olive, ocre, terre
+   cuite. Les variantes claires (`-clair`) sont réservées au décor (aplats,
+   filets, silhouettes) ; les variantes de base sont assez sombres pour
+   porter du texte sur crème ou sur papier.
+
+   Contrastes vérifiés sur le fond crème (#faf6ef) :
+     encre        #23201b  →  15,0:1   (AAA)
+     encre douce  #55503f  →   7,5:1   (AAA)
+     olive        #47552f  →   7,5:1   (AAA)
+     terre cuite  #8f4426  →   6,4:1   (AA large + AA texte courant)
+     ocre         #7a5714  →   6,1:1   (AA large + AA texte courant)
+   Sur le fond papier (#f1e8d9), le moins favorable reste l'ocre à 5,4:1 —
+   au-dessus du seuil AA de 4,5:1 pour le texte courant.
+
+   La bague de focus utilise la terre cuite : 6,4:1 sur crème, très au-dessus
+   du seuil de 3:1 exigé pour un élément d'interface non textuel.
+   =========================================================================== */
+
+@theme {
+  /* Matières */
+  --color-encre: #23201b;
+  --color-encre-douce: #55503f;
+  --color-creme: #faf6ef;
+  --color-papier: #f1e8d9;
+  --color-filet: #ddd0b6;
+
+  /* Accents */
+  --color-olive: #47552f;
+  --color-olive-clair: #6e8046;
+  --color-ocre: #7a5714;
+  --color-ocre-clair: #c89b3c;
+  --color-terre: #8f4426;
+  --color-terre-clair: #c0653f;
+
+  /* Familles — les piles de repli sont déclarées dans src/app/polices.ts */
+  --font-titre: var(--police-titre);
+  --font-texte: var(--police-texte);
+
+  /* Échelle d'affichage — fluide, sans requête de média */
+  --text-affiche: clamp(2.5rem, 1.7rem + 3.6vw, 4rem);
+  --text-affiche--line-height: 1.04;
+  --text-affiche--letter-spacing: -0.02em;
+  --text-titre: clamp(1.5rem, 1.2rem + 1.3vw, 2rem);
+  --text-titre--line-height: 1.18;
+  --text-titre--letter-spacing: -0.01em;
+  --text-chapeau: clamp(1.0625rem, 1rem + 0.4vw, 1.25rem);
+  --text-chapeau--line-height: 1.6;
+
+  /* Largeurs de composition */
+  --container-lisible: 36rem;
+  --container-page: 68rem;
+}
+
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--color-creme);
+    color: var(--color-encre);
+    font-family: var(--font-texte);
+    font-optical-sizing: auto;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-titre);
+    font-weight: 600;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--color-terre);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  ::selection {
+    background-color: var(--color-ocre-clair);
+    color: var(--color-encre);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
