@@ -1,0 +1,18 @@
+# Dépendances et sorties de construction
+node_modules/
+.next/
+out/
+.vercel/
+
+# Secrets : seuls les exemples vides sont versionnés
+.env*
+!.env.example
+
+# Outillage local
+.git-msg-*.txt
+test-results/
+playwright-report/
+.DS_Store
+
+# NOTE : mesures/*.json est VOLONTAIREMENT versionné — les mesures datées
+# sont une preuve publiée, pas un artefact de construction.
