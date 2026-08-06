@@ -6,14 +6,16 @@ import { useState } from 'react';
 import { MentionRetractation } from '@/composants/panier/MentionRetractation';
 import { RecapitulatifTotaux } from '@/composants/panier/RecapitulatifTotaux';
 import { formaterEuros } from '@/lib/argent';
+import { mettreEnAttente } from '@/lib/commandes/depot-local';
 import {
   trouverArticle,
   unionAllergenes,
   type ArticlePanier,
 } from '@/lib/panier/catalogue-panier';
 import { usePanier } from '@/lib/panier/contexte-panier';
-import { calculerTotaux, type LigneCalculee } from '@/lib/panier/totaux';
-import { LIBELLE_ZONE } from '@/lib/types';
+import { calculerTotaux, type LigneCalculee, type Totaux } from '@/lib/panier/totaux';
+import { stockageLocal } from '@/lib/stockage-navigateur';
+import { LIBELLE_ZONE, type CodeZone } from '@/lib/types';
 import { zoneDepuisCodePostal } from '@/lib/zones';
 
 /**
@@ -29,12 +31,29 @@ import { zoneDepuisCodePostal } from '@/lib/zones';
  * démontre l'article L. 221-14 : le bouton d'engagement porte la mention
  * « Commander avec obligation de paiement », sans variante ni raccourci.
  *
- * Elle refuse en revanche de simuler ce qui n'existe pas encore. Le bouton
- * final est INERTE en C4 et le dit ; le formulaire n'envoie rien nulle part et
- * le dit ; les coordonnées ne quittent pas la mémoire de l'onglet — elles ne
- * sont même pas écrites dans le stockage local, contrairement au panier, parce
- * qu'un nom et une adresse laissés dans un navigateur de démonstration n'ont
- * aucune raison d'y traîner.
+ * ---------------------------------------------------------------------------
+ * CE QUI PART SUR LE RÉSEAU, ET CE QUI N'EN PART JAMAIS (décision D2)
+ * ---------------------------------------------------------------------------
+ *
+ * Depuis la tranche C5, le bouton final agit : il demande une session de
+ * paiement à `/api/paiement/session`. Le corps envoyé contient TROIS choses, et
+ * trois seulement — les lignes réduites à `{ sku, quantite, composition? }`, la
+ * destination, et le total annoncé. Ni nom, ni adresse, ni code postal, ni
+ * courriel : les coordonnées saisies ci-dessous restent dans ce navigateur et
+ * rejoignent la commande rangée dans son stockage local. Le prestataire de
+ * paiement collecte les siennes de son côté, sur sa page hébergée.
+ *
+ * Le total annoncé n'est pas de la confiance : le serveur relit le catalogue,
+ * refait le calcul complet, et refuse la demande si un centime diffère. La
+ * page ne fixe pas les prix — elle les affiche.
+ *
+ * ORDRE DES DEUX ÉCRITURES, écart consigné. La commande en attente est écrite
+ * APRÈS la réponse du serveur, et non avant l'envoi : c'est le serveur qui
+ * fabrique la référence (elle n'est pas dans le corps envoyé, justement parce
+ * que rien de ce que le navigateur affirme ne fait autorité), et écrire une
+ * commande sous une référence provisoire qu'il faudrait ensuite réécrire
+ * ferait exister deux références pour une même commande. L'écriture est
+ * synchrone et précède immédiatement la redirection.
  *
  * ---------------------------------------------------------------------------
  * Un récapitulatif NON MODIFIABLE, recalculé depuis le même état
@@ -51,6 +70,49 @@ import { zoneDepuisCodePostal } from '@/lib/zones';
 /** Assez pour rejeter une saisie qui n'est pas une adresse ; pas plus. */
 const FORME_COURRIEL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
+/** L'unique route serveur du projet. */
+const ROUTE_SESSION = '/api/paiement/session';
+
+/** Ce que la route rend quand tout va bien, lu sans rien supposer. */
+interface ReponseSession {
+  readonly url: string;
+  readonly reference: string;
+  readonly mode: 'test' | 'simule';
+}
+
+function lireReponseSession(charge: unknown): ReponseSession | null {
+  if (typeof charge !== 'object' || charge === null) {
+    return null;
+  }
+
+  const { url, reference, mode } = charge as {
+    readonly url?: unknown;
+    readonly reference?: unknown;
+    readonly mode?: unknown;
+  };
+
+  if (typeof url !== 'string' || typeof reference !== 'string') {
+    return null;
+  }
+
+  if (mode !== 'test' && mode !== 'simule') {
+    return null;
+  }
+
+  return { url, reference, mode };
+}
+
+/** Le message d'un refus, tel que la route l'a rédigé, ou un repli honnête. */
+function lireMessageRefus(charge: unknown): string | null {
+  if (typeof charge !== 'object' || charge === null) {
+    return null;
+  }
+
+  const { message } = charge as { readonly message?: unknown };
+
+  return typeof message === 'string' && message !== '' ? message : null;
+}
+
 export function IlotCommande({
   catalogue,
 }: {
@@ -63,6 +125,8 @@ export function IlotCommande({
   const [codePostal, setCodePostal] = useState('');
   const [courriel, setCourriel] = useState('');
   const [conditionsAcceptees, setConditionsAcceptees] = useState(false);
+  const [envoiEnCours, setEnvoiEnCours] = useState(false);
+  const [erreur, setErreur] = useState<string | null>(null);
 
   if (!pretALEmploi) {
     return (
@@ -105,6 +169,89 @@ export function IlotCommande({
     zoneDuCodePostal !== null &&
     !codePostalIncoherent &&
     FORME_COURRIEL.test(courriel.trim());
+
+  /**
+   * LA SOUMISSION. Une demande de session, une écriture locale, une redirection.
+   *
+   * Aucun `try` autour de la redirection elle-même : `location.assign()` ne
+   * rend pas la main. Le `finally` qui rallume le bouton n'est donc atteint que
+   * sur les chemins d'échec, ce qui est exactement ce qu'on veut — rallumer un
+   * bouton d'engagement pendant qu'une redirection est en cours inviterait à
+   * cliquer deux fois.
+   */
+  const soumettre = async () => {
+    const { expedition } = totaux;
+
+    /* Le bouton est déjà éteint dans ces deux cas ; la garde est ici parce
+       qu'un état impossible ne doit pas produire un appel réseau bancal. */
+    if (expedition.statut !== 'calcule' || totaux.totalCentimes === null) {
+      return;
+    }
+
+    setEnvoiEnCours(true);
+    setErreur(null);
+
+    try {
+      const reponse = await fetch(ROUTE_SESSION, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(corpsDeLaDemande(totaux, etat.zone, totaux.totalCentimes)),
+      });
+
+      const charge: unknown = await reponse.json().catch(() => null);
+
+      if (!reponse.ok) {
+        setErreur(
+          lireMessageRefus(charge) ??
+            'La demande de paiement a été refusée par le serveur, sans explication lisible. Votre panier est intact.',
+        );
+        return;
+      }
+
+      const session = lireReponseSession(charge);
+
+      if (session === null) {
+        setErreur(
+          'Le serveur a répondu quelque chose que cette page ne sait pas lire. Aucun paiement n’a été engagé, votre panier est intact.',
+        );
+        return;
+      }
+
+      /* L'écriture locale précède immédiatement la redirection : c'est elle
+         qui portera les coordonnées et le récapitulatif jusqu'à la page de
+         confirmation, puisque cet onglet va être détruit. Voir l'écart
+         consigné en tête de fichier sur l'ORDRE des deux écritures. */
+      const stockage = stockageLocal();
+
+      if (stockage !== null) {
+        mettreEnAttente(stockage, {
+          reference: session.reference,
+          lignes: totaux.lignes,
+          zone: etat.zone,
+          totaux: {
+            sousTotal: totaux.sousTotalCentimes,
+            port: expedition.fraisCentimes,
+            total: totaux.totalCentimes,
+          },
+          coordonnees: {
+            prenomNom: nom.trim(),
+            adresse: adresse.trim(),
+            codePostal: codePostal.trim(),
+            courriel: courriel.trim(),
+          },
+          modePaiement: session.mode,
+        });
+      }
+
+      window.location.assign(session.url);
+    } catch {
+      setErreur(
+        'Le serveur n’a pas répondu. Aucun paiement n’a été engagé et votre panier est intact : vérifiez votre connexion, puis réessayez.',
+      );
+    } finally {
+      setEnvoiEnCours(false);
+    }
+  };
 
   return (
     <div className="mt-10 grid gap-x-12 gap-y-10 pb-4 lg:grid-cols-[minmax(0,1fr)_22rem]">
@@ -162,10 +309,37 @@ export function IlotCommande({
           setConditionsAcceptees={setConditionsAcceptees}
           expeditionPossible={totaux.expedition.statut === 'calcule'}
           coordonneesCompletes={coordonneesCompletes}
+          envoiEnCours={envoiEnCours}
+          erreur={erreur}
+          soumettre={soumettre}
         />
       </div>
     </div>
   );
+}
+
+/**
+ * Le corps envoyé au serveur — les trois seuls champs qu'il accepte.
+ *
+ * Les lignes viennent de `totaux.lignes`, c'est-à-dire des lignes DÉJÀ
+ * RAPPROCHÉES du catalogue, et non de `etat.lignes` : une référence retirée du
+ * rayon depuis que le panier a été rempli est ainsi écartée ici, comme elle
+ * l'est à l'affichage. Envoyer une ligne que la page n'a pas chiffrée ferait
+ * refuser la demande pour un article que le visiteur ne voit nulle part.
+ *
+ * `composition` n'est posée que lorsqu'elle existe : `exactOptionalPropertyTypes`
+ * distingue le champ absent du champ à `undefined`, et `JSON.stringify` non.
+ */
+function corpsDeLaDemande(totaux: Totaux, zone: CodeZone, totalCentimes: number) {
+  return {
+    lignes: totaux.lignes.map(({ ligne }) =>
+      ligne.composition === undefined
+        ? { sku: ligne.sku, quantite: ligne.quantite }
+        : { sku: ligne.sku, quantite: ligne.quantite, composition: ligne.composition },
+    ),
+    zone,
+    totalAnnonceCentimes: totalCentimes,
+  };
 }
 
 /* -------------------------------------------------------------------------- */
@@ -263,10 +437,15 @@ function Coordonnees({
       </h2>
 
       <p className="mt-3 max-w-lisible rounded-sm border border-filet bg-papier px-4 py-3 text-sm leading-relaxed text-encre">
-        <span className="font-semibold">La démonstration n’envoie rien.</span> Ce que
-        vous saisissez ici reste dans la mémoire de cet onglet&nbsp;: aucun serveur
-        n’est appelé, aucun courriel n’est expédié, rien n’est même écrit dans votre
-        navigateur. Rafraîchir la page efface ces champs.
+        <span className="font-semibold">
+          La démonstration n’envoie rien&nbsp;: vos coordonnées restent dans votre
+          navigateur.
+        </span>{' '}
+        Ouvrir le paiement appelle bien le serveur, mais la demande ne contient que
+        les articles, la destination et le total&nbsp;: pas votre nom, pas votre
+        adresse, pas votre courriel. Ce que vous saisissez ici rejoint la commande
+        rangée dans ce navigateur, et rien d’autre. Aucun courriel n’est expédié.
+        Vous pouvez le vérifier vous-même dans l’onglet réseau de votre navigateur.
       </p>
 
       {/* Un vrai `<form>` pour que les navigateurs et les lecteurs d'écran
@@ -403,24 +582,35 @@ function messageCodePostal(
  * aussi le lien via `aria-describedby`, si bien qu'un lecteur d'écran annonce
  * l'échéance avant même l'activation.
  *
- * LE BOUTON RESTE ÉTEINT EN TOUTES CIRCONSTANCES, et la raison affichée dit
- * laquelle des quatre s'applique. Les trois premières sont de VRAIES règles,
- * déjà en vigueur : expédition impossible, coordonnées incomplètes, conditions
- * non acceptées. La quatrième est l'aveu de la tranche : le paiement arrive
- * ensuite. Un bouton qui s'allumerait pour ne rien faire serait pire qu'un
- * bouton éteint.
+ * LE BOUTON AGIT DEPUIS LA TRANCHE C5. Il reste éteint tant que l'une des
+ * TROIS VRAIES RÈGLES n'est pas satisfaite — expédition possible, coordonnées
+ * complètes, conditions acceptées — et la phrase affichée dit laquelle
+ * manque. La quatrième raison qui l'éteignait en C4, « le paiement arrive à la
+ * tranche suivante », a disparu avec la tranche.
+ *
+ * Pendant l'envoi, le bouton est éteint et son libellé change : c'est la
+ * protection contre le double clic sur un bouton d'engagement, et elle est
+ * visible plutôt que silencieuse.
  */
 function Engagement({
   conditionsAcceptees,
   setConditionsAcceptees,
   expeditionPossible,
   coordonneesCompletes,
+  envoiEnCours,
+  erreur,
+  soumettre,
 }: {
   readonly conditionsAcceptees: boolean;
   readonly setConditionsAcceptees: (valeur: boolean) => void;
   readonly expeditionPossible: boolean;
   readonly coordonneesCompletes: boolean;
+  readonly envoiEnCours: boolean;
+  readonly erreur: string | null;
+  readonly soumettre: () => void;
 }) {
+  const pret = expeditionPossible && coordonneesCompletes && conditionsAcceptees;
+
   return (
     <section
       aria-labelledby="titre-engagement"
@@ -468,11 +658,14 @@ function Engagement({
 
       <button
         type="button"
-        disabled
+        disabled={!pret || envoiEnCours}
+        onClick={soumettre}
         aria-describedby="motif-bouton-final"
-        className="mt-5 w-full cursor-not-allowed rounded-sm border border-encre-douce/40 bg-creme px-4 py-3 text-sm font-semibold text-encre-douce"
+        className="mt-5 w-full rounded-sm border border-olive bg-olive px-4 py-3 text-sm font-semibold text-creme hover:bg-olive-clair disabled:cursor-not-allowed disabled:border-encre-douce/40 disabled:bg-creme disabled:text-encre-douce"
       >
-        Commander avec obligation de paiement
+        {envoiEnCours
+          ? 'Ouverture du paiement…'
+          : 'Commander avec obligation de paiement'}
       </button>
 
       <p
@@ -480,8 +673,22 @@ function Engagement({
         aria-live="polite"
         className="mt-3 text-xs leading-relaxed text-encre-douce"
       >
-        {motifBoutonEteint(expeditionPossible, coordonneesCompletes, conditionsAcceptees)}
+        {motifBouton(
+          expeditionPossible,
+          coordonneesCompletes,
+          conditionsAcceptees,
+          envoiEnCours,
+        )}
       </p>
+
+      {erreur === null ? null : (
+        <p
+          role="alert"
+          className="mt-3 rounded-sm border border-terre/40 bg-creme px-4 py-3 text-xs leading-relaxed text-encre"
+        >
+          {erreur}
+        </p>
+      )}
 
       <p className="mt-3 text-xs leading-relaxed text-encre-douce">
         Le libellé de ce bouton est celui qu’impose l’article L. 221-14 du code de la
@@ -492,11 +699,16 @@ function Engagement({
   );
 }
 
-function motifBoutonEteint(
+function motifBouton(
   expeditionPossible: boolean,
   coordonneesCompletes: boolean,
   conditionsAcceptees: boolean,
+  envoiEnCours: boolean,
 ): string {
+  if (envoiEnCours) {
+    return 'Demande de session de paiement en cours. Ne fermez pas cet onglet : vous allez être redirigé.';
+  }
+
   if (!expeditionPossible) {
     return 'Ce panier ne peut pas être expédié vers la destination choisie : revenez au panier pour changer de destination ou retirer l’article en cause.';
   }
@@ -509,5 +721,5 @@ function motifBoutonEteint(
     return 'Cochez la case d’acceptation des conditions générales de vente : elle est obligatoire.';
   }
 
-  return 'Tout est en ordre. Ce bouton reste néanmoins inerte : le paiement arrive à la tranche suivante, et cette démonstration ne fait semblant de rien.';
+  return 'Ce bouton ouvre le paiement. Vos coordonnées ne partent pas : seuls les articles, la destination et le total sont envoyés, et le serveur recalcule ce total avant d’ouvrir quoi que ce soit.';
 }

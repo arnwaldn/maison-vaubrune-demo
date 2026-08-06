@@ -12,7 +12,7 @@ import {
   type ReactNode,
 } from 'react';
 
-import { CLE_PANIER, ecrire, lire, type StockageCompatible } from '@/lib/panier/persistance';
+import { CLE_PANIER, ecrire, lire } from '@/lib/panier/persistance';
 import {
   ETAT_INITIAL,
   reduirePanier,
@@ -20,6 +20,7 @@ import {
   type EtatPanier,
   type StocksParSku,
 } from '@/lib/panier/reducteur';
+import { stockageLocal } from '@/lib/stockage-navigateur';
 
 /**
  * LE PREMIER ÎLOT CLIENT DU PROJET, et le seul monté sur toutes les pages.
@@ -80,21 +81,10 @@ interface ValeurPanier {
 
 const ContextePanier = createContext<ValeurPanier | null>(null);
 
-/**
- * Le stockage local du navigateur, ou `null` s'il est inaccessible.
- *
- * L'accès à `window.localStorage` lève pour de vrai — navigation privée de
- * certains navigateurs, cookies bloqués par une politique d'entreprise. Le
- * rattrapage est ici, une fois pour toutes : le reste du code n'a qu'un
- * `null` à traiter.
- */
-function stockageLocal(): StockageCompatible | null {
-  try {
-    return window.localStorage;
-  } catch {
-    return null;
-  }
-}
+/* Le rattrapage de `window.localStorage` — qui lève pour de vrai en navigation
+   privée — a quitté ce fichier en C5 pour `@/lib/stockage-navigateur` : la page
+   de confirmation de commande en a besoin elle aussi, et deux copies d'un
+   `try` divergeraient. */
 
 export function FournisseurPanier({
   stocks,

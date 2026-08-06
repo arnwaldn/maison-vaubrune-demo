@@ -18,7 +18,14 @@ import { marchand } from '@/donnees/marchand';
  * site pousse. Restent deux ancres ordinaires, jusqu'aux tranches C3 et C5.
  *
  * Bascule C3 : « Livraison » passe à son tour en `<Link>`. Reste une seule
- * ancre ordinaire, le suivi de commande, jusqu'à la tranche C5.
+ * ancre ordinaire : le suivi de commande.
+ *
+ * Report C5 : cette dernière ancre était annoncée pour C5. La tranche C5 livre
+ * le paiement, les états et le journal — de quoi ALIMENTER un suivi — mais la
+ * page `/suivi-de-commande` qui les affichera relève de C6. L'ancre reste donc
+ * ordinaire une tranche de plus, et le dire vaut mieux que laisser un
+ * commentaire promettre une bascule qui n'a pas eu lieu. La page de
+ * confirmation porte le même report, sous la marque TODO-C6.
  *
  * Ajout C4 : la pastille du panier, dernier élément de la navigation. C'est le
  * SEUL îlot client de cet en-tête — le reste, y compris cette liste, demeure

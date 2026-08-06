@@ -45,8 +45,9 @@ export default function PageCommande() {
           n’ouvrent pas droit à rétractation.
         </p>
         <p className="mt-4 max-w-lisible text-sm leading-relaxed text-encre-douce">
-          Aucun paiement n’est possible sur cette démonstration, et aucune donnée
-          saisie ne quitte cet onglet.
+          Le paiement va jusqu’au bout du parcours, mais n’encaisse rien&nbsp;: écran
+          de simulation qui s’annonce comme tel, ou prestataire agréé en mode test.
+          Vos coordonnées, elles, ne quittent pas ce navigateur.
         </p>
       </section>
 
