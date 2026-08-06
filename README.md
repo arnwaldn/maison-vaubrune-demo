@@ -86,6 +86,57 @@ encaisser un centime réel. Le visiteur reçoit alors la même réponse honnête
 qu'une panne du prestataire (502, « aucun montant n'a été engagé »), et le motif
 exact part au journal du serveur.
 
+## L'espace marchand et le suivi client
+
+**Le catalogue est tenu par le marchand, et la démonstration le prouve sans
+demander d'accès.** `/gestion` est ouvert volontairement — pas de compte, pas
+de mot de passe — et la page le dit en toutes lettres : une boutique livrée met
+cet espace derrière une authentification, la démonstration l'ouvre pour qu'on
+puisse regarder. Il n'y a rien à y protéger : le catalogue est public, les six
+commandes affichées sont un jeu d'essai qui se dit tel, et rien ne quitte le
+navigateur.
+
+Cinq écrans : tableau de bord (compteurs par état, chiffre d'affaires, stocks
+bas), commandes (liste filtrable et détail avec les boutons de changement
+d'état), catalogue (édition en ligne et export JSON), modèles de courriels (les
+cinq messages, lus au moment de la construction), prise en main (le mode
+d'emploi écrit).
+
+**La surcouche s'applique à la vitrine, jamais au tunnel** (décision D24,
+`contenu/decisions/005-surcouche-vitrine-seulement.md`). Modifier un prix dans
+`/gestion/catalogue` change `/boutique` et les fiches ; le panier et le paiement
+restent aux prix du catalogue versionné, parce que **le serveur ne fait jamais
+confiance au navigateur**. Quand le panier contient un article dont le prix de
+vitrine a été modifié, `/commande` affiche la note qui l'explique. C'est un
+moment pédagogique et non une gêne : le visiteur vient de tenter, sans le
+vouloir, une falsification de prix côté client, et il constate qu'elle ne passe
+pas.
+
+Cinq champs sont modifiables, et pas un de plus : le résumé, la mise en avant et
+la disponibilité d'une référence, le prix et le stock de chaque format. Les
+poids et les formats sont des entrées de calcul (frais de port, nombre de pièces
+d'un coffret) ; la prose et les mentions légales relèvent de
+`src/lib/retractation.ts`. Un patch qui tenterait autre chose est ignoré **champ
+par champ** — il applique ce qu'il a le droit d'appliquer et laisse le reste.
+
+**Le suivi client** (`/suivi`) est public et indexable : un client cherche
+« suivi commande » suivi du nom d'une boutique, il ne cherche jamais son propre
+panier. Il y saisit sa référence — les tirets et la casse n'ont pas
+d'importance — et voit la frise payée → préparée → expédiée avec les
+horodatages du journal. Six références d'exemple sont affichées pour essayer
+immédiatement. Aucune référence saisie ne part sur le réseau.
+
+**Le jeu d'essai** (`src/donnees/commandes-amorce.ts`) : six commandes à dates
+absolues figées, quatre états, trois zones. Elles ne sont pas écrites dans le
+stockage, elles sont fusionnées à la lecture ; les faire avancer écrit une
+**copie locale** qui les masque, et « Réinitialiser le jeu d'essai » efface les
+copies, les commandes réellement passées et la surcouche du catalogue. Leurs
+coordonnées se disent jeu d'essai jusqu'au bout — « Client d'essai n° 1 »,
+« 1, rue de l'Exemple », courriels en `.invalid` (domaine réservé par la
+RFC 2606). Leurs trois montants sont écrits en dur et **recalculés par la
+garde** : si un prix du catalogue bouge sous une commande figée,
+`npm run verifier-catalogue` échoue.
+
 ## Refaire les mesures
 
 Les quatre notes (rapidité, accessibilité, bonnes pratiques, référencement)
@@ -107,6 +158,18 @@ page d'accueil) : **rapidité 98, accessibilité 100, bonnes pratiques 100,
 référencement 100**. Décalage de mise en page cumulé 0,0001 ; premier affichage
 de contenu 1,54 s ; plus grand affichage de contenu 2,29 s ; JavaScript de
 premier chargement 103 ko.
+
+Relevés de la tranche C6 (mêmes conditions) : `/suivi` **98 / 100 / 100 / 100**,
+décalage 0. `/gestion` **98 / 100 / 100 / 63** — la note de référencement est en
+retrait parce que la page porte `noindex`, et c'est **voulu**. L'audit en échec
+est `is-crawlable`, un seul, et il échoue parce qu'on le lui a demandé. C'est
+l'application en sens inverse de la décision D19 : `/panier` et `/commande` sont
+restées indexables parce que ce sont des pages de boutique et qu'une note
+effondrée par une consigne y serait indiscernable d'une faute ; l'espace de
+gestion, lui, est la coulisse du marchand, il n'a rien à faire dans un moteur.
+**Cette note n'entre donc pas dans les quatre notes publiées** — elle est
+relevée et expliquée, pas corrigée : la corriger reviendrait à ouvrir l'espace
+de gestion aux robots pour faire un joli chiffre.
 
 Ces notes sont relevées **hors ligne, sur la machine de développement**. Elles
 donnent la santé du socle, pas la performance servie aux visiteurs : la mesure
