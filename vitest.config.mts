@@ -40,12 +40,36 @@ import { defineConfig } from 'vitest/config';
  * refuse un total falsifié, et il a été extrait de la route pour cette seule
  * raison (une route Next ne se couvre pas, une fonction pure si).
  *
- * Restent hors périmètre, et l'assument : `contexte-panier.tsx`, les îlots de
- * `src/composants/` — du React, donc du rendu, donc Playwright — et, en C5,
+ * Extension C6 — CINQ fichiers rejoignent la liste, et la règle qui les y fait
+ * entrer n'a pas changé d'un mot :
+ *
+ * - `catalogue-navigateur.ts` DÉCIDE de ce qu'une surcouche a le droit de
+ *   modifier. Un champ qui passerait au travers du filtre — un poids
+ *   d'expédition, un SKU — déplacerait un prix de port ou orphelinerait une
+ *   ligne de panier. C'est le fichier le plus exposé de la tranche.
+ * - `catalogue.ts` porte `appliquerSurcouche()`, la fusion elle-même, et les
+ *   deux garanties qui tiennent tout : le slug et le SKU ne sont jamais
+ *   réécrits. Elle attendait son implémentation depuis C2 ; elle l'a, elle
+ *   entre donc au périmètre.
+ * - `argent.ts` a cessé d'être un simple formateur : depuis que l'espace de
+ *   gestion laisse SAISIR un prix, il convertit des euros en centimes. C'est
+ *   le seul endroit du projet où un montant naît d'une chaîne de caractères,
+ *   et l'en-tête du fichier explique en dix lignes pourquoi la multiplication
+ *   flottante y est proscrite.
+ * - `commandes/horodatage.ts` et `gestion/projection-marchand.ts` ne décident
+ *   d'aucun montant, mais ils sont PURS, petits, et appelés par cinq écrans :
+ *   les couvrir coûte trente lignes de test et retire deux fichiers de la zone
+ *   grise. Le seuil n'a pas à être héroïque pour être tenu.
+ *
+ * Restent hors périmètre, et l'assument : `contexte-panier.tsx`,
+ * `contexte-surcouche.tsx`, `fournisseurs.tsx`, les îlots et les feuilles de
+ * `src/composants/` — du React, donc du rendu, donc Playwright — et, depuis C5,
  * `app/api/paiement/session/route.ts` (plomberie HTTP, sa décision est dans
  * `validation.ts`), `paiement/stripe.ts` et `paiement/adaptateur.ts` (leurs
  * comportements vérifiables le sont dans `tests/unitaires/paiement.spec.ts` ;
- * ce qui reste est un appel réseau qu'on ne simule pas).
+ * ce qui reste est un appel réseau qu'on ne simule pas). `donnees/` reste hors
+ * périmètre en tant que données — le jeu d'essai est vérifié par un test dédié
+ * qui recalcule ses six totaux, ce qui est plus fort qu'un pourcentage.
  *
  * L'alias `@/` est redéclaré ici parce que Vitest ne lit pas `tsconfig.json` :
  * il reprend la même correspondance que le compilateur et que Next.
@@ -62,8 +86,12 @@ export default defineConfig({
     coverage: {
       provider: 'v8',
       include: [
+        'src/lib/argent.ts',
+        'src/lib/catalogue.ts',
+        'src/lib/catalogue-navigateur.ts',
         'src/lib/expedition.ts',
         'src/lib/zones.ts',
+        'src/lib/gestion/projection-marchand.ts',
         'src/lib/panier/reducteur.ts',
         'src/lib/panier/totaux.ts',
         'src/lib/panier/persistance.ts',
@@ -71,6 +99,7 @@ export default defineConfig({
         'src/lib/commandes/reference.ts',
         'src/lib/commandes/etats.ts',
         'src/lib/commandes/depot-local.ts',
+        'src/lib/commandes/horodatage.ts',
         'src/lib/paiement/validation.ts',
       ],
       /* `skipFull` masquerait les fichiers à 100 % — c'est-à-dire, ici, les

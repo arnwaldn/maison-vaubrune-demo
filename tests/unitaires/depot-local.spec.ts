@@ -8,8 +8,10 @@ import {
   lireAttente,
   lireCommande,
   lireCommandes,
+  lireCommandesLocales,
   mettreEnAttente,
   promouvoirEnPayee,
+  purgerCommandesLocales,
   VERSION_COMMANDES,
   type StockageCommandes,
 } from '@/lib/commandes/depot-local';
@@ -440,5 +442,181 @@ describe('appliquerTransitionEnregistree', () => {
 
     expect(resultat.ok).toBe(false);
     expect(!resultat.ok && resultat.motif).toContain('refusé l’écriture');
+  });
+});
+
+/* -------------------------------------------------------------------------- */
+/* Le jeu d'essai : fusion, masquage, copie à l'écriture (tranche C6)          */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * LA COPIE À L'ÉCRITURE.
+ *
+ * Six commandes d'amorce peuplent l'espace de gestion sans jamais être écrites
+ * dans le stockage. Faire avancer l'une d'elles doit en écrire une COPIE
+ * locale, qui masque l'originale à la lecture suivante — et l'amorce doit
+ * rester intacte, en mémoire, pour que « Réinitialiser le jeu d'essai » rende
+ * exactement l'état de départ.
+ *
+ * C'est le seul endroit du projet où deux sources de commandes coexistent, et
+ * les trois cas qui comptent sont ici : la fusion, le masquage, et le fait que
+ * l'amorce reçue N'EST PAS MODIFIÉE.
+ */
+describe('le jeu d’essai et la copie à l’écriture', () => {
+  const REFERENCE_AMORCE = 'MVB-20260718-7F2B';
+
+  function amorce(): readonly Commande[] {
+    return [
+      {
+        ...commandePayee(),
+        reference: REFERENCE_AMORCE,
+        etat: 'preparee',
+        journal: [
+          { etat: 'payee', horodatage: '2026-07-18T09:12:00.000Z' },
+          { etat: 'preparee', horodatage: '2026-07-19T08:05:00.000Z' },
+        ],
+      },
+    ];
+  }
+
+  it('rend l’amorce seule quand le navigateur n’a rien écrit', () => {
+    const stockage = stockageMemoire();
+
+    expect(lireCommandes(stockage, amorce())).toHaveLength(1);
+    expect(lireCommandesLocales(stockage)).toHaveLength(0);
+  });
+
+  it('rend l’amorce PUIS les commandes locales', () => {
+    const stockage = stockageMemoire({ [CLE_COMMANDES]: enveloppe([commandePayee()]) });
+    const toutes = lireCommandes(stockage, amorce());
+
+    expect(toutes.map((commande) => commande.reference)).toEqual([
+      REFERENCE_AMORCE,
+      REFERENCE,
+    ]);
+  });
+
+  it('ignore l’amorce quand on ne la passe pas — le tunnel n’en veut pas', () => {
+    const stockage = stockageMemoire({ [CLE_COMMANDES]: enveloppe([commandePayee()]) });
+
+    expect(lireCommandes(stockage)).toHaveLength(1);
+    expect(lireCommande(stockage, REFERENCE_AMORCE)).toBeNull();
+  });
+
+  it('ÉCRIT UNE COPIE quand on fait avancer une commande d’amorce', () => {
+    const stockage = stockageMemoire();
+    const jeu = amorce();
+
+    const resultat = appliquerTransitionEnregistree(
+      stockage,
+      REFERENCE_AMORCE,
+      'expediee',
+      PLUS_TARD,
+      jeu,
+    );
+
+    expect(resultat.ok).toBe(true);
+
+    const locales = lireCommandesLocales(stockage);
+
+    expect(locales).toHaveLength(1);
+    expect(locales[0]?.reference).toBe(REFERENCE_AMORCE);
+    expect(locales[0]?.etat).toBe('expediee');
+    /* L'AMORCE N'A PAS BOUGÉ : c'est ce qui rend la réinitialisation exacte. */
+    expect(jeu[0]?.etat).toBe('preparee');
+    expect(jeu[0]?.journal).toHaveLength(2);
+  });
+
+  it('la copie MASQUE l’originale, sans la dupliquer à l’affichage', () => {
+    const stockage = stockageMemoire();
+    const jeu = amorce();
+
+    appliquerTransitionEnregistree(
+      stockage,
+      REFERENCE_AMORCE,
+      'expediee',
+      PLUS_TARD,
+      jeu,
+    );
+
+    const toutes = lireCommandes(stockage, jeu);
+
+    expect(toutes).toHaveLength(1);
+    expect(toutes[0]?.etat).toBe('expediee');
+    expect(toutes[0]?.journal).toHaveLength(3);
+  });
+
+  it('REMPLACE la copie au second changement d’état, sans en créer une seconde', () => {
+    const stockage = stockageMemoire();
+    const jeu = amorce();
+
+    appliquerTransitionEnregistree(stockage, REFERENCE_AMORCE, 'expediee', PLUS_TARD, jeu);
+    const second = appliquerTransitionEnregistree(
+      stockage,
+      REFERENCE_AMORCE,
+      'annulee',
+      PLUS_TARD,
+      jeu,
+    );
+
+    /* Expédiée est un état terminal : le second passage est refusé, et rien
+       n'a été ajouté à la liste locale. */
+    expect(second.ok).toBe(false);
+    expect(lireCommandesLocales(stockage)).toHaveLength(1);
+  });
+
+  it('enchaîne deux transitions sur une même copie', () => {
+    const stockage = stockageMemoire();
+    const jeu: readonly Commande[] = [
+      { ...commandePayee(), reference: REFERENCE_AMORCE },
+    ];
+
+    appliquerTransitionEnregistree(stockage, REFERENCE_AMORCE, 'preparee', PLUS_TARD, jeu);
+    appliquerTransitionEnregistree(
+      stockage,
+      REFERENCE_AMORCE,
+      'expediee',
+      '2026-08-08T09:00:00.000Z',
+      jeu,
+    );
+
+    const locales = lireCommandesLocales(stockage);
+
+    expect(locales).toHaveLength(1);
+    expect(locales[0]?.etat).toBe('expediee');
+    expect(locales[0]?.journal).toHaveLength(3);
+  });
+
+  it('refuse une référence absente de l’amorce comme du stockage', () => {
+    const resultat = appliquerTransitionEnregistree(
+      stockageMemoire(),
+      'MVB-20260806-9ZZZ',
+      'preparee',
+      PLUS_TARD,
+      amorce(),
+    );
+
+    expect(resultat.ok).toBe(false);
+  });
+});
+
+describe('purgerCommandesLocales', () => {
+  it('efface la liste ET la commande en attente, et rend l’amorce intacte', () => {
+    const stockage = stockageMemoire({
+      [CLE_COMMANDES]: enveloppe([commandePayee()]),
+      [CLE_ATTENTE]: enveloppe(ATTENTE),
+    });
+    const jeu: readonly Commande[] = [
+      { ...commandePayee(), reference: 'MVB-20260718-7F2B' },
+    ];
+
+    expect(purgerCommandesLocales(stockage)).toBe(true);
+    expect(lireCommandesLocales(stockage)).toHaveLength(0);
+    expect(lireAttente(stockage)).toBeNull();
+    expect(lireCommandes(stockage, jeu)).toHaveLength(1);
+  });
+
+  it('rend false quand le stockage refuse la suppression', () => {
+    expect(purgerCommandesLocales(STOCKAGE_VERROUILLE)).toBe(false);
   });
 });

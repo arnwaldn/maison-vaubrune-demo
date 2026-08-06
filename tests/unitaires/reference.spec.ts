@@ -5,6 +5,7 @@ import {
   genererReference,
   LONGUEUR_SUFFIXE,
   MOTIF_REFERENCE,
+  normaliserReferenceSaisie,
   PREFIXE_REFERENCE,
 } from '@/lib/commandes/reference';
 
@@ -126,6 +127,74 @@ describe('genererReference', () => {
   it('rend mille références valides avec la vraie source de hasard', () => {
     for (let essai = 0; essai < 1000; essai += 1) {
       expect(genererReference(new Date(), Math.random)).toMatch(MOTIF_REFERENCE);
+    }
+  });
+});
+
+/* -------------------------------------------------------------------------- */
+/* La lecture d'une référence saisie (tranche C6)                              */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * LA SAISIE DE LA PAGE DE SUIVI.
+ *
+ * Le client tape ce qu'il a noté : en minuscules, sans tirets, avec des espaces
+ * collés par un copier-coller. Trois formes pour une même commande, et une
+ * seule doit sortir. Ce qui NE DOIT PAS être toléré est aussi important : on ne
+ * corrige ni un `O` en `0`, ni un `1` en `L` — l'alphabet a été privé de ces
+ * paires précisément pour que la question ne se pose pas, et deviner ici
+ * rouvrirait la porte qu'il ferme.
+ */
+describe('normaliserReferenceSaisie', () => {
+  const CANONIQUE = 'MVB-20260718-7F2B';
+
+  it('rend la forme canonique telle quelle', () => {
+    expect(normaliserReferenceSaisie(CANONIQUE)).toBe(CANONIQUE);
+  });
+
+  it('tolère l’absence de tirets', () => {
+    expect(normaliserReferenceSaisie('MVB202607187F2B')).toBe(CANONIQUE);
+  });
+
+  it('tolère la casse', () => {
+    expect(normaliserReferenceSaisie('mvb-20260718-7f2b')).toBe(CANONIQUE);
+    expect(normaliserReferenceSaisie('Mvb 20260718 7f2b')).toBe(CANONIQUE);
+  });
+
+  it('tolère les espaces, y compris insécables', () => {
+    const insecable = String.fromCodePoint(0x00a0);
+
+    expect(normaliserReferenceSaisie(`  ${CANONIQUE}  `)).toBe(CANONIQUE);
+    expect(normaliserReferenceSaisie(`MVB${insecable}20260718${insecable}7F2B`)).toBe(
+      CANONIQUE,
+    );
+  });
+
+  it('refuse une saisie qui n’est pas une référence', () => {
+    expect(normaliserReferenceSaisie('')).toBeNull();
+    expect(normaliserReferenceSaisie('   ')).toBeNull();
+    expect(normaliserReferenceSaisie('20260718-7F2B')).toBeNull();
+    expect(normaliserReferenceSaisie('MVB-2026071-7F2B')).toBeNull();
+    expect(normaliserReferenceSaisie('MVB-20260718-7F2')).toBeNull();
+    expect(normaliserReferenceSaisie('MVB-20260718-7F2BC')).toBeNull();
+    expect(normaliserReferenceSaisie('AAA-20260718-7F2B')).toBeNull();
+  });
+
+  it('REFUSE les caractères exclus de l’alphabet, au lieu de les deviner', () => {
+    expect(normaliserReferenceSaisie('MVB-20260718-7F2O')).toBeNull();
+    expect(normaliserReferenceSaisie('MVB-20260718-7F2I')).toBeNull();
+    expect(normaliserReferenceSaisie('MVB-20260718-7F20')).toBeNull();
+    expect(normaliserReferenceSaisie('MVB-20260718-7F21')).toBeNull();
+  });
+
+  it('accepte toute référence que le générateur produit', () => {
+    for (let essai = 0; essai < 200; essai += 1) {
+      const reference = genererReference(new Date(), Math.random);
+
+      expect(normaliserReferenceSaisie(reference)).toBe(reference);
+      expect(normaliserReferenceSaisie(reference.replaceAll('-', '').toLowerCase())).toBe(
+        reference,
+      );
     }
   });
 });
