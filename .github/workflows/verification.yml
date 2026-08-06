@@ -1,0 +1,112 @@
+# INTÉGRATION CONTINUE — tranche C8.
+#
+# Ce fichier rend INÉVITABLE ce qui, jusqu'ici, ne s'exécutait que si quelqu'un
+# pensait à lancer `npm run controle`. Chaque poussée sur `main` et chaque
+# demande de fusion rejoue la chaîne entière : les types, les quatre gardes, les
+# tests unitaires, la construction et les parcours de bout en bout sur les deux
+# profils. Un lien mort, une espace ordinaire devant un deux-points, une marque
+# réelle glissée dans une fiche ou un total de panier faux bloquent la fusion.
+#
+# ═══════════════════════════════════════════════════════════════════════════
+#  AUCUN SECRET N'EST REQUIS, ET C'EST LA RAISON D'ÊTRE DE LA DÉCISION D3
+# ═══════════════════════════════════════════════════════════════════════════
+#
+# Le paiement passe par un ADAPTATEUR : sans clé de prestataire, l'adaptateur
+# simulé prend le relais et le tunnel va jusqu'au bout — écran de paiement,
+# retour, confirmation, journal de la commande. Le parcours fumigatoire traverse
+# donc la totalité du parcours d'achat sur un runner qui ne connaît aucun
+# secret, et la campagne d'un contributeur extérieur (fork) tourne exactement
+# comme la nôtre.
+#
+# C'est ce qu'on gagne à avoir écrit l'adaptateur AVANT la première clé, et non
+# après : la chaîne de vérification n'a jamais dépendu d'un compte marchand.
+#
+# ═══════════════════════════════════════════════════════════════════════════
+#  CE QUI N'EST PAS ICI, ET POURQUOI
+# ═══════════════════════════════════════════════════════════════════════════
+#
+# `npm run mesurer-notes` n'y est PAS. Le portfolio garde ses notes en
+# intégration continue parce qu'il les PUBLIE sur une page du site : une note
+# affichée qui diverge de la mesure doit arrêter la publication. Ici, les notes
+# ne sont pas affichées sur le site — elles sont versionnées dans `mesures/`,
+# datées, avec le profil et les seuils qui les ont produites. Le relevé fait
+# foi ; le rejouer à chaque poussée coûterait trois minutes de runner pour
+# republier le même fichier. Il se rejoue à la demande, et sa date dit quand.
+#
+# Le jour où une page du site affichera ces quatre notes, cette étape devra
+# être ajoutée ici et rendue bloquante — c'est le même raisonnement que sur le
+# portfolio, et il vaudra le même geste.
+
+name: Vérification
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+# Le jeton du workflow ne peut QUE lire le dépôt. Ce job exécute du code tiers
+# (npm ci, navigateur Playwright) : s'il était compromis, il ne pourrait rien
+# écrire.
+permissions:
+  contents: read
+
+# Une poussée qui suit une autre annule la campagne précédente : c'est le
+# dernier état de la branche qui doit être vert, pas l'avant-dernier.
+concurrency:
+  group: verification-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  controle:
+    name: Contrôle complet
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+
+    steps:
+      - name: Récupérer le dépôt
+        uses: actions/checkout@v4
+        with:
+          # Les identifiants git ne restent pas dans la configuration du runner
+          # après le checkout : le code tiers exécuté ensuite ne peut pas les
+          # lire.
+          persist-credentials: false
+
+      - name: Node 24 (la version du poste de développement)
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Installer les dépendances (versions verrouillées)
+        run: npm ci
+
+      # AVANT le contrôle, parce que sa dernière étape en a besoin. `--with-deps`
+      # installe les bibliothèques système que Chromium réclame sur un runner
+      # Ubuntu nu : sans elles, le navigateur se lance et meurt aussitôt, et
+      # l'échec ressemble à un test instable alors que c'est une dépendance
+      # manquante.
+      - name: Installer le navigateur de la campagne
+        run: npx playwright install --with-deps chromium
+
+      # LA CHAÎNE ENTIÈRE, dans un seul appel et dans cet ordre :
+      #   typecheck → verifier-catalogue → verifier-donnees → verifier-marques
+      #   → test:unitaires → build → test:parcours
+      # Un seul appel plutôt que sept étapes : c'est exactement la commande
+      # qu'un développeur lance sur son poste, et une chaîne d'intégration
+      # continue qui diverge de la commande locale finit par attraper des
+      # défauts que personne ne peut reproduire.
+      - name: npm run controle
+        run: npm run controle
+
+      # Le rapport HTML de Playwright porte, pour chaque test en échec, sa
+      # trace, ses captures et la liste des violations mineures d'accessibilité
+      # relevées sans blocage. Il n'est publié qu'en cas d'échec : un artefact
+      # de campagne verte n'est jamais ouvert.
+      - name: Publier le rapport de campagne en cas d’échec
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7
