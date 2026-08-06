@@ -5,8 +5,10 @@ import { marchand } from '@/donnees/marchand';
  *
  * Les quatre documents qu'une boutique de vente à distance doit publier sont
  * listés dès maintenant, mais en texte et non en liens : ils n'existent pas
- * encore (tranche C4). Un lien mort vaut moins qu'un inventaire honnête —
- * et il coûterait une page 404 aux robots d'indexation.
+ * encore (tranche C7 — l'échéance était annoncée en C4, elle a été repoussée
+ * quand le tunnel de commande a pris cette tranche-là). Un lien mort vaut
+ * moins qu'un inventaire honnête, et il coûterait une page 404 aux robots
+ * d'indexation.
  */
 const DOCUMENTS_LEGAUX = [
   'Mentions légales',

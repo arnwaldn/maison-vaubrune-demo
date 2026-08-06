@@ -3,9 +3,11 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
 import { Silhouette } from '@/composants/illustrations/Silhouette';
+import { BoutonAjouter } from '@/composants/panier/BoutonAjouter';
 import { CATALOGUE } from '@/donnees/catalogue';
 import { formaterEuros } from '@/lib/argent';
 import { prixLePlusBas, trouverProduitParSlug, trouverReferenceParSku } from '@/lib/catalogue';
+import { projeterCatalogue, type ArticlePanier } from '@/lib/panier/catalogue-panier';
 import { regimeRetractation } from '@/lib/retractation';
 import { typographier } from '@/lib/typographie';
 import { LIBELLE_FAMILLE, type Conservation, type Produit } from '@/lib/types';
@@ -232,29 +234,40 @@ export default async function PageProduit({ params }: ProprietesPage) {
               qui servira au calcul des frais de port.
             </p>
 
-            <div className="mt-6 rounded-sm border border-filet bg-papier p-5">
-              <button
-                type="button"
-                disabled
-                aria-describedby="note-panier"
-                className="w-full cursor-not-allowed rounded-sm border border-encre-douce/40 bg-creme px-4 py-2.5 text-sm font-semibold text-encre-douce"
-              >
-                Ajouter au panier
-              </button>
-              <p
-                id="note-panier"
-                className="mt-3 text-xs leading-relaxed text-encre-douce"
-              >
-                Bouton volontairement inerte&nbsp;: le panier arrive à la tranche
-                suivante. Rien n’est caché derrière — pas de formulaire, pas de
-                message d’erreur, pas de fausse mise en attente.
-              </p>
+            {/* L'unique îlot client de cette route. Il ne reçoit que la
+                PROJECTION du produit (voir `catalogue-panier.ts`) : ses
+                variantes, et pour un coffret personnalisable les articles de
+                sa liste blanche. Le catalogue complet reste côté serveur. */}
+            <div className="mt-6">
+              <BoutonAjouter
+                articles={projeterCatalogue([produit])}
+                pieces={piecesEligiblesProjetees(produit)}
+              />
             </div>
           </section>
         </div>
       </div>
     </article>
   );
+}
+
+/**
+ * Les articles que ce produit autorise à choisir, s'il est personnalisable.
+ *
+ * Vide pour les quatorze autres références : `BoutonAjouter` n'affiche alors
+ * aucune case à cocher, et rien de la liste blanche ne traverse la frontière
+ * client. Les pièces sont projetées depuis le catalogue complet — c'est le
+ * même aplatissement que partout ailleurs, donc les mêmes libellés et les
+ * mêmes allergènes qu'au panier.
+ */
+function piecesEligiblesProjetees(produit: Produit): readonly ArticlePanier[] {
+  if (produit.piecesEligibles === undefined) {
+    return [];
+  }
+
+  const eligibles = new Set(produit.piecesEligibles);
+
+  return projeterCatalogue(CATALOGUE).filter((article) => eligibles.has(article.sku));
 }
 
 /**
