@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "description": "Boutique en ligne de demonstration - epicerie fine regionale fictive",
+  "sideEffects": [
+    "*.css"
+  ],
   "scripts": {
     "dev": "next dev",
     "build": "next build",

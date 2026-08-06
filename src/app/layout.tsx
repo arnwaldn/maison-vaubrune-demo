@@ -7,11 +7,11 @@ import { PiedDePage } from '@/composants/mise-en-page/PiedDePage';
 import { CATALOGUE } from '@/donnees/catalogue';
 import { marchand } from '@/donnees/marchand';
 import { URL_SITE } from '@/donnees/site';
+import { Fournisseurs } from '@/lib/fournisseurs';
 import {
   projeterCatalogue,
   stocksDepuisCatalogue,
 } from '@/lib/panier/catalogue-panier';
-import { FournisseurPanier } from '@/lib/panier/contexte-panier';
 
 import { policeTexte, policeTitre } from './polices';
 import './globals.css';
@@ -64,12 +64,19 @@ export const viewport: Viewport = {
 const STOCKS = stocksDepuisCatalogue(projeterCatalogue(CATALOGUE));
 
 /**
- * La mise en page racine RESTE UN COMPOSANT SERVEUR. `<FournisseurPanier>`
- * porte la directive `'use client'`, mais `children` lui est passé en
- * propriété : React le traite comme un arbre déjà rendu côté serveur, si bien
- * que l'accueil, le rayon et les quinze fiches ne deviennent pas clients pour
- * autant. C'est ce patron — et lui seul — qui permet une pastille de panier
- * dans l'en-tête sans expédier les pages au navigateur.
+ * La mise en page racine RESTE UN COMPOSANT SERVEUR. `<Fournisseurs>` porte la
+ * directive `'use client'`, mais `children` lui est passé en propriété : React
+ * le traite comme un arbre déjà rendu côté serveur, si bien que l'accueil, le
+ * rayon et les quinze fiches ne deviennent pas clients pour autant. C'est ce
+ * patron — et lui seul — qui permet une pastille de panier dans l'en-tête et
+ * une surcouche marchand sur toute la vitrine sans expédier les pages au
+ * navigateur.
+ *
+ * UNE SEULE frontière cliente ici, et c'est mesuré. Les deux contextes — panier
+ * et surcouche — sont imbriqués dans `@/lib/fournisseurs`, parce que deux
+ * références `'use client'` depuis cette mise en page ouvraient deux groupes de
+ * morceaux chez l'empaqueteur, donc un fichier de plus à télécharger sur chaque
+ * page du site. Le raisonnement chiffré est en tête de ce fichier-là.
  */
 export default function MiseEnPageRacine({
   children,
@@ -77,14 +84,14 @@ export default function MiseEnPageRacine({
   return (
     <html lang="fr" className={`${policeTitre.variable} ${policeTexte.variable}`}>
       <body className="flex min-h-dvh flex-col antialiased">
-        <FournisseurPanier stocks={STOCKS}>
+        <Fournisseurs stocks={STOCKS}>
           <LienSaut />
           <EnTete />
           <main id="contenu" className="flex-1">
             {children}
           </main>
           <PiedDePage />
-        </FournisseurPanier>
+        </Fournisseurs>
       </body>
     </html>
   );

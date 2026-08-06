@@ -197,4 +197,30 @@ export interface Produit {
   readonly composition?: readonly PieceCoffret[];
   /** Coffret personnalisable : liste blanche des SKU choisissables. */
   readonly piecesEligibles?: readonly string[];
+  /**
+   * Retrait de la vente sans suppression de la fiche (tranche C6).
+   *
+   * ABSENT du catalogue versionné, et c'est volontaire : les quinze références
+   * sont en vente, un champ posé quinze fois à `true` n'apprendrait rien. Le
+   * champ n'existe que lorsque la surcouche marchand l'a posé, et seul `false`
+   * a un effet. Toute lecture passe donc par `estDisponible()` ci-dessous, qui
+   * traite l'absence comme la valeur vraie.
+   *
+   * Pourquoi retirer plutôt que supprimer : le slug est une adresse publique
+   * (voir `Produit.slug`). Une fiche effacée répond 404 à un lien partagé, à un
+   * favori, à un résultat de moteur. Une fiche indisponible se lit encore, dit
+   * qu'elle ne se commande pas, et redevient commandable d'un clic.
+   */
+  readonly disponible?: boolean;
+}
+
+/**
+ * Ce produit est-il en vente ?
+ *
+ * Le seul prédicat autorisé pour lire `disponible` : l'absence du champ vaut
+ * `true`, et écrire `produit.disponible === true` ferait disparaître les quinze
+ * références du catalogue livré, qui ne le portent pas.
+ */
+export function estDisponible(produit: Pick<Produit, 'disponible'>): boolean {
+  return produit.disponible !== false;
 }

@@ -47,7 +47,7 @@ export interface DepotCatalogue {
    * Enregistre une modification partielle sur un produit désigné par son slug.
    * Les champs absents restent inchangés.
    */
-  enregistrerModification(slug: string, modification: Partial<Produit>): void;
+  enregistrerModification(slug: string, modification: ModificationProduit): void;
   /** Efface toutes les modifications et rend le catalogue livré. */
   reinitialiser(): void;
   /**
@@ -58,10 +58,30 @@ export interface DepotCatalogue {
 }
 
 /**
+ * Une variante PROPOSÉE par la surcouche : son SKU, qui l'identifie, et ce que
+ * le marchand corrige dessus.
+ *
+ * ÉLARGISSEMENT C6 d'un type posé en C2. La tranche C2 écrivait
+ * `Partial<Produit>`, dont le champ `variantes` exigeait des `Variante`
+ * COMPLÈTES — format, poids et stock recopiés pour changer un prix. C'était
+ * demander au marchand de réécrire un format vendable pour corriger un
+ * centime, et c'était surtout le moyen le plus sûr de désaligner un poids
+ * d'expédition sans s'en apercevoir. Le SKU reste obligatoire : c'est lui qui
+ * désigne la variante à corriger, et il n'est jamais lui-même modifiable
+ * (voir `fusionnerVariantes` plus bas).
+ */
+export type VarianteModifiee = { readonly sku: string } & Partial<Omit<Variante, 'sku'>>;
+
+/** Ce qu'une surcouche a le droit de porter sur un produit. */
+export type ModificationProduit = Omit<Partial<Produit>, 'variantes'> & {
+  readonly variantes?: readonly VarianteModifiee[];
+};
+
+/**
  * Les modifications en attente, indexées par slug de produit.
  * Un slug absent signifie « produit inchangé ».
  */
-export type SurcoucheCatalogue = Readonly<Record<string, Partial<Produit>>>;
+export type SurcoucheCatalogue = Readonly<Record<string, ModificationProduit>>;
 
 /**
  * Applique une surcouche à un catalogue et rend le résultat.
@@ -106,7 +126,7 @@ export function appliquerSurcouche(
 
 function fusionnerVariantes(
   base: readonly [Variante, ...Variante[]],
-  proposees: readonly Variante[],
+  proposees: readonly VarianteModifiee[],
 ): readonly [Variante, ...Variante[]] {
   const fusionner = (variante: Variante): Variante => {
     const proposee = proposees.find((candidate) => candidate.sku === variante.sku);
@@ -157,11 +177,8 @@ export function trouverReferenceParSku(
   return undefined;
 }
 
-/** Le prix d'entrée d'un produit — « à partir de ». */
-export function prixLePlusBas(produit: Produit): number {
-  const [premiere, ...suivantes] = produit.variantes;
-  return suivantes.reduce(
-    (minimum, variante) => Math.min(minimum, variante.prixCentimes),
-    premiere.prixCentimes,
-  );
-}
+/* Le « à partir de » a quitté ce fichier en C6. Il était calculé ici, sur le
+   catalogue versionné ; il doit désormais suivre la surcouche marchand, et vit
+   donc dans `catalogue-navigateur.ts` sous le nom `prixLePlusBasAffiche()`. En
+   laisser une seconde version ici, aveugle à la surcouche, aurait garanti
+   qu'un écran finisse par l'appeler et affiche l'ancien prix. */
