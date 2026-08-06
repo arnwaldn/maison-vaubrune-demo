@@ -16,7 +16,9 @@ entreprises actives, web) sont documentés dans
 
 - **Aucune commande n'est expédiée, aucun paiement n'est encaissé.** Le
   paiement passe par un prestataire agréé en mode test, ou par un écran de
-  simulation qui s'annonce comme tel.
+  simulation qui s'annonce comme tel — écran qui n'affiche aucun champ de
+  carte, pas même désactivé. Une clé de production est refusée par le code
+  lui-même (voir « Le paiement »).
 - **Aucun courriel ne part.** Les modèles de courriels d'une boutique livrée
   sont fournis en lecture.
 - **Rien n'est enregistré sur un serveur.** Les essais du visiteur (commandes,
@@ -45,6 +47,44 @@ Aucune variable d'environnement n'est nécessaire pour construire ou lancer le
 projet : `NEXT_PUBLIC_URL_SITE` sert uniquement à écrire des adresses absolues
 dans les métadonnées, le plan du site et le fichier robots, et retombe sur
 `http://localhost:3000` quand elle n'est pas définie.
+
+## Le paiement
+
+**Le serveur recalcule, il ne croit jamais un prix venu du navigateur. C'est la
+différence entre une boutique et un formulaire.**
+
+Cette phrase est la règle de `src/lib/paiement/validation.ts`, et tout le reste
+en découle. Le bouton « Commander avec obligation de paiement » envoie à
+`/api/paiement/session` un corps qui ne contient que trois choses — les lignes
+réduites à `{ sku, quantite, composition? }`, la destination, et le total
+qu'affiche la page. Le serveur relit le catalogue versionné, refait le calcul
+complet (prix, poids, tranche de port, franco), et **refuse la demande si le
+total diffère d'un centime** : réponse 422, message en français, aucune session
+de paiement ouverte. Onze contrôles s'enchaînent avant, du SKU inexistant à la
+composition de coffret hors liste blanche.
+
+**Aucune coordonnée ne transite.** Le nom, l'adresse, le code postal et le
+courriel saisis sur `/commande` restent dans le navigateur et rejoignent la
+commande rangée dans son stockage local. Le prestataire de paiement collecte sa
+propre adresse de livraison sur sa page hébergée. C'est vérifiable en trois
+secondes dans l'onglet réseau du navigateur, et c'est la décision D2 traduite
+en code.
+
+**Deux modes, un seul tunnel.** Sans variable `STRIPE_SECRET_KEY`, le paiement
+passe par un écran de simulation du site, qui s'annonce comme tel en première
+ligne et n'affiche **aucun champ de carte, pas même décoratif**. Avec une clé,
+le paiement passe par la page hébergée du prestataire. Les pages de retour —
+confirmation et annulation — sont les mêmes dans les deux cas.
+
+```bash
+npm run start   # sans clé : écran de paiement simulé
+```
+
+**Une clé qui ne commence pas par `sk_test_` est refusée à la construction de
+l'adaptateur**, avant tout appel réseau : cette démonstration ne doit jamais
+encaisser un centime réel. Le visiteur reçoit alors la même réponse honnête
+qu'une panne du prestataire (502, « aucun montant n'a été engagé »), et le motif
+exact part au journal du serveur.
 
 ## Refaire les mesures
 
