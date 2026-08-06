@@ -1,8 +1,11 @@
 import Link from 'next/link';
 
 import { Silhouette } from '@/composants/illustrations/Silhouette';
-import { formaterEuros } from '@/lib/argent';
-import { prixLePlusBas } from '@/lib/catalogue';
+import {
+  EtiquettesVitrine,
+  PrixLePlusBasVitrine,
+  ResumeVitrine,
+} from '@/composants/surcouche/FeuillesVitrine';
 import { exigeChaineDuFroid, type Produit } from '@/lib/types';
 
 /**
@@ -18,9 +21,25 @@ import { exigeChaineDuFroid, type Produit } from '@/lib/types';
  *   coffret contiendra du beurre, il portera le badge sans qu'on y touche.
  * - La carte entière est cliquable, mais le nom du produit reste le texte du
  *   lien : c'est lui qu'annonce un lecteur d'écran, pas « lire la suite ».
+ *
+ * BASCULE C6 — la carte reste un composant SERVEUR. Trois de ses valeurs (le
+ * résumé, le « à partir de », les étiquettes) passent par des feuilles
+ * clientes qui rendent la valeur d'origine puis basculent sur celle de la
+ * surcouche marchand après montage. Le HTML servi est donc inchangé pour un
+ * visiteur qui n'a rien modifié, et la mise en page ne bouge pas — les
+ * feuilles rendent les mêmes éléments avec les mêmes classes que le code
+ * qu'elles remplacent (voir l'en-tête de `FeuillesVitrine.tsx`).
+ *
+ * Les variantes ne traversent la frontière que réduites à `{ sku,
+ * prixCentimes }` : le minimum n'a besoin de rien d'autre, et la décision D17
+ * interdit d'en envoyer davantage.
  */
 export function CarteProduit({ produit }: { readonly produit: Produit }) {
   const frais = exigeChaineDuFroid(produit.conservation);
+  const prix = produit.variantes.map((variante) => ({
+    sku: variante.sku,
+    prixCentimes: variante.prixCentimes,
+  }));
 
   return (
     <li className="border-t border-filet pt-6">
@@ -40,22 +59,24 @@ export function CarteProduit({ produit }: { readonly produit: Produit }) {
             {produit.nom}
           </span>
 
-          <span className="mt-2 block text-sm leading-relaxed text-encre-douce">
-            {produit.resume}
-          </span>
+          <ResumeVitrine
+            slug={produit.slug}
+            resume={produit.resume}
+            className="mt-2 block text-sm leading-relaxed text-encre-douce"
+          />
 
           {/* `mt-auto` colle la ligne de prix au bas de la carte : sur une même
               rangée, les prix s'alignent quelle que soit la longueur des
               résumés. */}
           <span className="mt-auto flex flex-wrap items-baseline gap-x-3 gap-y-2 pt-3">
-            <span className="text-sm font-semibold text-encre">
-              à partir de {formaterEuros(prixLePlusBas(produit))}
+            <span className="text-sm font-semibold text-encre tabular-nums">
+              à partir de <PrixLePlusBasVitrine slug={produit.slug} variantes={prix} />
             </span>
-            {frais ? (
-              <span className="rounded-sm border border-terre px-2 py-0.5 text-[0.6875rem] font-semibold tracking-[0.12em] text-terre uppercase">
-                Frais
-              </span>
-            ) : null}
+            <EtiquettesVitrine
+              slug={produit.slug}
+              frais={frais}
+              miseEnAvant={produit.miseEnAvant}
+            />
           </span>
         </span>
       </Link>

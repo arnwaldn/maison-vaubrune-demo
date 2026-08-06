@@ -4,13 +4,25 @@ import { notFound } from 'next/navigation';
 
 import { Silhouette } from '@/composants/illustrations/Silhouette';
 import { BoutonAjouter } from '@/composants/panier/BoutonAjouter';
+import {
+  EtiquettesVitrine,
+  PrixLePlusBasVitrine,
+  PrixVarianteVitrine,
+  ResumeVitrine,
+  StockVarianteVitrine,
+} from '@/composants/surcouche/FeuillesVitrine';
 import { CATALOGUE } from '@/donnees/catalogue';
 import { formaterEuros } from '@/lib/argent';
-import { prixLePlusBas, trouverProduitParSlug, trouverReferenceParSku } from '@/lib/catalogue';
+import { trouverProduitParSlug, trouverReferenceParSku } from '@/lib/catalogue';
 import { projeterCatalogue, type ArticlePanier } from '@/lib/panier/catalogue-panier';
 import { regimeRetractation } from '@/lib/retractation';
 import { typographier } from '@/lib/typographie';
-import { LIBELLE_FAMILLE, type Conservation, type Produit } from '@/lib/types';
+import {
+  exigeChaineDuFroid,
+  LIBELLE_FAMILLE,
+  type Conservation,
+  type Produit,
+} from '@/lib/types';
 
 /**
  * La fiche produit.
@@ -61,6 +73,13 @@ export default async function PageProduit({ params }: ProprietesPage) {
 
   const retractation = regimeRetractation(produit);
 
+  /* Les variantes, réduites à ce que la feuille du « à partir de » exige : un
+     SKU et un prix. Rien d'autre ne traverse la frontière (décision D17). */
+  const prix = produit.variantes.map((variante) => ({
+    sku: variante.sku,
+    prixCentimes: variante.prixCentimes,
+  }));
+
   return (
     <article className="mx-auto max-w-page px-5 pb-4 sm:px-8">
       <nav aria-label="Fil d’Ariane" className="pt-8 text-sm text-encre-douce">
@@ -93,14 +112,21 @@ export default async function PageProduit({ params }: ProprietesPage) {
           </p>
           <h1 className="mt-4 text-titre font-semibold text-encre">{produit.nom}</h1>
           <p className="mt-4 max-w-lisible text-chapeau text-encre-douce">
-            {produit.resume}
+            <ResumeVitrine slug={produit.slug} resume={produit.resume} className="block" />
           </p>
           <p className="mt-4 text-sm text-encre-douce">
             Origine&nbsp;: {produit.origine}
           </p>
-          <p className="mt-5 text-lg font-semibold text-encre">
-            {produit.variantes.length > 1 ? 'à partir de ' : null}
-            {formaterEuros(prixLePlusBas(produit))}
+          <p className="mt-5 flex flex-wrap items-baseline gap-x-3 gap-y-2 text-lg font-semibold text-encre tabular-nums">
+            <span>
+              {produit.variantes.length > 1 ? 'à partir de ' : null}
+              <PrixLePlusBasVitrine slug={produit.slug} variantes={prix} />
+            </span>
+            <EtiquettesVitrine
+              slug={produit.slug}
+              frais={exigeChaineDuFroid(produit.conservation)}
+              miseEnAvant={produit.miseEnAvant}
+            />
           </p>
         </div>
       </header>
@@ -214,13 +240,21 @@ export default async function PageProduit({ params }: ProprietesPage) {
                           {variante.sku}
                         </span>
                       </td>
-                      <td className="py-3 text-right font-semibold text-encre">
-                        {formaterEuros(variante.prixCentimes)}
+                      <td className="py-3 text-right font-semibold text-encre tabular-nums">
+                        <PrixVarianteVitrine
+                          slug={produit.slug}
+                          sku={variante.sku}
+                          prixCentimes={variante.prixCentimes}
+                        />
                       </td>
-                      <td className="py-3 text-right text-encre-douce">
+                      <td className="py-3 text-right text-encre-douce tabular-nums">
                         {variante.poidsGrammes}&nbsp;g
                         <span className="block text-xs">
-                          {variante.stock} en stock
+                          <StockVarianteVitrine
+                            slug={produit.slug}
+                            sku={variante.sku}
+                            stock={variante.stock}
+                          />
                         </span>
                       </td>
                     </tr>

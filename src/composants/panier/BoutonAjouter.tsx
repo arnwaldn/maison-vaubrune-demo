@@ -4,6 +4,12 @@ import Link from 'next/link';
 import { useId, useState } from 'react';
 
 import { formaterEuros } from '@/lib/argent';
+import {
+  estDisponibleAffiche,
+  prixAffiche,
+  stockAffiche,
+} from '@/lib/catalogue-navigateur';
+import { useSurcouche } from '@/lib/contexte-surcouche';
 import { unionAllergenes, type ArticlePanier } from '@/lib/panier/catalogue-panier';
 import { usePanier } from '@/lib/panier/contexte-panier';
 
@@ -25,6 +31,30 @@ import { usePanier } from '@/lib/panier/contexte-panier';
  * La quantité est bornée par le stock À LA SAISIE comme au réducteur. Les deux
  * ne font pas double emploi : ici c'est un confort d'interface, là-bas c'est
  * l'invariant. Le second tient même si le premier est contourné.
+ *
+ * ---------------------------------------------------------------------------
+ * AJOUT C6 — la surcouche marchand, et jusqu'où elle porte (décision D24)
+ * ---------------------------------------------------------------------------
+ *
+ * Ce bloc est sur la fiche produit, donc dans la VITRINE : il affiche les prix
+ * et les stocks corrigés par le visiteur dans `/gestion/catalogue`, comme le
+ * reste de la fiche. Le panier et le tunnel, eux, restent aux prix du catalogue
+ * versionné — le serveur ne fait jamais confiance au navigateur, et `/commande`
+ * porte la note qui l'explique.
+ *
+ * Deux conséquences précises sur ce composant :
+ *
+ * - LA DISPONIBILITÉ ÉTEINT LE BOUTON, avec son motif. C'est la seule
+ *   modification de vitrine qui interdit quelque chose, et elle est sûre parce
+ *   qu'elle RETRANCHE : un produit retiré de la vente ne peut pas entrer au
+ *   panier, jamais l'inverse.
+ * - LA QUANTITÉ EST BORNÉE PAR LE PLUS PETIT des deux stocks, celui de la
+ *   surcouche et celui du catalogue livré. Baisser un stock dans l'espace de
+ *   gestion contraint donc réellement l'ajout ; l'augmenter n'élargit rien,
+ *   parce que le réducteur du panier ne connaît que le stock d'origine
+ *   (décision D17 : il reçoit `Record<SKU, stock>` calculé côté serveur) et
+ *   ramènerait silencieusement la quantité. Deux nombres qui se contredisent
+ *   valent moins qu'un seul qui restreint.
  */
 
 export function BoutonAjouter({
@@ -37,6 +67,7 @@ export function BoutonAjouter({
   readonly pieces: readonly ArticlePanier[];
 }) {
   const { envoyer } = usePanier();
+  const { surcouche } = useSurcouche();
   const identifiant = useId();
 
   const [skuChoisi, setSkuChoisi] = useState(articles[0]?.sku ?? '');
@@ -53,11 +84,16 @@ export function BoutonAjouter({
     return null;
   }
 
+  const disponible = estDisponibleAffiche(surcouche, article.slug);
+  const stockVitrine = stockAffiche(surcouche, article.slug, article.sku, article.stock);
+  /* Le plus petit des deux stocks : voir l'en-tête, section « décision D24 ». */
+  const stockAjoutable = Math.min(stockVitrine, article.stock);
+
   const requises = article.piecesRequises;
   const composeParLeClient = requises !== null && pieces.length > 0;
   const compositionComplete = !composeParLeClient || choisies.length === requises;
-  const epuise = article.stock <= 0;
-  const activable = !epuise && compositionComplete;
+  const epuise = stockAjoutable <= 0;
+  const activable = disponible && !epuise && compositionComplete;
 
   const basculerPiece = (sku: string) => {
     setConfirmation(false);
@@ -104,14 +140,27 @@ export function BoutonAjouter({
           >
             {articles.map((candidat) => (
               <option key={candidat.sku} value={candidat.sku}>
-                {candidat.format} — {formaterEuros(candidat.prixCentimes)}
+                {candidat.format} —{' '}
+                {formaterEuros(
+                  prixAffiche(
+                    surcouche,
+                    candidat.slug,
+                    candidat.sku,
+                    candidat.prixCentimes,
+                  ),
+                )}
               </option>
             ))}
           </select>
         </div>
       ) : (
         <p className="text-sm text-encre">
-          {article.format} — <strong>{formaterEuros(article.prixCentimes)}</strong>
+          {article.format} —{' '}
+          <strong className="tabular-nums">
+            {formaterEuros(
+              prixAffiche(surcouche, article.slug, article.sku, article.prixCentimes),
+            )}
+          </strong>
         </p>
       )}
 
@@ -138,20 +187,20 @@ export function BoutonAjouter({
             type="number"
             inputMode="numeric"
             min={1}
-            max={Math.max(1, article.stock)}
+            max={Math.max(1, stockAjoutable)}
             step={1}
             value={quantite}
-            disabled={epuise}
+            disabled={epuise || !disponible}
             onChange={(evenement) => {
               setConfirmation(false);
-              setQuantite(borner(evenement.target.value, article.stock));
+              setQuantite(borner(evenement.target.value, stockAjoutable));
             }}
             className="mt-2 w-24 rounded-sm border border-filet bg-creme px-3 py-2 text-sm text-encre tabular-nums"
           />
         </div>
 
-        <p className="text-xs leading-relaxed text-encre-douce">
-          {epuise ? 'Épuisé pour ce format.' : `${String(article.stock)} en stock.`}
+        <p className="text-xs leading-relaxed text-encre-douce tabular-nums">
+          {epuise ? 'Épuisé pour ce format.' : `${String(stockVitrine)} en stock.`}
         </p>
       </div>
 
@@ -170,9 +219,7 @@ export function BoutonAjouter({
           id={`${identifiant}-empechement`}
           className="mt-3 text-xs leading-relaxed text-encre-douce"
         >
-          {epuise
-            ? 'Ce format est épuisé : il ne peut pas être ajouté au panier.'
-            : `Choisissez ${String(requises)} pièces pour composer ce coffret.`}
+          {motifEmpechement(disponible, epuise, requises)}
         </p>
       )}
 
@@ -191,6 +238,29 @@ export function BoutonAjouter({
       </p>
     </div>
   );
+}
+
+/**
+ * Pourquoi le bouton d'ajout est éteint, dit en français.
+ *
+ * L'ordre des trois cas est celui de leur portée : un produit retiré de la
+ * vente ne se commande d'aucun format, un format épuisé n'empêche pas les
+ * autres, une composition incomplète ne tient qu'à un clic de plus.
+ */
+function motifEmpechement(
+  disponible: boolean,
+  epuise: boolean,
+  requises: number | null,
+): string {
+  if (!disponible) {
+    return 'Ce produit a été retiré de la vente depuis l’espace de gestion de la démonstration : il ne peut pas être ajouté au panier. Rendez-le disponible dans « Catalogue », ou réinitialisez le jeu d’essai.';
+  }
+
+  if (epuise) {
+    return 'Ce format est épuisé : il ne peut pas être ajouté au panier.';
+  }
+
+  return `Choisissez ${String(requises)} pièces pour composer ce coffret.`;
 }
 
 /**

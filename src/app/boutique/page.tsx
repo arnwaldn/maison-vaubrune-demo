@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
 
 import { CarteProduit } from '@/composants/boutique/CarteProduit';
+import { BornesPrixVitrine } from '@/composants/surcouche/FeuillesVitrine';
 import { CATALOGUE } from '@/donnees/catalogue';
-import { formaterEuros } from '@/lib/argent';
 import { FAMILLES, LIBELLE_FAMILLE } from '@/lib/types';
 
 export const metadata: Metadata = {
@@ -36,14 +36,21 @@ const RAYONS = FAMILLES.map((famille) => ({
   produits: CATALOGUE.filter((produit) => produit.famille === famille),
 })).filter((rayon) => rayon.produits.length > 0);
 
-/** Tous les prix du catalogue, pour en donner les bornes sans les recopier. */
-const PRIX = CATALOGUE.flatMap((produit) =>
-  produit.variantes.map((variante) => variante.prixCentimes),
+/**
+ * Tous les formats du catalogue, réduits à ce dont la ligne des bornes a
+ * besoin. Le calcul lui-même a quitté cette page en C6 : les bornes doivent
+ * suivre la surcouche marchand comme les cartes, sans quoi le pied du rayon
+ * contredirait les prix affichés juste au-dessus.
+ */
+const FORMATS = CATALOGUE.flatMap((produit) =>
+  produit.variantes.map((variante) => ({
+    slug: produit.slug,
+    sku: variante.sku,
+    prixCentimes: variante.prixCentimes,
+  })),
 );
 
-const NOMBRE_FORMATS = PRIX.length;
-const PRIX_PLANCHER = Math.min(...PRIX);
-const PRIX_PLAFOND = Math.max(...PRIX);
+const NOMBRE_FORMATS = FORMATS.length;
 
 export default function PageBoutique() {
   return (
@@ -58,9 +65,9 @@ export default function PageBoutique() {
           sont indiqués toutes taxes comprises, hors frais de port.
         </p>
         <p className="mt-4 max-w-lisible text-sm leading-relaxed text-encre-douce">
-          Le panier et la commande arrivent à la tranche suivante&nbsp;: les fiches se
-          consultent, rien ne s’achète encore. Rappel utile&nbsp;: la maison est
-          fictive, aucune commande ne serait expédiée.
+          Le panier, la commande et le paiement de démonstration vont jusqu’au
+          bout du parcours. Rappel utile&nbsp;: la maison est fictive, aucune
+          commande ne serait expédiée et aucun montant n’est encaissé.
         </p>
       </section>
 
@@ -108,9 +115,9 @@ export default function PageBoutique() {
         </section>
       ))}
 
-      <p className="mt-14 mb-4 text-sm text-encre-douce">
+      <p className="mt-14 mb-4 text-sm text-encre-douce tabular-nums">
         {NOMBRE_FORMATS} formats vendables au total, de{' '}
-        {formaterEuros(PRIX_PLANCHER)} à {formaterEuros(PRIX_PLAFOND)}.
+        <BornesPrixVitrine articles={FORMATS} />.
       </p>
     </div>
   );

@@ -6,7 +6,9 @@ import { useState } from 'react';
 import { MentionRetractation } from '@/composants/panier/MentionRetractation';
 import { RecapitulatifTotaux } from '@/composants/panier/RecapitulatifTotaux';
 import { formaterEuros } from '@/lib/argent';
+import { prixAffiche } from '@/lib/catalogue-navigateur';
 import { mettreEnAttente } from '@/lib/commandes/depot-local';
+import { useSurcouche } from '@/lib/contexte-surcouche';
 import {
   trouverArticle,
   unionAllergenes,
@@ -119,6 +121,7 @@ export function IlotCommande({
   readonly catalogue: readonly ArticlePanier[];
 }) {
   const { etat, pretALEmploi } = usePanier();
+  const { surcouche } = useSurcouche();
 
   const [nom, setNom] = useState('');
   const [adresse, setAdresse] = useState('');
@@ -157,6 +160,17 @@ export function IlotCommande({
       </div>
     );
   }
+
+  /* Décision D24 — au moins une ligne dont le prix de VITRINE a été modifié
+     depuis l'espace de gestion. La comparaison porte sur les prix de la
+     projection du catalogue versionné, ceux-là mêmes qui viennent d'être
+     facturés : c'est donc l'écart réel entre ce que le visiteur a vu au rayon
+     et ce qu'il s'apprête à payer. */
+  const prixVitrineModifie = totaux.lignes.some(
+    ({ article }) =>
+      prixAffiche(surcouche, article.slug, article.sku, article.prixCentimes) !==
+      article.prixCentimes,
+  );
 
   const zoneDuCodePostal = zoneDepuisCodePostal(codePostal);
   const codePostalIncoherent = zoneDuCodePostal !== null && zoneDuCodePostal !== etat.zone;
@@ -281,6 +295,8 @@ export function IlotCommande({
           <p className="mt-4 text-sm text-encre-douce">
             Destination&nbsp;: {LIBELLE_ZONE[etat.zone]}.
           </p>
+
+          {prixVitrineModifie ? <NotePrixMarchand /> : null}
         </section>
 
         <Coordonnees
@@ -340,6 +356,35 @@ function corpsDeLaDemande(totaux: Totaux, zone: CodeZone, totalCentimes: number)
     zone,
     totalAnnonceCentimes: totalCentimes,
   };
+}
+
+/* -------------------------------------------------------------------------- */
+/* La note des prix marchand (décision D24)                                    */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * Le moment pédagogique de la démonstration.
+ *
+ * Elle n'apparaît que si le visiteur a réellement modifié le prix d'un article
+ * qu'il a au panier — sinon elle avertirait de rien. Elle ne s'excuse pas d'une
+ * limite : elle nomme la règle qui produit l'écart, et cette règle est
+ * exactement ce que le projet vend. Le visiteur vient de tenter, sans le
+ * vouloir, une falsification de prix côté client ; il constate qu'elle ne
+ * passe pas.
+ */
+function NotePrixMarchand() {
+  return (
+    <p className="mt-6 max-w-lisible rounded-sm border border-ocre-clair bg-papier px-4 py-3 text-sm leading-relaxed text-encre">
+      <span className="font-semibold">
+        Vos essais de prix marchand ne s’appliquent pas au paiement de
+        démonstration&nbsp;:
+      </span>{' '}
+      sur une boutique livrée, les prix vivent côté serveur — c’est précisément ce
+      que le contrôle d’intégrité du paiement vérifie. Les montants ci-contre sont
+      donc ceux du catalogue d’origine, et ce sont eux que le serveur recalculera
+      avant d’ouvrir quoi que ce soit.
+    </p>
+  );
 }
 
 /* -------------------------------------------------------------------------- */
