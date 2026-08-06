@@ -41,6 +41,11 @@ npm run dev     # serveur de développement sur http://localhost:3000
 npm run build   # construction de production
 npm run start   # sert la construction de production sur le port 3000
 npm run typecheck   # tsc --noEmit, zéro erreur attendue
+
+npm run verifier-catalogue  # 18 contrôles de cohérence du catalogue
+npm run verifier-donnees    # 4 contrôles : aucune donnée d'entreprise inventée
+npm run test:unitaires      # Vitest, modules purs
+npm run controle            # les cinq d'affilée, dans cet ordre, puis le build
 ```
 
 Aucune variable d'environnement n'est nécessaire pour construire ou lancer le
@@ -137,6 +142,75 @@ RFC 2606). Leurs trois montants sont écrits en dur et **recalculés par la
 garde** : si un prix du catalogue bouge sous une commande figée,
 `npm run verifier-catalogue` échoue.
 
+## Les documents légaux
+
+Cinq pages, toutes statiques et indexables, toutes reliées depuis le pied de
+page : `/mentions-legales`, `/conditions-generales-de-vente`,
+`/donnees-personnelles`, `/retractation` et
+`/a-propos-de-cette-demonstration`.
+
+**Ce sont des gabarits, et ils le disent.** Chacun des quatre documents de
+vente s'ouvre sur un encadré en deux temps : ce document est un gabarit, la
+relecture par un juriste reste celle du marchand ; et la maison est fictive.
+Partout où un marchand réel inscrirait une donnée qui lui appartient, la page
+affiche un emplacement surligné qui nomme en français ce qui manque —
+**vingt-deux** sur les mentions légales, **onze** sur les conditions
+générales, **quarante et un** sur les données personnelles, **sept** sur la
+rétractation. La page « À propos » n'en porte aucun : elle décrit le site, pas
+le marchand.
+
+**Le tableau des exceptions de rétractation est ENGENDRÉ.** La page
+`/retractation` publie le régime des quinze références du catalogue — onze à
+droit ouvert, deux au titre du 4° de l'article L. 221-28, une au titre du 5°,
+une au titre du 3° — et ces lignes sortent de `regimeRetractation()`, la même
+fonction qui écrit la mention de chaque fiche produit (décision D12). Une
+référence ne peut pas être annoncée dans un régime ici et vendue dans un autre
+là-bas.
+
+**Le formulaire type de l'annexe R. 221-1** est reproduit sur la même page,
+imprimable (une feuille de style d'impression retire la navigation, le pied de
+page et les sommaires) et téléchargeable en texte brut
+(`public/formulaire-retractation.txt`, UTF-8, fins de ligne CRLF pour être
+lisible dans n'importe quel éditeur).
+
+### La garde d'honnêteté
+
+```bash
+npm run verifier-donnees
+```
+
+Quatre contrôles, intégrés à `npm run controle` :
+
+1. **Les pages gabarits portent encore leurs emplacements.** Une page légale
+   qui ne contiendrait plus un seul `<AComplete>` serait une page dont
+   quelqu'un a bouché les trous en inventant. La page « À propos » en est
+   dispensée, avec son motif écrit dans le script.
+2. **Le formulaire téléchargeable est resté un gabarit** — il doit encore
+   porter ses `[À COMPLÉTER : …]`.
+3. **Le jeu d'essai porte ses marqueurs d'irréalité.** Ses six adresses ne
+   sont exemptées du contrôle suivant que parce qu'elles PROUVENT qu'elles
+   sont fictives (« rue de l'Exemple », « Client d'essai »). Remplacer ces
+   marqueurs par une vraie voie fait tomber l'exemption avec eux.
+4. **Aucun motif de donnée réelle** dans `src/`, `contenu/`, `public/` ni dans
+   les noms de fichiers : SIREN, SIRET, TVA intracommunautaire, IBAN, numéro
+   de téléphone français, adresse postale (numéro + type de voie + code postal
+   à proximité).
+
+Ce que la garde ne prend PAS, et pourquoi : un horodatage ISO n'aligne jamais
+neuf chiffres, un code postal seul n'en fait que cinq (`src/lib/zones.ts` en
+manipule par construction), et un nombre suivi d'une unité est une quantité,
+pas un identifiant — c'est ce qui laisse passer les « 300 000 euros » de
+l'encadré réglementaire de l'article D. 211-2. Un bloc peut en outre être
+déclaré texte réglementaire (`texte-reglementaire:debut` /
+`texte-reglementaire:fin`) et sortir de l'analyse ; les balises non refermées
+sont une anomalie.
+
+`tests/` est hors périmètre, délibérément :
+`tests/fixtures/donnees-inventees/` contient par construction un faux numéro à
+neuf chiffres, un faux téléphone et un faux identifiant bancaire — ce sont les
+pièces qui prouvent que la garde échoue quand elle doit échouer
+(`tests/unitaires/garde-donnees-inventees.spec.ts`, six cas).
+
 ## Refaire les mesures
 
 Les quatre notes (rapidité, accessibilité, bonnes pratiques, référencement)
@@ -158,6 +232,19 @@ page d'accueil) : **rapidité 98, accessibilité 100, bonnes pratiques 100,
 référencement 100**. Décalage de mise en page cumulé 0,0001 ; premier affichage
 de contenu 1,54 s ; plus grand affichage de contenu 2,29 s ; JavaScript de
 premier chargement 103 ko.
+
+Relevés de la tranche C7 (mêmes conditions, 2026-08-06) : `/mentions-legales`
+**98 / 100 / 100 / 100**, `/conditions-generales-de-vente`
+**97 / 100 / 100 / 100**, `/donnees-personnelles` **97 / 100 / 100 / 100**,
+`/retractation` **97 / 100 / 100 / 100**,
+`/a-propos-de-cette-demonstration` **98 / 100 / 100 / 100**. Décalage cumulé
+0,001 partout, sauf `/donnees-personnelles` à **0,03** — la seule page du site
+au-dessus de 0,002. La cause est identifiée et écrite plutôt que corrigée à la
+main : c'est le chargement des deux polices qui refait la coupure du chapeau
+le plus long des cinq pages, au-dessus de l'encadré d'ouverture. La valeur
+reste dans la bande « bonne » de l'outil (seuil 0,1) et la note tient à 97 ; y
+répondre par une hauteur minimale en dur reviendrait à graver une constante
+juste pour une largeur d'écran et une paire de polices.
 
 Relevés de la tranche C6 (mêmes conditions) : `/suivi` **98 / 100 / 100 / 100**,
 décalage 0. `/gestion` **98 / 100 / 100 / 63** — la note de référencement est en
