@@ -12,6 +12,33 @@ sur sa page d'accueil. Le choix du nom et sa vérification (marques déposées,
 entreprises actives, web) sont documentés dans
 [`contenu/decisions/000-choix-du-nom.md`](contenu/decisions/000-choix-du-nom.md).
 
+## Voir la démonstration en ligne
+
+### → https://maison-vaubrune-demo.vercel.app
+
+En ligne depuis le **2026-08-06**. Rien à installer, rien à créer : le paiement
+tourne sur l'adaptateur **simulé** (aucune clé de prestataire n'est branchée sur
+ce déploiement), et le parcours va jusqu'au bout.
+
+Le tour complet en cinq minutes, dans l'ordre :
+
+| Étape | Adresse | Ce qu'il y a à voir |
+|---|---|---|
+| 1 | [`/boutique`](https://maison-vaubrune-demo.vercel.app/boutique) | quinze produits, vingt-trois formats, groupés par famille |
+| 2 | [une fiche](https://maison-vaubrune-demo.vercel.app/boutique/fromage-fermier-brebis) | le fromage : périssable, donc **sans** droit de rétractation (L. 221-28, 4°) — la fiche le dit avant l'achat |
+| 3 | [`/panier`](https://maison-vaubrune-demo.vercel.app/panier) | les frais de port calculés **avant** de payer : tranche de poids, supplément isotherme, franco, et la Corse qui refuse le produit frais |
+| 4 | `/commande` | le libellé imposé par l'article L. 221-14 sur le bouton, éteint tant que les conditions ne sont pas acceptées |
+| 5 | l'écran de paiement | il s'annonce comme simulé et n'affiche **aucun** champ de carte, pas même désactivé |
+| 6 | [`/suivi`](https://maison-vaubrune-demo.vercel.app/suivi) | la frise d'états de votre commande — six commandes d'essai sont fournies pour ceux qui n'ont pas commandé |
+| 7 | [`/gestion`](https://maison-vaubrune-demo.vercel.app/gestion) | le côté marchand : tableau de bord, commandes, catalogue modifiable, modèles de courriels |
+
+Vos essais (panier, commandes, modifications du catalogue) restent **dans votre
+navigateur** et n'atteignent aucun serveur. Vider les données du site remet la
+démonstration à neuf.
+
+Le dépôt est **public et relisible** :
+[github.com/arnwaldn/maison-vaubrune-demo](https://github.com/arnwaldn/maison-vaubrune-demo).
+
 ## Ce que cette démonstration ne fait pas
 
 - **Aucune commande n'est expédiée, aucun paiement n'est encaissé.** Le
@@ -303,7 +330,8 @@ sont mesurées, datées et versionnées dans `mesures/`. **Une seule commande**,
 depuis la tranche C8 :
 
 ```bash
-npm run mesurer-notes
+npm run mesurer-notes                                             # hors ligne
+node scripts/mesurer-notes.mjs --base https://maison-vaubrune-demo.vercel.app   # en ligne
 ```
 
 Elle construit le site si `.next/` est absent, le sert en production sur un
@@ -313,6 +341,40 @@ fiche de l'huile d'olive et le panier —, compare chaque note à son seuil
 `mesures/lighthouse-<date>.json` et **sort en erreur** si une note passe sous
 son seuil. Le mode d'emploi complet, le choix des trois URL et ce que « hors
 ligne » signifie exactement sont dans `mesures/LISEZ-MOI.md`.
+
+Avec **`--base https://…`**, le script ne construit rien et ne sert rien : il
+mesure le **déploiement réel**, avec son réseau de diffusion, sa compression et
+les en-têtes réellement servis. Le relevé part alors dans un fichier distinct,
+`mesures/lighthouse-en-ligne-<date>.json`, parce que confondre les deux
+reviendrait à publier la note d'un site pour celle d'un autre. Les seuils sont
+les mêmes : une mesure en ligne plus indulgente ne serait pas une mesure.
+
+### Les douze notes EN LIGNE — 2026-08-06
+
+**C'est ce relevé qui engage.** Lighthouse 13.4.1, profil mobile bridé, mesuré
+depuis Internet sur `https://maison-vaubrune-demo.vercel.app`
+(`mesures/lighthouse-en-ligne-2026-08-06.json`) :
+
+| URL | Rapidité | Accessibilité | Bonnes pratiques | Référencement |
+|---|---|---|---|---|
+| `/` | **98** | **100** | **100** | **100** |
+| `/boutique/huile-olive-premiere-pression` | **98** | **100** | **100** | **100** |
+| `/panier` | **99** | **100** | **100** | **100** |
+
+Décalage cumulé de mise en page **nul sur les trois** ; premier affichage de
+contenu 0,8 à 0,9 s ; plus grand affichage 2,1 à 2,2 s ; temps de blocage 60 à
+130 ms.
+
+**Aucune note ne baisse en passant en ligne**, et le panier en gagne une
+(98 → 99). L'écart se lit dans les métriques : le premier affichage tombe de
+1,5 s à 0,8 s — c'est le réseau de diffusion qui sert un fichier déjà écrit,
+là où la mesure locale attendait un `next start` sur une machine de bureau. Le
+temps de blocage, lui, monte (50-60 ms → 60-130 ms) : c'est le même JavaScript,
+analysé sur un processeur émulé quatre fois plus lent une fois le réseau cessé
+d'être le facteur limitant. Il reste très en dessous du seuil de l'outil
+(200 ms), et la note de rapidité ne bouge pas.
+
+### Le relevé hors ligne, pour mémoire
 
 Relevé du **2026-08-06** (Lighthouse 13.4.1, profil mobile, construction de
 production servie en local) — les douze notes :
@@ -359,8 +421,12 @@ relevée et expliquée, pas corrigée : la corriger reviendrait à ouvrir l'espa
 de gestion aux robots pour faire un joli chiffre.
 
 Ces notes sont relevées **hors ligne, sur la machine de développement**. Elles
-donnent la santé du socle, pas la performance servie aux visiteurs : la mesure
-qui engage commercialement sera refaite sur le déploiement réel.
+donnent la santé du socle, pas la performance servie aux visiteurs. La mesure
+qui engage commercialement a été refaite sur le déploiement réel le 2026-08-06 :
+c'est le tableau « Les douze notes EN LIGNE » ci-dessus. Les deux relevés sont
+conservés, et ils sont conservés SÉPARÉMENT — le premier attrape une régression
+le jour où on l'introduit, sans réseau ni hébergeur ; le second est celui qu'on
+montre.
 
 ## Les données structurées (JSON-LD)
 
@@ -401,6 +467,39 @@ contributeur extérieur tourne exactement comme la nôtre.
 
 Le rapport Playwright est publié en artefact **en cas d’échec seulement** : un
 artefact de campagne verte n’est jamais ouvert.
+
+Le dépôt étant **public**, cette chaîne est gratuite et son résultat est
+visible de tous — y compris quand elle échoue, ce qui est le seul état dans
+lequel un badge vert veut dire quelque chose.
+
+## Le déploiement
+
+Hébergé sur **Vercel**, projet `maison-vaubrune-demo`, **branché sur la branche
+`main` du dépôt GitHub** : une poussée sur `main` construit et publie. Il n'y a
+donc qu'une seule façon de mettre en ligne, et c'est celle que tout le monde
+peut relire.
+
+**Aucune variable d'environnement n'est définie sur le déploiement**, et c'est
+la même raison qu'en intégration continue (décision D3) : sans clé de
+prestataire, l'adaptateur simulé prend le relais et le tunnel va jusqu'au bout.
+Un visiteur voit donc exactement ce que voit un contributeur.
+
+Le repli de `NEXT_PUBLIC_URL_SITE` est l'adresse de **production**
+(`src/donnees/site.ts`) : une construction qui oublierait la variable publie un
+plan du site juste, et non l'adresse de la machine du développeur. Le
+développement local reprend la main en la définissant (voir `.env.example`).
+
+Vérifié en ligne le 2026-08-06 : `/robots.txt` (`Disallow: /gestion`, plan du
+site en adresse absolue), `/sitemap.xml` (**24 adresses**, toutes sur le domaine
+de production), `/formulaire-retractation.txt` servi en `text/plain`. Les
+24 adresses sont la vitrine complète — quinze fiches, le rayon, l'accueil,
+`/livraison`, `/suivi` et les cinq documents légaux. `/panier`, `/commande` et
+le tunnel de paiement n'y figurent pas (ils restent indexables, décision D19),
+et `/gestion` en est écarté deux fois : par le plan du site et par `robots.txt`.
+
+**La campagne de bout en bout a été rejouée sur l'URL publique** — les mêmes
+74 tests, les mêmes montants exacts, les deux mêmes profils : 74 verts, dont le
+parcours d'achat entier jusqu'au 69,80 € et au changement d'état côté marchand.
 
 ## En-têtes de sécurité
 
@@ -463,6 +562,32 @@ aurait suffi), `form-action 'self'`, `img-src 'self' data:`,
 La décision D34 écrit aussi le chemin du retour en arrière — jeton posé par un
 `middleware.ts` et `'strict-dynamic'` — pour le jour où ce socle servira une
 boutique qui rend, elle, du contenu saisi par des tiers.
+
+**Validée en ligne, pas sur relecture.** Le parcours d'achat entier a été rejoué
+sur l'URL publique avec la console sous surveillance — messages de console,
+exceptions non rattrapées et, surtout, l'événement `securitypolicyviolation`
+que le navigateur émet dans la page à chaque directive enfreinte. Résultat :
+**0 message, 0 exception, 0 violation**.
+
+Les neuf en-têtes réellement servis, relevés au `curl` le 2026-08-06 :
+
+```
+Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline';
+  style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self';
+  connect-src 'self'; form-action 'self'; frame-ancestors 'none';
+  base-uri 'none'; object-src 'none'; frame-src 'none';
+  upgrade-insecure-requests
+Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
+X-Content-Type-Options: nosniff
+Referrer-Policy: strict-origin-when-cross-origin
+X-Frame-Options: DENY
+Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(),
+  browsing-topics=(), usb=(), serial=(), bluetooth=(), display-capture=(),
+  idle-detection=(), screen-wake-lock=(), midi=(), xr-spatial-tracking=()
+Cross-Origin-Opener-Policy: same-origin
+Cross-Origin-Resource-Policy: same-origin
+X-Permitted-Cross-Domain-Policies: none
+```
 
 ## Les décisions et pourquoi
 
