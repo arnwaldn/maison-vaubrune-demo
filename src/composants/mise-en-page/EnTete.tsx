@@ -15,10 +15,13 @@ import { marchand } from '@/donnees/marchand';
  * Bascule C2 : « Boutique » est désormais un `<Link>`, la route existe et son
  * préchargement est même souhaitable — c'est la page vers laquelle tout le
  * site pousse. Restent deux ancres ordinaires, jusqu'aux tranches C3 et C5.
+ *
+ * Bascule C3 : « Livraison » passe à son tour en `<Link>`. Reste une seule
+ * ancre ordinaire, le suivi de commande, jusqu'à la tranche C5.
  */
 const LIENS_NAVIGATION = [
   { libelle: 'Boutique', adresse: '/boutique', livree: true },
-  { libelle: 'Livraison', adresse: '/livraison', livree: false },
+  { libelle: 'Livraison', adresse: '/livraison', livree: true },
   { libelle: 'Suivi de commande', adresse: '/suivi-de-commande', livree: false },
 ] as const;
 
