@@ -44,9 +44,26 @@ npm run typecheck   # tsc --noEmit, zéro erreur attendue
 
 npm run verifier-catalogue  # 18 contrôles de cohérence du catalogue
 npm run verifier-donnees    # 4 contrôles : aucune donnée d'entreprise inventée
+npm run verifier-marques    # 6 contrôles : aucune marque réelle, aucune appellation
 npm run test:unitaires      # Vitest, modules purs
-npm run controle            # les cinq d'affilée, dans cet ordre, puis le build
+npm run test:parcours       # Playwright, parcours de bout en bout (2 profils)
+npm run mesurer-notes       # Lighthouse sur 3 URL, écrit un relevé daté
+npm run controle            # toute la chaîne, dans cet ordre
 ```
+
+`npm run controle` enchaîne, et s'arrête à la première anomalie :
+
+```
+typecheck → verifier-catalogue → verifier-donnees → verifier-marques
+         → test:unitaires → build → test:parcours
+```
+
+Les parcours viennent EN DERNIER parce qu'ils s'exécutent sur la construction
+de production que l'étape précédente vient de produire — jamais sur le serveur
+de développement, qui rend les pages autrement. `npm run mesurer-notes` n'est
+pas dans la chaîne : la mesure demande un Chrome et plusieurs minutes, et une
+garde pénible finit désactivée. Son résultat est versionné, daté, et c'est lui
+qui fait foi (voir `mesures/LISEZ-MOI.md`).
 
 Aucune variable d'environnement n'est nécessaire pour construire ou lancer le
 projet : `NEXT_PUBLIC_URL_SITE` sert uniquement à écrire des adresses absolues
@@ -211,21 +228,104 @@ neuf chiffres, un faux téléphone et un faux identifiant bancaire — ce sont l
 pièces qui prouvent que la garde échoue quand elle doit échouer
 (`tests/unitaires/garde-donnees-inventees.spec.ts`, six cas).
 
+## Les parcours de bout en bout
+
+```bash
+npm run test:parcours                      # les deux profils
+npx playwright test --project=bureau-1280  # un seul
+npx playwright test --ui                   # en mode interactif
+```
+
+Playwright joue quatre campagnes sur **deux profils** — un bureau à 1280 px et
+un mobile à 390 px, les deux largeurs auxquelles ce projet a été dessiné — et
+sur la **construction de production**, servie par
+`scripts/servir-production.mjs`. Le serveur de développement rend les pages
+autrement : une campagne verte sur `next dev` ne dirait rien du site livré.
+
+**`parcours.spec.ts` — l'histoire entière, en un seul test.** Accueil, rayon,
+fiche de l'huile d'olive, deux flacons de 50 cl au panier, un fromage, puis le
+panier qui chiffre **56,90 € + 12,90 € de port = 69,80 €** aux montants exacts ;
+la Corse qui refuse le produit frais et éteint le bouton ; le retour en
+métropole ; le récapitulatif, les coordonnées, les conditions générales ;
+« Commander avec obligation de paiement » ; l'écran de paiement simulé qui
+s'annonce comme tel ; « Payer » ; la référence `MVB-…` et le panier vidé ; le
+suivi arrêté à « payée » ; l'espace marchand qui marque la commande préparée ;
+le suivi à deux états. Plus deux tests courts : l'annulation qui laisse le
+panier intact, et le coffret « Composez le vôtre » qui exige trois pièces
+exactes et fait **deux lignes** pour deux compositions différentes.
+
+**`accessibilite.spec.ts`** — axe-core sur sept pages, zéro violation
+« serious » ou « critical ». Les violations mineures sont listées dans le
+rapport sans bloquer.
+
+**`typographie.spec.ts`** — les quatre familles de règles de la typographie
+française (groupes de milliers, unités, ponctuation haute, guillemets) et
+l'absence d'apostrophe droite, appliquées au `innerText` de douze pages, donc
+au texte réellement rendu et non à la source.
+
+**`liens.spec.ts`** — un parcours en largeur depuis l'accueil : tous les liens
+internes répondent 200, toutes les ancres ont une cible dans le DOM de leur
+page, et chaque description de page porte le mot « démonstration ». Ce filet
+est **obligatoire** : `typedRoutes` ne garde pas les `<Link>` morts (vérifié
+deux fois, le motif est écrit dans `next.config.ts`).
+
+## La garde des marques réelles
+
+```bash
+npm run verifier-marques
+```
+
+Les mentions légales écrivent « aucune marque réelle, aucune appellation
+protégée et aucun producteur nommé ». Six contrôles rendent la phrase vraie :
+le texte de `src/`, `contenu/` et `public/`, puis les **noms de fichiers**,
+sont cherchés — insensible à la casse, frontières de mot Unicode — contre
+**cinquante-huit marques** d'épicerie fine et d'agroalimentaire français,
+**vingt appellations protégées** et **neuf signes officiels** (AOP, AOC, IGP,
+STG, Label Rouge et leurs formes en toutes lettres).
+
+**La liste est publique**, dans `scripts/verifier-marques-reelles.mjs`, et
+c'est tout l'intérêt : elle dit ce qu'on a cherché à ne pas emprunter, et
+quiconque relit le fichier peut vérifier que la recherche a été sérieuse. Les
+marques ÉCARTÉES y figurent aussi, avec leur motif — un nom qui est aussi un
+mot courant, un prénom ou un patronyme répandu ferait échouer la construction
+sur une phrase française ordinaire.
+
+Une seule exemption est accordée à ce jour, et elle vise une **citation**, pas
+un fichier : « Fauchon » apparaît dans `contenu/decisions/000-choix-du-nom.md`
+où le nom sert de MESURE de densité de marques déposées. Si la phrase change,
+l'exemption tombe — et une exemption qui ne sert plus fait échouer la garde,
+pour qu'une liste d'exceptions ne s'allonge pas en silence.
+
 ## Refaire les mesures
 
 Les quatre notes (rapidité, accessibilité, bonnes pratiques, référencement)
-sont mesurées, datées et versionnées dans `mesures/`. La mesure se fait sur la
-construction de production, pas sur le serveur de développement :
+sont mesurées, datées et versionnées dans `mesures/`. **Une seule commande**,
+depuis la tranche C8 :
 
 ```bash
-npm run build
-npm run start &                       # sert le site sur le port 3000
-npx lighthouse http://localhost:3000 \
-  --output=json \
-  --output-path=./mesures/lighthouse-a-blanc-AAAA-MM-JJ.json \
-  --only-categories=performance,accessibility,best-practices,seo \
-  --chrome-flags=--headless
+npm run mesurer-notes
 ```
+
+Elle construit le site si `.next/` est absent, le sert en production sur un
+port libre, mesure **trois URL** au profil **mobile bridé** — l'accueil, la
+fiche de l'huile d'olive et le panier —, compare chaque note à son seuil
+(rapidité 92, accessibilité 100, bonnes pratiques 100, référencement 96), écrit
+`mesures/lighthouse-<date>.json` et **sort en erreur** si une note passe sous
+son seuil. Le mode d'emploi complet, le choix des trois URL et ce que « hors
+ligne » signifie exactement sont dans `mesures/LISEZ-MOI.md`.
+
+Relevé du **2026-08-06** (Lighthouse 13.4.1, profil mobile, construction de
+production servie en local) — les douze notes :
+
+| URL | Rapidité | Accessibilité | Bonnes pratiques | Référencement |
+|---|---|---|---|---|
+| `/` | 98 | 100 | 100 | 100 |
+| `/boutique/huile-olive-premiere-pression` | 98 | 100 | 100 | 100 |
+| `/panier` | 98 | 100 | 100 | 100 |
+
+Décalage cumulé de mise en page nul sur les trois ; premier affichage de
+contenu 1,5 à 1,6 s ; plus grand affichage 2,3 à 2,4 s ; temps de blocage
+50 à 60 ms.
 
 Mesure de référence du socle (2026-08-06, Lighthouse 13.4.1, profil mobile,
 page d'accueil) : **rapidité 98, accessibilité 100, bonnes pratiques 100,
@@ -261,6 +361,46 @@ de gestion aux robots pour faire un joli chiffre.
 Ces notes sont relevées **hors ligne, sur la machine de développement**. Elles
 donnent la santé du socle, pas la performance servie aux visiteurs : la mesure
 qui engage commercialement sera refaite sur le déploiement réel.
+
+## Les données structurées (JSON-LD)
+
+Trois balisages, et rien de plus :
+
+- **`Product` + `Offer`** sur les quinze fiches — nom, résumé, prix du format
+  le moins cher, devise, disponibilité et adresse. Les données de **BASE**, pas
+  celles de la surcouche marchand : un robot d’indexation n’a pas de
+  `localStorage`, et baliser un prix que seul le navigateur du visiteur connaît
+  reviendrait à publier un chiffre que personne d’autre ne voit.
+- **`BreadcrumbList`** sur les mêmes fiches : Accueil → Boutique → Produit.
+- **`Organization`** dans la mise en page racine : trois champs — nom, adresse
+  du site, description portant le mot « démonstration ». **Sans adresse, sans
+  téléphone, sans logo**, parce que le marchand n’en a pas (`marchand.ts` les
+  laisse à `null`) et que le balisage doit dire la même chose que l’affichage.
+
+**Aucune note moyenne, aucun avis.** Cette boutique n’a pas d’avis clients —
+ils sont hors périmètre — et un `aggregateRating` inventé s’afficherait en
+étoiles dans un résultat de recherche. C’est la donnée fausse la plus rentable
+à écrire, donc la première à refuser.
+
+Le poids ajouté est du **HTML**, pas du JavaScript : de 0,05 Ko gzip sur les
+pages qui ne portent que l’organisation à 0,20 Ko sur une fiche, qui en porte
+trois blocs. Le budget JavaScript des pages publiques est inchangé.
+
+## L’intégration continue
+
+`.github/workflows/verification.yml` — déclenché à chaque poussée sur `main` et
+à chaque demande de fusion. Une seule étape utile : `npm run controle`, la même
+commande qu’en local. Une chaîne d’intégration continue qui diverge de la
+commande locale finit par attraper des défauts que personne ne peut reproduire.
+
+**Aucun secret n’est requis**, et c’est la raison d’être de la décision D3 :
+sans clé de prestataire, l’adaptateur simulé prend le relais et le tunnel va
+jusqu’au bout. Le parcours fumigatoire traverse donc la totalité du parcours
+d’achat sur un runner qui ne connaît aucun secret — et la campagne d’un
+contributeur extérieur tourne exactement comme la nôtre.
+
+Le rapport Playwright est publié en artefact **en cas d’échec seulement** : un
+artefact de campagne verte n’est jamais ouvert.
 
 ## En-têtes de sécurité
 
