@@ -22,10 +22,15 @@ import { marchand } from '@/donnees/marchand';
  *
  * Report C5 : cette dernière ancre était annoncée pour C5. La tranche C5 livre
  * le paiement, les états et le journal — de quoi ALIMENTER un suivi — mais la
- * page `/suivi-de-commande` qui les affichera relève de C6. L'ancre reste donc
- * ordinaire une tranche de plus, et le dire vaut mieux que laisser un
- * commentaire promettre une bascule qui n'a pas eu lieu. La page de
- * confirmation porte le même report, sous la marque TODO-C6.
+ * page qui les affiche relève de C6. L'ancre est restée ordinaire une tranche
+ * de plus, et le dire valait mieux que laisser un commentaire promettre une
+ * bascule qui n'avait pas eu lieu.
+ *
+ * Bascule C6 : la page existe, à `/suivi`. Les trois liens sont désormais des
+ * `<Link>`, plus une seule ancre ordinaire dans cet en-tête. L'adresse a été
+ * raccourcie de `/suivi-de-commande` à `/suivi` en même temps qu'elle
+ * devenait réelle : rien ne pointait dessus, et une adresse courte se dicte au
+ * téléphone comme la référence qu'on y tape.
  *
  * Ajout C4 : la pastille du panier, dernier élément de la navigation. C'est le
  * SEUL îlot client de cet en-tête — le reste, y compris cette liste, demeure
@@ -35,7 +40,7 @@ import { marchand } from '@/donnees/marchand';
 const LIENS_NAVIGATION = [
   { libelle: 'Boutique', adresse: '/boutique', livree: true },
   { libelle: 'Livraison', adresse: '/livraison', livree: true },
-  { libelle: 'Suivi de commande', adresse: '/suivi-de-commande', livree: false },
+  { libelle: 'Suivi de commande', adresse: '/suivi', livree: true },
 ] as const;
 
 const CLASSE_LIEN =

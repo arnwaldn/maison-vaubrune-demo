@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { formaterEuros } from '@/lib/argent';
 import { promouvoirEnPayee } from '@/lib/commandes/depot-local';
 import { LIBELLE_ETAT, type Commande } from '@/lib/commandes/etats';
+import { formaterHorodatage } from '@/lib/commandes/horodatage';
 import { usePanier } from '@/lib/panier/contexte-panier';
 import { stockageLocal } from '@/lib/stockage-navigateur';
 import { LIBELLE_ZONE } from '@/lib/types';
@@ -281,14 +282,18 @@ function RecapitulatifCommande({ commande }: { readonly commande: Commande }) {
             ))}
           </ol>
 
-          {/* TODO-C6 : remplacer ce paragraphe par un lien vers `/suivi` quand
-              la page existera — même convention que le lien des conditions
-              générales dans `IlotCommande`, qui attend la tranche C7. */}
+          {/* Bascule C6 : la page de suivi existe, le lien est un vrai
+              `<Link>`. La référence est passée en chaîne de requête pour que
+              le client arrive sur sa frise sans rien retaper. */}
           <p className="mt-4 text-xs leading-relaxed text-encre-douce">
-            <span className="font-semibold text-ocre">Suivi en construction.</span> La
-            page qui liste vos commandes et fait avancer leurs états — préparée,
-            expédiée, annulée — est livrée à la tranche C6. Cette commande y
-            apparaîtra&nbsp;: elle est déjà rangée dans votre navigateur.
+            <Link
+              href={`/suivi?reference=${commande.reference}`}
+              className="font-semibold underline decoration-filet decoration-2 underline-offset-4 hover:text-terre hover:decoration-terre"
+            >
+              Suivre cette commande
+            </Link>{' '}
+            — la page de suivi affiche la frise des états et leurs horodatages, à
+            partir de la référence ci-dessus.
           </p>
         </section>
 
@@ -303,25 +308,9 @@ function RecapitulatifCommande({ commande }: { readonly commande: Commande }) {
   );
 }
 
-/**
- * Le jour et l'heure, en français, dans le fuseau du visiteur.
- *
- * Un horodatage ISO est illisible sur un écran de confirmation. La conversion
- * est faite ici et non au moment de l'écriture : ce qui est ENREGISTRÉ reste un
- * instant sans ambiguïté, ce qui est AFFICHÉ est une phrase.
- */
-function formaterHorodatage(horodatage: string): string {
-  const instant = new Date(horodatage);
-
-  if (Number.isNaN(instant.getTime())) {
-    return horodatage;
-  }
-
-  return new Intl.DateTimeFormat('fr-FR', {
-    dateStyle: 'long',
-    timeStyle: 'short',
-  }).format(instant);
-}
+/* La conversion d'un horodatage en phrase a quitté ce fichier en C6 pour
+   `@/lib/commandes/horodatage` : le détail marchand et la frise du suivi en ont
+   besoin, et une quatrième copie de six lignes aurait fini par diverger. */
 
 /* -------------------------------------------------------------------------- */
 /* La commande introuvable                                                     */

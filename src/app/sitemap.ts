@@ -16,10 +16,18 @@ import { DATE_PUBLICATION, URL_SITE } from '@/donnees/site';
  *
  * La tranche C3 en apporte une : la page « Livraison ».
  *
+ * La tranche C6 en apporte une : la page « Suivi de commande ». Elle est
+ * INDEXABLE et annoncée, contrairement aux pages du tunnel qui sont hors plan
+ * (décision D19) : un client cherche « suivi commande Maison Vaubrune » dans un
+ * moteur, il ne cherche jamais son propre panier. L'espace de gestion
+ * (`/gestion`), lui, reste absent du plan ET interdit aux robots
+ * (`src/app/robots.ts`), avec la note `noindex` que porte sa mise en page.
+ *
  * Priorités : l'accueil à 1, le rayon à 0,9 (c'est la page qui vend), les
- * fiches à 0,8, la livraison à 0,7 — page de confiance, consultée avant
- * l'achat mais rarement cherchée pour elle-même. Ce ne sont que des
- * indications de hiérarchie interne, aucun moteur n'en fait un classement.
+ * fiches à 0,8, la livraison et le suivi à 0,7 — pages de confiance,
+ * consultées autour de l'achat mais rarement cherchées pour elles-mêmes. Ce ne
+ * sont que des indications de hiérarchie interne, aucun moteur n'en fait un
+ * classement.
  */
 export default function sitemap(): MetadataRoute.Sitemap {
   const accueil = {
@@ -50,5 +58,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.7,
   };
 
-  return [accueil, rayon, ...fiches, livraison];
+  const suivi = {
+    url: new URL('/suivi', URL_SITE).toString(),
+    lastModified: DATE_PUBLICATION,
+    changeFrequency: 'monthly' as const,
+    priority: 0.7,
+  };
+
+  return [accueil, rayon, ...fiches, livraison, suivi];
 }
