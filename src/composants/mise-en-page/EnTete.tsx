@@ -1,5 +1,6 @@
 import Link from 'next/link';
 
+import { PastillePanier } from '@/composants/panier/PastillePanier';
 import { marchand } from '@/donnees/marchand';
 
 /**
@@ -18,6 +19,11 @@ import { marchand } from '@/donnees/marchand';
  *
  * Bascule C3 : « Livraison » passe à son tour en `<Link>`. Reste une seule
  * ancre ordinaire, le suivi de commande, jusqu'à la tranche C5.
+ *
+ * Ajout C4 : la pastille du panier, dernier élément de la navigation. C'est le
+ * SEUL îlot client de cet en-tête — le reste, y compris cette liste, demeure
+ * rendu côté serveur. Elle est placée en fin de liste parce que c'est là qu'on
+ * la cherche, et qu'un lien qui bouge d'une page à l'autre ne se retrouve pas.
  */
 const LIENS_NAVIGATION = [
   { libelle: 'Boutique', adresse: '/boutique', livree: true },
@@ -56,6 +62,9 @@ export function EnTete() {
                 )}
               </li>
             ))}
+            <li>
+              <PastillePanier />
+            </li>
           </ul>
         </nav>
       </div>
