@@ -13,6 +13,16 @@ quatre notes et quatre mesures d'expérience, plus le profil et les seuils qui
 ont servi de barrière. C'est le seul fichier de ce dossier qu'il faut lire pour
 savoir où en est le site.
 
+`lighthouse-en-ligne-AAAA-MM-JJ.json` est son jumeau **mesuré sur le
+déploiement réel** (tranche C9, depuis le 2026-08-06). Même profil, mêmes trois
+URL, mêmes seuils — seule l'origine change : `profil.horsLigne` y vaut `false`
+et `profil.origine` nomme l'adresse mesurée. **C'est ce fichier-là qui engage
+commercialement** : il porte le réseau de diffusion, la compression et les
+en-têtes réellement servis. Les deux relevés vivent séparément parce que
+confondre les deux reviendrait à publier la note d'un site pour celle d'un
+autre — et parce que le relevé hors ligne attrape une régression le jour où on
+l'introduit, sans réseau ni hébergeur.
+
 Les autres fichiers — `lighthouse-<page>-AAAA-MM-JJ.json` — sont les rapports
 Lighthouse **complets** des tranches C1 à C7, lancés à la main page par page.
 Ils font plusieurs centaines de kilo-octets chacun et contiennent le détail
@@ -38,6 +48,18 @@ Deux options, toutes deux facultatives :
 node scripts/mesurer-notes.mjs --date 2026-08-06   # nomme le fichier autrement
 node scripts/mesurer-notes.mjs --port 4310         # impose le port de service
 ```
+
+Et une troisième, qui change la nature du relevé :
+
+```bash
+node scripts/mesurer-notes.mjs --base https://maison-vaubrune-demo.vercel.app
+```
+
+Rien n'est construit, rien n'est servi : le script mesure le déploiement en
+ligne et écrit `lighthouse-en-ligne-<date>.json`. L'adresse doit être en
+`https://` — mesurée en clair, la page ne serait pas un contexte sécurisé et la
+note de bonnes pratiques chuterait pour une raison qui ne regarde pas le
+livrable.
 
 La mesure demande un Chrome. Le script prend celui que Playwright a déjà
 installé pour les parcours de bout en bout ; à défaut, posez `CHROME_PATH` ou

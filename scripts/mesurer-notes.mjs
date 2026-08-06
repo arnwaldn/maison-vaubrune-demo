@@ -43,7 +43,24 @@
  * demande, `npm run mesurer-notes`, et son RÉSULTAT est versionné : c'est le
  * fichier daté qui fait foi, pas le souvenir de l'avoir lancée.
  *
+ * ═══════════════════════════════════════════════════════════════════════════
+ *  HORS LIGNE OU EN LIGNE — DEUX RELEVÉS, DEUX FICHIERS
+ * ═══════════════════════════════════════════════════════════════════════════
+ *
+ * Sans option, le script construit s'il le faut, sert la production en local et
+ * mesure `http://localhost:<port libre>`. C'est la mesure de SANTÉ DU SOCLE :
+ * elle se rejoue sans réseau, sur n'importe quelle machine, et elle attrape une
+ * régression le jour où on l'introduit.
+ *
+ * Avec `--base https://…`, il ne construit rien, ne sert rien, et mesure le
+ * déploiement RÉEL. C'est la mesure qui ENGAGE COMMERCIALEMENT : elle porte le
+ * réseau de diffusion, la compression et les en-têtes réellement servis. Elle
+ * s'écrit dans un fichier distinct — `lighthouse-en-ligne-<date>.json` — parce
+ * que confondre les deux relevés reviendrait à publier la note d'un site pour
+ * celle d'un autre.
+ *
  * Usage : `node scripts/mesurer-notes.mjs [--date AAAA-MM-JJ] [--port 4310]`
+ *         `node scripts/mesurer-notes.mjs --base https://exemple.vercel.app`
  */
 
 import { spawn } from 'node:child_process';
@@ -162,6 +179,22 @@ const JOUR_PARIS = new Intl.DateTimeFormat('fr-CA', {
 
 const DATE = lireOption('--date', JOUR_PARIS.format(new Date()));
 
+/**
+ * La base à mesurer, quand elle est DISTANTE.
+ *
+ * `null` = mesure hors ligne, le script construit et sert lui-même. Une valeur
+ * = mesure en ligne : rien n'est construit, rien n'est servi, et le relevé
+ * part dans un fichier séparé.
+ */
+const BASE_DISTANTE = lireOption('--base', null);
+
+if (BASE_DISTANTE !== null && !BASE_DISTANTE.startsWith('https://')) {
+  throw new Error(
+    '--base attend une adresse en https:// — une mesure en clair fausserait la note ' +
+      'de bonnes pratiques pour une raison qui ne regarde pas le livrable',
+  );
+}
+
 /* -------------------------------------------------------------------------- */
 /* Le serveur de production                                                    */
 /* -------------------------------------------------------------------------- */
@@ -209,6 +242,14 @@ function lancer(commande, arguments_) {
  * piège avant nous ; on ne le refait pas.
  */
 async function servirLaProduction() {
+  /*
+   * Mesure en ligne : il n'y a rien à construire ni à servir. On rend un
+   * service sans processus, que le `finally` saura ne pas tuer.
+   */
+  if (BASE_DISTANTE !== null) {
+    return { serveur: null, base: BASE_DISTANTE.replace(/\/$/, '') };
+  }
+
   if (!existsSync(TEMOIN_DE_CONSTRUCTION)) {
     console.log('  Aucune construction dans .next/ — construction avant la mesure…');
     await lancer(process.execPath, [NEXT, 'build']);
@@ -372,7 +413,11 @@ async function principal() {
 
   try {
     service = await servirLaProduction();
-    console.log(`  Production servie sur ${service.base}`);
+    console.log(
+      BASE_DISTANTE === null
+        ? `  Production servie sur ${service.base}`
+        : `  Déploiement mesuré EN LIGNE : ${service.base}`,
+    );
     console.log('');
 
     const pages = [];
@@ -423,8 +468,11 @@ async function principal() {
       profil: {
         appareil: 'mobile',
         bridage: 'profil par défaut de Lighthouse (mobile émulé, réseau et processeur bridés)',
-        origine: 'construction de production servie en local (next start)',
-        horsLigne: true,
+        origine:
+          BASE_DISTANTE === null
+            ? 'construction de production servie en local (next start)'
+            : `déploiement de production, mesuré depuis Internet (${service.base})`,
+        horsLigne: BASE_DISTANTE === null,
       },
       seuils: SEUILS,
       pages,
@@ -432,11 +480,16 @@ async function principal() {
 
     mkdirSync(DOSSIER_MESURES, { recursive: true });
 
-    const fichier = join(DOSSIER_MESURES, `lighthouse-${DATE}.json`);
-    writeFileSync(fichier, `${JSON.stringify(releve, null, 2)}\n`, 'utf8');
+    const nomFichier =
+      BASE_DISTANTE === null ? `lighthouse-${DATE}.json` : `lighthouse-en-ligne-${DATE}.json`;
+    writeFileSync(
+      join(DOSSIER_MESURES, nomFichier),
+      `${JSON.stringify(releve, null, 2)}\n`,
+      'utf8',
+    );
 
     console.log('');
-    console.log(`  Relevé écrit : mesures/lighthouse-${DATE}.json`);
+    console.log(`  Relevé écrit : mesures/${nomFichier}`);
     console.log('-'.repeat(72));
 
     if (ecarts.length > 0) {
@@ -454,7 +507,7 @@ async function principal() {
     );
     console.log('');
   } finally {
-    if (service !== null) {
+    if (service !== null && service.serveur !== null) {
       service.serveur.kill();
     }
     rmSync(dossierTemporaire, { recursive: true, force: true });
