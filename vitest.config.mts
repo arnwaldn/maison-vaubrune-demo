@@ -31,8 +31,21 @@ import { defineConfig } from 'vitest/config';
  * appartient au périmètre pour cette raison, même si elle n'a pas été nommée
  * dans la commande de la tranche).
  *
- * Restent hors périmètre, et l'assument : `contexte-panier.tsx` et les îlots
- * de `src/composants/panier/` — du React, donc du rendu, donc Playwright.
+ * Extension C5 — quatre fichiers rejoignent la liste, et la règle qui les y
+ * fait entrer est inchangée : ils DÉCIDENT. `commandes/reference.ts` fabrique
+ * l'identifiant sous lequel une commande existera ; `commandes/etats.ts` dit
+ * quels changements d'état sont permis ; `commandes/depot-local.ts` relit un
+ * stockage auquel on ne doit rien croire ; `paiement/validation.ts` est le seul
+ * endroit du projet où un montant est ARBITRÉ CÔTÉ SERVEUR — c'est lui qui
+ * refuse un total falsifié, et il a été extrait de la route pour cette seule
+ * raison (une route Next ne se couvre pas, une fonction pure si).
+ *
+ * Restent hors périmètre, et l'assument : `contexte-panier.tsx`, les îlots de
+ * `src/composants/` — du React, donc du rendu, donc Playwright — et, en C5,
+ * `app/api/paiement/session/route.ts` (plomberie HTTP, sa décision est dans
+ * `validation.ts`), `paiement/stripe.ts` et `paiement/adaptateur.ts` (leurs
+ * comportements vérifiables le sont dans `tests/unitaires/paiement.spec.ts` ;
+ * ce qui reste est un appel réseau qu'on ne simule pas).
  *
  * L'alias `@/` est redéclaré ici parce que Vitest ne lit pas `tsconfig.json` :
  * il reprend la même correspondance que le compilateur et que Next.
@@ -55,6 +68,10 @@ export default defineConfig({
         'src/lib/panier/totaux.ts',
         'src/lib/panier/persistance.ts',
         'src/lib/panier/catalogue-panier.ts',
+        'src/lib/commandes/reference.ts',
+        'src/lib/commandes/etats.ts',
+        'src/lib/commandes/depot-local.ts',
+        'src/lib/paiement/validation.ts',
       ],
       /* `skipFull` masquerait les fichiers à 100 % — c'est-à-dire, ici, les
          deux seuls qu'on regarde. Le rapport doit AFFICHER le plein, pas le
