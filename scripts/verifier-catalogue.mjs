@@ -53,7 +53,10 @@ import { fileURLToPath } from 'node:url';
 import { z } from 'zod';
 
 import { CATALOGUE, PRODUITS_MIS_EN_AVANT } from '@/donnees/catalogue';
+import { COMMANDES_AMORCE } from '@/donnees/commandes-amorce';
 import { formaterEuros } from '@/lib/argent';
+import { projeterCatalogue } from '@/lib/panier/catalogue-panier';
+import { calculerTotaux } from '@/lib/panier/totaux';
 import { PHRASES_RETRACTATION, regimeRetractation } from '@/lib/retractation';
 import { typographier } from '@/lib/typographie';
 import {
@@ -159,6 +162,12 @@ const produitSchema = z.strictObject({
     .min(2)
     .optional(),
   piecesEligibles: z.array(SKU).min(3).optional(),
+  /* Ajouté en C6. ABSENT du catalogue versionné — les quinze références sont en
+     vente, et un champ posé quinze fois à `true` n'apprendrait rien. Il n'existe
+     que lorsque la surcouche marchand l'a posé. Le schéma l'accepte pour que le
+     jour où une référence sera réellement retirée de la vente dans le fichier,
+     la garde ne le refuse pas comme un champ inconnu. */
+  disponible: z.boolean().optional(),
 });
 
 /* -------------------------------------------------------------------------- */
@@ -594,6 +603,65 @@ controle('rétractation : le bon fondement sur le bon produit', (exiger, noter) 
       .map(([fondement, compte]) => `${fondement === 'null' ? 'droit ouvert' : fondement} : ${String(compte)}`)
       .join(' | '),
   );
+});
+
+/**
+ * Contrôle ajouté en C6 — LE JEU D'ESSAI CONTRE LE CATALOGUE.
+ *
+ * Les six commandes d'amorce portent leurs trois montants ÉCRITS EN DUR : c'est
+ * la sémantique de `Commande.totaux`, des montants FIGÉS au paiement. Ce
+ * contrôle les recalcule avec `calculerTotaux()` — la même fonction que le
+ * panier et le récapitulatif — et exige l'égalité au centime.
+ *
+ * Sa place est ici, dans la garde du CATALOGUE, et pas seulement dans les tests
+ * unitaires (où il figure aussi). La raison : ce contrôle n'attrape pas une
+ * faute de frappe dans le jeu d'essai, il attrape le jour où quelqu'un modifie
+ * un PRIX DU CATALOGUE sous une commande figée. C'est un contrôle de cohérence
+ * du catalogue, il doit échouer là où l'on vient de toucher au catalogue.
+ */
+controle('jeu d’essai : les six totaux se recalculent au centime', (exiger, noter) => {
+  const projete = projeterCatalogue(CATALOGUE);
+  const skus = new Set(projete.map((article) => article.sku));
+
+  exiger(COMMANDES_AMORCE.length === 6, `${String(COMMANDES_AMORCE.length)} commandes d'amorce au lieu de 6`);
+
+  for (const commande of COMMANDES_AMORCE) {
+    for (const calculee of commande.lignes) {
+      exiger(
+        skus.has(calculee.article.sku),
+        `${commande.reference} : SKU inconnu ${calculee.article.sku}`,
+      );
+    }
+
+    const recalcule = calculerTotaux(
+      commande.lignes.map((calculee) => calculee.ligne),
+      projete,
+      commande.zone,
+    );
+
+    if (recalcule.expedition.statut !== 'calcule') {
+      exiger(false, `${commande.reference} : expédition devenue impossible (${recalcule.expedition.motif})`);
+      continue;
+    }
+
+    const attendus = commande.totaux;
+    const obtenus = {
+      sousTotal: recalcule.sousTotalCentimes,
+      port: recalcule.expedition.fraisCentimes,
+      total: recalcule.totalCentimes,
+    };
+
+    for (const champ of ['sousTotal', 'port', 'total']) {
+      exiger(
+        obtenus[champ] === attendus[champ],
+        `${commande.reference} · ${champ} : ${formaterEuros(attendus[champ])} écrit, ${formaterEuros(obtenus[champ])} recalculé — un prix du catalogue a bougé sous une commande figée`,
+      );
+    }
+
+    noter(
+      `${commande.reference} (${commande.etat}, ${commande.zone}) : ${formaterEuros(attendus.total)}`,
+    );
+  }
 });
 
 controle('les règles typographiques rejouent les quinze fiches', (exiger, noter) => {

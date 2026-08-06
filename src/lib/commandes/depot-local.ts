@@ -54,6 +54,34 @@ import { CODES_ZONE, type CodeZone } from '@/lib/types';
  * Comme pour le panier, une commande MALFORMÉE invalide TOUTE la liste : une
  * liste à moitié comprise ferait disparaître des commandes sans le dire, ce
  * qui est pire qu'une liste vide qu'on remarque.
+ *
+ * ---------------------------------------------------------------------------
+ * AJOUT C6 — le jeu d'essai, et la COPIE À L'ÉCRITURE
+ * ---------------------------------------------------------------------------
+ *
+ * Un espace de gestion vide ne démontre rien : six commandes d'amorce
+ * (`src/donnees/commandes-amorce.ts`) peuplent le tableau de bord dès la
+ * première visite. Elles ne sont PAS écrites dans le stockage — elles sont
+ * FUSIONNÉES à la lecture. Deux conséquences qui valent d'être dites :
+ *
+ * - un visiteur qui n'a rien fait ne trouve rien dans son navigateur, ce qui
+ *   est ce que la démonstration promet (« vos essais restent chez vous ») ;
+ * - la réinitialisation n'a pas à reconstruire l'amorce, seulement à effacer
+ *   ce que le visiteur a écrit.
+ *
+ * Faire avancer une commande d'amorce écrit donc une COPIE dans le stockage
+ * local, et cette copie MASQUE l'originale à la lecture suivante. L'amorce
+ * reste intacte, en mémoire, telle que le module la construit. C'est la seule
+ * manière d'avoir à la fois des commandes d'exemple sur lesquelles agir et un
+ * bouton « Réinitialiser » qui tienne sa promesse.
+ *
+ * L'AMORCE EST INJECTÉE, jamais importée ici. Deux raisons, et la seconde est
+ * la vraie : ce module est déjà dans le paquet client du tunnel
+ * (`IlotCommande`, `IlotConfirmation`), et un `import` du jeu d'essai y
+ * embarquerait six commandes complètes — articles projetés compris — sur des
+ * pages qui n'en ont aucun usage (décision D17). Le paramètre est optionnel et
+ * vaut la liste vide : les appels du tunnel n'ont pas changé d'une lettre, et
+ * ne coûtent pas un octet de plus.
  */
 
 /* -------------------------------------------------------------------------- */
@@ -325,11 +353,16 @@ export function abandonnerAttente(stockage: StockageCommandes): boolean {
 /* -------------------------------------------------------------------------- */
 
 /**
- * Toutes les commandes rangées, dans l'ordre où elles ont été payées. Liste
- * vide si la clé est absente, illisible, ou si UNE SEULE commande est
- * malformée (voir l'en-tête).
+ * Les commandes ÉCRITES DANS CE NAVIGATEUR, dans l'ordre où elles ont été
+ * payées. Liste vide si la clé est absente, illisible, ou si UNE SEULE commande
+ * est malformée (voir l'en-tête).
+ *
+ * C'est la lecture brute du stockage : elle ignore le jeu d'essai. L'espace de
+ * gestion s'en sert pour distinguer, dans son tableau, les commandes que le
+ * visiteur a réellement produites — les siennes et les copies qu'il a fait
+ * avancer — de celles qui viennent de l'amorce.
  */
-export function lireCommandes(stockage: StockageCommandes): readonly Commande[] {
+export function lireCommandesLocales(stockage: StockageCommandes): readonly Commande[] {
   const charge = lireCharge(stockage, CLE_COMMANDES);
 
   if (!Array.isArray(charge)) {
@@ -351,12 +384,67 @@ export function lireCommandes(stockage: StockageCommandes): readonly Commande[] 
   return commandes;
 }
 
-/** La commande portant cette référence, ou `null`. */
+/**
+ * Toutes les commandes visibles : le jeu d'essai, puis celles du navigateur.
+ *
+ * Une commande LOCALE MASQUE l'amorce de même référence — c'est la copie à
+ * l'écriture décrite en tête de fichier. L'ordre rend l'amorce d'abord (les
+ * plus anciennes) puis les locales dans l'ordre d'écriture ; les écrans qui
+ * veulent un autre tri le font eux-mêmes, sur une liste dont ils savent qu'elle
+ * est complète.
+ */
+export function lireCommandes(
+  stockage: StockageCommandes,
+  amorce: readonly Commande[] = [],
+): readonly Commande[] {
+  const locales = lireCommandesLocales(stockage);
+
+  if (amorce.length === 0) {
+    return locales;
+  }
+
+  const masquees = new Set(locales.map((commande) => commande.reference));
+
+  return [
+    ...amorce.filter((commande) => !masquees.has(commande.reference)),
+    ...locales,
+  ];
+}
+
+/** La commande portant cette référence, ou `null`. Jeu d'essai compris. */
 export function lireCommande(
   stockage: StockageCommandes,
   reference: string,
+  amorce: readonly Commande[] = [],
 ): Commande | null {
-  return lireCommandes(stockage).find((commande) => commande.reference === reference) ?? null;
+  return (
+    lireCommandes(stockage, amorce).find(
+      (commande) => commande.reference === reference,
+    ) ?? null
+  );
+}
+
+/**
+ * Efface TOUT ce que ce navigateur a écrit sur les commandes — la liste et la
+ * commande en attente. Le jeu d'essai, lui, n'est pas dans le stockage : il
+ * réapparaît intact à la lecture suivante, ce qui est précisément ce qu'on
+ * attend d'une réinitialisation.
+ *
+ * `false` si l'une des deux suppressions a échoué. L'appelant le dit plutôt que
+ * d'afficher un succès démenti par l'écran suivant.
+ */
+export function purgerCommandesLocales(stockage: StockageCommandes): boolean {
+  let ok = true;
+
+  for (const cle of [CLE_COMMANDES, CLE_ATTENTE]) {
+    try {
+      stockage.removeItem(cle);
+    } catch {
+      ok = false;
+    }
+  }
+
+  return ok;
 }
 
 /**
@@ -397,7 +485,9 @@ export function promouvoirEnPayee(
 
   /* L'attente n'est effacée QUE si la liste a bien été écrite. Un stockage
      plein effacerait sinon la seule trace de la commande. */
-  if (ecrireCharge(stockage, CLE_COMMANDES, [...lireCommandes(stockage), commande])) {
+  if (
+    ecrireCharge(stockage, CLE_COMMANDES, [...lireCommandesLocales(stockage), commande])
+  ) {
     abandonnerAttente(stockage);
   }
 
@@ -405,23 +495,29 @@ export function promouvoirEnPayee(
 }
 
 /**
- * Applique une transition d'état et réécrit la liste.
+ * Applique une transition d'état et réécrit la liste locale.
  *
  * La décision reste dans `appliquerTransition()` — ce module ne connaît pas le
- * graphe, il ne fait que persister son verdict. C'est ce qui permettra à
- * l'espace de gestion (tranche C6) de faire avancer une commande sans
- * dupliquer une seule règle.
+ * graphe, il ne fait que persister son verdict. C'est ce qui permet à l'espace
+ * de gestion de faire avancer une commande sans dupliquer une seule règle.
+ *
+ * COPIE À L'ÉCRITURE. La commande à faire avancer est cherchée dans la vue
+ * COMPLÈTE (jeu d'essai compris), mais l'écriture n'a lieu que dans la liste
+ * LOCALE : une commande d'amorce y est AJOUTÉE dans son nouvel état, où elle
+ * masquera l'originale à la lecture suivante ; une commande déjà locale y est
+ * REMPLACÉE. L'amorce n'est jamais modifiée — c'est ce qui rend
+ * « Réinitialiser le jeu d'essai » exact, et non approximatif.
  */
 export function appliquerTransitionEnregistree(
   stockage: StockageCommandes,
   reference: string,
   cible: EtatCommande,
   horodatage: string,
+  amorce: readonly Commande[] = [],
 ): ResultatTransition {
-  const commandes = lireCommandes(stockage);
-  const courante = commandes.find((commande) => commande.reference === reference);
+  const courante = lireCommande(stockage, reference, amorce);
 
-  if (courante === undefined) {
+  if (courante === null) {
     return { ok: false, motif: `Aucune commande ne porte la référence ${reference}.` };
   }
 
@@ -431,9 +527,14 @@ export function appliquerTransitionEnregistree(
     return resultat;
   }
 
-  const suivantes = commandes.map((commande) =>
-    commande.reference === reference ? resultat.commande : commande,
-  );
+  const locales = lireCommandesLocales(stockage);
+  const dejaLocale = locales.some((commande) => commande.reference === reference);
+
+  const suivantes = dejaLocale
+    ? locales.map((commande) =>
+        commande.reference === reference ? resultat.commande : commande,
+      )
+    : [...locales, resultat.commande];
 
   if (!ecrireCharge(stockage, CLE_COMMANDES, suivantes)) {
     return {

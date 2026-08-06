@@ -108,3 +108,53 @@ export function genererReference(date: Date, alea: () => number): string {
 
   return `${PREFIXE_REFERENCE}-${jour}-${suffixe}`;
 }
+
+/* -------------------------------------------------------------------------- */
+/* La lecture d'une référence saisie à la main (tranche C6)                    */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * La même référence, sans ses tirets ni ses espaces, en capitales.
+ *
+ * Les tirets sont retirés de la SAISIE et remis à la sortie : ils appartiennent
+ * à l'affichage, pas à l'identité. C'est ce qui permet d'accepter les trois
+ * formes qu'un client produit réellement — celle qu'il recopie de son écran de
+ * confirmation, celle qu'il tape de mémoire sans tirets, celle qu'un
+ * correcteur automatique lui a mise en minuscules.
+ */
+const MOTIF_REFERENCE_COMPACTE = /^MVB\d{8}[2-9A-HJ-NP-Z]{4}$/;
+
+const SEPARATEURS_SAISIS = /[\s-]/g;
+
+/** Longueurs des trois segments : préfixe, jour, suffixe. */
+const FIN_PREFIXE = PREFIXE_REFERENCE.length;
+const FIN_JOUR = FIN_PREFIXE + 8;
+
+/**
+ * Une référence saisie à la main, ramenée à sa forme canonique — ou `null`.
+ *
+ * Sert à la page de suivi, où le visiteur tape ce qu'il a noté. La tolérance
+ * s'arrête exactement là où l'ambiguïté commencerait : on accepte la casse et
+ * les séparateurs, on refuse tout le reste. En particulier, on ne « corrige »
+ * ni un `O` en `0` ni un `1` en `L` — l'alphabet a précisément été privé de ces
+ * paires pour que la question ne se pose jamais (voir l'en-tête), et deviner
+ * ici rouvrirait la porte qu'il ferme.
+ *
+ * La reconstruction se fait par découpage plutôt que par groupes capturés :
+ * `slice()` rend toujours une chaîne, là où un groupe d'expression régulière
+ * rend `string | undefined` et imposerait une branche que rien ne peut
+ * atteindre — donc une branche que la couverture ne pourrait jamais montrer.
+ */
+export function normaliserReferenceSaisie(saisie: string): string | null {
+  const compacte = saisie.replace(SEPARATEURS_SAISIS, '').toUpperCase();
+
+  if (!MOTIF_REFERENCE_COMPACTE.test(compacte)) {
+    return null;
+  }
+
+  return [
+    compacte.slice(0, FIN_PREFIXE),
+    compacte.slice(FIN_PREFIXE, FIN_JOUR),
+    compacte.slice(FIN_JOUR),
+  ].join('-');
+}
