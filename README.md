@@ -135,6 +135,15 @@ encaisser un centime réel. Le visiteur reçoit alors la même réponse honnête
 qu'une panne du prestataire (502, « aucun montant n'a été engagé »), et le motif
 exact part au journal du serveur.
 
+**Activer le paiement de test sur le déploiement** (geste du titulaire du
+compte Stripe, environ deux minutes) : tableau de bord Stripe en **mode test**
+→ « Développeurs » → « Clés API » → copier la clé secrète de test (préfixe
+`sk_test_`) ; puis tableau de bord Vercel → projet `maison-vaubrune-demo` →
+« Settings » → « Environment Variables » → ajouter `STRIPE_SECRET_KEY` pour
+l'environnement *Production* → redéployer. La clé ne se met **jamais** dans le
+dépôt ni dans un fichier suivi. Au retrait de la variable, le site retombe de
+lui-même sur l'écran simulé — c'est le même tunnel.
+
 ## L'espace marchand et le suivi client
 
 **Le catalogue est tenu par le marchand, et la démonstration le prouve sans
