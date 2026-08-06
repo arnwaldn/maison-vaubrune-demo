@@ -419,6 +419,44 @@ controle('coffret « Composez le vôtre » : le forfait tient', (exiger, noter) 
   }
 });
 
+/**
+ * Contrôle ajouté en C4 — LA CONVENTION QUE LE PANIER EXPLOITE.
+ *
+ * `nombreDePiecesAChoisir()` (src/lib/panier/catalogue-panier.ts) lit le
+ * nombre de pièces d'un coffret personnalisable EN TÊTE DE SON FORMAT :
+ * « 3 pièces » donne trois cases à cocher obligatoires, « 5 pièces » en donne
+ * cinq. Le catalogue arrêté en C2 ne porte pas de champ dédié, et l'ajouter
+ * aurait rouvert les quinze fiches et le schéma zod pour une seule référence.
+ *
+ * La convention est donc GARDÉE ICI plutôt que supposée là-bas. Un format
+ * renommé « coffret de trois » ferait échouer cette garde — au lieu de laisser
+ * l'interface exiger `null` pièce et le bouton d'ajout rester éteint sans que
+ * personne ne comprenne pourquoi.
+ */
+controle('coffrets personnalisables : le format annonce son nombre de pièces', (exiger, noter) => {
+  const personnalisables = CATALOGUE.filter((produit) => produit.personnalisable);
+
+  exiger(
+    personnalisables.length > 0,
+    'aucun produit personnalisable : ce contrôle ne garde plus rien',
+  );
+
+  for (const produit of personnalisables) {
+    for (const variante of produit.variantes) {
+      const tete = /^(\d+)/.exec(variante.format);
+
+      exiger(
+        tete !== null,
+        `${produit.slug} · ${variante.sku} : le format « ${variante.format} » ne commence pas par un nombre, le panier ne saura pas combien de pièces exiger`,
+      );
+
+      if (tete !== null) {
+        noter(`${variante.sku} : ${tete[1]} pièces à choisir`);
+      }
+    }
+  }
+});
+
 controle('coffret « La table du dimanche » : composition fidèle', (exiger, noter) => {
   const coffret = CATALOGUE.find((produit) => produit.slug === SLUG_COFFRET_FIXE);
   exiger(coffret !== undefined, `produit ${SLUG_COFFRET_FIXE} introuvable`);
