@@ -6,18 +6,24 @@ import { marchand } from '@/donnees/marchand';
  * Navigation squelette. Les trois destinations sont celles d'une boutique :
  * le rayon, la promesse de livraison, le suivi d'une commande déjà passée.
  *
- * Les pages n'existent pas encore (tranches C2 et suivantes) : ce sont donc
- * des ancres HTML ordinaires et non des `<Link>`. La raison n'est pas
- * typographique mais mesurable — `<Link>` préchargerait ces trois routes dès
- * qu'elles entrent dans la fenêtre, soit trois requêtes qui répondraient 404
- * sur chaque page vue. La bascule vers `<Link>` se fera route par route, à
- * mesure que chaque page existe.
+ * Les pages qui n'existent pas encore sont des ancres HTML ordinaires et non
+ * des `<Link>`. La raison n'est pas typographique mais mesurable — `<Link>`
+ * préchargerait ces routes dès qu'elles entrent dans la fenêtre, soit autant
+ * de requêtes qui répondraient 404 sur chaque page vue. La bascule se fait
+ * route par route, à mesure que chaque page existe.
+ *
+ * Bascule C2 : « Boutique » est désormais un `<Link>`, la route existe et son
+ * préchargement est même souhaitable — c'est la page vers laquelle tout le
+ * site pousse. Restent deux ancres ordinaires, jusqu'aux tranches C3 et C5.
  */
 const LIENS_NAVIGATION = [
-  { libelle: 'Boutique', adresse: '/boutique' },
-  { libelle: 'Livraison', adresse: '/livraison' },
-  { libelle: 'Suivi de commande', adresse: '/suivi-de-commande' },
+  { libelle: 'Boutique', adresse: '/boutique', livree: true },
+  { libelle: 'Livraison', adresse: '/livraison', livree: false },
+  { libelle: 'Suivi de commande', adresse: '/suivi-de-commande', livree: false },
 ] as const;
+
+const CLASSE_LIEN =
+  'text-sm font-medium text-encre-douce underline decoration-filet decoration-2 underline-offset-4 hover:text-terre hover:decoration-terre';
 
 export function EnTete() {
   return (
@@ -36,12 +42,15 @@ export function EnTete() {
           <ul className="flex flex-wrap items-center gap-x-6 gap-y-2">
             {LIENS_NAVIGATION.map((lien) => (
               <li key={lien.adresse}>
-                <a
-                  href={lien.adresse}
-                  className="text-sm font-medium text-encre-douce underline decoration-filet decoration-2 underline-offset-4 hover:text-terre hover:decoration-terre"
-                >
-                  {lien.libelle}
-                </a>
+                {lien.livree ? (
+                  <Link href={lien.adresse} className={CLASSE_LIEN}>
+                    {lien.libelle}
+                  </Link>
+                ) : (
+                  <a href={lien.adresse} className={CLASSE_LIEN}>
+                    {lien.libelle}
+                  </a>
+                )}
               </li>
             ))}
           </ul>
