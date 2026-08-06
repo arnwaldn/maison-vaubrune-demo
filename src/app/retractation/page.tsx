@@ -733,9 +733,13 @@ export default function PageRetractation() {
  * Le cadre de signature est le plus haut de tous : le modèle le prévoit pour un
  * envoi papier, et une signature ne tient pas sur une interligne.
  *
- * Balisé `data-texte-reglementaire` pour que la garde « aucune donnée inventée »
- * n'aille pas prendre « R. 221-1 » ou une adresse de modèle pour une donnée
- * réelle.
+ * L'attribut `data-texte-reglementaire` déclare le bloc dans le document rendu.
+ * Il n'est PAS doublé du marqueur qui le retirerait de l'analyse de la garde
+ * « aucune donnée inventée », contrairement à l'encadré de l'article D. 211-2 :
+ * ce modèle-ci ne contient aucun nombre — pas un montant, pas un délai — et
+ * n'a donc rien à faire sortir d'un contrôle. Exempter ce qui n'en a pas besoin
+ * est la manière la plus sûre de ne plus savoir, dans six mois, ce qui est
+ * réellement contrôlé.
  */
 function ModeleFormulaire() {
   return (

@@ -84,7 +84,20 @@ const SOMMAIRE: readonly EntreeSommaire[] = [
   { ancre: 'article-14', libelle: 'Article 14 — Archivage et preuve' },
 ];
 
-/** L'encadré de l'article D. 211-2, reproduit tel quel — voir `EncadreD211()`. */
+/**
+ * L'encadré de l'article D. 211-2, reproduit tel quel — voir `EncadreD211()`.
+ *
+ * texte-reglementaire:debut — encadré prévu par l'article D. 211-2 du code de
+ * la consommation. Ce marqueur, refermé après la dernière ligne du tableau,
+ * retire ce bloc de l'analyse de `verifier-aucune-donnee-inventee` : le
+ * rédacteur juridique avait signalé que « 300 000 euros » et « 10 % » ont la
+ * forme de ce qu'une garde de ce type recherche, et jugeait un marquage plus
+ * sûr qu'une liste d'exceptions « parce qu'elle ne se périme pas à chaque
+ * nouvelle citation » (00-NOTES-INTEGRATION.md, § 5.7). Les nombres présents
+ * passeraient d'ailleurs sans lui — un montant suivi d'une unité n'est pas un
+ * identifiant, et la garde le sait —, mais la prochaine citation ajoutée ici
+ * n'aura pas à être plaidée.
+ */
 const ENCADRE_D211: readonly string[] = [
   'Le consommateur dispose d’un délai de deux ans à compter de la délivrance du ' +
     'bien pour obtenir la mise en œuvre de la garantie légale de conformité en ' +
@@ -135,6 +148,7 @@ const ENCADRE_D211: readonly string[] = [
     'une réduction de prix si le bien est conservé ou à un remboursement intégral ' +
     'contre restitution du bien.',
 ];
+/* texte-reglementaire:fin */
 
 export default function PageConditionsGeneralesDeVente() {
   return (
@@ -861,10 +875,17 @@ export default function PageConditionsGeneralesDeVente() {
  *    tranché ici.
  * 2. Ses deux nombres — « 300 000 euros » et « 10 % » — sont exactement le
  *    genre de chaîne qu'une garde « aucune donnée inventée » prend pour un
- *    identifiant. C'est pourquoi ce bloc est BALISÉ : l'attribut
- *    `data-texte-reglementaire` le déclare, et la garde ignore le contenu
- *    ainsi déclaré au lieu de tenir une liste d'exceptions qui se périmerait à
- *    chaque nouvelle citation (§ 5.7 des mêmes notes).
+ *    identifiant. Ce bloc est donc balisé DEUX FOIS, pour deux lecteurs
+ *    différents : l'attribut `data-texte-reglementaire` ci-dessous le déclare
+ *    dans le document rendu, à l'usage de qui inspecte la page ; et la paire
+ *    de marqueurs qui encadre la constante `ENCADRE_D211` le retire de
+ *    l'analyse de la garde. Le second est celui que le script lit — le premier
+ *    ne dit rien à personne d'autre qu'un humain.
+ *
+ *    Ces marqueurs ne s'écrivent PAS en prose, ici ou ailleurs : le script les
+ *    cherche par leur texte, une mention dans un commentaire compterait pour
+ *    une ouverture réelle. C'est arrivé pendant l'écriture de cette page, et
+ *    c'est le contrôle de déséquilibre de la garde qui l'a dit.
  *
  * La mise en forme (bordure franche, fond distinct, ouverture et fermeture
  * annoncées) sert une seule chose : qu'on voie où le texte officiel commence et
