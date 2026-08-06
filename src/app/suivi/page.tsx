@@ -42,8 +42,9 @@ export const dynamic = 'force-static';
 export const metadata: Metadata = {
   title: 'Suivi de commande',
   description:
-    'Suivez une commande de la Maison Vaubrune à partir de sa référence : ' +
-    'payée, préparée, expédiée, avec les horodatages de chaque étape.',
+    'Suivez une commande de la boutique de démonstration Maison Vaubrune à ' +
+    'partir de sa référence : payée, préparée, expédiée, avec les horodatages ' +
+    'de chaque étape.',
   alternates: { canonical: '/suivi' },
 };
 

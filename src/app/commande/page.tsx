@@ -24,8 +24,9 @@ export const dynamic = 'force-static';
 export const metadata: Metadata = {
   title: 'Commande',
   description:
-    'Récapitulatif de commande de la Maison Vaubrune : articles, frais de port, ' +
-    'total à payer, coordonnées de livraison et conditions générales de vente.',
+    'Récapitulatif de commande de la boutique de démonstration Maison ' +
+    'Vaubrune : articles, frais de port, total à payer, coordonnées de ' +
+    'livraison et conditions générales de vente.',
   alternates: { canonical: '/commande' },
 };
 

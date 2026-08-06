@@ -1,12 +1,14 @@
 import type { Metadata, Viewport } from 'next';
 import type { ReactNode } from 'react';
 
+import { DonneesStructurees } from '@/composants/mise-en-page/DonneesStructurees';
 import { EnTete } from '@/composants/mise-en-page/EnTete';
 import { LienSaut } from '@/composants/mise-en-page/LienSaut';
 import { PiedDePage } from '@/composants/mise-en-page/PiedDePage';
 import { CATALOGUE } from '@/donnees/catalogue';
 import { marchand } from '@/donnees/marchand';
 import { URL_SITE } from '@/donnees/site';
+import { donneesOrganisation } from '@/lib/donnees-structurees';
 import { Fournisseurs } from '@/lib/fournisseurs';
 import {
   projeterCatalogue,
@@ -64,6 +66,16 @@ export const viewport: Viewport = {
 const STOCKS = stocksDepuisCatalogue(projeterCatalogue(CATALOGUE));
 
 /**
+ * L'organisation, en trois champs et sans une donnée inventée.
+ *
+ * Calculée une fois à la construction, comme les stocks : c'est du texte figé,
+ * il n'a aucune raison d'être reconstruit à chaque rendu. Le raisonnement sur
+ * les champs ABSENTS — adresse, téléphone, logo, note moyenne — est en tête de
+ * `src/lib/donnees-structurees.ts`.
+ */
+const ORGANISATION = donneesOrganisation(URL_SITE);
+
+/**
  * La mise en page racine RESTE UN COMPOSANT SERVEUR. `<Fournisseurs>` porte la
  * directive `'use client'`, mais `children` lui est passé en propriété : React
  * le traite comme un arbre déjà rendu côté serveur, si bien que l'accueil, le
@@ -84,6 +96,8 @@ export default function MiseEnPageRacine({
   return (
     <html lang="fr" className={`${policeTitre.variable} ${policeTexte.variable}`}>
       <body className="flex min-h-dvh flex-col antialiased">
+        <DonneesStructurees donnees={ORGANISATION} />
+
         <Fournisseurs stocks={STOCKS}>
           <LienSaut />
           <EnTete />

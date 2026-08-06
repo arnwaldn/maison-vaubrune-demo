@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
 import { Silhouette } from '@/composants/illustrations/Silhouette';
+import { DonneesStructurees } from '@/composants/mise-en-page/DonneesStructurees';
 import { BoutonAjouter } from '@/composants/panier/BoutonAjouter';
 import {
   EtiquettesVitrine,
@@ -12,8 +13,10 @@ import {
   StockVarianteVitrine,
 } from '@/composants/surcouche/FeuillesVitrine';
 import { CATALOGUE } from '@/donnees/catalogue';
+import { URL_SITE } from '@/donnees/site';
 import { formaterEuros } from '@/lib/argent';
 import { trouverProduitParSlug, trouverReferenceParSku } from '@/lib/catalogue';
+import { donneesProduit, filArianeProduit } from '@/lib/donnees-structurees';
 import { projeterCatalogue, type ArticlePanier } from '@/lib/panier/catalogue-panier';
 import { regimeRetractation } from '@/lib/retractation';
 import { typographier } from '@/lib/typographie';
@@ -58,7 +61,14 @@ export async function generateMetadata({ params }: ProprietesPage): Promise<Meta
 
   return {
     title: produit.nom,
-    description: produit.resume,
+    /* Le résumé du rédacteur, SUIVI du rappel de fiction. Les quinze fiches
+       étaient les seules pages du site dont la description ne portait pas le
+       mot « démonstration » : un extrait de résultat de recherche qui vante
+       une huile d'olive sans dire qu'elle n'existe pas est exactement le
+       malentendu que ce projet passe son temps à écarter. La phrase est
+       ajoutée plutôt que substituée — le résumé reste ce qui décrit le
+       produit, et il vient en premier. */
+    description: `${produit.resume} Fiche produit de Maison Vaubrune, boutique de démonstration.`,
     alternates: { canonical: `/boutique/${produit.slug}` },
   };
 }
@@ -82,6 +92,15 @@ export default async function PageProduit({ params }: ProprietesPage) {
 
   return (
     <article className="mx-auto max-w-page px-5 pb-4 sm:px-8">
+      {/* Les DONNÉES DE BASE, jamais celles de la surcouche marchand : un robot
+          d'indexation n'a pas de `localStorage`, et baliser un prix que seul le
+          navigateur du visiteur connaît reviendrait à publier un chiffre que
+          personne d'autre ne voit. Le raisonnement complet — et la liste des
+          champs volontairement absents, à commencer par toute note d'avis — est
+          en tête de `src/lib/donnees-structurees.ts`. */}
+      <DonneesStructurees donnees={donneesProduit(produit, URL_SITE)} />
+      <DonneesStructurees donnees={filArianeProduit(produit, URL_SITE)} />
+
       <nav aria-label="Fil d’Ariane" className="pt-8 text-sm text-encre-douce">
         <Link
           href="/boutique"

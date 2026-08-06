@@ -8,9 +8,9 @@ import { FAMILLES, LIBELLE_FAMILLE } from '@/lib/types';
 export const metadata: Metadata = {
   title: 'Boutique',
   description:
-    'Les quinze références de la Maison Vaubrune, rangées par famille : huiles ' +
-    'et vinaigres, conserves salées, miels et confitures, épicerie sèche, ' +
-    'infusions, frais et coffrets.',
+    'Les quinze références de la boutique de démonstration Maison Vaubrune, ' +
+    'rangées par famille : huiles et vinaigres, conserves salées, miels et ' +
+    'confitures, épicerie sèche, infusions, frais et coffrets.',
   alternates: { canonical: '/boutique' },
 };
 

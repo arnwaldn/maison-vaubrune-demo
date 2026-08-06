@@ -34,9 +34,9 @@ export const dynamic = 'force-static';
 export const metadata: Metadata = {
   title: 'Livraison',
   description:
-    'Frais de port de la Maison Vaubrune : barème par poids et par zone ' +
-    '(France métropolitaine, Corse, outre-mer), franco de port, emballage ' +
-    'isotherme et délais indicatifs.',
+    'Frais de port de la boutique de démonstration Maison Vaubrune : barème ' +
+    'par poids et par zone (France métropolitaine, Corse, outre-mer), franco ' +
+    'de port, emballage isotherme et délais indicatifs.',
   alternates: { canonical: '/livraison' },
 };
 

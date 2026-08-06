@@ -10,8 +10,9 @@ import { defineConfig } from 'vitest/config';
  * depuis la tranche C4 la logique du panier. Aucun composant, aucun rendu,
  * aucun navigateur : l'environnement est `node`, il n'y a donc pas de DOM à
  * simuler, pas de jsdom à installer, et le lancement se compte en centaines de
- * millisecondes. Les parcours d'interface relèveront de Playwright (tranche
- * C8), qui teste le site réel plutôt qu'une imitation du navigateur.
+ * millisecondes. Les parcours d'interface relèvent de Playwright depuis la
+ * tranche C8 (`tests/e2e/`), qui teste le site réel plutôt qu'une imitation du
+ * navigateur.
  *
  * Le seuil de couverture. Cent pour cent des lignes ET des branches, sur une
  * LISTE NOMMÉE de fichiers. Un seuil global à 100 % sur tout `src/` serait une
@@ -61,6 +62,15 @@ import { defineConfig } from 'vitest/config';
  *   les couvrir coûte trente lignes de test et retire deux fichiers de la zone
  *   grise. Le seuil n'a pas à être héroïque pour être tenu.
  *
+ * Extension C8 — UN fichier rejoint la liste, et la règle d'admission n'a
+ * toujours pas bougé : `donnees-structurees.ts` PUBLIE UN PRIX. Le balisage
+ * JSON-LD des fiches déclare aux moteurs de recherche le montant du format le
+ * moins cher et sa disponibilité ; un prix affiché dans un résultat de
+ * recherche est un prix affiché, et il se compose de surcroît en écriture
+ * anglaise (« 22.50 »), là où tout le reste du site écrit « 22,50 € ». Deux
+ * écritures d'un même montant, c'est exactement le genre d'endroit où une
+ * branche non couverte finit par publier un chiffre faux.
+ *
  * Restent hors périmètre, et l'assument : `contexte-panier.tsx`,
  * `contexte-surcouche.tsx`, `fournisseurs.tsx`, les îlots et les feuilles de
  * `src/composants/` — du React, donc du rendu, donc Playwright — et, depuis C5,
@@ -89,6 +99,7 @@ export default defineConfig({
         'src/lib/argent.ts',
         'src/lib/catalogue.ts',
         'src/lib/catalogue-navigateur.ts',
+        'src/lib/donnees-structurees.ts',
         'src/lib/expedition.ts',
         'src/lib/zones.ts',
         'src/lib/gestion/projection-marchand.ts',

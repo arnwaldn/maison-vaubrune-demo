@@ -45,8 +45,9 @@ export const dynamic = 'force-static';
 export const metadata: Metadata = {
   title: 'Panier',
   description:
-    'Le panier de la Maison Vaubrune : quantités, destination de livraison, ' +
-    'frais de port calculés et récapitulatif avant commande.',
+    'Le panier de la boutique de démonstration Maison Vaubrune : quantités, ' +
+    'destination de livraison, frais de port calculés et récapitulatif avant ' +
+    'commande.',
   alternates: { canonical: '/panier' },
 };
 
