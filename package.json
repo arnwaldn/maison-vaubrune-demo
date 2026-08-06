@@ -14,7 +14,8 @@
     "verifier-catalogue": "tsx scripts/verifier-catalogue.mjs",
     "test:unitaires": "vitest run",
     "test:couverture": "vitest run --coverage",
-    "controle": "npm run typecheck && npm run verifier-catalogue && npm run test:unitaires && npm run build"
+    "controle": "npm run typecheck && npm run verifier-catalogue && npm run verifier-donnees && npm run test:unitaires && npm run build",
+    "verifier-donnees": "node scripts/verifier-aucune-donnee-inventee.mjs"
   },
   "dependencies": {
     "@fontsource-variable/newsreader": "5.3.0",

@@ -1,0 +1,3 @@
+Fiche d'identite du marchand (piece a conviction, valeur fabriquee).
+
+Numero unique d'identification : 812345678
