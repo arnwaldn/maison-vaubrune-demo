@@ -1,1 +1,9 @@
 * text=auto eol=lf
+
+# Exception unique (tranche C7) : le formulaire de rétractation téléchargeable.
+# Ce fichier n'est pas du code, c'est un document que le CLIENT télécharge et
+# ouvre dans l'éditeur de texte qu'il a sous la main — souvent le Bloc-notes de
+# Windows. Les fins de ligne CRLF s'y lisent partout ; des fins de ligne LF
+# donnent, sur les outils Windows anciens, un pavé d'une seule ligne. Le fichier
+# est donc stocké et livré en CRLF, à l'inverse de tout le reste du dépôt.
+public/formulaire-retractation.txt text eol=crlf
