@@ -16,5 +16,9 @@ test-results/
 playwright-report/
 .DS_Store
 
+# Pièces de preuve (captures d'écran de recette) : elles pèsent, elles se
+# refont d'une commande, et elles ne se relisent pas dans un diff.
+preuves/
+
 # NOTE : mesures/*.json est VOLONTAIREMENT versionné — les mesures datées
 # sont une preuve publiée, pas un artefact de construction.
