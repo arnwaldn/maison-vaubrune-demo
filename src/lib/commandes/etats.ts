@@ -1,4 +1,5 @@
 import type { LigneCalculee } from '@/lib/panier/totaux';
+import { typographier } from '@/lib/typographie';
 import type { CodeZone } from '@/lib/types';
 
 /**
@@ -176,17 +177,21 @@ function motifRefus(
   cible: EtatCommande,
   autorisees: readonly EtatCommande[],
 ): string {
+  /* Les deux phrases passent par `typographier()` (décision D11) : elles sont
+     AFFICHÉES telles quelles dans l’espace marchand, et une espace ordinaire
+     devant leur deux-points ou leur point-virgule se couperait en fin de ligne
+     comme partout ailleurs. Le module reste pur — `typographier()` l’est. */
   if (autorisees.length === 0) {
-    return (
-      `Une commande ${LIBELLE_ETAT[depuis].toLowerCase()} ne change plus d’état : ` +
-      `le passage vers ${LIBELLE_ETAT[cible].toLowerCase()} est refusé.`
+    return typographier(
+      `Une commande ${LIBELLE_ETAT[depuis].toLowerCase()} ne change plus d’état : ` +
+        `le passage vers ${LIBELLE_ETAT[cible].toLowerCase()} est refusé.`,
     );
   }
 
   const possibles = autorisees.map((etat) => LIBELLE_ETAT[etat].toLowerCase()).join(' ou ');
 
-  return (
+  return typographier(
     `Une commande ${LIBELLE_ETAT[depuis].toLowerCase()} ne peut passer que vers ` +
-    `${possibles} ; le passage vers ${LIBELLE_ETAT[cible].toLowerCase()} est refusé.`
+      `${possibles} ; le passage vers ${LIBELLE_ETAT[cible].toLowerCase()} est refusé.`,
   );
 }

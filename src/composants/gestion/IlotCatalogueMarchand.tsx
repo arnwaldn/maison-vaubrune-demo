@@ -20,6 +20,7 @@ import {
   type ProduitMarchand,
 } from '@/lib/gestion/projection-marchand';
 import { stockageLocal } from '@/lib/stockage-navigateur';
+import { typographier } from '@/lib/typographie';
 import type { Produit } from '@/lib/types';
 
 /**
@@ -100,7 +101,9 @@ export function IlotCatalogueMarchand({
 
       if (stockage === null) {
         setMessage(
-          'Le stockage de ce navigateur est inaccessible : vos modifications ne peuvent pas être enregistrées.',
+          typographier(
+            'Le stockage de ce navigateur est inaccessible : vos modifications ne peuvent pas être enregistrées.',
+          ),
         );
         return false;
       }
@@ -350,7 +353,7 @@ function FicheMarchand({
       <div className="mt-6 overflow-x-auto">
         <table className="w-full min-w-[34rem] border-collapse text-sm">
           <caption className="sr-only">
-            Formats de {produit.nom} : prix et stock modifiables
+            {typographier(`Formats de ${produit.nom} : prix et stock modifiables`)}
           </caption>
           <thead>
             <tr className="border-b border-filet text-left">

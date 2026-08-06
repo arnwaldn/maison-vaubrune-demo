@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 
 import { AComplete } from '@/composants/demonstration/AComplete';
 import { BoutonImprimer } from '@/composants/legal/BoutonImprimer';
+import { CadreDefilant } from '@/composants/legal/CadreDefilant';
 import {
   CLASSE_ARTICLE,
   CLASSE_LIEN,
@@ -202,7 +203,7 @@ export default function PageRetractation() {
       {/* 1 ---------------------------------------------------------------- */}
       <section id="delai" className={CLASSE_ARTICLE} aria-labelledby="titre-delai">
         <h2 id="titre-delai" className={CLASSE_TITRE_ARTICLE}>
-          1. Le délai : quatorze jours
+          1. Le délai&nbsp;: quatorze jours
         </h2>
 
         <p className={CLASSE_TEXTE}>
@@ -424,7 +425,7 @@ export default function PageRetractation() {
       {/* 5 ---------------------------------------------------------------- */}
       <section id="exceptions" className={CLASSE_ARTICLE} aria-labelledby="titre-exceptions">
         <h2 id="titre-exceptions" className={CLASSE_TITRE_ARTICLE}>
-          5. Les exceptions : trois cas, trois raisons différentes
+          5. Les exceptions&nbsp;: trois cas, trois raisons différentes
         </h2>
 
         <p className={CLASSE_TEXTE}>
@@ -545,9 +546,9 @@ export default function PageRetractation() {
           <T>{'.'}</T>
         </p>
 
-        <div className="mt-6 overflow-x-auto">
+        <CadreDefilant idLegende="legende-regimes" className="mt-6">
           <table className="w-full min-w-3xl border-collapse text-sm">
-            <caption className="sr-only">
+            <caption id="legende-regimes" className="sr-only">
               <T>
                 {'Régime de rétractation de chaque référence du catalogue : droit ' +
                   'ouvert ou exception, fondement et mention affichée'}
@@ -601,7 +602,7 @@ export default function PageRetractation() {
               ))}
             </tbody>
           </table>
-        </div>
+        </CadreDefilant>
       </section>
 
       {/* 6 ---------------------------------------------------------------- */}

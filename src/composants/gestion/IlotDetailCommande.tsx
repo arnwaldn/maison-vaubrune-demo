@@ -17,6 +17,7 @@ import {
 } from '@/lib/commandes/etats';
 import { formaterHorodatage } from '@/lib/commandes/horodatage';
 import { stockageLocal } from '@/lib/stockage-navigateur';
+import { typographier } from '@/lib/typographie';
 import { LIBELLE_ZONE } from '@/lib/types';
 
 /**
@@ -84,7 +85,9 @@ export function IlotDetailCommande({
 
       if (stockage === null) {
         setRefus(
-          'Le stockage de ce navigateur est inaccessible : le changement d’état ne peut pas être enregistré.',
+          typographier(
+            'Le stockage de ce navigateur est inaccessible : le changement d’état ne peut pas être enregistré.',
+          ),
         );
         return;
       }
@@ -343,9 +346,11 @@ function BoutonsTransition({
   if (cibles.length === 0) {
     return (
       <p className="mt-4 text-sm leading-relaxed text-encre-douce">
-        {etat === 'expediee'
-          ? 'Le colis est parti : cette commande ne change plus d’état. Un retour ou une rétractation est un autre acte, avec ses propres pièces.'
-          : 'Cette commande est annulée : elle ne change plus d’état. Une commande annulée que l’on pourrait rouvrir ferait exister deux versions d’un même engagement.'}
+        {typographier(
+          etat === 'expediee'
+            ? 'Le colis est parti : cette commande ne change plus d’état. Un retour ou une rétractation est un autre acte, avec ses propres pièces.'
+            : 'Cette commande est annulée : elle ne change plus d’état. Une commande annulée que l’on pourrait rouvrir ferait exister deux versions d’un même engagement.',
+        )}
       </p>
     );
   }

@@ -4,6 +4,8 @@ import { join } from 'node:path';
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
 
+import { typographier } from '@/lib/typographie';
+
 /**
  * LES CINQ MODÈLES DE COURRIELS, LUS À LA CONSTRUCTION.
  *
@@ -181,13 +183,13 @@ export default function PageModelesDeCourriels() {
               id={`modele-${modele.fichier}`}
               className="text-titre font-semibold text-encre"
             >
-              {modele.titre}
+              {typographier(modele.titre)}
             </h2>
 
             {modele.declencheur === '' ? null : (
               <p className="mt-2 text-sm text-encre-douce">
                 <span className="font-semibold">Déclencheur&nbsp;:</span>{' '}
-                {modele.declencheur}
+                {typographier(modele.declencheur)}
               </p>
             )}
 
@@ -222,6 +224,13 @@ const EST_JETON = /^\{\{[A-Z0-9_]+\}\}$/;
 
 /** Le texte d'une ligne, jetons mis en évidence. */
 function avecJetons(texte: string): ReactNode {
+  /* Le texte lu des cinq documents passe par `typographier()` (décision D11),
+     et les JETONS n'y passent PAS : `{{TOTAL_ARTICLES}}` est un identifiant que
+     le système remplace, pas une phrase française. Le découpage précède donc la
+     transformation, ce qui garantit qu'aucune insécable ne se glisse dans un
+     emplacement. Les documents eux-mêmes gardent leurs espaces ordinaires — ils
+     sont écrits pour être relus en Markdown, et c'est l'affichage qui pose les
+     insécables, jamais la source. */
   return texte.split(DECOUPAGE_JETON).map((morceau, rang) =>
     EST_JETON.test(morceau) ? (
       <code
@@ -231,7 +240,7 @@ function avecJetons(texte: string): ReactNode {
         {morceau}
       </code>
     ) : (
-      morceau
+      typographier(morceau)
     ),
   );
 }
@@ -258,7 +267,7 @@ function rendre(lignes: readonly string[]): ReactNode[] {
     if (nettoyee.startsWith('### ')) {
       rendu.push(
         <h4 key={cle} className="mt-6 font-titre text-base font-semibold text-encre">
-          {nettoyee.slice(4)}
+          {typographier(nettoyee.slice(4))}
         </h4>,
       );
       continue;
@@ -267,7 +276,7 @@ function rendre(lignes: readonly string[]): ReactNode[] {
     if (nettoyee.startsWith('## ')) {
       rendu.push(
         <h3 key={cle} className="mt-6 font-titre text-lg font-semibold text-encre">
-          {nettoyee.slice(3)}
+          {typographier(nettoyee.slice(3))}
         </h3>,
       );
       continue;

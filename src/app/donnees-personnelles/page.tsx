@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
 
 import { AComplete } from '@/composants/demonstration/AComplete';
+import { CadreDefilant } from '@/composants/legal/CadreDefilant';
 import {
   CLASSE_ARTICLE,
   CLASSE_LISTE,
@@ -280,7 +281,7 @@ export default function PageDonneesPersonnelles() {
       {/* ==================== PARTIE 1 ==================== */}
       <section id="partie-1" className={CLASSE_ARTICLE} aria-labelledby="titre-partie-1">
         <h2 id="titre-partie-1" className={CLASSE_TITRE_ARTICLE}>
-          Partie 1 — Ce que cette démonstration collecte : rien
+          Partie 1 — Ce que cette démonstration collecte&nbsp;: rien
         </h2>
 
         <p className={CLASSE_TEXTE}>
@@ -564,9 +565,9 @@ export default function PageDonneesPersonnelles() {
           </T>
         </h3>
 
-        <div className="mt-5 overflow-x-auto">
+        <CadreDefilant idLegende="legende-finalites" className="mt-5">
           <table className="w-full border-collapse text-sm">
-            <caption className="sr-only">
+            <caption id="legende-finalites" className="sr-only">
               <T>
                 {'Finalités de traitement, données concernées, base légale et ' +
                   'durée de conservation, à compléter par le marchand'}
@@ -604,15 +605,15 @@ export default function PageDonneesPersonnelles() {
               ))}
             </tbody>
           </table>
-        </div>
+        </CadreDefilant>
 
         <h3 className={CLASSE_SOUS_TITRE}>
           <T>{'2.3 Destinataires et sous-traitants'}</T>
         </h3>
 
-        <div className="mt-5 overflow-x-auto">
+        <CadreDefilant idLegende="legende-destinataires" className="mt-5">
           <table className="w-full border-collapse text-sm">
-            <caption className="sr-only">
+            <caption id="legende-destinataires" className="sr-only">
               <T>
                 {'Destinataires et sous-traitants, ce que chacun reçoit et où les ' +
                   'données sont traitées, à compléter par le marchand'}
@@ -650,7 +651,7 @@ export default function PageDonneesPersonnelles() {
               ))}
             </tbody>
           </table>
-        </div>
+        </CadreDefilant>
 
         <p className={CLASSE_TEXTE}>
           <T>

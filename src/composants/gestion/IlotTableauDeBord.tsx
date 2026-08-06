@@ -11,6 +11,7 @@ import { ETATS_COMMANDE, type Commande, type EtatCommande } from '@/lib/commande
 import { useSurcouche } from '@/lib/contexte-surcouche';
 import type { ProduitMarchand } from '@/lib/gestion/projection-marchand';
 import { stockageLocal } from '@/lib/stockage-navigateur';
+import { typographier } from '@/lib/typographie';
 
 /**
  * LE TABLEAU DE BORD — quatre compteurs, un chiffre d'affaires, les stocks bas.
@@ -210,7 +211,7 @@ const RACCOURCIS = [
     adresse: '/gestion/catalogue',
     libelle: 'Catalogue',
     texte:
-      'Les quinze références et leurs vingt-trois formats : prix, stock, ' +
+      typographier('Les quinze références et leurs vingt-trois formats : prix, stock, ') +
       'disponibilité, mise en avant, résumé. Export en JSON.',
   },
   {
@@ -224,7 +225,7 @@ const RACCOURCIS = [
     adresse: '/gestion/prise-en-main',
     libelle: 'Prise en main',
     texte:
-      'Le mode d’emploi écrit : tenir le catalogue, suivre une commande, ' +
+      typographier('Le mode d’emploi écrit : tenir le catalogue, suivre une commande, ') +
       'retrouver les documents, exporter.',
   },
 ] as const;
