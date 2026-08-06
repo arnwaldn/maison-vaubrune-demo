@@ -295,6 +295,21 @@ function RecapitulatifCommande({ commande }: { readonly commande: Commande }) {
             — la page de suivi affiche la frise des états et leurs horodatages, à
             partir de la référence ci-dessus.
           </p>
+
+          {/* Bascule C7 : le document de rétractation existe. Sa place est ICI,
+              sur l'écran qui suit immédiatement le paiement, parce que c'est de
+              cette commande-là que partent les quatorze jours et que le client
+              n'y repensera qu'au moment où il voudra s'en servir. */}
+          <p className="mt-3 text-xs leading-relaxed text-encre-douce">
+            <Link
+              href="/retractation"
+              className="font-semibold underline decoration-filet decoration-2 underline-offset-4 hover:text-terre hover:decoration-terre"
+            >
+              Comment exercer votre rétractation
+            </Link>{' '}
+            — le délai de quatorze jours, la façon de le faire valoir, le formulaire
+            type à télécharger et les produits qui font exception.
+          </p>
         </section>
 
         <Link

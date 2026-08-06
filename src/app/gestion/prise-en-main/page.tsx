@@ -196,12 +196,49 @@ export default function PagePriseEnMain() {
           </p>
 
           <p className={CLASSE_TEXTE}>
-            Les documents de vente — conditions générales, mentions légales,
-            politique de données personnelles, formulaire de rétractation — sont
-            rédigés et publiés à la tranche suivante de ce chantier. Le lien des
-            conditions générales, sur la page de commande, mène pour l’instant à un
-            paragraphe qui le dit&nbsp;: la démonstration préfère annoncer ce qui
-            manque plutôt qu’ouvrir une page vide.
+            Les documents de vente sont publiés et accessibles depuis le pied de page
+            de la boutique&nbsp;:{' '}
+            <Link href="/mentions-legales" className={CLASSE_LIEN}>
+              Mentions légales
+            </Link>
+            ,{' '}
+            <Link href="/conditions-generales-de-vente" className={CLASSE_LIEN}>
+              Conditions générales de vente
+            </Link>
+            ,{' '}
+            <Link href="/donnees-personnelles" className={CLASSE_LIEN}>
+              Données personnelles
+            </Link>{' '}
+            et{' '}
+            <Link href="/retractation" className={CLASSE_LIEN}>
+              Droit de rétractation
+            </Link>
+            . Le lien des conditions générales, sur la page de commande, ouvre
+            désormais le vrai document.
+          </p>
+
+          <p className={CLASSE_TEXTE}>
+            Ce sont des <strong>gabarits</strong>&nbsp;: partout où un marchand
+            réel inscrit une donnée qui lui appartient — son numéro
+            d’identification, son adresse, son téléphone, son médiateur, ses durées
+            de conservation — la page affiche un emplacement surligné qui nomme ce
+            qui manque, en français. Rien n’a été inventé pour les remplir, et une
+            garde du dépôt (<code>npm run verifier-donnees</code>) fait échouer le
+            contrôle si une donnée de ce type venait à y apparaître.
+          </p>
+
+          <p className={CLASSE_TEXTE}>
+            La page{' '}
+            <Link href="/retractation" className={CLASSE_LIEN}>
+              Droit de rétractation
+            </Link>{' '}
+            publie en outre le régime de chaque référence du catalogue —
+            droit ouvert ou exception, avec son fondement — et ce tableau est{' '}
+            <strong>engendré</strong> depuis le catalogue&nbsp;: modifier une fiche
+            met la page à jour, et il est impossible d’annoncer une référence dans un
+            régime ici et de la vendre dans un autre là-bas. Elle porte aussi le
+            formulaire type de l’annexe R.&nbsp;221-1, imprimable et téléchargeable
+            en texte brut.
           </p>
 
           <p className={CLASSE_TEXTE}>

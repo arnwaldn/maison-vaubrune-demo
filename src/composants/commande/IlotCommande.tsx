@@ -617,15 +617,20 @@ function messageCodePostal(
 /**
  * La case des conditions générales et le bouton d'engagement.
  *
- * ÉCART CONSIGNÉ — le lien des conditions générales de vente pointe vers
- * `#cgv`, une ancre de cette page, et non vers `/cgv` qui n'existe pas encore.
- * Les documents légaux sont la tranche C7. Trois voies avaient été pesées : un
- * lien mort vers `/cgv` (404 pour le visiteur comme pour les robots), un
- * détournement vers `/livraison` (qui n'est pas les conditions générales et
- * ferait passer un document pour un autre), ou l'ancre honnête retenue ici —
- * elle mène à un paragraphe qui dit ce qu'il en est, et ce paragraphe décrit
- * aussi le lien via `aria-describedby`, si bien qu'un lecteur d'écran annonce
- * l'échéance avant même l'activation.
+ * ÉCART LEVÉ EN C7 — le lien des conditions générales de vente pointait vers
+ * `#cgv`, une ancre de CETTE page, faute de document à ouvrir : les documents
+ * légaux étaient la tranche C7. Elle est livrée. Le lien vise désormais
+ * `/conditions-generales-de-vente#cgv`, l'ancre du titre du document, et le
+ * paragraphe provisoire qui annonçait l'échéance — ainsi que l'`aria-describedby`
+ * qui le faisait annoncer avant l'activation — ont disparu avec elle.
+ *
+ * Il s'ouvre dans un NOUVEL ONGLET. C'est le seul lien du projet qui le fasse,
+ * et la raison est étroite : partir lire les conditions générales depuis cet
+ * écran-ci ferait perdre l'adresse saisie et la case cochée, puisque le
+ * formulaire de commande vit dans l'état React de cet îlot et non dans le
+ * stockage. Un client renvoyé à son panier vide parce qu'il a voulu lire le
+ * contrat qu'on lui demande d'accepter, c'est la faute que ce lien évite. Le
+ * `rel` accompagne la cible, et le libellé annonce l'ouverture.
  *
  * LE BOUTON AGIT DEPUIS LA TRANCHE C5. Il reste éteint tant que l'une des
  * TROIS VRAIES RÈGLES n'est pas satisfaite — expédition possible, coordonnées
@@ -676,30 +681,18 @@ function Engagement({
         />
         <span>
           J’ai lu et j’accepte les{' '}
-          <a
-            href="#cgv"
-            aria-describedby="cgv"
+          <Link
+            href="/conditions-generales-de-vente#cgv"
+            target="_blank"
+            rel="noopener"
             className="underline decoration-filet decoration-2 underline-offset-4 hover:text-terre hover:decoration-terre"
           >
             conditions générales de vente
-          </a>
+            <span className="sr-only"> (s’ouvre dans un nouvel onglet)</span>
+          </Link>
           .
         </span>
       </label>
-
-      {/* TODO-C7 : remplacer `#cgv` par `/cgv` quand la page existera, et
-          retirer ce paragraphe. Voir l'en-tête de ce composant pour l'arbitrage. */}
-      <p
-        id="cgv"
-        className="mt-4 scroll-mt-8 rounded-sm border border-filet bg-creme px-4 py-3 text-xs leading-relaxed text-encre-douce"
-      >
-        <span className="font-semibold text-ocre">Page en cours de construction.</span>{' '}
-        Les conditions générales de vente, les mentions légales, la politique de
-        données personnelles et le formulaire de rétractation sont rédigés à la
-        tranche C7 de ce chantier. Ce lien mène pour l’instant à ce paragraphe
-        plutôt qu’à une page absente&nbsp;: la démonstration préfère dire ce qui
-        manque.
-      </p>
 
       <button
         type="button"

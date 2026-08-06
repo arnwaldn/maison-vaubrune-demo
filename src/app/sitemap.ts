@@ -23,10 +23,22 @@ import { DATE_PUBLICATION, URL_SITE } from '@/donnees/site';
  * (`/gestion`), lui, reste absent du plan ET interdit aux robots
  * (`src/app/robots.ts`), avec la note `noindex` que porte sa mise en page.
  *
+ * La tranche C7 en apporte CINQ : les quatre documents de vente et la page
+ * « À propos de cette démonstration ». Elles sont INDEXABLES (décision D19) et
+ * annoncées, pour deux raisons distinctes. Les documents légaux d'abord :
+ * l'obligation d'information du consommateur n'a de sens que si le document est
+ * atteignable, et une page de conditions générales se cherche parfois dans un
+ * moteur plutôt que dans un pied de page. La page « À propos » ensuite : c'est
+ * elle qui dit que la maison est fictive et où passe la frontière entre ce qui
+ * fonctionne et ce qui est simulé — la dernière page qu'on voudrait cacher aux
+ * moteurs sur un site de démonstration.
+ *
  * Priorités : l'accueil à 1, le rayon à 0,9 (c'est la page qui vend), les
  * fiches à 0,8, la livraison et le suivi à 0,7 — pages de confiance,
- * consultées autour de l'achat mais rarement cherchées pour elles-mêmes. Ce ne
- * sont que des indications de hiérarchie interne, aucun moteur n'en fait un
+ * consultées autour de l'achat mais rarement cherchées pour elles-mêmes —, la
+ * page « À propos » à 0,6 et les quatre documents légaux à 0,4 : ils doivent
+ * être trouvables, ils ne sont pas ce qui amène quelqu'un sur la boutique. Ce
+ * ne sont que des indications de hiérarchie interne, aucun moteur n'en fait un
  * classement.
  */
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -65,5 +77,24 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.7,
   };
 
-  return [accueil, rayon, ...fiches, livraison, suivi];
+  const aPropos = {
+    url: new URL('/a-propos-de-cette-demonstration', URL_SITE).toString(),
+    lastModified: DATE_PUBLICATION,
+    changeFrequency: 'monthly' as const,
+    priority: 0.6,
+  };
+
+  const documentsLegaux = [
+    '/mentions-legales',
+    '/conditions-generales-de-vente',
+    '/donnees-personnelles',
+    '/retractation',
+  ].map((chemin) => ({
+    url: new URL(chemin, URL_SITE).toString(),
+    lastModified: DATE_PUBLICATION,
+    changeFrequency: 'yearly' as const,
+    priority: 0.4,
+  }));
+
+  return [accueil, rayon, ...fiches, livraison, suivi, aPropos, ...documentsLegaux];
 }
