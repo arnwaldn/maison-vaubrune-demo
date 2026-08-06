@@ -8,7 +8,10 @@
     "build": "next build",
     "start": "next start",
     "typecheck": "tsc --noEmit",
-    "verifier-catalogue": "tsx scripts/verifier-catalogue.mjs"
+    "verifier-catalogue": "tsx scripts/verifier-catalogue.mjs",
+    "test:unitaires": "vitest run",
+    "test:couverture": "vitest run --coverage",
+    "controle": "npm run typecheck && npm run verifier-catalogue && npm run test:unitaires && npm run build"
   },
   "dependencies": {
     "@fontsource-variable/newsreader": "5.3.0",
@@ -22,10 +25,12 @@
     "@types/node": "24.13.3",
     "@types/react": "19.2.18",
     "@types/react-dom": "19.2.4",
+    "@vitest/coverage-v8": "^4.1.10",
     "postcss": "8.5.25",
     "tailwindcss": "4.3.3",
     "tsx": "^4.23.8",
     "typescript": "5.9.3",
+    "vitest": "^4.1.10",
     "zod": "^4.4.3"
   }
 }
