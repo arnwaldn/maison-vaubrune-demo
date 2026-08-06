@@ -65,6 +65,15 @@
 
    La bague de focus utilise la terre cuite : 6,4:1 sur crème, très au-dessus
    du seuil de 3:1 exigé pour un élément d'interface non textuel.
+
+   Ajout C2 — la cinquième teinte des silhouettes. Le cadrage rédactionnel
+   distribue les quinze vignettes du catalogue sur cinq formes × cinq teintes,
+   dont une nommée « crème ». Tracer de la crème (#faf6ef) sur le fond crème
+   du site donnerait 1,0:1, c'est-à-dire rien du tout. Le jeton
+   `--color-creme-trace` (#857c6a) est la version soutenue de cette matière —
+   un grège chaud, distinct de l'ocre et de la terre cuite au premier coup
+   d'œil : 3,8:1 sur crème et 3,4:1 sur papier, au-dessus du seuil de 3:1 des
+   éléments graphiques. Il ne porte JAMAIS de texte, uniquement du trait.
    =========================================================================== */
 
 @theme {
@@ -74,6 +83,8 @@
   --color-creme: #faf6ef;
   --color-papier: #f1e8d9;
   --color-filet: #ddd0b6;
+  /* Crème soutenue : le trait des silhouettes dites « crème » (voir plus bas). */
+  --color-creme-trace: #857c6a;
 
   /* Accents */
   --color-olive: #47552f;

@@ -1,10 +1,9 @@
-export type FormeSilhouette = 'bouteille' | 'bocal' | 'pot' | 'sachet' | 'coffret';
-export type TeinteSilhouette = 'olive' | 'ocre' | 'terre' | 'encre';
+import type { FormeIllustration, TeinteIllustration } from '@/lib/types';
 
 interface ProprietesSilhouette {
-  readonly forme: FormeSilhouette;
+  readonly forme: FormeIllustration;
   /** Une teinte de la palette, jamais une couleur libre. */
-  readonly teinte?: TeinteSilhouette;
+  readonly teinte?: TeinteIllustration;
   /** Hauteur en pixels ; la largeur suit le rapport 2:3 du gabarit. */
   readonly hauteur?: number;
   /**
@@ -28,6 +27,13 @@ interface ProprietesSilhouette {
  * Version C1 : le trait est propre mais élémentaire. Le dessin sera repris en
  * C2, quand les fiches produit diront quels contenants existent vraiment dans
  * le catalogue.
+ *
+ * Reprise C2 : le vocabulaire des formes et des teintes n'est plus déclaré
+ * ici mais dans `src/lib/types.ts`, avec le reste du vocabulaire du catalogue.
+ * C'est la donnée qui dit qu'un produit est un « bocal terre-cuite » ; le
+ * composant ne fait que le dessiner. Deux teintes ont suivi ce déménagement :
+ * `terre` s'appelle désormais `terre-cuite` (le nom qu'emploient les fiches) et
+ * `creme` est apparue, cinquième teinte du cadrage rédactionnel.
  */
 
 /** Gabarit commun : toutes les formes sont dessinées dans cette boîte. */
@@ -38,15 +44,23 @@ const HAUTEUR_GABARIT = 96;
  * Classes écrites en toutes lettres : Tailwind lit les fichiers source pour
  * décider quels utilitaires produire, et ne devine pas une classe composée à
  * l'exécution.
+ *
+ * La teinte `creme` fait exception et vaut d'être dite : une crème tracée sur
+ * un fond crème donnerait un rapport de contraste de 1,0:1, autrement dit une
+ * vignette blanche. Elle est donc rendue par sa version soutenue, un grège
+ * (jeton `--color-creme-trace`), qui tient 3,8:1 sur le fond crème du site —
+ * au-dessus du seuil de 3:1 exigé pour un élément graphique. Le catalogue
+ * garde le mot du rédacteur, l'écran garde un dessin visible.
  */
-const CLASSE_TEINTE: Record<TeinteSilhouette, string> = {
+const CLASSE_TEINTE: Record<TeinteIllustration, string> = {
   olive: 'text-olive',
   ocre: 'text-ocre',
-  terre: 'text-terre',
+  'terre-cuite': 'text-terre',
   encre: 'text-encre',
+  creme: 'text-creme-trace',
 };
 
-const TRACE: Record<FormeSilhouette, readonly string[]> = {
+const TRACE: Record<FormeIllustration, readonly string[]> = {
   bouteille: [
     'M25 4h14a2 2 0 0 1 2 2v6H23V6a2 2 0 0 1 2-2z',
     'M26 12h12v16c0 6 10 10 10 20v38a6 6 0 0 1-6 6H22a6 6 0 0 1-6-6V48c0-10 10-14 10-20V12z',

@@ -2,16 +2,16 @@ import type { Metadata } from 'next';
 
 import { EncartFiction } from '@/composants/demonstration/EncartFiction';
 import { Silhouette } from '@/composants/illustrations/Silhouette';
-import type { FormeSilhouette, TeinteSilhouette } from '@/composants/illustrations/Silhouette';
 import { marchand } from '@/donnees/marchand';
+import type { FormeIllustration, TeinteIllustration } from '@/lib/types';
 
 export const metadata: Metadata = {
   alternates: { canonical: '/' },
 };
 
 interface Promesse {
-  readonly forme: FormeSilhouette;
-  readonly teinte: TeinteSilhouette;
+  readonly forme: FormeIllustration;
+  readonly teinte: TeinteIllustration;
   readonly titre: string;
   readonly texte: string;
 }
@@ -32,7 +32,7 @@ const PROMESSES: readonly Promesse[] = [
   },
   {
     forme: 'coffret',
-    teinte: 'terre',
+    teinte: 'terre-cuite',
     titre: 'Un panier qui va jusqu’au paiement',
     texte:
       'Frais de port calculés par zone et affichés avant de payer, encaissement ' +
