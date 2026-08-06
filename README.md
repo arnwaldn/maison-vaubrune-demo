@@ -419,16 +419,50 @@ faudra ouvrir trois choses : `payment=(self "https://js.stripe.com")` dans
 `script-src https://js.stripe.com` dans la politique de sécurité du contenu.
 Tant que la redirection suffit, on ne les ouvre pas.
 
-**Alerte ouverte : `script-src 'self'` et Next.** La politique interdit tout
-script en ligne. Or l'App Router de Next dépose le contenu de la page dans des
-balises `<script>` sans `src` (15 sur l'accueil au 2026-08-06). Sur le
-portfolio, écrit en Astro sans script en ligne, cette politique passe ; ici,
-elle bloquerait l'hydratation dès le premier déploiement. La tranche C1 ne
-déploie pas, donc rien n'est cassé aujourd'hui, mais **il faut trancher avant
-la mise en ligne** entre trois voies : jetons à usage unique posés par un
-intercepteur (correct, mais rend toutes les pages dynamiques), `'unsafe-inline'`
-sur `script-src` (l'en-tête cesse d'être une preuve), ou export entièrement
-statique. Le choix appartient à la tranche de déploiement.
+**`script-src 'self' 'unsafe-inline'` — tranché le 2026-08-06 (décision D34,
+[`contenu/decisions/006-csp-script-src.md`](contenu/decisions/006-csp-script-src.md)).**
+L'alerte laissée ouverte par la tranche C1 est fermée. L'App Router de Next
+dépose le contenu de la page dans des balises `<script>` sans `src` : 15 sur
+l'accueil, 41 sur `/gestion/modeles-de-courriels`, **740 occurrences et 445
+empreintes distinctes** sur les 41 pages prérendues. Sous `script-src 'self'`,
+aucun ne s'exécute — le site s'affiche et reste mort.
+
+Les trois autres voies ont été écartées, chiffres à l'appui :
+
+- **les jetons à usage unique** exigeraient un rendu **dynamique de toutes les
+  pages** (un jeton mis en cache n'est plus un jeton) : c'est la perte du
+  statique, donc des notes mesurées — c'est-à-dire du produit vendu ;
+- **les empreintes `sha256`** feraient un en-tête de **23,5 Ko sur chacune des
+  46 routes**, et ne peuvent pas être posées par page depuis `vercel.json`, qui
+  est statique : **396 des 445 empreintes n'apparaissent que sur une seule
+  page**, parce que les charges utiles RSC contiennent le contenu de la page ;
+- **l'export entièrement statique** n'enlève **pas** les scripts en ligne
+  (`output: 'export'` change l'écriture des fichiers, pas l'hydratation de
+  React — le comptage ci-dessus est fait sur des pages déjà prérendues) et
+  supprimerait la route de paiement, donc la preuve centrale du projet.
+
+**Ce que la concession ne coûte pas, et pourquoi.** `'unsafe-inline'` ne vaut que
+s'il existe un chemin par lequel un tiers fait écrire quelque chose dans le HTML
+rendu. Il n'y en a aucun : **aucun contenu saisi par un tiers n'est jamais
+rendu** — pas de commentaire, pas d'avis, pas de recherche, pas de compte —,
+**aucun script tiers** (ni régie, ni mesure d'audience, ni police distante), et
+ce que le visiteur saisit vit dans **son** navigateur sans jamais voyager vers un
+autre. Le seul `dangerouslySetInnerHTML` du projet est le JSON-LD, engendré
+depuis le catalogue versionné et le chevron ouvrant échappé. **La surface
+d'injection est nulle en amont de la politique.**
+
+Et les autres directives ne bougent pas : `connect-src 'self'` — qui interdit
+l'exfiltration, donc vide de son intérêt le scénario que `'unsafe-inline'` rend
+théoriquement possible —, `object-src 'none'`, `frame-src 'none'`,
+`frame-ancestors 'none'`, `base-uri 'none'` (plus strict que le `'self'` qui
+aurait suffi), `form-action 'self'`, `img-src 'self' data:`,
+`upgrade-insecure-requests`.
+
+> **L'en-tête cesse d'être une preuve de plus, les huit autres le restent.**
+
+La décision D34 écrit aussi le chemin du retour en arrière — jeton posé par un
+`middleware.ts` et `'strict-dynamic'` — pour le jour où ce socle servira une
+boutique qui rend, elle, du contenu saisi par des tiers.
 
 ## Les décisions et pourquoi
 
