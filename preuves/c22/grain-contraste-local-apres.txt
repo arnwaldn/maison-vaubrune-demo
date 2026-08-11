@@ -1,0 +1,24 @@
+
+LE GRAIN DE PAPIER, MESURÉ SUR LES PIXELS RENDUS (1280 × 900, densité 1)
+==============================================================================
+
+accueil (haut, lavis de verre)      576 px lus — plus sombre #ece6db, plus clair #f1ebe0, amplitude 3.96 pt de luminance
+accueil (milieu, coquille)          576 px lus — plus sombre #ede6dc, plus clair #f1ebe0, amplitude 3.73 pt de luminance
+rayon (milieu)                      576 px lus — plus sombre #dbd5ca, plus clair #f0e9df, amplitude 15.22 pt de luminance
+CGV (bas, lavis de papier)          576 px lus — plus sombre #eee7dd, plus clair #f2ebe1, amplitude 3.18 pt de luminance
+
+FOND LE PLUS SOMBRE DE TOUT LE SITE : #dbd5ca (rayon (milieu))
+FOND LE PLUS CLAIR                  : #f2ebe1
+
+LES RATIOS RECALCULÉS CONTRE LE PIRE FOND RÉELLEMENT PEINT
+------------------------------------------------------------------------------
+
+encre                        valeur lue   jeton→coquille   pire pixel   seuil   marge
+encre                        #1c211a         13.93        11.22     4.5   +6.72
+encre douce                  #4f5347          6.71         5.41     4.5   +0.91
+ocre (étiquettes)            #5b3e0c          8.35         6.72     4.5   +2.22
+bleu (chaîne du froid)       #1f4ea8          6.58         5.30     4.5   +0.80
+------------------------------------------------------------------------------
+
+Les 4 encres tiennent AA contre le pire fond réellement peint.
+

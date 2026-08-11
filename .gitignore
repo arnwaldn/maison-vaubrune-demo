@@ -180,6 +180,18 @@ preuves/c21/*
 !preuves/c21/*.mjs
 !preuves/c21/*.txt
 
+# TRANCHE C22 — la première APRÈS la publication. Même règle, sans la re-juger.
+#
+# Ce que ces relevés portent et qu'aucune garde ne dirait : le contraste des
+# quatre encres contre la veine la plus sombre du marbre, mesuré au pixel, EN
+# LOCAL ET SUR L'ADRESSE PUBLIQUE. C'est la pièce qui clôt l'arbitrage laissé
+# ouvert à la publication — et elle vaut surtout par ce qu'elle DÉMENT : le
+# défaut n'était pas dans le site, il était dans l'instrument.
+!preuves/c22/
+preuves/c22/*
+!preuves/c22/*.mjs
+!preuves/c22/*.txt
+
 # Atelier des visuels (tranche C11, décision D35). Les sorties BRUTES des
 # moteurs d'images sont énormes, portent leurs métadonnées — dont le texte de
 # la consigne — et ne sont pas ce qu'on livre. Seul le résultat recadré,

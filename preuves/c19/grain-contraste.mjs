@@ -24,6 +24,7 @@
  * Emploi :  node preuves/c19/grain-contraste.mjs [--sortie <fichier.txt>]
  */
 import { writeFileSync } from 'node:fs';
+import { execFileSync } from 'node:child_process';
 
 import { chromium } from 'playwright-core';
 
@@ -56,21 +57,85 @@ function ratio(a, b) {
   return (luminance(clair) + 0.05) / (luminance(sombre) + 0.05);
 }
 
-function hexEnRvb(hex) {
-  const n = Number.parseInt(hex.slice(1), 16);
-  return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
-}
-
 /* LES COUPLES DE TEXTE DU PROJET, encres seules — ce sont eux que WCAG 1.4.3
    contraint. `--color-filet-fort` est absent volontairement : C12 l'a déclaré
    NON TEXTUEL (filets et bordures), son seuil est 3:1 et il ne vit pas sur la
-   coquille. */
+   coquille.
+   ═══════════════════════════════════════════════════════════════════════════
+    LES ENCRES SONT NOMMÉES, PLUS JAMAIS RECOPIÉES — correction C22
+   ═══════════════════════════════════════════════════════════════════════════
+   Cette liste portait des valeurs hexadécimales ÉCRITES À LA MAIN. Elle a donc
+   vieilli en silence : la quatrième écriture du fond (C19) a fait descendre
+   `--color-ocre` de #7A5714 à #5B3E0C, et cette liste est restée sur l'ANCIENNE
+   valeur. L'outil a continué de rendre un verdict — parfaitement calculé, sur
+   une couleur que le site n'emploie plus nulle part. Il a fini par annoncer
+   4,49 contre la pire veine du marbre, c'est-à-dire un défaut d'accessibilité
+   IMAGINAIRE, tenu pour un arbitrage ouvert pendant toute la publication.
+   L'encre réelle vaut 6,72 au même endroit.
+   C'est le défaut que ce dépôt connaît sous son nom depuis C13 — *contrôler la
+   propriété, pas son indice* —, retourné contre un outil de PREUVE : une sonde
+   qui recopie ce qu'elle mesure ne mesure plus rien le jour où la source bouge.
+   Les encres sont donc désignées par leur JETON, lu dans la page rendue au
+   moment de la mesure. Une valeur qui change dans `globals.css` change ici
+   toute seule, et un jeton disparu fait ÉCHOUER la sonde au lieu de la laisser
+   mesurer du vide. */
 const ENCRES = [
-  { nom: 'encre', hex: '#1c211a', seuil: 4.5 },
-  { nom: 'encre douce', hex: '#4f5347', seuil: 4.5 },
-  { nom: 'ocre (étiquettes)', hex: '#7a5714', seuil: 4.5 },
-  { nom: 'bleu (chaîne du froid)', hex: '#1f4ea8', seuil: 4.5 },
+  { nom: 'encre', jeton: '--color-encre', seuil: 4.5 },
+  { nom: 'encre douce', jeton: '--color-encre-douce', seuil: 4.5 },
+  { nom: 'ocre (étiquettes)', jeton: '--color-ocre', seuil: 4.5 },
+  { nom: 'bleu (chaîne du froid)', jeton: '--color-bleu', seuil: 4.5 },
 ];
+
+/**
+ * LIT LES JETONS DANS LA PAGE RENDUE, et refuse de deviner.
+ *
+ * La sonde pose `color: var(--jeton)` sur un élément neuf dont la couleur a
+ * d'abord été forcée à une SENTINELLE improbable. Si le jeton n'existe pas, la
+ * déclaration est invalide à l'analyse et la sentinelle reste : on le voit, et
+ * on s'arrête. Sans elle, un jeton renommé rendrait la couleur héritée — du
+ * noir, la plus contrastée des encres — et la sonde passerait au vert en
+ * mesurant une couleur que personne n'affiche.
+ */
+async function lireJetons(page, jetons) {
+  const lus = await page.evaluate((noms) => {
+    /* UN ÉLÉMENT NEUF PAR JETON, et c'est une correction payée à l'écriture :
+       en réutilisant une seule sonde et en lui réassignant sa couleur, les
+       quatre lectures rendaient la PREMIÈRE valeur, quatre fois. Une seule
+       déclaration `color` par élément, lue une seule fois, ne peut pas mentir. */
+    const SENTINELLE = 'rgb(1, 2, 3)';
+
+    return noms.map((nom) => {
+      const sonde = document.createElement('span');
+      sonde.style.position = 'absolute';
+      sonde.style.visibility = 'hidden';
+      sonde.style.color = SENTINELLE;
+      sonde.style.color = `var(${nom})`;
+      sonde.textContent = '.';
+      document.body.append(sonde);
+
+      const calcule = getComputedStyle(sonde).color;
+      sonde.remove();
+
+      return { nom, calcule };
+    });
+  }, jetons);
+
+  return lus.map(({ nom, calcule }) => {
+    const nombres = /^rgba?\((\d+),\s*(\d+),\s*(\d+)/.exec(calcule);
+
+    if (nombres === null) {
+      throw new Error(`Le jeton ${nom} ne rend pas une couleur lisible : « ${calcule} »`);
+    }
+
+    const rvb = [Number(nombres[1]), Number(nombres[2]), Number(nombres[3])];
+
+    if (rvb[0] === 1 && rvb[1] === 2 && rvb[2] === 3) {
+      throw new Error(`Le jeton ${nom} n'existe pas dans la page — sonde arrêtée.`);
+    }
+
+    return { nom, rvb };
+  });
+}
 
 /* LES PAGES ET LES BANDES DE FOND. Les ordonnées sont choisies dans des zones
    que la mise en page laisse vides à ces largeurs — le relevé imprime le nombre
@@ -90,9 +155,53 @@ const contexte = await navigateur.newContext({
 });
 const page = await contexte.newPage();
 
+/* LES ENCRES SONT LUES AVANT TOUTE MESURE — si un jeton manque, rien ne sert
+   de relever des pixels : la sonde s'arrête ici plutôt que de rendre un
+   verdict sur une couleur qu'elle aurait inventée. */
+await page.goto(`${BASE}/`, { waitUntil: 'load' });
+const ENCRES_LUES = await lireJetons(
+  page,
+  ENCRES.map((encre) => encre.jeton),
+);
+/* La coquille est lue elle aussi : c'est le fond de référence du système, et
+   le recopier ici rouvrirait exactement la dérive que cette passe corrige. */
+const [{ rvb: COQUILLE }] = await lireJetons(page, ['--color-coquille']);
+
+/* LES QUATRE ENCRES SONT QUATRE COULEURS DIFFÉRENTES — la seule chose qu'on
+   sache d'elles sans les recopier, et elle suffit à démasquer une lecture
+   défaillante. La première rédaction de `lireJetons` rendait quatre fois la
+   même valeur ; ce contrôle l'a arrêtée avant qu'elle ne rende un vert. */
+const distinctes = new Set(ENCRES_LUES.map(({ rvb }) => rvb.join(',')));
+
+if (distinctes.size !== ENCRES.length) {
+  throw new Error(
+    `Lecture des jetons défaillante : ${String(ENCRES.length)} encres demandées, ` +
+      `${String(distinctes.size)} couleur(s) distincte(s) lue(s).`,
+  );
+}
+
+/* LA PROVENANCE EN TÊTE DU RELEVÉ — « chaque relevé porte le commit qu'il a
+   mesuré » est une règle écrite de ce dépôt (C20), et elle manquait ici : deux
+   relevés de contraste pris sur deux états du code étaient indiscernables. */
+const commit = () => {
+  try {
+    return execFileSync('git', ['rev-parse', '--short', 'HEAD']).toString().trim();
+  } catch {
+    return 'inconnu';
+  }
+};
+
+const JOUR = new Intl.DateTimeFormat('fr-FR', {
+  timeZone: 'Europe/Paris',
+  dateStyle: 'long',
+  timeStyle: 'short',
+}).format(new Date());
+
 dire('');
 dire('LE GRAIN DE PAPIER, MESURÉ SUR LES PIXELS RENDUS (1280 × 900, densité 1)');
 dire('='.repeat(78));
+dire('');
+dire(`Mesuré le ${JOUR} · commit ${commit()} · adresse ${BASE}`);
 dire('');
 
 let fondLePlusSombre = [255, 255, 255];
@@ -175,13 +284,12 @@ dire('');
 dire('LES RATIOS RECALCULÉS CONTRE LE PIRE FOND RÉELLEMENT PEINT');
 dire('-'.repeat(78));
 dire('');
-dire('encre                        jeton→coquille   pire pixel   seuil   marge');
+dire('encre                        valeur lue   jeton→coquille   pire pixel   seuil   marge');
 
-const COQUILLE = hexEnRvb('#f2ece1');
 let echec = 0;
 
-for (const encre of ENCRES) {
-  const rvb = hexEnRvb(encre.hex);
+for (const [rang, encre] of ENCRES.entries()) {
+  const rvb = ENCRES_LUES[rang].rvb;
   const surJeton = ratio(rvb, COQUILLE);
   const surPire = ratio(rvb, fondLePlusSombre);
   const marge = surPire - encre.seuil;
@@ -189,7 +297,7 @@ for (const encre of ENCRES) {
   if (surPire < encre.seuil) echec += 1;
 
   dire(
-    `${encre.nom.padEnd(28)} ${surJeton.toFixed(2).padStart(8)}   ` +
+    `${encre.nom.padEnd(28)} ${hex(rvb).padEnd(12)} ${surJeton.toFixed(2).padStart(8)}   ` +
       `${surPire.toFixed(2).padStart(10)}   ${encre.seuil.toFixed(1).padStart(5)}   ` +
       `${marge >= 0 ? '+' : ''}${marge.toFixed(2)}`,
   );

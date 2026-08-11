@@ -1,0 +1,15 @@
+[WebServer]   Construction existante réutilisée (.next/BUILD_ID présent).
+[WebServer]   Service de la production sur http://localhost:3000
+[WebServer]    ▲ Next.js 15.5.22
+[WebServer]    - Local:        http://localhost:3000
+[WebServer]    - Network:      http://<adresse-du-poste>:3000
+[WebServer] 
+[WebServer]  ✓ Starting...
+[WebServer]  ✓ Ready in 818ms
+
+Running 1 test using 1 worker
+
+  ✓  1 [mouvement] › tests\e2e\mouvement.spec.ts:319:5 › le défilement adouci vit sur trois routes, jamais dans le tunnel, et pas du tout sous mouvement réduit (5.2s)
+
+  1 passed (7.9s)
+CODE_ISOLE=0

@@ -1,0 +1,103 @@
+L'ARBITRAGE DE L'OCRE EST CLOS — ET IL N'AVAIT PAS DE MATIÈRE (C22, 11 août 2026)
+==============================================================================
+
+Publication du 11/08 17:22, commits 050eb47 + 99b7680. La recette en ligne
+laissait UN point ouvert, seul de tout le chantier :
+
+    « le grain AA maison relève l'ocre à 4,49/4,50 contre la pire VEINE du
+      marbre en ligne (même pixel sur 2 tirages) — axe 0/0 et Lighthouse 100
+      ne le voient pas, la sonde maison est plus sévère que WCAG outillé. »
+
+Trois issues étaient envisagées : foncer l'ocre d'un cheveu, éclaircir le
+marbre sous le rayon, ou assumer l'écart au registre.
+
+AUCUNE DES TROIS. Le site n'avait rien à corriger : l'instrument mesurait une
+couleur que le site n'emploie plus.
+
+
+CE QUE LA SONDE MESURAIT
+------------------------------------------------------------------------------
+
+`preuves/c19/grain-contraste.mjs` portait ses quatre encres en valeurs
+hexadécimales ÉCRITES À LA MAIN :
+
+    { nom: 'ocre (étiquettes)', hex: '#7a5714', seuil: 4.5 }
+
+#7A5714 est l'ocre d'AVANT la quatrième écriture du fond. C19 l'a fait
+descendre à #5B3E0C — précisément pour qu'il tienne contre le marbre — et a
+écrit le motif complet dans `globals.css`. La sonde, elle, est restée sur
+l'ancienne valeur. Elle a donc continué de rendre un verdict parfaitement
+calculé sur une couleur qui n'est plus affichée nulle part.
+
+Les deux relevés de C19 disent la même chose, et personne ne pouvait le voir :
+le nombre était plausible, l'outil réputé sévère, et le verdict allait dans le
+sens de la prudence.
+
+    relevé                          ocre mesuré   pire veine   verdict rendu
+    preuves/c19/grain-contraste.txt     #7A5714       5,19       « +0,69 »
+    preuves/c19/grain-contraste-en-ligne.txt
+                                        #7A5714       4,49       « sous AA »
+
+
+CE QUE LE SITE AFFICHE RÉELLEMENT
+------------------------------------------------------------------------------
+
+    encre du jeton --color-ocre : #5B3E0C
+    contre la pire veine #DBD5CA : 6,72:1   (seuil AA petit texte : 4,50)
+    contre la coquille #F2ECE1   : 8,35:1   (AAA)
+
+L'écart n'est pas de trois centièmes, il est de DEUX POINTS ET QUART au-dessus
+du seuil. Et il ne dépendait d'aucun arbitrage : il était acquis depuis C19.
+
+Un second instrument le disait déjà, sans être entendu. `marbre-in-vivo.mjs`,
+écrit APRÈS `grain-contraste.mjs` dans la même tranche, mesure le pire pixel
+SOUS CHAQUE MOT (et non dans des bandes de fond nues) ; il nomme l'ocre par sa
+vraie valeur, et son pire petit texte du site entier rend 5,08. Deux sondes se
+contredisaient depuis C19 sur la même couleur, sans que la contradiction soit
+relevée.
+
+
+LA CORRECTION
+------------------------------------------------------------------------------
+
+1. LES ENCRES SONT NOMMÉES, PLUS RECOPIÉES. La sonde lit les jetons
+   (`--color-encre`, `--color-encre-douce`, `--color-ocre`, `--color-bleu`,
+   `--color-coquille`) dans la page rendue, au moment de la mesure. Une valeur
+   qui change dans `globals.css` change ici toute seule.
+
+2. UN JETON DISPARU ARRÊTE LA SONDE. La couleur est forcée à une sentinelle
+   improbable avant d'appliquer `var(--jeton)` : si le jeton n'existe pas, la
+   sentinelle reste et la sonde jette. Sans cette précaution, un jeton renommé
+   aurait rendu la couleur héritée — du noir, la plus contrastée des encres —
+   et la sonde serait passée au vert en mesurant du vide.
+
+3. LES QUATRE ENCRES DOIVENT ÊTRE QUATRE COULEURS. Ce contrôle a servi le jour
+   même : la première rédaction de la lecture réutilisait une seule sonde et
+   rendait quatre fois la PREMIÈRE valeur. Le relevé était vert et faux. Il a
+   été arrêté par cette ligne, pas par une relecture.
+
+4. LE RELEVÉ PORTE SA PROVENANCE — date, commit, adresse mesurée. Deux relevés
+   de contraste pris sur deux états du code étaient jusqu'ici indiscernables.
+
+5. LA LIGNE DE PALETTE DE `globals.css` EST CORRIGÉE. Le tableau de résumé, en
+   tête de fichier, annonçait encore « ocre #7A5714 → 5,58:1 ». C'est de là que
+   venait la valeur recopiée dans la sonde. Un résumé qui vieillit est pire
+   qu'un résumé absent.
+
+
+LA LEÇON, ET ELLE N'EST PAS NEUVE DANS CE DÉPÔT
+------------------------------------------------------------------------------
+
+C13 l'a écrite en toutes lettres : *contrôler la propriété, pas son indice*.
+C14 l'a repayée sur le répertoire de la mono (145 déclarés, 143 dans le
+fichier). C15 sur les images de partage (trois affirmations d'accord entre
+elles, et pas une mesure). C19 sur son propre outil de recette vidéo.
+
+C22 la retourne contre un outil de PREUVE, et c'est le déguisement le plus
+coûteux : une sonde qui recopie ce qu'elle mesure cesse de mesurer le jour où
+la source bouge, SANS RIEN DIRE. Elle continue de rendre des nombres justes sur
+un monde qui n'existe plus, et on lui fait confiance parce qu'elle a toujours eu
+raison. Ici, elle a fait porter à une couleur validée par le client un défaut
+d'accessibilité imaginaire, jusque dans le compte rendu de publication.
+
+Un instrument se vérifie comme un livrable.

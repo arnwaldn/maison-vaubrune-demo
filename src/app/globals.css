@@ -63,7 +63,17 @@
                                               du texte
      olive        #47552F  →  6,85:1  (AA)    matière
      terre        #8F4426  →  5,91:1  (AA)    matière
-     ocre         #7A5714  →  5,58:1  (AA)    matière
+     ocre         #5B3E0C  →  8,35:1  (AAA)   matière — DESCENDU EN C19, et
+                                              cette ligne annonçait encore
+                                              #7A5714 → 5,58 jusqu'en C22. Le
+                                              tableau ci-dessus est un RÉSUMÉ :
+                                              la valeur qui fait foi est le
+                                              jeton, une centaine de lignes plus
+                                              bas. Un résumé qui vieillit est
+                                              pire qu'un résumé absent — celui-ci
+                                              a fait tenir pour un défaut
+                                              d'accessibilité une couleur qui
+                                              passait AAA (détail au jeton).
      filet fort   #8B8471  →  3,17:1  (AA non textuel) bordure PORTEUSE DE SENS
      crème tracée #857C6A  →  3,51:1  (AA non textuel) trait de silhouette
      filet        #D8CFBE  →  1,31:1  DÉCOR SEUL — un filet de séparation, qui
@@ -170,6 +180,14 @@
    * contraste, mesuré sur les quatre surfaces du système :
    *     coquille 5,58 → 8,35 · verre 5,97 → 8,94
    *     papier   5,37 → 8,03 · crème 6,09 → 9,11
+   *
+   * VÉRIFIÉ CONTRE LE SITE PUBLIÉ (C22) : 6,72 contre la veine la plus sombre
+   * que le marbre peigne où que ce soit — mesuré au pixel, en local ET sur
+   * l'adresse publique. La valeur ne bouge pas, et c'est la conclusion : ce
+   * jeton n'a jamais eu de dette d'accessibilité depuis C19. Les 4,49 qu'on
+   * lui a prêtés pendant la publication venaient d'une SONDE restée sur
+   * l'ancienne valeur (voir `preuves/c19/grain-contraste.mjs`, qui lit
+   * désormais les jetons au lieu de les recopier).
    */
   --color-ocre: #5b3e0c;
   --color-ocre-clair: #c89b3c;
