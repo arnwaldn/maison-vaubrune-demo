@@ -70,6 +70,82 @@ const DOSSIER_APRES = option('apres', join(ICI, 'captures-apres'));
 const SORTIE = option('sortie', join(ICI, 'planches-avant-apres.html'));
 
 /**
+ * ═══════════════════════════════════════════════════════════════════════════
+ *  DEUX RÉCITS POUR UN SEUL OUTIL — ajout C22
+ * ═══════════════════════════════════════════════════════════════════════════
+ *
+ * La planche de C19 comparait l'ancien site EN LIGNE à une refonte qui ne
+ * l'était pas encore. Depuis le 11 août, la refonte EST le site : la phrase
+ * « à gauche le site tel qu'il est en ligne aujourd'hui » est devenue fausse
+ * du jour au lendemain, et la colonne de droite montrait une construction de
+ * poste là où il existe désormais des captures de l'adresse publique.
+ *
+ * Il aurait été facile de recopier ce fichier pour changer six phrases. Le
+ * dépôt a déjà tranché contre (règle écrite au `.gitignore`, tranche C20) : un
+ * outil recopié pour changer une liste duplique tout ce qu'il porte — ici les
+ * quatre formats, les sept pages, la lecture des dimensions PNG, le balayage
+ * et son clavier —, c'est-à-dire cinq décisions mesurées, désormais
+ * entretenues à deux endroits.
+ *
+ * Ce qui change entre les deux planches n'est donc PAS du code : c'est un
+ * RÉCIT, quelques phrases nommées, écrites côte à côte pour qu'on les compare
+ * d'un coup d'œil. `--recit refonte` reprend la narration de C19 : mêmes sept
+ * regards, mêmes étiquettes, même chapeau — à un détail près, assumé. Le
+ * COMMIT a quitté le chapeau pour rejoindre la ligne de provenance, où il vit
+ * désormais avec la date et le dossier mesuré. Il n'y a plus qu'un endroit au
+ * monde où lire d'où sort une planche, et c'est le bas de la page.
+ */
+const RECITS = {
+  refonte: {
+    surtitre: 'Maison Vaubrune — boutique témoin · recette de la tranche C19',
+    gauche: 'le site tel qu’il est <strong>en ligne aujourd’hui</strong>',
+    droite: 'le site tel que la refonte le rend, mesuré sur la construction du poste',
+    etiquetteAvant: 'Avant — le site en ligne',
+    etiquetteApres: 'Après — la refonte',
+    provenanceApres: 'construction fraîche du poste',
+  },
+  'en-ligne': {
+    surtitre: 'Maison Vaubrune — boutique témoin · la refonte, mise en ligne le 11 août 2026',
+    gauche: 'la boutique <strong>telle qu’elle était</strong> avant la refonte',
+    droite:
+      'la boutique <strong>telle qu’elle est en ligne</strong>, photographiée sur son adresse publique',
+    etiquetteAvant: 'Avant — la boutique d’origine',
+    etiquetteApres: 'Après — la boutique en ligne',
+    provenanceApres: 'captures prises sur l’adresse publique, après la mise en ligne',
+    /* LES REGARDS SONT RÉÉCRITS, ET C'EST LA RAISON D'ÊTRE DU RÉCIT.
+       Ceux de C19 s'adressaient à qui relit une tranche : ils disent « le
+       héros », « la cascade de révélation », « le tunnel », « le registre en
+       chasse fixe ». Cette planche-ci s'ouvre devant quelqu'un qui envisage
+       d'acheter une boutique — pas devant un intégrateur. Chaque phrase dit
+       donc ce que le VISITEUR gagne, dans les mots de qui tient un commerce.
+       Aucun autre mot ne change : mêmes pages, mêmes formats, même outil. */
+    regards: {
+      accueil:
+        'La page d’accueil. La grande image d’ouverture, le nom de la maison posé en très grand, et un fond de papier à la place du blanc d’origine.',
+      boutique:
+        'La liste des produits. Quinze photographies au lieu de quinze dessins, et le choix entre une vue en grille et une vue en liste.',
+      'fiche-fromage':
+        'Une fiche produit. Deux photographies, un bloc d’achat qui reste sous les yeux pendant qu’on lit la page, et les mentions obligatoires à leur place.',
+      'panier-plein':
+        'Le panier. Volontairement sobre : au moment de payer, on ne cherche pas à séduire, on cherche à être clair sur les montants.',
+      'gestion-commandes':
+        'L’espace du commerçant, où l’on suit ses commandes. Même dessin que la boutique, sans photographies — c’est un outil de travail, pas une vitrine.',
+      suivi:
+        'La page où un client retrouve sa commande avec sa référence, et voit où elle en est.',
+      retractation:
+        'Une page réglementaire. Une refonte réussie n’abîme rien de ce qui engage juridiquement : le tableau des quinze cas est entier, et il s’imprime.',
+    },
+  },
+};
+
+const NOM_RECIT = option('recit', 'refonte');
+const RECIT = RECITS[NOM_RECIT];
+
+if (RECIT === undefined) {
+  throw new Error(`--recit inconnu : « ${NOM_RECIT} » (attendu : ${Object.keys(RECITS).join(', ')})`);
+}
+
+/**
  * LES SEPT PAGES, dans l'ordre de la campagne — qui est aussi l'ordre d'un
  * parcours d'achat, et non l'ordre alphabétique. On regarde une boutique comme
  * on l'utilise.
@@ -247,7 +323,10 @@ const donnees = JSON.stringify(
       fichier: page.fichier,
       titre: page.titre,
       adresse: page.adresse,
-      regard: page.regard,
+      /* Le récit peut réécrire le regard d'une page ; s'il se tait, celui de
+         la tranche vaut. `--recit refonte` n'en réécrit aucun, donc la planche
+         de C19 se reproduit mot pour mot. */
+      regard: RECIT.regards?.[page.fichier] ?? page.regard,
     })),
     formats: FORMATS,
     planches,
@@ -520,13 +599,12 @@ const html = `<!doctype html>
 <body data-vue="duo">
 
 <header class="tete">
-  <p class="surtitre">Maison Vaubrune — boutique témoin · recette de la tranche C19</p>
+  <p class="surtitre">${RECIT.surtitre}</p>
   <h1>La refonte, avant et après</h1>
   <p class="chapeau">
     Vingt-huit captures d’un côté, vingt-huit de l’autre : les mêmes sept pages,
-    aux mêmes quatre formats, photographiées par le même outil. À gauche le site
-    tel qu’il est <strong>en ligne aujourd’hui</strong> ; à droite le site tel que
-    la refonte le rend, mesuré sur la construction du ${texte(commit())}.
+    aux mêmes quatre formats, photographiées par le même outil. À gauche
+    ${RECIT.gauche} ; à droite ${RECIT.droite}.
   </p>
   <p class="chapeau">
     Aucune commande n’est passée pendant la campagne : les pages de suivi et de
@@ -553,14 +631,14 @@ const html = `<!doctype html>
   <div class="duo">
     <figure class="volet-avant">
       <figcaption>
-        <span class="etiquette">Avant — le site en ligne</span>
+        <span class="etiquette">${texte(RECIT.etiquetteAvant)}</span>
         <span class="metrique" id="metrique-avant"></span>
       </figcaption>
       <div class="cadre" id="cadre-avant"></div>
     </figure>
     <figure class="volet-apres">
       <figcaption>
-        <span class="etiquette">Après — la refonte</span>
+        <span class="etiquette">${texte(RECIT.etiquetteApres)}</span>
         <span class="metrique" id="metrique-apres"></span>
       </figcaption>
       <div class="cadre" id="cadre-apres"></div>
@@ -594,8 +672,10 @@ const html = `<!doctype html>
   </p>
   <p class="note">
     Jeu « avant » : <code>preuves/avant-refonte/</code> (constitué le 6 août, avant la
-    première ligne de la refonte). Jeu « après » : <code>preuves/c19/captures-apres/</code>,
-    ${texte(JOUR)}, construction fraîche du commit ${texte(commit())}.
+    première ligne de la refonte). Jeu « après » :
+    <code>${texte(relative(RACINE, DOSSIER_APRES).replaceAll('\\', '/'))}/</code>,
+    ${texte(RECIT.provenanceApres)}.
+    Planche assemblée le ${texte(JOUR)}, au commit ${texte(commit())}.
   </p>
   <div class="manquants" id="manquants" hidden></div>
 </main>

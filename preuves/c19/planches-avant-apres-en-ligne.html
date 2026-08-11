@@ -1,0 +1,494 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Maison Vaubrune — la refonte, avant et après</title>
+<style>
+  :root {
+    --coquille: #f2ece1;
+    --verre: #f8f4ea;
+    --papier: #ede8dc;
+    --encre: #1c211a;
+    --encre-douce: #4f5347;
+    --filet: #d8cfbe;
+    --filet-fort: #8b8471;
+    --ocre: #5b3e0c;
+    --bleu: #1f4ea8;
+  }
+
+  * { box-sizing: border-box; }
+
+  html { -webkit-text-size-adjust: 100%; }
+
+  body {
+    margin: 0;
+    background: var(--coquille);
+    color: var(--encre);
+    font: 16px/1.6 "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  }
+
+  header.tete {
+    padding: 2.5rem clamp(1rem, 4vw, 3rem) 1.75rem;
+    border-bottom: 1px solid var(--filet-fort);
+    background: var(--verre);
+  }
+
+  .surtitre {
+    font-family: ui-monospace, "Cascadia Mono", "Consolas", monospace;
+    font-size: 0.6875rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--encre-douce);
+    margin: 0 0 0.75rem;
+  }
+
+  h1 {
+    font-size: clamp(1.75rem, 4.5vw, 2.75rem);
+    line-height: 1.1;
+    margin: 0 0 0.75rem;
+    font-weight: 500;
+  }
+
+  .chapeau {
+    max-width: 62ch;
+    margin: 0;
+    color: var(--encre-douce);
+  }
+
+  .chapeau + .chapeau { margin-top: 0.75rem; }
+
+  nav.barre {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: color-mix(in srgb, var(--coquille) 94%, transparent);
+    backdrop-filter: blur(6px);
+    border-bottom: 1px solid var(--filet);
+    padding: 0.75rem clamp(1rem, 4vw, 3rem);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.25rem 2rem;
+    align-items: center;
+  }
+
+  .groupe { display: flex; flex-wrap: wrap; gap: 0.375rem; align-items: center; }
+
+  .groupe > .intitule {
+    font-family: ui-monospace, "Cascadia Mono", "Consolas", monospace;
+    font-size: 0.625rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--encre-douce);
+    margin-right: 0.25rem;
+  }
+
+  button {
+    font: inherit;
+    font-size: 0.8125rem;
+    padding: 0.35rem 0.7rem;
+    border: 1px solid var(--filet-fort);
+    border-radius: 2px;
+    background: transparent;
+    color: var(--encre);
+    cursor: pointer;
+    transition: background 180ms ease, color 180ms ease;
+  }
+
+  button:hover { background: var(--papier); }
+
+  button[aria-pressed="true"] {
+    background: var(--encre);
+    color: var(--coquille);
+    border-color: var(--encre);
+  }
+
+  button:focus-visible {
+    outline: 2px solid var(--encre);
+    outline-offset: 2px;
+    box-shadow: 0 0 0 4px var(--coquille);
+  }
+
+  main { padding: 1.75rem clamp(1rem, 4vw, 3rem) 4rem; }
+
+  .titre-planche {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.75rem 1.25rem;
+    margin: 0 0 0.25rem;
+  }
+
+  .titre-planche h2 { font-size: 1.5rem; margin: 0; font-weight: 500; }
+
+  .titre-planche .adresse {
+    font-family: ui-monospace, "Cascadia Mono", "Consolas", monospace;
+    font-size: 0.75rem;
+    color: var(--ocre);
+  }
+
+  .regard { margin: 0 0 1.5rem; max-width: 76ch; color: var(--encre-douce); }
+
+  .duo { display: grid; gap: 1.5rem; grid-template-columns: 1fr; }
+
+  @media (min-width: 60rem) { .duo { grid-template-columns: 1fr 1fr; } }
+
+  body[data-vue="avant"] .volet-apres,
+  body[data-vue="apres"] .volet-avant,
+  body[data-vue="balayage"] .duo { display: none; }
+
+  body[data-vue="avant"] .duo,
+  body[data-vue="apres"] .duo { grid-template-columns: 1fr; }
+
+  body:not([data-vue="balayage"]) .balayage { display: none; }
+
+  figure { margin: 0; }
+
+  figcaption {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.5rem 1rem;
+    padding: 0 0 0.5rem;
+    border-bottom: 1px solid var(--filet-fort);
+    margin-bottom: 0.75rem;
+  }
+
+  .etiquette {
+    font-family: ui-monospace, "Cascadia Mono", "Consolas", monospace;
+    font-size: 0.6875rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+
+  .volet-avant .etiquette { color: var(--encre-douce); }
+  .volet-apres .etiquette { color: var(--ocre); }
+
+  .metrique {
+    font-family: ui-monospace, "Cascadia Mono", "Consolas", monospace;
+    font-size: 0.75rem;
+    color: var(--encre-douce);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .cadre {
+    background: var(--verre);
+    border: 1px solid var(--filet);
+    padding: 0.5rem;
+    max-height: 78vh;
+    overflow: auto;
+    overscroll-behavior: contain;
+  }
+
+  .cadre img { display: block; width: 100%; height: auto; }
+
+  .absent {
+    padding: 2rem;
+    text-align: center;
+    color: var(--ocre);
+    background: var(--papier);
+    border: 1px dashed var(--filet-fort);
+  }
+
+  /* LE BALAYAGE — les deux états superposés, coupés par un curseur. Les hauts
+     de page sont alignés ; les hauteurs, elles, diffèrent, et c'est dit. */
+  .balayage { max-width: 68rem; }
+
+  .balayage-scene {
+    position: relative;
+    background: var(--verre);
+    border: 1px solid var(--filet);
+    overflow: hidden;
+    max-height: 78vh;
+  }
+
+  .balayage-scene img { display: block; width: 100%; height: auto; }
+
+  .balayage-scene .dessus {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+  }
+
+  .balayage-scene .dessus img { position: absolute; inset: 0; width: 100%; }
+
+  .balayage-trait {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: var(--encre);
+    pointer-events: none;
+  }
+
+  .balayage-commande { display: flex; align-items: center; gap: 1rem; margin-top: 0.75rem; }
+
+  .balayage-commande input { flex: 1; accent-color: var(--encre); }
+
+  .note {
+    margin-top: 2.5rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--filet);
+    color: var(--encre-douce);
+    font-size: 0.875rem;
+    max-width: 76ch;
+  }
+
+  .note code {
+    font-family: ui-monospace, "Cascadia Mono", "Consolas", monospace;
+    font-size: 0.8125rem;
+    color: var(--ocre);
+  }
+
+  .manquants {
+    background: var(--papier);
+    border-left: 3px solid var(--ocre);
+    padding: 0.75rem 1rem;
+    margin: 1.5rem 0 0;
+    font-size: 0.875rem;
+  }
+
+  kbd {
+    font-family: ui-monospace, "Cascadia Mono", "Consolas", monospace;
+    font-size: 0.75rem;
+    border: 1px solid var(--filet-fort);
+    border-bottom-width: 2px;
+    border-radius: 3px;
+    padding: 0 0.3em;
+  }
+</style>
+</head>
+<body data-vue="duo">
+
+<header class="tete">
+  <p class="surtitre">Maison Vaubrune — boutique témoin · la refonte, mise en ligne le 11 août 2026</p>
+  <h1>La refonte, avant et après</h1>
+  <p class="chapeau">
+    Vingt-huit captures d’un côté, vingt-huit de l’autre : les mêmes sept pages,
+    aux mêmes quatre formats, photographiées par le même outil. À gauche
+    la boutique <strong>telle qu’elle était</strong> avant la refonte ; à droite la boutique <strong>telle qu’elle est en ligne</strong>, photographiée sur son adresse publique.
+  </p>
+  <p class="chapeau">
+    Aucune commande n’est passée pendant la campagne : les pages de suivi et de
+    gestion montrent le jeu d’essai à dates figées, donc les deux jeux sont
+    comparables à l’octet près. Choisissez une page, puis un format.
+    <kbd>←</kbd> <kbd>→</kbd> changent de page, <kbd>↑</kbd> <kbd>↓</kbd> de format.
+  </p>
+</header>
+
+<nav class="barre" aria-label="Choix de la planche">
+  <div class="groupe" id="choix-pages" role="group" aria-label="Page"><span class="intitule">Page</span></div>
+  <div class="groupe" id="choix-formats" role="group" aria-label="Format"><span class="intitule">Format</span></div>
+  <div class="groupe" id="choix-vue" role="group" aria-label="Affichage"><span class="intitule">Vue</span></div>
+</nav>
+
+<main>
+  <div class="titre-planche">
+    <h2 id="titre-page">—</h2>
+    <span class="adresse" id="adresse-page"></span>
+    <span class="metrique" id="format-page"></span>
+  </div>
+  <p class="regard" id="regard-page"></p>
+
+  <div class="duo">
+    <figure class="volet-avant">
+      <figcaption>
+        <span class="etiquette">Avant — la boutique d’origine</span>
+        <span class="metrique" id="metrique-avant"></span>
+      </figcaption>
+      <div class="cadre" id="cadre-avant"></div>
+    </figure>
+    <figure class="volet-apres">
+      <figcaption>
+        <span class="etiquette">Après — la boutique en ligne</span>
+        <span class="metrique" id="metrique-apres"></span>
+      </figcaption>
+      <div class="cadre" id="cadre-apres"></div>
+    </figure>
+  </div>
+
+  <div class="balayage">
+    <figcaption>
+      <span class="etiquette">Balayage — les deux états superposés</span>
+      <span class="metrique">hauts de page alignés</span>
+    </figcaption>
+    <div class="balayage-scene" id="balayage-scene">
+      <img id="balayage-avant" alt="Avant la refonte">
+      <div class="dessus" id="balayage-dessus"><img id="balayage-apres" alt="Après la refonte"></div>
+      <div class="balayage-trait" id="balayage-trait"></div>
+    </div>
+    <div class="balayage-commande">
+      <span class="etiquette">Avant</span>
+      <input type="range" id="balayage-curseur" min="0" max="100" value="50" aria-label="Position du balayage">
+      <span class="etiquette">Après</span>
+    </div>
+  </div>
+
+  <p class="note">
+    Les captures sont prises en <strong>pleine hauteur</strong> : le cadre défile.
+    Elles attendent l’immobilité du site avant le déclic — les révélations sont
+    jouées, le titre est arrivé, la vidéo du héros est figée sur une image choisie —
+    sans quoi une planche montrerait un geste saisi en plein milieu.
+    Le balayage aligne les hauts de page : les deux états n’ont pas la même
+    hauteur, et la vue côte à côte reste celle qui fait foi.
+  </p>
+  <p class="note">
+    Jeu « avant » : <code>preuves/avant-refonte/</code> (constitué le 6 août, avant la
+    première ligne de la refonte). Jeu « après » :
+    <code>preuves/en-ligne-post-publication/</code>,
+    captures prises sur l’adresse publique, après la mise en ligne.
+    Planche assemblée le 11 août 2026, au commit 99b7680.
+  </p>
+  <div class="manquants" id="manquants" hidden></div>
+</main>
+
+<script>
+const DONNEES = {"pages":[{"fichier":"accueil","titre":"Accueil","adresse":"/","regard":"La page d’accueil. La grande image d’ouverture, le nom de la maison posé en très grand, et un fond de papier à la place du blanc d’origine."},{"fichier":"boutique","titre":"Le rayon","adresse":"/boutique","regard":"La liste des produits. Quinze photographies au lieu de quinze dessins, et le choix entre une vue en grille et une vue en liste."},{"fichier":"fiche-fromage","titre":"Une fiche produit","adresse":"/boutique/…","regard":"Une fiche produit. Deux photographies, un bloc d’achat qui reste sous les yeux pendant qu’on lit la page, et les mentions obligatoires à leur place."},{"fichier":"panier-plein","titre":"Le panier","adresse":"/panier","regard":"Le panier. Volontairement sobre : au moment de payer, on ne cherche pas à séduire, on cherche à être clair sur les montants."},{"fichier":"gestion-commandes","titre":"L’espace marchand","adresse":"/gestion/commandes","regard":"L’espace du commerçant, où l’on suit ses commandes. Même dessin que la boutique, sans photographies — c’est un outil de travail, pas une vitrine."},{"fichier":"suivi","titre":"Le suivi de commande","adresse":"/suivi","regard":"La page où un client retrouve sa commande avec sa référence, et voit où elle en est."},{"fichier":"retractation","titre":"Le droit de rétractation","adresse":"/retractation","regard":"Une page réglementaire. Une refonte réussie n’abîme rien de ce qui engage juridiquement : le tableau des quinze cas est entier, et il s’imprime."}],"formats":[{"nom":"1280x800","titre":"Bureau","detail":"1280 × 800"},{"nom":"768x1024","titre":"Tablette","detail":"768 × 1024"},{"nom":"390x844","titre":"Téléphone","detail":"390 × 844"},{"nom":"360x740","titre":"Petit téléphone","detail":"360 × 740"}],"planches":[{"page":"accueil","format":"1280x800","avant":{"dimensions":{"largeur":1280,"hauteur":1550},"octets":148159,"poids":"145 Ko","taille":"1280 × 1550 px","src":"../avant-refonte/accueil-1280x800.png"},"apres":{"dimensions":{"largeur":1280,"hauteur":2444},"octets":1432873,"poids":"1 399 Ko","taille":"1280 × 2444 px","src":"../en-ligne-post-publication/accueil-1280x800.png"}},{"page":"accueil","format":"768x1024","avant":{"dimensions":{"largeur":768,"hauteur":1690},"octets":149561,"poids":"146 Ko","taille":"768 × 1690 px","src":"../avant-refonte/accueil-768x1024.png"},"apres":{"dimensions":{"largeur":768,"hauteur":2664},"octets":1125476,"poids":"1 099 Ko","taille":"768 × 2664 px","src":"../en-ligne-post-publication/accueil-768x1024.png"}},{"page":"accueil","format":"390x844","avant":{"dimensions":{"largeur":780,"hauteur":4868},"octets":351221,"poids":"343 Ko","taille":"780 × 4868 px","src":"../avant-refonte/accueil-390x844.png"},"apres":{"dimensions":{"largeur":780,"hauteur":5266},"octets":1852387,"poids":"1 809 Ko","taille":"780 × 5266 px","src":"../en-ligne-post-publication/accueil-390x844.png"}},{"page":"accueil","format":"360x740","avant":{"dimensions":{"largeur":720,"hauteur":4994},"octets":346983,"poids":"339 Ko","taille":"720 × 4994 px","src":"../avant-refonte/accueil-360x740.png"},"apres":{"dimensions":{"largeur":720,"hauteur":5404},"octets":1761647,"poids":"1 720 Ko","taille":"720 × 5404 px","src":"../en-ligne-post-publication/accueil-360x740.png"}},{"page":"boutique","format":"1280x800","avant":{"dimensions":{"largeur":1280,"hauteur":3535},"octets":355046,"poids":"347 Ko","taille":"1280 × 3535 px","src":"../avant-refonte/boutique-1280x800.png"},"apres":{"dimensions":{"largeur":1280,"hauteur":8650},"octets":5552634,"poids":"5 422 Ko","taille":"1280 × 8650 px","src":"../en-ligne-post-publication/boutique-1280x800.png"}},{"page":"boutique","format":"768x1024","avant":{"dimensions":{"largeur":768,"hauteur":4205},"octets":351871,"poids":"344 Ko","taille":"768 × 4205 px","src":"../avant-refonte/boutique-768x1024.png"},"apres":{"dimensions":{"largeur":768,"hauteur":10712},"octets":4870783,"poids":"4 757 Ko","taille":"768 × 10712 px","src":"../en-ligne-post-publication/boutique-768x1024.png"}},{"page":"boutique","format":"390x844","avant":{"dimensions":{"largeur":780,"hauteur":10354},"octets":818791,"poids":"800 Ko","taille":"780 × 10354 px","src":"../avant-refonte/boutique-390x844.png"},"apres":{"dimensions":{"largeur":780,"hauteur":28670},"octets":8657517,"poids":"8 455 Ko","taille":"780 × 28670 px","src":"../en-ligne-post-publication/boutique-390x844.png"}},{"page":"boutique","format":"360x740","avant":{"dimensions":{"largeur":720,"hauteur":10948},"octets":820067,"poids":"801 Ko","taille":"720 × 10948 px","src":"../avant-refonte/boutique-360x740.png"},"apres":{"dimensions":{"largeur":720,"hauteur":27782},"octets":8118259,"poids":"7 928 Ko","taille":"720 × 27782 px","src":"../en-ligne-post-publication/boutique-360x740.png"}},{"page":"fiche-fromage","format":"1280x800","avant":{"dimensions":{"largeur":1280,"hauteur":2260},"octets":272397,"poids":"266 Ko","taille":"1280 × 2260 px","src":"../avant-refonte/fiche-fromage-1280x800.png"},"apres":{"dimensions":{"largeur":1280,"hauteur":3085},"octets":1555215,"poids":"1 519 Ko","taille":"1280 × 3085 px","src":"../en-ligne-post-publication/fiche-fromage-1280x800.png"}},{"page":"fiche-fromage","format":"768x1024","avant":{"dimensions":{"largeur":768,"hauteur":2772},"octets":261080,"poids":"255 Ko","taille":"768 × 2772 px","src":"../avant-refonte/fiche-fromage-768x1024.png"},"apres":{"dimensions":{"largeur":768,"hauteur":3514},"octets":1007305,"poids":"984 Ko","taille":"768 × 3514 px","src":"../en-ligne-post-publication/fiche-fromage-768x1024.png"}},{"page":"fiche-fromage","format":"390x844","avant":{"dimensions":{"largeur":780,"hauteur":7188},"octets":635132,"poids":"620 Ko","taille":"780 × 7188 px","src":"../avant-refonte/fiche-fromage-390x844.png"},"apres":{"dimensions":{"largeur":780,"hauteur":9994},"octets":2761102,"poids":"2 696 Ko","taille":"780 × 9994 px","src":"../en-ligne-post-publication/fiche-fromage-390x844.png"}},{"page":"fiche-fromage","format":"360x740","avant":{"dimensions":{"largeur":720,"hauteur":7594},"octets":633266,"poids":"618 Ko","taille":"720 × 7594 px","src":"../avant-refonte/fiche-fromage-360x740.png"},"apres":{"dimensions":{"largeur":720,"hauteur":10458},"octets":2697371,"poids":"2 634 Ko","taille":"720 × 10458 px","src":"../en-ligne-post-publication/fiche-fromage-360x740.png"}},{"page":"panier-plein","format":"1280x800","avant":{"dimensions":{"largeur":1280,"hauteur":2042},"octets":186528,"poids":"182 Ko","taille":"1280 × 2042 px","src":"../avant-refonte/panier-plein-1280x800.png"},"apres":{"dimensions":{"largeur":1280,"hauteur":2560},"octets":1507865,"poids":"1 473 Ko","taille":"1280 × 2560 px","src":"../en-ligne-post-publication/panier-plein-1280x800.png"}},{"page":"panier-plein","format":"768x1024","avant":{"dimensions":{"largeur":768,"hauteur":2315},"octets":165391,"poids":"162 Ko","taille":"768 × 2315 px","src":"../avant-refonte/panier-plein-768x1024.png"},"apres":{"dimensions":{"largeur":768,"hauteur":3173},"octets":1119120,"poids":"1 093 Ko","taille":"768 × 3173 px","src":"../en-ligne-post-publication/panier-plein-768x1024.png"}},{"page":"panier-plein","format":"390x844","avant":{"dimensions":{"largeur":780,"hauteur":5370},"octets":389181,"poids":"380 Ko","taille":"780 × 5370 px","src":"../avant-refonte/panier-plein-390x844.png"},"apres":{"dimensions":{"largeur":780,"hauteur":6618},"octets":1967049,"poids":"1 921 Ko","taille":"780 × 6618 px","src":"../en-ligne-post-publication/panier-plein-390x844.png"}},{"page":"panier-plein","format":"360x740","avant":{"dimensions":{"largeur":720,"hauteur":5586},"octets":390574,"poids":"381 Ko","taille":"720 × 5586 px","src":"../avant-refonte/panier-plein-360x740.png"},"apres":{"dimensions":{"largeur":720,"hauteur":6870},"octets":1894233,"poids":"1 850 Ko","taille":"720 × 6870 px","src":"../en-ligne-post-publication/panier-plein-360x740.png"}},{"page":"gestion-commandes","format":"1280x800","avant":{"dimensions":{"largeur":1280,"hauteur":1788},"octets":195150,"poids":"191 Ko","taille":"1280 × 1788 px","src":"../avant-refonte/gestion-commandes-1280x800.png"},"apres":{"dimensions":{"largeur":1280,"hauteur":2340},"octets":939854,"poids":"918 Ko","taille":"1280 × 2340 px","src":"../en-ligne-post-publication/gestion-commandes-1280x800.png"}},{"page":"gestion-commandes","format":"768x1024","avant":{"dimensions":{"largeur":768,"hauteur":1850},"octets":188420,"poids":"184 Ko","taille":"768 × 1850 px","src":"../avant-refonte/gestion-commandes-768x1024.png"},"apres":{"dimensions":{"largeur":768,"hauteur":2251},"octets":716548,"poids":"700 Ko","taille":"768 × 2251 px","src":"../en-ligne-post-publication/gestion-commandes-768x1024.png"}},{"page":"gestion-commandes","format":"390x844","avant":{"dimensions":{"largeur":780,"hauteur":4678},"octets":419200,"poids":"409 Ko","taille":"780 × 4678 px","src":"../avant-refonte/gestion-commandes-390x844.png"},"apres":{"dimensions":{"largeur":780,"hauteur":5528},"octets":1500819,"poids":"1 466 Ko","taille":"780 × 5528 px","src":"../en-ligne-post-publication/gestion-commandes-390x844.png"}},{"page":"gestion-commandes","format":"360x740","avant":{"dimensions":{"largeur":720,"hauteur":4808},"octets":416213,"poids":"406 Ko","taille":"720 × 4808 px","src":"../avant-refonte/gestion-commandes-360x740.png"},"apres":{"dimensions":{"largeur":720,"hauteur":5806},"octets":1486780,"poids":"1 452 Ko","taille":"720 × 5806 px","src":"../en-ligne-post-publication/gestion-commandes-360x740.png"}},{"page":"suivi","format":"1280x800","avant":{"dimensions":{"largeur":1280,"hauteur":1650},"octets":166589,"poids":"163 Ko","taille":"1280 × 1650 px","src":"../avant-refonte/suivi-1280x800.png"},"apres":{"dimensions":{"largeur":1280,"hauteur":2348},"octets":951468,"poids":"929 Ko","taille":"1280 × 2348 px","src":"../en-ligne-post-publication/suivi-1280x800.png"}},{"page":"suivi","format":"768x1024","avant":{"dimensions":{"largeur":768,"hauteur":1690},"octets":157752,"poids":"154 Ko","taille":"768 × 1690 px","src":"../avant-refonte/suivi-768x1024.png"},"apres":{"dimensions":{"largeur":768,"hauteur":2672},"octets":818955,"poids":"800 Ko","taille":"768 × 2672 px","src":"../en-ligne-post-publication/suivi-768x1024.png"}},{"page":"suivi","format":"390x844","avant":{"dimensions":{"largeur":780,"hauteur":4248},"octets":375927,"poids":"367 Ko","taille":"780 × 4248 px","src":"../avant-refonte/suivi-390x844.png"},"apres":{"dimensions":{"largeur":780,"hauteur":5804},"octets":1405837,"poids":"1 373 Ko","taille":"780 × 5804 px","src":"../en-ligne-post-publication/suivi-390x844.png"}},{"page":"suivi","format":"360x740","avant":{"dimensions":{"largeur":720,"hauteur":4418},"octets":373510,"poids":"365 Ko","taille":"720 × 4418 px","src":"../avant-refonte/suivi-360x740.png"},"apres":{"dimensions":{"largeur":720,"hauteur":6338},"octets":1409957,"poids":"1 377 Ko","taille":"720 × 6338 px","src":"../en-ligne-post-publication/suivi-360x740.png"}},{"page":"retractation","format":"1280x800","avant":{"dimensions":{"largeur":1280,"hauteur":8078},"octets":1031038,"poids":"1 007 Ko","taille":"1280 × 8078 px","src":"../avant-refonte/retractation-1280x800.png"},"apres":{"dimensions":{"largeur":1280,"hauteur":8657},"octets":2465063,"poids":"2 407 Ko","taille":"1280 × 8657 px","src":"../en-ligne-post-publication/retractation-1280x800.png"}},{"page":"retractation","format":"768x1024","avant":{"dimensions":{"largeur":768,"hauteur":9052},"octets":1026101,"poids":"1 002 Ko","taille":"768 × 9052 px","src":"../avant-refonte/retractation-768x1024.png"},"apres":{"dimensions":{"largeur":768,"hauteur":9201},"octets":2210217,"poids":"2 158 Ko","taille":"768 × 9201 px","src":"../en-ligne-post-publication/retractation-768x1024.png"}},{"page":"retractation","format":"390x844","avant":{"dimensions":{"largeur":780,"hauteur":22916},"octets":2346932,"poids":"2 292 Ko","taille":"780 × 22916 px","src":"../avant-refonte/retractation-390x844.png"},"apres":{"dimensions":{"largeur":780,"hauteur":23518},"octets":4853083,"poids":"4 739 Ko","taille":"780 × 23518 px","src":"../en-ligne-post-publication/retractation-390x844.png"}},{"page":"retractation","format":"360x740","avant":{"dimensions":{"largeur":720,"hauteur":23548},"octets":2355434,"poids":"2 300 Ko","taille":"720 × 23548 px","src":"../avant-refonte/retractation-360x740.png"},"apres":{"dimensions":{"largeur":720,"hauteur":25106},"octets":5050256,"poids":"4 932 Ko","taille":"720 × 25106 px","src":"../en-ligne-post-publication/retractation-360x740.png"}}]};
+const MANQUANTS = [];
+
+let rangPage = 0;
+let rangFormat = 0;
+let vue = 'duo';
+
+const VUES = [
+  { clef: 'duo', titre: 'Côte à côte' },
+  { clef: 'balayage', titre: 'Balayage' },
+  { clef: 'avant', titre: 'Avant seul' },
+  { clef: 'apres', titre: 'Après seul' },
+];
+
+function planche() {
+  const page = DONNEES.pages[rangPage];
+  const format = DONNEES.formats[rangFormat];
+
+  return DONNEES.planches.find((p) => p.page === page.fichier && p.format === format.nom);
+}
+
+function boutons(hote, liste, actif, action) {
+  for (const [rang, element] of liste.entries()) {
+    const bouton = document.createElement('button');
+    bouton.type = 'button';
+    bouton.textContent = element.titre;
+    bouton.setAttribute('aria-pressed', String(rang === actif));
+    bouton.addEventListener('click', () => { action(rang); });
+    hote.append(bouton);
+  }
+}
+
+function marquer(hote, actif) {
+  const liste = [...hote.querySelectorAll('button')];
+
+  for (const [rang, bouton] of liste.entries()) {
+    bouton.setAttribute('aria-pressed', String(rang === actif));
+  }
+}
+
+function image(cadre, piece, alternative) {
+  cadre.replaceChildren();
+
+  if (piece === null) {
+    const vide = document.createElement('p');
+    vide.className = 'absent';
+    vide.textContent = 'Capture absente — la campagne ne l’a pas produite.';
+    cadre.append(vide);
+    return;
+  }
+
+  const img = document.createElement('img');
+  img.src = piece.src;
+  img.alt = alternative;
+  img.loading = 'lazy';
+
+  if (piece.dimensions !== null) {
+    img.width = piece.dimensions.largeur;
+    img.height = piece.dimensions.hauteur;
+  }
+
+  cadre.append(img);
+}
+
+function rendre() {
+  const page = DONNEES.pages[rangPage];
+  const format = DONNEES.formats[rangFormat];
+  const p = planche();
+
+  document.getElementById('titre-page').textContent = page.titre;
+  document.getElementById('adresse-page').textContent = page.adresse;
+  document.getElementById('format-page').textContent = format.titre + ' · ' + format.detail;
+  document.getElementById('regard-page').textContent = page.regard;
+
+  document.getElementById('metrique-avant').textContent =
+    p.avant === null ? '—' : p.avant.taille + ' · ' + p.avant.poids;
+  document.getElementById('metrique-apres').textContent =
+    p.apres === null ? '—' : p.apres.taille + ' · ' + p.apres.poids;
+
+  image(document.getElementById('cadre-avant'), p.avant, 'Avant la refonte — ' + page.titre);
+  image(document.getElementById('cadre-apres'), p.apres, 'Après la refonte — ' + page.titre);
+
+  const balayageAvant = document.getElementById('balayage-avant');
+  const balayageApres = document.getElementById('balayage-apres');
+  balayageAvant.src = p.avant === null ? '' : p.avant.src;
+  balayageApres.src = p.apres === null ? '' : p.apres.src;
+
+  document.body.dataset.vue = vue;
+  poserBalayage();
+  document.title = 'Avant / après — ' + page.titre + ' — ' + format.detail;
+}
+
+function poserBalayage() {
+  const part = Number(document.getElementById('balayage-curseur').value);
+  document.getElementById('balayage-dessus').style.width = part + '%';
+  document.getElementById('balayage-trait').style.left = part + '%';
+}
+
+boutons(document.getElementById('choix-pages'), DONNEES.pages, 0, (rang) => {
+  rangPage = rang;
+  marquer(document.getElementById('choix-pages'), rang);
+  rendre();
+});
+
+boutons(document.getElementById('choix-formats'), DONNEES.formats, 0, (rang) => {
+  rangFormat = rang;
+  marquer(document.getElementById('choix-formats'), rang);
+  rendre();
+});
+
+boutons(document.getElementById('choix-vue'), VUES, 0, (rang) => {
+  vue = VUES[rang].clef;
+  marquer(document.getElementById('choix-vue'), rang);
+  rendre();
+});
+
+document.getElementById('balayage-curseur').addEventListener('input', poserBalayage);
+
+document.addEventListener('keydown', (evenement) => {
+  if (evenement.target instanceof HTMLInputElement) {
+    return;
+  }
+
+  const nombrePages = DONNEES.pages.length;
+  const nombreFormats = DONNEES.formats.length;
+
+  if (evenement.key === 'ArrowRight') { rangPage = (rangPage + 1) % nombrePages; }
+  else if (evenement.key === 'ArrowLeft') { rangPage = (rangPage - 1 + nombrePages) % nombrePages; }
+  else if (evenement.key === 'ArrowDown') { rangFormat = (rangFormat + 1) % nombreFormats; }
+  else if (evenement.key === 'ArrowUp') { rangFormat = (rangFormat - 1 + nombreFormats) % nombreFormats; }
+  else { return; }
+
+  evenement.preventDefault();
+  marquer(document.getElementById('choix-pages'), rangPage);
+  marquer(document.getElementById('choix-formats'), rangFormat);
+  rendre();
+});
+
+if (MANQUANTS.length > 0) {
+  const bloc = document.getElementById('manquants');
+  bloc.hidden = false;
+  bloc.textContent = 'Captures manquantes (' + MANQUANTS.length + ') : ' + MANQUANTS.join(', ');
+}
+
+rendre();
+</script>
+</body>
+</html>
