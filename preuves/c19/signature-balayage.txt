@@ -1,0 +1,48 @@
+   capture  260 ms  le bloc entre  ->  preuves/c19/signature-0260ms.png
+   capture  520 ms  le bloc couvre  ->  preuves/c19/signature-0520ms.png
+   capture  820 ms  le bloc se retire  ->  preuves/c19/signature-0820ms.png
+   capture 2200 ms  la page est posee  ->  preuves/c19/signature-2200ms.png
+
+LA SÉQUENCE, ÉCHANTILLONNÉE À FROID (1440 × 900, densité 2) — 5 lignes
+------------------------------------------------------------------------------------------------
+
+    ms  | bloc : échelle horizontale                | texte : opacité
+       | épicerie    maison  vaubrune  conserves  voir le r  | épicerie    maison  vaubrune  conserves  voir le r
+------------------------------------------------------------------------------------------------
+   300  |       0        0        0        0        0  |       0        0        0        0        0
+   309  |  0.0028        0        0        0        0  |       0        0        0        0        0
+   319  |  0.0071        0        0        0        0  |       0        0        0        0        0
+   417  |  0.1067   0.0212   0.0001        0        0  |       0        0        0        0        0
+   510  |  0.6779   0.1896   0.0462        0        0  |       0        0        0        0        0
+   600  |  0.9377   0.7538   0.2456   0.0082        0  |       0        0        0        0        0
+   609  |  0.9572   0.8219   0.3446   0.0155        0  |       0        0        0        0        0
+   709  |       1   0.9808   0.8998   0.1566   0.0364  |       0        0        0        0        0
+   900  |   0.798   0.9502   0.9949   0.9604   0.8328  |       1        1        1        0        0
+   909  |  0.7193   0.9285   0.9892   0.9743   0.8784  |       1        1        1        0        0
+  1009  |  0.1216   0.4849   0.8706   0.9992   0.9905  |       1        1        1        1        0
+  1109  |  0.0095   0.0668   0.2629   0.9422   0.9929  |       1        1        1        1        1
+  1509  |       0        0        0        0        0  |       1        1        1        1        1
+  1608  |       0        0        0        0        0  |       1        1        1        1        1
+  1709  |       0        0        0        0        0  |       1        1        1        1        1
+  1810  |       0        0        0        0        0  |       1        1        1        1        1
+  2010  |       0        0        0        0        0  |       1        1        1        1        1
+  2109  |       0        0        0        0        0  |       1        1        1        1        1
+  2209  |       0        0        0        0        0  |       1        1        1        1        1
+  2308  |       0        0        0        0        0  |       1        1        1        1        1
+  2409  |       0        0        0        0        0  |       1        1        1        1        1
+  2508  |       0        0        0        0        0  |       1        1        1        1        1
+  2609  |       0        0        0        0        0  |       1        1        1        1        1
+------------------------------------------------------------------------------------------------
+
+épicerie   bloc max     1 ->     0 en fin ; texte visible à 726 ms, bloc couvrant dès 672 ms ; opacité finale 1
+maison     bloc max 0.9949 ->     0 en fin ; texte visible à 900 ms, bloc couvrant dès 743 ms ; opacité finale 1
+vaubrune   bloc max 0.9949 ->     0 en fin ; texte visible à 900 ms, bloc couvrant dès 900 ms ; opacité finale 1
+conserves  bloc max     1 ->     0 en fin ; texte visible à 992 ms, bloc couvrant dès 942 ms ; opacité finale 1
+voir le r  bloc max     1 ->     0 en fin ; texte visible à 1076 ms, bloc couvrant dès 1009 ms ; opacité finale 1
+
+CE QUE CES TROIS COLONNES DOIVENT DIRE :
+  1. le bloc atteint 1 (il couvre) puis revient à 0 (il s’est retiré) ;
+  2. le texte devient visible APRÈS que le bloc couvre — jamais avant,
+     sans quoi de l’encre passerait sur de l’encre pendant le balayage ;
+  3. toutes les opacités finales valent 1.
+

@@ -1,0 +1,102 @@
+{
+  "date": "2026-08-10",
+  "lighthouseVersion": "13.4.1",
+  "profil": {
+    "appareil": "mobile",
+    "bridage": "profil par défaut de Lighthouse (mobile émulé, réseau et processeur bridés)",
+    "origine": "construction de production servie en local (next start)",
+    "horsLigne": true
+  },
+  "seuils": {
+    "performance": 90,
+    "accessibility": 100,
+    "seo": 96,
+    "best-practices": 100
+  },
+  "pages": [
+    {
+      "chemin": "/",
+      "intitule": "Accueil",
+      "notes": {
+        "performance": 98,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "mesures": {
+        "premierAffichage": {
+          "valeur": 1545.222,
+          "affichage": "1.5 s"
+        },
+        "plusGrandAffichage": {
+          "valeur": 2381.148,
+          "affichage": "2.4 s"
+        },
+        "tempsDeBlocage": {
+          "valeur": 51,
+          "affichage": "50 ms"
+        },
+        "decalageCumule": {
+          "valeur": 0.00005596923707480527,
+          "affichage": "0"
+        }
+      }
+    },
+    {
+      "chemin": "/boutique/huile-olive-premiere-pression",
+      "intitule": "Fiche huile d’olive",
+      "notes": {
+        "performance": 97,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "mesures": {
+        "premierAffichage": {
+          "valeur": 1525.62405,
+          "affichage": "1.5 s"
+        },
+        "plusGrandAffichage": {
+          "valeur": 2596.0827,
+          "affichage": "2.6 s"
+        },
+        "tempsDeBlocage": {
+          "valeur": 27,
+          "affichage": "30 ms"
+        },
+        "decalageCumule": {
+          "valeur": 0.00005596923707480527,
+          "affichage": "0"
+        }
+      }
+    },
+    {
+      "chemin": "/panier",
+      "intitule": "Panier",
+      "notes": {
+        "performance": 96,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "mesures": {
+        "premierAffichage": {
+          "valeur": 1515.3942,
+          "affichage": "1.5 s"
+        },
+        "plusGrandAffichage": {
+          "valeur": 2533.2627999999995,
+          "affichage": "2.5 s"
+        },
+        "tempsDeBlocage": {
+          "valeur": 73,
+          "affichage": "70 ms"
+        },
+        "decalageCumule": {
+          "valeur": 0.00005596923707480527,
+          "affichage": "0"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,56 @@
+ATTRIBUTION DU PLUS GRAND AFFICHAGE — tranche C19, recette finale
+date   : 2026-08-11 09 h 37 (Paris)
+commit : f30692a
+bridage: réseau 1,6 Mb/s · latence 150 ms · processeur ÷ 4, APPLIQUÉ par le
+         protocole de débogage — à ne pas confondre avec le bridage SIMULÉ
+         du profil mobile de Lighthouse, qui est ce que mesure `mesurer-notes`.
+==============================================================================
+
+/livraison  (/livraison)
+------------------------------------------------------------------------------
+  premier affichage    : 1116 ms
+  plus grand affichage : 1132 ms  —  <img.block.h-auto.w-full>  70092 px²
+                         image : /editorial/livraison/illustration-1024.avif
+
+  ce qui finit de charger dans la fenêtre du retard :
+     1265 ms    53 Ko  script     /_next/static/chunks/4bd1b696-c023c6e3521b1417.js
+     1199 ms    46 Ko  script     /_next/static/chunks/255-3d881dfa8c72bc56.js
+
+  les ressources les plus lourdes de la page :
+      53 Ko  fin à  1265 ms  script     /_next/static/chunks/4bd1b696-c023c6e3521b1417.js
+      46 Ko  fin à  1831 ms  css        /_next/static/media/dae0c9f40ba3b9b7-s.p.woff2
+      46 Ko  fin à  1199 ms  script     /_next/static/chunks/255-3d881dfa8c72bc56.js
+      45 Ko  fin à  1815 ms  css        /_next/static/media/67480a5ef8cc4d5f-s.p.woff2
+      36 Ko  fin à  1404 ms  css        /fond/marbre-coquille.avif
+
+/suivi  (/suivi)
+------------------------------------------------------------------------------
+  premier affichage    : 976 ms
+  plus grand affichage : 996 ms  —  <img.block.h-auto.w-full>  73986 px²
+                         image : /editorial/suivi/illustration-1024.avif
+
+  ce qui finit de charger dans la fenêtre du retard :
+     1127 ms    46 Ko  script     /_next/static/chunks/255-3d881dfa8c72bc56.js
+      915 ms     3 Ko  script     /_next/static/chunks/app/suivi/page-4d2e071d07163ecb.js
+      869 ms     2 Ko  script     /_next/static/chunks/235-2a92a0f04269fc9a.js
+      852 ms     4 Ko  script     /_next/static/chunks/app/layout-2a348f6df75f2ce3.js
+      806 ms     1 Ko  script     /_next/static/chunks/app/page-97766b91b8f009b0.js
+
+  les ressources les plus lourdes de la page :
+      53 Ko  fin à  1337 ms  script     /_next/static/chunks/4bd1b696-c023c6e3521b1417.js
+      46 Ko  fin à  1820 ms  css        /_next/static/media/dae0c9f40ba3b9b7-s.p.woff2
+      46 Ko  fin à  1127 ms  script     /_next/static/chunks/255-3d881dfa8c72bc56.js
+      45 Ko  fin à  1820 ms  css        /_next/static/media/67480a5ef8cc4d5f-s.p.woff2
+      36 Ko  fin à  1603 ms  css        /fond/marbre-coquille.avif
+
+==============================================================================
+LA TUILE DE MARBRE EST-ELLE DEVANT LE PLUS GRAND AFFICHAGE ?
+------------------------------------------------------------------------------
+  page                    premier aff.   plus grand aff.   fin du marbre   écart
+  /livraison                 1116 ms          1132 ms          1404 ms   +272 ms
+  /suivi                      976 ms           996 ms          1603 ms   +607 ms
+
+  Un écart POSITIF veut dire que la tuile finit APRÈS le plus grand
+  affichage : elle n’est pas sur son chemin. Elle est découverte par la
+  feuille de style, donc après le premier rendu, et elle arrive derrière.
+==============================================================================

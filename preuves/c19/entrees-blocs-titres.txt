@@ -1,0 +1,63 @@
+
+── /boutique  (le rayon)
+   lignes d’entrée ............. 4
+   retards lus dans le moteur .. [70,140,210.00000000000003,280] ms
+   montées à la 1re image ...... [16,83,24,24] px
+   opacités à la 1re image ..... [0,0,0,0]
+   OK   aucun pseudo-élément coloré
+   OK   rien de persistant : tout à 1 / none à l’arrivée
+   OK   le titre ENTRE — attendu qu’il entre (une image porte la mesure)
+   OK   sous reduce : 4 lignes visibles et immobiles
+
+── /livraison  (une page de confiance)
+   lignes d’entrée ............. 4
+   retards lus dans le moteur .. [70,140,210.00000000000003,280] ms
+   montées à la 1re image ...... [16,83,24,24] px
+   opacités à la 1re image ..... [0,0,0,0]
+   OK   aucun pseudo-élément coloré
+   OK   rien de persistant : tout à 1 / none à l’arrivée
+   OK   le titre ENTRE — attendu qu’il entre (une image porte la mesure)
+   OK   sous reduce : 4 lignes visibles et immobiles
+
+── /boutique/huile-olive-premiere-pression  (une fiche produit)
+   lignes d’entrée ............. 3
+   retards lus dans le moteur .. [70,140,210.00000000000003] ms
+   montées à la 1re image ...... [16,165,24] px
+   opacités à la 1re image ..... [0,0,0]
+   OK   aucun pseudo-élément coloré
+   OK   rien de persistant : tout à 1 / none à l’arrivée
+   OK   le titre ENTRE — attendu qu’il entre (une image porte la mesure)
+   OK   sous reduce : 3 lignes visibles et immobiles
+
+── /gestion  (un écran marchand)
+   lignes d’entrée ............. 4
+   retards lus dans le moteur .. [70,null,210.00000000000003,280] ms
+   montées à la 1re image ...... [16,0,24,24] px
+   opacités à la 1re image ..... [0,1,0,0]
+   OK   aucun pseudo-élément coloré
+   OK   rien de persistant : tout à 1 / none à l’arrivée
+   OK   le titre reste en place — attendu qu’il reste (il EST la mesure)
+   OK   sous reduce : 4 lignes visibles et immobiles
+
+── /conditions-generales-de-vente  (un document légal)
+   lignes d’entrée ............. 3
+   retards lus dans le moteur .. [70,null,210.00000000000003] ms
+   montées à la 1re image ...... [16,0,24] px
+   opacités à la 1re image ..... [0,1,0]
+   OK   aucun pseudo-élément coloré
+   OK   rien de persistant : tout à 1 / none à l’arrivée
+   OK   le titre reste en place — attendu qu’il reste (il EST la mesure)
+   OK   sous reduce : 3 lignes visibles et immobiles
+
+── /panier  (le tunnel)
+   lignes d’entrée ............. 4
+   retards lus dans le moteur .. [70,140,210.00000000000003,280] ms
+   montées à la 1re image ...... [16,83,24,24] px
+   opacités à la 1re image ..... [0,0,0,0]
+   OK   aucun pseudo-élément coloré
+   OK   rien de persistant : tout à 1 / none à l’arrivée
+   OK   le titre ENTRE — attendu qu’il entre (une image porte la mesure)
+   OK   sous reduce : 4 lignes visibles et immobiles
+
+--------------------------------------------------------------------------
+6 pages contrôlées, aucune anomalie.

@@ -1,0 +1,89 @@
+PREUVE ROUGE DU CAS 9 DE LA CAMPAGNE DU MOUVEMENT — tranche C20, 2026-08-11
+================================================================================
+
+Un test vert ne prouve rien tant qu'on ne l'a pas vu ROUGE pour la raison qu'il
+annonce (leçon de C16, quatre fois payee depuis). Le cas 9 — « les héros de
+/livraison et /suivi jouent à froid, et se taisent sous reduce » — porte deux
+affirmations NEUVES, c'est-à-dire deux affirmations que la campagne ne faisait
+nulle part ailleurs. Elles ont été rompues une par une, sur une construction
+complète, et le cas est tombé les deux fois en nommant exactement ce qu'on
+venait de casser.
+
+Les deux ruptures ont été ANNULÉES ensuite, et le diff de
+src/lib/fournisseurs.tsx contre le sommet est VIDE — vérifié à `git diff`.
+
+--------------------------------------------------------------------------------
+ROUGE n° 1 — LA BOUCLE SERVIE EST CELLE DE LA PAGE, ET PAS CELLE DU VOISIN
+--------------------------------------------------------------------------------
+
+Rupture : dans src/donnees/visuels-editoriaux.ts, l'entrée HEROS_SUIVI reçoit
+`video: 'livraison'` au lieu de `video: 'suivi'`.
+
+C'est le défaut que la nouvelle forme de données rend possible et qu'aucune
+autre assertion n'attraperait : la page joue une vidéo, l'attribut bascule à
+« joue », le temps courant avance, un seul AV1 part sur le réseau, l'affiche est
+dessous — tout est vert, et le visiteur regarde le colis de /livraison sur la
+page de suivi.
+
+    npx playwright test --project=mouvement -g "les héros de /livraison et /suivi"
+
+    x  1 [mouvement] > mouvement.spec.ts:1535:5 > les héros de /livraison et
+       /suivi jouent à froid, et se taisent sous reduce (3.5s)
+
+    Error: /suivi : la boucle servie vient d'un autre dossier
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "suivi"
+    Received: "livraison"
+
+      > 1593 |     expect(etat.dossier, `${chemin} : la boucle servie vient d'un
+                    autre dossier`).toBe(
+
+    1 failed
+
+--------------------------------------------------------------------------------
+ROUGE n° 2 — SOUS MOUVEMENT RÉDUIT, PAS UN OCTET, SUR LES DEUX PAGES
+--------------------------------------------------------------------------------
+
+Rupture : dans src/lib/fournisseurs.tsx, la condition
+`window.matchMedia('(prefers-reduced-motion: reduce)').matches` est retirée de
+la garde d'entrée de l'effet vidéo. Le reste de l'effet est intact.
+
+C'est la condition de retour n° 3 de l'interdit n° 17 de D37, et elle ne se lit
+qu'au RÉSEAU : sans elle, l'attribut et l'opacité vaudraient exactement la même
+chose pendant que le fichier partirait quand même.
+
+    Error: sous mouvement réduit, 2 fichier(s) vidéo demandés sur les deux pages
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 4
+
+    - Array []
+    + Array [
+    +   "boucle-1280.av1.mp4",
+    +   "boucle-1280.av1.mp4",
+    + ]
+
+      > 1665 |   ).toEqual([]);
+
+    1 failed
+
+Les DEUX fichiers demandés sont le fait notable : le contexte réduit visite
+/livraison PUIS /suivi dans la même session, et la garde retirée rend le réseau
+bavard sur les deux. Un compte à zéro cumulé sur deux pages couvre donc AUSSI la
+navigation de l'une à l'autre — ce qu'un compte à zéro pris page par page ne
+couvrirait pas.
+
+--------------------------------------------------------------------------------
+VERT, LES DEUX RUPTURES ANNULÉES
+--------------------------------------------------------------------------------
+
+    npx playwright test --project=mouvement
+    10 passed
+
+puis, dans la chaîne complète sur construction fraîche :
+
+    108 passed (54.4s)

@@ -1,0 +1,65 @@
+LOT DE MESURES — tranche C19
+date   : 2026-08-10
+commit : c5ba8d1
+========================================================================
+
+### npm run test:couverture
++           src/donnees/commandes-amorce.ts : marqueurs présents, exemption accordée (jeu d’essai à adresses irréelles, dont les marqueurs sont vérifiés ci-dessus)
++ [ OK   ] Aucun motif de donnée réelle dans src, contenu et public
++           137 fichiers lus dans src, contenu, public
++           233 binaire(s) déclaré(s) non lu(s) comme du texte — leur nom a été analysé, leur contenu relève de la garde des métadonnées
++           1 zone(s) de texte réglementaire neutralisée(s)
++ [ OK   ] Texte et binaire restent deux catégories disjointes
++           12 extension(s) lue(s) comme du texte, 7 tenue(s) pour binaires
++ [ ÉCHEC] Aucun fichier de pilotage privé n’est suivi par git
++           577 fichier(s) suivi(s) par git dans ce périmètre
++           289 suivi(s) relu(s) pour les empreintes de pilotage (51 du banc d’essai et 237 binaire(s) écartés)
++    -> preuves/c19/controle-c19.txt:123 : chemin de poste Windows (profil utilisateur) — « <profil du poste>s/c19/controle-c19.txt:124 : chemin de poste Windows (profil utilisateur) — « <profil du poste>s/c19/controle-c19.txt:169 : chemin de poste Windows (profil utilisateur) — « <profil du poste>s, 1 en échec : Aucun fichier de pilotage privé n’est suivi par git
++
++
+
+ ❯ tests/unitaires/garde-donnees-inventees.spec.ts:93:28
+     91|     const verdict = lancerLaGarde();
+     92|
+     93|     expect(verdict.sortie).toContain('aucune anomalie');
+       |                            ^
+     94|     expect(verdict.code).toBe(0);
+     95|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 24 passed (25)
+      Tests  1 failed | 581 passed (582)
+   Start at  19:53:02
+   Duration  11.92s (transform 4.19s, setup 0ms, import 7.31s, tests 30.17s, environment 6ms)
+
+
+### premier chargement, route par route
+FIRST LOAD JS, À L'OCTET — somme des morceaux d'entrée par route
+Source : .next/app-build-manifest.json (22 routes)
+
+route                                    brut Ko   gzip Ko   morceaux
+────────────────────────────────────────────────────────────────────────
+/                                       410.78    118.96      9
+/_not-found                             410.71    118.92      9
+/a-propos-de-cette-demonstration        410.78    118.96      9
+/boutique                               414.37    120.38      9
+/boutique/[produit]                     422.20    123.44     10
+/commande                               439.91    129.74     12
+/commande/annulee                       420.70    123.04     10
+/commande/confirmation                  428.88    125.34     10
+/conditions-generales-de-vente          410.78    118.96      9
+/donnees-personnelles                   410.78    118.96      9
+/gestion                                422.19    123.54     11
+/gestion/catalogue                      425.45    124.49     11
+/gestion/commandes                      420.64    122.98     11
+/gestion/commandes/[reference]          426.25    124.48     11
+/gestion/modeles-de-courriels           410.92    119.10     10
+/gestion/prise-en-main                  410.99    119.15     10
+/livraison                              410.78    118.96      9
+/mentions-legales                       410.78    118.96      9
+/paiement/simulation                    414.05    120.28      9
+/panier                                 431.15    126.40     11
+/retractation                           411.13    119.17      9
+/suivi                                  422.92    123.77     10

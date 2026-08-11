@@ -18,7 +18,200 @@ playwright-report/
 
 # Pièces de preuve (captures d'écran de recette) : elles pèsent, elles se
 # refont d'une commande, et elles ne se relisent pas dans un diff.
-preuves/
+#
+# UNE EXCEPTION depuis C11 : les EMPREINTES du jeu de référence d'avant la
+# refonte. Deux kilooctets de sommes SHA-256 se versionnent sans peine, et sans
+# elles « les 28 captures sont identiques » est une parole qu'il faut croire —
+# le jeu de référence n'existant que sur un poste. Avec elles, n'importe qui
+# rejoue `node preuves/captures.mjs` et compare. Même raisonnement que les
+# relevés datés de `mesures/`.
+#
+# Le SCRIPT de capture entre lui aussi, et pour la même raison : des empreintes
+# qu'on ne peut pas refaire ne prouvent rien. Le motif de C9 était le POIDS des
+# images et le bruit qu'elles font dans un diff — il ne visait pas deux cents
+# lignes d'outillage, qui se relisent très bien. Les PNG, eux, restent dehors.
+#
+# La forme est imposée par git : on ne peut pas ré-inclure un fichier dont un
+# dossier parent est exclu, d'où l'exclusion du CONTENU (`preuves/*`) plutôt
+# que du dossier, puis les ré-inclusions.
+#
+# Même doctrine appliquée à l'outillage de C13 : les trois scripts de
+# `preuves/c13/` entrent, leurs sorties restent dehors. `diag-cls.mjs` est
+# le plus important des trois — c'est lui qui a trouvé le décalage cumulé de
+# 0,0089 que ni l'œil, ni les 74 campagnes, ni une mesure sans bridage ne
+# voyaient. Un outil de diagnostic qui ne survit pas à sa tranche oblige la
+# suivante à le réécrire, et le rapport de C13 le déclarait « versionné » à
+# trois endroits alors qu'il ne l'était pas.
+preuves/*
+!preuves/captures.mjs
+# `parcours-console.mjs` ENTRE À SON TOUR (recette finale de C19), et c'est une
+# omission qu'on répare plutôt qu'une doctrine qu'on change : son frère
+# `captures.mjs` est versionné depuis C9, le `CLAUDE.md` du projet les cite
+# côte à côte comme l'outillage de recette, et lui seul n'existait que sur un
+# poste. C'est le défaut exact que C13 avait trouvé sur `diag-cls.mjs` — un
+# rapport qui déclare « versionné » un fichier absent du dépôt —, sur le
+# fichier d'à côté.
+#
+# Ce qu'il porte n'est pas remplaçable : c'est le SEUL instrument qui parcoure
+# la boutique de bout en bout en écoutant `securitypolicyviolation`, donc la
+# seule preuve vivante de la décision D34. Le laisser dehors, c'est demander
+# qu'on croie sur parole « zéro violation de CSP ».
+!preuves/parcours-console.mjs
+!preuves/avant-refonte/
+preuves/avant-refonte/*
+!preuves/avant-refonte/EMPREINTES.txt
+!preuves/c13/
+preuves/c13/*
+!preuves/c13/*.mjs
+!preuves/c14/
+preuves/c14/*
+!preuves/c14/*.mjs
+# Les RELEVÉS DE TEXTE de C14 entrent aussi, et pour la raison qui a déjà fait
+# entrer `avant-refonte/EMPREINTES.txt` : une preuve qu'on ne peut pas lire
+# n'est qu'une parole. « La garde échouait avant le correctif » et « le décalage
+# cumulé passe de 0,0002 à 0 » sont deux affirmations du rapport ; les deux
+# tiennent en trois kilooctets de sortie de commande, et sans eux il faut croire
+# sur parole. Les PNG et les PDF, eux, restent dehors — ils pèsent et ne se
+# relisent pas dans un diff.
+!preuves/c14/*.txt
+# C15 : même doctrine — outillage et relevés de texte entrent, images dehors.
+!preuves/c15/
+preuves/c15/*
+!preuves/c15/*.mjs
+!preuves/c15/*.txt
+# C16 : idem.
+!preuves/c16/
+preuves/c16/*
+!preuves/c16/*.mjs
+!preuves/c16/*.txt
+# C17 : idem. Le relevé de First Load entre AUSSI en JSON, et c'est la seule
+# exception au « les binaires restent dehors, les documents entrent » : deux
+# kilooctets de nombres par route sont ce qui permet à la tranche suivante de
+# calculer son écart d'une commande, au lieu de reconstruire le sommet
+# précédent dans son arbre comme C13 a dû le faire.
+!preuves/c17/
+preuves/c17/*
+!preuves/c17/*.mjs
+!preuves/c17/*.txt
+!preuves/c17/*.json
+# C18 : idem. Les relevés de géométrie du héros entrent — c'est la première
+# fois qu'un défaut de ce dépôt est signalé par le CLIENT et non par une garde,
+# et le tableau des cinq largeurs est ce qui permettra à quiconque de refaire
+# la mesure au lieu de croire le rapport sur parole.
+!preuves/c18/
+preuves/c18/*
+!preuves/c18/*.mjs
+!preuves/c18/*.txt
+!preuves/c18/*.json
+# C19 : idem, plus le HTML des PLANCHES avant/après. Une planche est une page
+# qui met deux images côte à côte ; les images restent dehors comme toujours,
+# mais le document qui les met en regard entre — c'est lui qui porte le
+# raisonnement (quelle page, quel format, ce qu'on doit y voir), et il se
+# régénère d'une commande dès que les captures sont refaites.
+#
+# LA CONDITION QUI REND CETTE LIGNE TENABLE est arrivée avec la tranche : le
+# sixième contrôle de `verifier-donnees` relit tout fichier SUIVI à la
+# recherche des empreintes de pilotage privé. Sept relevés de C14 à C17
+# publiaient un chemin de poste nominatif sans que personne ne l'ait vu ; on
+# versionne désormais des relevés en sachant qu'une garde les regarde.
+!preuves/c19/
+preuves/c19/*
+!preuves/c19/*.mjs
+!preuves/c19/*.txt
+!preuves/c19/*.json
+!preuves/c19/*.html
+# LES CAPTURES IN VIVO DU FOND ENTRENT, EN AVIF — première exception à « les
+# images de recette restent dehors », et elle ne renie pas la règle : le motif
+# écrit en C9 est le POIDS et le bruit dans un diff. Deux PNG de 1440 × 900
+# pèsent 1,2 Mo ; les mêmes captures en AVIF de haute qualité tiennent en
+# quelques dizaines de kilooctets, et le diff n'en est pas plus lisible dans un
+# cas que dans l'autre. Ce qui fait pencher, c'est ce qu'elles PROUVENT : le
+# fond a été refusé TROIS FOIS par le client, sur trois livraisons qui
+# affirmaient toutes qu'il se voyait. « Le marbre se voit » est exactement le
+# genre de phrase qu'on ne doit plus avoir à croire sur parole — et un relevé
+# de luminance, si juste soit-il, ne remplace pas le fait de regarder.
+!preuves/c19/marbre-*.avif
+# C20 : les relevés ET les outils, comme c13 à c19. La rédaction précédente
+# n'ouvrait que `*.txt`, sur une affirmation qui s'est révélée fausse — « cette
+# tranche n'écrit aucun outil qui lui soit propre ». Elle était juste pour
+# l'essentiel de la tranche, qui rejoue les instruments de C17 et de C19 en leur
+# ajoutant l'option qui leur manquait (`--pages` sur l'attribution du plus grand
+# affichage) plutôt que de les recopier — un outil recopié pour changer une
+# liste duplique le bridage, l'observateur et la fenêtre du retard, c'est-à-dire
+# trois décisions mesurées, désormais entretenues à deux endroits. Mais elle
+# était fausse pour `vu-panier.mjs`, écrit pendant la tranche pour regarder le
+# héros de `/panier` sous les deux régimes, et resté hors du dépôt sans que
+# personne le décide.
+#
+# C'EST LE DÉFAUT DE C13 SUR `diag-cls.mjs`, UN DOSSIER PLUS LOIN, et c'est la
+# troisième fois qu'il se produit (C13, puis `parcours-console.mjs` en C19).
+# La règle qui le ferme ne dépend plus d'un jugement porté sur une tranche :
+# un dossier de preuves ouvre `*.mjs` et `*.txt`, toujours, et l'exception se
+# justifie par écrit — jamais l'inverse.
+#
+# Ce que ces relevés portent et qu'aucune garde ne dirait : le plus grand
+# affichage de `/livraison` et de `/suivi` AVANT et APRÈS la bascule en vidéo.
+# La promesse « le LCP reste une image » n'est vérifiable nulle part ailleurs —
+# ni `mesurer-notes`, qui ne garde que quatre nombres, ni la campagne, qui ne
+# mesure pas sous bridage. Les deux tirages de chaque état sont versionnés, et
+# c'est la fourchette qui fait foi, jamais une valeur isolée.
+!preuves/c20/
+preuves/c20/*
+!preuves/c20/*.mjs
+!preuves/c20/*.txt
+
+# TRANCHE C21a — les trois pages du tunnel gagnent leur héros illustré. La règle
+# posée juste au-dessus s'applique SANS être re-jugée, et c'est tout l'intérêt
+# de l'avoir écrite : `*.mjs` et `*.txt`, d'office.
+#
+# `vu-tunnel.mjs` est l'instrument propre à cette tranche, et il l'est parce
+# qu'aucun outil du dépôt ne mesure ce qu'elle promet : que l'avertissement de
+# D22 reste devant l'image dans l'ordre du DOCUMENT, que la référence de
+# commande se lise sans défiler sur un téléphone, et qu'une page imprimée ne
+# garde pas un cartouche orphelin. Les trois se sont révélés utiles le jour même
+# — le troisième a trouvé un défaut ANTÉRIEUR au tunnel, présent sur cinq pages
+# depuis C19-ter.
+#
+# Les relevés versionnés portent, eux, ce qu'aucune garde ne dit : le plus grand
+# affichage et le décalage cumulé des trois pages AVANT et APRÈS leur image, aux
+# deux régimes de mouvement.
+!preuves/c21/
+preuves/c21/*
+!preuves/c21/*.mjs
+!preuves/c21/*.txt
+
+# Atelier des visuels (tranche C11, décision D35). Les sorties BRUTES des
+# moteurs d'images sont énormes, portent leurs métadonnées — dont le texte de
+# la consigne — et ne sont pas ce qu'on livre. Seul le résultat recadré,
+# réencodé et DÉSHABILLÉ entre dans public/produits/, où deux gardes
+# l'attendent (verifier-images, contrôle des métadonnées).
+#
+# DEUX EXCEPTIONS depuis C14, et c'est la même doctrine que `preuves/` juste
+# au-dessus : les BINAIRES restent dehors, les DOCUMENTS entrent.
+#
+# `manifeste.json` n'est pas une sortie, c'est la SOURCE du pipeline — les
+# boîtes de recadrage, les alternatives textuelles, les couleurs de réservation
+# et les empreintes des masters. Le laisser dehors aurait rendu
+# `npm run preparer-images` irreproductible depuis le dépôt : on aurait des
+# images versionnées et aucune trace écrite de ce qui les a décidées.
+#
+# Le journal de génération, LUI, RESTE DEHORS — arbitrage de la revue de C18,
+# qui ANNULE l'exception posée en C14. Le motif d'alors (« il est cité par le
+# manifeste, par le pipeline et par les rapports de tranche ; trois documents
+# qui renvoient à un fichier absent du dépôt, c'est le défaut relevé sur
+# `diag-cls.mjs` ») ne pèse rien face à ce que le fichier PUBLIE : l'adresse
+# d'une conversation privée avec le moteur d'images, des chemins de poste et
+# des notes nominatives de séance. Ce dépôt est PUBLIC. Un renvoi qui pend se
+# corrige dans le document qui renvoie ; une donnée personnelle publiée ne se
+# corrige pas. C'est le renvoi qui cède, pas la confidentialité.
+travaux-images/*
+!travaux-images/manifeste.json
+# PAS d'exception pour `JOURNAL-GENERATION.md` : voir le paragraphe ci-dessus.
+# Le fichier reste sur le poste, il n'entre plus au dépôt.
+
+# Plans et comptes rendus de tranche de l'outillage d'assistance : ils
+# décrivent le travail, ils n'en font pas partie.
+.superpowers/
 
 # NOTE : mesures/*.json est VOLONTAIREMENT versionné — les mesures datées
 # sont une preuve publiée, pas un artefact de construction.

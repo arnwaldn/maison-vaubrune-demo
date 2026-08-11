@@ -1,0 +1,1939 @@
+{
+  "$commentaire": "Relevé de livraison — écrit par scripts/preparer-images.mjs, jamais à la main. La liste « fichiers » est celle que verifier-images.mjs confronte au disque dans les deux sens ; « derives » porte le détail et rattache chaque fichier au hachage du master relu dont il descend ; « masters » porte la position MESURÉE de la signature du moteur d’images (l’étincelle) et la marge qui la sépare de la boîte de recadrage — une signature qui entre dans la boîte arrête la livraison. Les masters sont listés dans les DEUX relevés : ils sont examinés en une seule passe.",
+  "genere": "npm run preparer-images",
+  "espace": "editorial",
+  "qualites": {
+    "avif": {
+      "quality": 66,
+      "effort": 9,
+      "chromaSubsampling": "4:4:4"
+    },
+    "jpeg": {
+      "quality": 80,
+      "progressive": true,
+      "mozjpeg": true
+    }
+  },
+  "fichiers": [
+    "accueil/hero-1024.avif",
+    "accueil/hero-1024.jpg",
+    "accueil/hero-1440.avif",
+    "accueil/hero-1440.jpg",
+    "accueil/hero-640.avif",
+    "accueil/hero-640.jpg",
+    "accueil/partage-1200x630.jpg",
+    "boutique/affiche-1024.avif",
+    "boutique/affiche-1024.jpg",
+    "boutique/affiche-640.avif",
+    "boutique/affiche-640.jpg",
+    "coffrets/macro-1024.avif",
+    "coffrets/macro-1024.jpg",
+    "coffrets/macro-640.avif",
+    "coffrets/macro-640.jpg",
+    "commande-confirmation/illustration-1024.avif",
+    "commande-confirmation/illustration-1024.jpg",
+    "commande-confirmation/illustration-640.avif",
+    "commande-confirmation/illustration-640.jpg",
+    "commande/illustration-1024.avif",
+    "commande/illustration-1024.jpg",
+    "commande/illustration-640.avif",
+    "commande/illustration-640.jpg",
+    "conserves-salees/macro-1024.avif",
+    "conserves-salees/macro-1024.jpg",
+    "conserves-salees/macro-640.avif",
+    "conserves-salees/macro-640.jpg",
+    "epicerie-seche/macro-1024.avif",
+    "epicerie-seche/macro-1024.jpg",
+    "epicerie-seche/macro-640.avif",
+    "epicerie-seche/macro-640.jpg",
+    "frais/macro-1024.avif",
+    "frais/macro-1024.jpg",
+    "frais/macro-640.avif",
+    "frais/macro-640.jpg",
+    "huiles-et-vinaigres/macro-1024.avif",
+    "huiles-et-vinaigres/macro-1024.jpg",
+    "huiles-et-vinaigres/macro-640.avif",
+    "huiles-et-vinaigres/macro-640.jpg",
+    "infusions/macro-1024.avif",
+    "infusions/macro-1024.jpg",
+    "infusions/macro-640.avif",
+    "infusions/macro-640.jpg",
+    "livraison/affiche-1024.avif",
+    "livraison/affiche-1024.jpg",
+    "livraison/affiche-640.avif",
+    "livraison/affiche-640.jpg",
+    "miels-et-confitures/macro-1024.avif",
+    "miels-et-confitures/macro-1024.jpg",
+    "miels-et-confitures/macro-640.avif",
+    "miels-et-confitures/macro-640.jpg",
+    "paiement-simulation/illustration-1024.avif",
+    "paiement-simulation/illustration-1024.jpg",
+    "paiement-simulation/illustration-640.avif",
+    "paiement-simulation/illustration-640.jpg",
+    "panier/affiche-1024.avif",
+    "panier/affiche-1024.jpg",
+    "panier/affiche-640.avif",
+    "panier/affiche-640.jpg",
+    "suivi/affiche-1024.avif",
+    "suivi/affiche-1024.jpg",
+    "suivi/affiche-640.avif",
+    "suivi/affiche-640.jpg"
+  ],
+  "derives": [
+    {
+      "espace": "editorial",
+      "fichier": "accueil/hero-1024.avif",
+      "vue": "hero",
+      "largeur": 1024,
+      "hauteur": 576,
+      "format": "avif",
+      "octets": 11203,
+      "sha256": "6c8c3614718704f4c9486043e6a654107606fd46ba2aacf9bddf70db2db036a7",
+      "master": "2c1fcf13faa82bbb97eaa15f6a77b410a4c28ba946026e382a7941627de539a6"
+    },
+    {
+      "espace": "editorial",
+      "fichier": "accueil/hero-1024.jpg",
+      "vue": "hero",
+      "largeur": 1024,
+      "hauteur": 576,
+      "format": "jpg",
+      "octets": 24502,
+      "sha256": "fc147bbcc0992a3b3eef87f074eaee051a46c0b499a29a367d31ccc95917d7b4",
+      "master": "2c1fcf13faa82bbb97eaa15f6a77b410a4c28ba946026e382a7941627de539a6"
+    },
+    {
+      "espace": "editorial",
+      "fichier": "accueil/hero-1440.avif",
+      "vue": "hero",
+      "largeur": 1440,
+      "hauteur": 810,
+      "format": "avif",
+      "octets": 17959,
+      "sha256": "c762799808b799852c15737b97e30c89d1b0eef1103a78bce7573369636d8eb7",
+      "master": "2c1fcf13faa82bbb97eaa15f6a77b410a4c28ba946026e382a7941627de539a6"
+    },
+    {
+      "espace": "editorial",
+      "fichier": "accueil/hero-1440.jpg",
+      "vue": "hero",
+      "largeur": 1440,
+      "hauteur": 810,
+      "format": "jpg",
+      "octets": 40799,
+      "sha256": "b6010a942de4be8e5c76bb910d7d2961fbb93bb05f41f63f0ee633b6afce3ea5",
+      "master": "2c1fcf13faa82bbb97eaa15f6a77b410a4c28ba946026e382a7941627de539a6"
+    },
+    {
+      "espace": "editorial",
+      "fichier": "accueil/hero-640.avif",
+      "vue": "hero",
+      "largeur": 640,
+      "hauteur": 360,
+      "format": "avif",
+      "octets": 6389,
+      "sha256": "0213acdd8d2ec8ee68ad9e26511370528f5907cd850ddeaef0ebcb7ebb337d94",
+      "master": "2c1fcf13faa82bbb97eaa15f6a77b410a4c28ba946026e382a7941627de539a6"
+    },
+    {
+      "espace": "editorial",
+      "fichier": "accueil/hero-640.jpg",
+      "vue": "hero",
+      "largeur": 640,
+      "hauteur": 360,
+      "format": "jpg",
+      "octets": 12680,
+      "sha256": "91880ed830f7ff5f224db2bda0d396d48bf1f88e9f192b49759b07318d270379",
+      "master": "2c1fcf13faa82bbb97eaa15f6a77b410a4c28ba946026e382a7941627de539a6"
+    },
+    {
+      "espace": "editorial",
+      "fichier": "accueil/partage-1200x630.jpg",
+      "vue": "partage",
+      "largeur": 1200,
+      "hauteur": 630,
+      "format": "jpg",
+      "octets": 28499,
+      "sha256": "d3d06c550b1d44cde0d4d5ebe8a06a5bce0783bf279672cf4b7a070e0d12977d",
+      "master": "2c1fcf13faa82bbb97eaa15f6a77b410a4c28ba946026e382a7941627de539a6"
+    },
+    {
+      "espace": "editorial",
+      "fichier": "boutique/affiche-1024.avif",
+      "vue": "affiche",
+      "largeur": 1024,
+      "hauteur": 576,
+      "format": "avif",
+      "octets": 26338,
+      "sha256": "252f7389b3f25406356b7e85e30582e91dc7c1bbdc55dedd49f0839845c8f879",
+      "master": "4eb05da17c39db61e015bb1b436890fc8d880059df004421c258d7d6576a1613"
+    },
+    {
+      "espace": "editorial",
+      "fichier": "boutique/affiche-1024.jpg",
+      "vue": "affiche",
+      "largeur": 1024,
+      "hauteur": 576,
+      "format": "jpg",
+      "octets": 40547,
+      "sha256": "d986f47c386fe05ebbadd3b68acb07f5216e982938806d777737c99cbb86fb5d",
+      "master": "4eb05da17c39db61e015bb1b436890fc8d880059df004421c258d7d6576a1613"
+    },
+    {
+      "espace": "editorial",
+      "fichier": "boutique/affiche-640.avif",
+      "vue": "affiche",
+      "largeur": 640,
+      "hauteur": 360,
+      "format": "avif",
+      "octets": 14838,
+      "sha256": "0012a3b2e16d41a18a3e4da7532d8a9573801464b3f489ac1edb6edde29163d1",
+      "master": "4eb05da17c39db61e015bb1b436890fc8d880059df004421c258d7d6576a1613"
+    },
+    {
+      "espace": "editorial",
+      "fichier": "boutique/affiche-640.jpg",
+      "vue": "affiche",
+      "largeur": 640,
+      "hauteur": 360,
+      "format": "jpg",
+      "octets": 20853,
+      "sha256": "ee8043ed80977af0641e32bec1ca84c12f38d31a13ccd1f5a943174611737417",
+      "master": "4eb05da17c39db61e015bb1b436890fc8d880059df004421c258d7d6576a1613"
+    },
+    {
+      "espace": "editorial",
+      "fichier": "coffrets/macro-1024.avif",
+      "vue": "macro",
+      "largeur": 1024,
+      "hauteur": 576,
+      "format": "avif",
+      "octets": 28723,
+      "sha256": "213744ccae69a5c8e2f22d6006160cce2843d0a0e610beff2be290ee88c71bc0",
+      "master": "9f5c44420be1f4ebbc48489763e82a09babbca035728a9631404d86ab247f9fd"
+    },
+    {
+      "espace": "editorial",
+      "fichier": "coffrets/macro-1024.jpg",
+      "vue": "macro",
+      "largeur": 1024,
+      "hauteur": 576,
+      "format": "jpg",
+      "octets": 41481,
+      "sha256": "7b1aa5328b7e230b66a600ba45a211a06bace5f060558774314ab4e780a7f4c9",
+      "master": "9f5c44420be1f4ebbc48489763e82a09babbca035728a9631404d86ab247f9fd"
+    },
+    {
+      "espace": "editorial",
+      "fichier": "coffrets/macro-640.avif",
+      "vue": "macro",
+      "largeur": 640,
+      "hauteur": 360,
+      "format": "avif",
+      "octets": 13397,
+      "sha256": "984d32e6de99a212b19453990618b97be3c062d580a6e0e146d5993224bd65fd",
+      "master": "9f5c44420be1f4ebbc48489763e82a09babbca035728a9631404d86ab247f9fd"
+    },
+    {
+      "espace": "editorial",
+      "fichier": "coffrets/macro-640.jpg",
+      "vue": "macro",
+      "largeur": 640,
+      "hauteur": 360,
+      "format": "jpg",
+      "octets": 19612,
+      "sha256": "9944e57650b9ba5817a9e7cd0de7fa674fbefc660500662d64156b29a389cd9d",
+      "master": "9f5c44420be1f4ebbc48489763e82a09babbca035728a9631404d86ab247f9fd"
+    },
+    {
+      "espace": "editorial",
+      "fichier": "commande-confirmation/illustration-1024.avif",
+      "vue": "illustration",
+      "largeur": 1024,
+      "hauteur": 572,
+      "format": "avif",
+      "octets": 16459,
+      "sha256": "d8310512851a9951c65eafbf1177c2f66ae13bc87f699f07e8e044bd6b3dae2f",
+      "master": "85021d5bd4191851f12ef89c3ea893cddc195d79fc5f80a708b4cd1d83de8956"
+    },
+    {
+      "espace": "editorial",
+      "fichier": "commande-confirmation/illustration-1024.jpg",
+      "vue": "illustration",
+      "largeur": 1024,
+      "hauteur": 572,
+      "format": "jpg",
+      "octets": 24833,
+      "sha256": "3d89addc1c62ffde9d4a3abba10c34e69ea93e6af2dea23ebe998da8c7191ee1",
+      "master": "85021d5bd4191851f12ef89c3ea893cddc195d79fc5f80a708b4cd1d83de8956"
+    },
+    {
+      "espace": "editorial",
+      "fichier": "commande-confirmation/illustration-640.avif",
+      "vue": "illustration",
+      "largeur": 640,
+      "hauteur": 357,
+      "format": "avif",
+      "octets": 7601,
+      "sha256": "a06b15a3e92c60f13e0b684f081216981071ca3b4105ef335d2c5a6f33f3d0dc",
+      "master": "85021d5bd4191851f12ef89c3ea893cddc195d79fc5f80a708b4cd1d83de8956"
+    },
+    {
+      "espace": "editorial",
+      "fichier": "commande-confirmation/illustration-640.jpg",
+      "vue": "illustration",
+      "largeur": 640,
+      "hauteur": 357,
+      "format": "jpg",
+      "octets": 11536,
+      "sha256": "bb7909c570b290236e31ed54d612b1d7ce62715993e4f29f3a0da17bec74147f",
+      "master": "85021d5bd4191851f12ef89c3ea893cddc195d79fc5f80a708b4cd1d83de8956"
+    },
+    {
+      "espace": "editorial",
+      "fichier": "commande/illustration-1024.avif",
+      "vue": "illustration",
+      "largeur": 1024,
+      "hauteur": 572,
+      "format": "avif",
+      "octets": 12710,
+      "sha256": "1e23cc003c0b5c0728be791d09b2171d09d36dcb09c1f87ee07efd79119a965d",
+      "master": "54f296318becf5e2fe99a6a322154f7781e1c4c4b159d511bcac14a501ca7dff"
+    },
+    {
+      "espace": "editorial",
+      "fichier": "commande/illustration-1024.jpg",
+      "vue": "illustration",
+      "largeur": 1024,
+      "hauteur": 572,
+      "format": "jpg",
+      "octets": 24787,
+      "sha256": "6a74eaf93cddc9ec73180abd95ce6943914479fa992972dc54ed9908f512d396",
+      "master": "54f296318becf5e2fe99a6a322154f7781e1c4c4b159d511bcac14a501ca7dff"
+    },
+    {
+      "espace": "editorial",
+      "fichier": "commande/illustration-640.avif",
+      "vue": "illustration",
+      "largeur": 640,
+      "hauteur": 357,
+      "format": "avif",
+      "octets": 6907,
+      "sha256": "4c7c513ce5e85ac6abce83a5d9b5bf6afd10f4579aefad3a0326ce97569f2dde",
+      "master": "54f296318becf5e2fe99a6a322154f7781e1c4c4b159d511bcac14a501ca7dff"
+    },
+    {
+      "espace": "editorial",
+      "fichier": "commande/illustration-640.jpg",
+      "vue": "illustration",
+      "largeur": 640,
+      "hauteur": 357,
+      "format": "jpg",
+      "octets": 12703,
+      "sha256": "3c3d68f22e2fa3d12e2a8871ae96b5b895683d64731dc3cb510c986b4e50dce1",
+      "master": "54f296318becf5e2fe99a6a322154f7781e1c4c4b159d511bcac14a501ca7dff"
+    },
+    {
+      "espace": "editorial",
+      "fichier": "conserves-salees/macro-1024.avif",
+      "vue": "macro",
+      "largeur": 1024,
+      "hauteur": 576,
+      "format": "avif",
+      "octets": 58542,
+      "sha256": "63619a96a174a1bc9f6e91f84d678b7558a6e70c6aebba9a2fb3e606a5d4e34f",
+      "master": "980417ee914b0aa3d7616020d4530ba84803cf24d68446c9e06defa8ef9a6c8c"
+    },
+    {
+      "espace": "editorial",
+      "fichier": "conserves-salees/macro-1024.jpg",
+      "vue": "macro",
+      "largeur": 1024,
+      "hauteur": 576,
+      "format": "jpg",
+      "octets": 75746,
+      "sha256": "3237a9123c1f278e4512d28a96c86b66ea155e025c3fb4a68f62f4a4dea22150",
+      "master": "980417ee914b0aa3d7616020d4530ba84803cf24d68446c9e06defa8ef9a6c8c"
+    },
+    {
+      "espace": "editorial",
+      "fichier": "conserves-salees/macro-640.avif",
+      "vue": "macro",
+      "largeur": 640,
+      "hauteur": 360,
+      "format": "avif",
+      "octets": 29808,
+      "sha256": "626b64791e78a39a7dc9a5ff11cafe2845c9af103a4a2633bcba4fd62259ddfe",
+      "master": "980417ee914b0aa3d7616020d4530ba84803cf24d68446c9e06defa8ef9a6c8c"
+    },
+    {
+      "espace": "editorial",
+      "fichier": "conserves-salees/macro-640.jpg",
+      "vue": "macro",
+      "largeur": 640,
+      "hauteur": 360,
+      "format": "jpg",
+      "octets": 35822,
+      "sha256": "84b4c6fa951a3df518b7f1671fbaf523d785cf8380edd836014578f04821e2e0",
+      "master": "980417ee914b0aa3d7616020d4530ba84803cf24d68446c9e06defa8ef9a6c8c"
+    },
+    {
+      "espace": "editorial",
+      "fichier": "epicerie-seche/macro-1024.avif",
+      "vue": "macro",
+      "largeur": 1024,
+      "hauteur": 576,
+      "format": "avif",
+      "octets": 28768,
+      "sha256": "dcad382ebc7a98d18e95faeec9f9a2be479118a499465ec1c06ad121c95366a6",
+      "master": "4674c8b9976362ef24cc75d7ab98634c57340c496a0b95ca7f006e6193e308ba"
+    },
+    {
+      "espace": "editorial",
+      "fichier": "epicerie-seche/macro-1024.jpg",
+      "vue": "macro",
+      "largeur": 1024,
+      "hauteur": 576,
+      "format": "jpg",
+      "octets": 48398,
+      "sha256": "1490574cfb6d1cc2272b25296f6553829528615991e587e1168678a2381e2b3b",
+      "master": "4674c8b9976362ef24cc75d7ab98634c57340c496a0b95ca7f006e6193e308ba"
+    },
+    {
+      "espace": "editorial",
+      "fichier": "epicerie-seche/macro-640.avif",
+      "vue": "macro",
+      "largeur": 640,
+      "hauteur": 360,
+      "format": "avif",
+      "octets": 15648,
+      "sha256": "5b7af23e4693cbb271d170a2cd6f7265bf794e39c88d4c3b2752684afa3aad56",
+      "master": "4674c8b9976362ef24cc75d7ab98634c57340c496a0b95ca7f006e6193e308ba"
+    },
+    {
+      "espace": "editorial",
+      "fichier": "epicerie-seche/macro-640.jpg",
+      "vue": "macro",
+      "largeur": 640,
+      "hauteur": 360,
+      "format": "jpg",
+      "octets": 24505,
+      "sha256": "132b5600e918b99aef402afcc295c3aa8e73f34ed07210a7974646bc376f0d68",
+      "master": "4674c8b9976362ef24cc75d7ab98634c57340c496a0b95ca7f006e6193e308ba"
+    },
+    {
+      "espace": "editorial",
+      "fichier": "frais/macro-1024.avif",
+      "vue": "macro",
+      "largeur": 1024,
+      "hauteur": 576,
+      "format": "avif",
+      "octets": 23762,
+      "sha256": "59215465051a2f404cc8b6bf190de2e22d7304fcd557f28776f21b83e0f07a51",
+      "master": "aa03405754de1247698eaa83ec16a0a7269f3caef4128a562a8bdf1fc3cb44da"
+    },
+    {
+      "espace": "editorial",
+      "fichier": "frais/macro-1024.jpg",
+      "vue": "macro",
+      "largeur": 1024,
+      "hauteur": 576,
+      "format": "jpg",
+      "octets": 41353,
+      "sha256": "a69ffda2e28cd68d5f0cd98c302c0377bca68f113d0fade6a3687a6070b3cdd3",
+      "master": "aa03405754de1247698eaa83ec16a0a7269f3caef4128a562a8bdf1fc3cb44da"
+    },
+    {
+      "espace": "editorial",
+      "fichier": "frais/macro-640.avif",
+      "vue": "macro",
+      "largeur": 640,
+      "hauteur": 360,
+      "format": "avif",
+      "octets": 13161,
+      "sha256": "af6b1b371c11ebd0535bfeb3594b971880e8733c7fc0013c041acfa381874b8b",
+      "master": "aa03405754de1247698eaa83ec16a0a7269f3caef4128a562a8bdf1fc3cb44da"
+    },
+    {
+      "espace": "editorial",
+      "fichier": "frais/macro-640.jpg",
+      "vue": "macro",
+      "largeur": 640,
+      "hauteur": 360,
+      "format": "jpg",
+      "octets": 20823,
+      "sha256": "b9cd74a74d4807fdfc4313ae632f1021ec6a49f9b1b17804220419b09eba426d",
+      "master": "aa03405754de1247698eaa83ec16a0a7269f3caef4128a562a8bdf1fc3cb44da"
+    },
+    {
+      "espace": "editorial",
+      "fichier": "huiles-et-vinaigres/macro-1024.avif",
+      "vue": "macro",
+      "largeur": 1024,
+      "hauteur": 576,
+      "format": "avif",
+      "octets": 14393,
+      "sha256": "03e2c0b3c797a1d13c02aa984f51162d9e1de4701a97199f810894b792c8035b",
+      "master": "eb8ff075ae9c27ecc90f51f5e6822c25ac3aa7101d545d882aba9c0f91fa1223"
+    },
+    {
+      "espace": "editorial",
+      "fichier": "huiles-et-vinaigres/macro-1024.jpg",
+      "vue": "macro",
+      "largeur": 1024,
+      "hauteur": 576,
+      "format": "jpg",
+      "octets": 30697,
+      "sha256": "776666fd849d8dfcba543ae6771630786037658e9b13ea52c084f7018cfe85c1",
+      "master": "eb8ff075ae9c27ecc90f51f5e6822c25ac3aa7101d545d882aba9c0f91fa1223"
+    },
+    {
+      "espace": "editorial",
+      "fichier": "huiles-et-vinaigres/macro-640.avif",
+      "vue": "macro",
+      "largeur": 640,
+      "hauteur": 360,
+      "format": "avif",
+      "octets": 8417,
+      "sha256": "aac030d6f5d3dec020a97af36c39a67ebe94ea9635163b87a2c7645944907c5f",
+      "master": "eb8ff075ae9c27ecc90f51f5e6822c25ac3aa7101d545d882aba9c0f91fa1223"
+    },
+    {
+      "espace": "editorial",
+      "fichier": "huiles-et-vinaigres/macro-640.jpg",
+      "vue": "macro",
+      "largeur": 640,
+      "hauteur": 360,
+      "format": "jpg",
+      "octets": 15990,
+      "sha256": "10a9fdc182727435c9e9dc08e1c8d486eaba90aebe3cd354ad03a695f4cc086b",
+      "master": "eb8ff075ae9c27ecc90f51f5e6822c25ac3aa7101d545d882aba9c0f91fa1223"
+    },
+    {
+      "espace": "editorial",
+      "fichier": "infusions/macro-1024.avif",
+      "vue": "macro",
+      "largeur": 1024,
+      "hauteur": 576,
+      "format": "avif",
+      "octets": 55579,
+      "sha256": "f8ac74b91c7e654048e8e3c7419aa875d8fbcc8f4787d6d66e43bcd85e6b3d74",
+      "master": "df5d4238965ab46c4a9b461e9ef7afdb24f5ef2b21a20233095b08959b3f1863"
+    },
+    {
+      "espace": "editorial",
+      "fichier": "infusions/macro-1024.jpg",
+      "vue": "macro",
+      "largeur": 1024,
+      "hauteur": 576,
+      "format": "jpg",
+      "octets": 78603,
+      "sha256": "093fa84522487680fc111669213a9a8e345f2491d3bb1ab83c895abae1002282",
+      "master": "df5d4238965ab46c4a9b461e9ef7afdb24f5ef2b21a20233095b08959b3f1863"
+    },
+    {
+      "espace": "editorial",
+      "fichier": "infusions/macro-640.avif",
+      "vue": "macro",
+      "largeur": 640,
+      "hauteur": 360,
+      "format": "avif",
+      "octets": 29727,
+      "sha256": "ed3df7f22c5794ea0864eb6132d272106d668ec7d7edacac589ae7d625dcd48a",
+      "master": "df5d4238965ab46c4a9b461e9ef7afdb24f5ef2b21a20233095b08959b3f1863"
+    },
+    {
+      "espace": "editorial",
+      "fichier": "infusions/macro-640.jpg",
+      "vue": "macro",
+      "largeur": 640,
+      "hauteur": 360,
+      "format": "jpg",
+      "octets": 38065,
+      "sha256": "4b83b918e23e78b23af09f6416e2f5343dd178c16b92b4f2f457656773bfb407",
+      "master": "df5d4238965ab46c4a9b461e9ef7afdb24f5ef2b21a20233095b08959b3f1863"
+    },
+    {
+      "espace": "editorial",
+      "fichier": "livraison/affiche-1024.avif",
+      "vue": "affiche",
+      "largeur": 1024,
+      "hauteur": 576,
+      "format": "avif",
+      "octets": 17235,
+      "sha256": "dc38a33a999c7fe841a351183e7db06b52e4da1d3a8c56140f087eb17b13350e",
+      "master": "035f1c2e287bf981691151a1996e539039671cab16760914c912fb132ea314f4"
+    },
+    {
+      "espace": "editorial",
+      "fichier": "livraison/affiche-1024.jpg",
+      "vue": "affiche",
+      "largeur": 1024,
+      "hauteur": 576,
+      "format": "jpg",
+      "octets": 28497,
+      "sha256": "21c9b26aad9706831bda1ec3b48e19e10d2f5b7f3ec896637844bbc8fc994a6b",
+      "master": "035f1c2e287bf981691151a1996e539039671cab16760914c912fb132ea314f4"
+    },
+    {
+      "espace": "editorial",
+      "fichier": "livraison/affiche-640.avif",
+      "vue": "affiche",
+      "largeur": 640,
+      "hauteur": 360,
+      "format": "avif",
+      "octets": 8537,
+      "sha256": "41364f1b4e11cbf70767baabbe4d3e224e3615db4a90f68bea53407208b85e60",
+      "master": "035f1c2e287bf981691151a1996e539039671cab16760914c912fb132ea314f4"
+    },
+    {
+      "espace": "editorial",
+      "fichier": "livraison/affiche-640.jpg",
+      "vue": "affiche",
+      "largeur": 640,
+      "hauteur": 360,
+      "format": "jpg",
+      "octets": 14096,
+      "sha256": "ac376aa28023d77aa9369c2cc569be031bdadf2fc4135c98e4872c053033a433",
+      "master": "035f1c2e287bf981691151a1996e539039671cab16760914c912fb132ea314f4"
+    },
+    {
+      "espace": "editorial",
+      "fichier": "miels-et-confitures/macro-1024.avif",
+      "vue": "macro",
+      "largeur": 1024,
+      "hauteur": 576,
+      "format": "avif",
+      "octets": 34822,
+      "sha256": "959af61fe4a0947780988aca7409e33114d0ae0e0a8dbc4f5c4317814db5f66e",
+      "master": "59e402409c69b7d0176b1a2e994a6b0c1bb7a865a0c046ea0f7874486d4572c1"
+    },
+    {
+      "espace": "editorial",
+      "fichier": "miels-et-confitures/macro-1024.jpg",
+      "vue": "macro",
+      "largeur": 1024,
+      "hauteur": 576,
+      "format": "jpg",
+      "octets": 53590,
+      "sha256": "d0bc16023612eb1efa0204f2ff7f3da4e64f8c3caad5bd38d36e5d1491b74bf9",
+      "master": "59e402409c69b7d0176b1a2e994a6b0c1bb7a865a0c046ea0f7874486d4572c1"
+    },
+    {
+      "espace": "editorial",
+      "fichier": "miels-et-confitures/macro-640.avif",
+      "vue": "macro",
+      "largeur": 640,
+      "hauteur": 360,
+      "format": "avif",
+      "octets": 18753,
+      "sha256": "7c9ca30a53498705aee1d646fb0c9c5c8313d1d10ffdfe45e663e60e6ea1a3a9",
+      "master": "59e402409c69b7d0176b1a2e994a6b0c1bb7a865a0c046ea0f7874486d4572c1"
+    },
+    {
+      "espace": "editorial",
+      "fichier": "miels-et-confitures/macro-640.jpg",
+      "vue": "macro",
+      "largeur": 640,
+      "hauteur": 360,
+      "format": "jpg",
+      "octets": 25814,
+      "sha256": "4f18add02da53f937baae94809010878153801b48c2c5a59485b4093af0e9398",
+      "master": "59e402409c69b7d0176b1a2e994a6b0c1bb7a865a0c046ea0f7874486d4572c1"
+    },
+    {
+      "espace": "editorial",
+      "fichier": "paiement-simulation/illustration-1024.avif",
+      "vue": "illustration",
+      "largeur": 1024,
+      "hauteur": 572,
+      "format": "avif",
+      "octets": 12346,
+      "sha256": "444323c4051d25883fd996258e530164608e5da5cd3f476688e90f775cbc546e",
+      "master": "fc3b053f6174ae7b1334f95121f589a4f6bb9ced075bc596031b7ee74a7c74d8"
+    },
+    {
+      "espace": "editorial",
+      "fichier": "paiement-simulation/illustration-1024.jpg",
+      "vue": "illustration",
+      "largeur": 1024,
+      "hauteur": 572,
+      "format": "jpg",
+      "octets": 19755,
+      "sha256": "6fae626a6ec8ae12a2ab44e0b540d9a9b326ac5ac2b68043a4e86ff97255cc9e",
+      "master": "fc3b053f6174ae7b1334f95121f589a4f6bb9ced075bc596031b7ee74a7c74d8"
+    },
+    {
+      "espace": "editorial",
+      "fichier": "paiement-simulation/illustration-640.avif",
+      "vue": "illustration",
+      "largeur": 640,
+      "hauteur": 357,
+      "format": "avif",
+      "octets": 6043,
+      "sha256": "942b9eb4e803e98db7f3f8547133ec69da165c7e5e483c883d70efff6b385047",
+      "master": "fc3b053f6174ae7b1334f95121f589a4f6bb9ced075bc596031b7ee74a7c74d8"
+    },
+    {
+      "espace": "editorial",
+      "fichier": "paiement-simulation/illustration-640.jpg",
+      "vue": "illustration",
+      "largeur": 640,
+      "hauteur": 357,
+      "format": "jpg",
+      "octets": 9881,
+      "sha256": "dfeece894060dcde57a2276d41361c2f949b1085cbfcf28afc07d955a0d7b7e6",
+      "master": "fc3b053f6174ae7b1334f95121f589a4f6bb9ced075bc596031b7ee74a7c74d8"
+    },
+    {
+      "espace": "editorial",
+      "fichier": "panier/affiche-1024.avif",
+      "vue": "affiche",
+      "largeur": 1024,
+      "hauteur": 576,
+      "format": "avif",
+      "octets": 22267,
+      "sha256": "5b5d02d8cbc7353b6534bfb80d8aa888bdf90e97890572ad334a6b98c1dd7a91",
+      "master": "339d77239bd6d85ec276b08304386da5b992a415974bfa8d77c7040ff0fb20b7"
+    },
+    {
+      "espace": "editorial",
+      "fichier": "panier/affiche-1024.jpg",
+      "vue": "affiche",
+      "largeur": 1024,
+      "hauteur": 576,
+      "format": "jpg",
+      "octets": 34260,
+      "sha256": "34490a45815ac0256bd2ea4d57f0700ea6a9f672b5196cef0ae2e87a6523bca9",
+      "master": "339d77239bd6d85ec276b08304386da5b992a415974bfa8d77c7040ff0fb20b7"
+    },
+    {
+      "espace": "editorial",
+      "fichier": "panier/affiche-640.avif",
+      "vue": "affiche",
+      "largeur": 640,
+      "hauteur": 360,
+      "format": "avif",
+      "octets": 11234,
+      "sha256": "dfe885f7c0d67a32a50ba9285e97a387577ae0c82391f8e54d25a7c030a6f437",
+      "master": "339d77239bd6d85ec276b08304386da5b992a415974bfa8d77c7040ff0fb20b7"
+    },
+    {
+      "espace": "editorial",
+      "fichier": "panier/affiche-640.jpg",
+      "vue": "affiche",
+      "largeur": 640,
+      "hauteur": 360,
+      "format": "jpg",
+      "octets": 16880,
+      "sha256": "c5d38a759eaad8e932e57df56d2d8a0909fcc05afa425dd9d596918f06295862",
+      "master": "339d77239bd6d85ec276b08304386da5b992a415974bfa8d77c7040ff0fb20b7"
+    },
+    {
+      "espace": "editorial",
+      "fichier": "suivi/affiche-1024.avif",
+      "vue": "affiche",
+      "largeur": 1024,
+      "hauteur": 576,
+      "format": "avif",
+      "octets": 13463,
+      "sha256": "0e51e3f31d4dccaabcfb4a317ba498bae20f979308ae13a6b703cdaa0d2d6314",
+      "master": "a4ae25abd5e59fba57c849ff9fdcafc97b77639f8a89aec85e0f88e14dc1449a"
+    },
+    {
+      "espace": "editorial",
+      "fichier": "suivi/affiche-1024.jpg",
+      "vue": "affiche",
+      "largeur": 1024,
+      "hauteur": 576,
+      "format": "jpg",
+      "octets": 24543,
+      "sha256": "15e964c2c32c5e6737409cb644bfe61171976fe2eaf60314facecd4dd7d57f23",
+      "master": "a4ae25abd5e59fba57c849ff9fdcafc97b77639f8a89aec85e0f88e14dc1449a"
+    },
+    {
+      "espace": "editorial",
+      "fichier": "suivi/affiche-640.avif",
+      "vue": "affiche",
+      "largeur": 640,
+      "hauteur": 360,
+      "format": "avif",
+      "octets": 7170,
+      "sha256": "b109455133331784bd8b61d1add7e33eea00c9bd80f519d1c2cff379536543c9",
+      "master": "a4ae25abd5e59fba57c849ff9fdcafc97b77639f8a89aec85e0f88e14dc1449a"
+    },
+    {
+      "espace": "editorial",
+      "fichier": "suivi/affiche-640.jpg",
+      "vue": "affiche",
+      "largeur": 640,
+      "hauteur": 360,
+      "format": "jpg",
+      "octets": 12299,
+      "sha256": "c878430f073d38860612f128a0dd5ba06cbf3c2cea15429fdf6e2a69522ad529",
+      "master": "a4ae25abd5e59fba57c849ff9fdcafc97b77639f8a89aec85e0f88e14dc1449a"
+    }
+  ],
+  "masters": [
+    {
+      "master": "A01-huile-olive-premiere-pression-v3.png",
+      "sha256": "883631f1b94a668582ac9afa1a2f3bfea997574c97e458f2cb760de979120184",
+      "dimensions": {
+        "largeur": 928,
+        "hauteur": 1152
+      },
+      "boite": {
+        "x": 132,
+        "y": 66,
+        "largeur": 640,
+        "hauteur": 1024
+      },
+      "signature": {
+        "localisee": true,
+        "score": 0.552,
+        "amplitude": 10.93,
+        "precision": 2,
+        "boite": {
+          "x": 781,
+          "y": 1006,
+          "largeur": 54,
+          "hauteur": 54
+        }
+      },
+      "dansLaBoite": false,
+      "marge": 9
+    },
+    {
+      "master": "A02-huile-noix-moulin.png",
+      "sha256": "f5ff403eafdcf67b11f81ea18b53d1d658121879fcf580abffa850d9c43322fa",
+      "dimensions": {
+        "largeur": 928,
+        "hauteur": 1152
+      },
+      "boite": {
+        "x": 132,
+        "y": 66,
+        "largeur": 640,
+        "hauteur": 1024
+      },
+      "signature": {
+        "localisee": true,
+        "score": 0.563,
+        "amplitude": 10.18,
+        "precision": 2,
+        "boite": {
+          "x": 781,
+          "y": 1006,
+          "largeur": 54,
+          "hauteur": 54
+        }
+      },
+      "dansLaBoite": false,
+      "marge": 9
+    },
+    {
+      "master": "A03-vinaigre-cidre-vieilli-fut.png",
+      "sha256": "af851009583edad584954504a19d6f56483b9a519fbd6dee917e54ad3a645017",
+      "dimensions": {
+        "largeur": 928,
+        "hauteur": 1152
+      },
+      "boite": {
+        "x": 132,
+        "y": 66,
+        "largeur": 640,
+        "hauteur": 1024
+      },
+      "signature": {
+        "localisee": true,
+        "score": 0.742,
+        "amplitude": 9.1,
+        "precision": 2,
+        "boite": {
+          "x": 781,
+          "y": 1005,
+          "largeur": 54,
+          "hauteur": 54
+        }
+      },
+      "dansLaBoite": false,
+      "marge": 9
+    },
+    {
+      "master": "A04-terrine-campagne-poivre-noir.png",
+      "sha256": "7c99efe50488ff0f2a3b2cde91c01f12a375aa4783d4104bd053360816cda9b4",
+      "dimensions": {
+        "largeur": 928,
+        "hauteur": 1152
+      },
+      "boite": {
+        "x": 132,
+        "y": 66,
+        "largeur": 640,
+        "hauteur": 1024
+      },
+      "signature": {
+        "localisee": true,
+        "score": 0.908,
+        "amplitude": 5.11,
+        "precision": 2,
+        "boite": {
+          "x": 781,
+          "y": 1005,
+          "largeur": 54,
+          "hauteur": 54
+        }
+      },
+      "dansLaBoite": false,
+      "marge": 9
+    },
+    {
+      "master": "A05-rillettes-canard-echalotes.png",
+      "sha256": "35dc98124005c25e82a009f5424fe009af10ed645acfefbae75ad1f65918d303",
+      "dimensions": {
+        "largeur": 928,
+        "hauteur": 1152
+      },
+      "boite": {
+        "x": 132,
+        "y": 66,
+        "largeur": 640,
+        "hauteur": 1024
+      },
+      "signature": {
+        "localisee": true,
+        "score": 0.906,
+        "amplitude": 5.08,
+        "precision": 2,
+        "boite": {
+          "x": 781,
+          "y": 1005,
+          "largeur": 54,
+          "hauteur": 54
+        }
+      },
+      "dansLaBoite": false,
+      "marge": 9
+    },
+    {
+      "master": "A06-confit-oignons-vin-doux.png",
+      "sha256": "38b698d3b732b6e9e2eb7096dd1b13fdc7ea0295dfde3fdcced7ac0167290359",
+      "dimensions": {
+        "largeur": 928,
+        "hauteur": 1152
+      },
+      "boite": {
+        "x": 132,
+        "y": 66,
+        "largeur": 640,
+        "hauteur": 1024
+      },
+      "signature": {
+        "localisee": true,
+        "score": 0.904,
+        "amplitude": 5.32,
+        "precision": 2,
+        "boite": {
+          "x": 781,
+          "y": 1005,
+          "largeur": 54,
+          "hauteur": 54
+        }
+      },
+      "dansLaBoite": false,
+      "marge": 9
+    },
+    {
+      "master": "A07-miel-chataignier.png",
+      "sha256": "222296bed4edc6c268035c0da5ae9a5e4f4442728e117856ba098a2953953626",
+      "dimensions": {
+        "largeur": 928,
+        "hauteur": 1152
+      },
+      "boite": {
+        "x": 132,
+        "y": 66,
+        "largeur": 640,
+        "hauteur": 1024
+      },
+      "signature": {
+        "localisee": true,
+        "score": 0.596,
+        "amplitude": 5.4,
+        "precision": 2,
+        "boite": {
+          "x": 781,
+          "y": 1005,
+          "largeur": 54,
+          "hauteur": 54
+        }
+      },
+      "dansLaBoite": false,
+      "marge": 9
+    },
+    {
+      "master": "A08-miel-bruyere-blanche.png",
+      "sha256": "317522446f7053e5e7cdfc1aa30ebf25c4319f8e5f84a455a3793f972307658c",
+      "dimensions": {
+        "largeur": 928,
+        "hauteur": 1152
+      },
+      "boite": {
+        "x": 132,
+        "y": 66,
+        "largeur": 640,
+        "hauteur": 1024
+      },
+      "signature": {
+        "localisee": true,
+        "score": 0.597,
+        "amplitude": 5.66,
+        "precision": 2,
+        "boite": {
+          "x": 781,
+          "y": 1005,
+          "largeur": 54,
+          "hauteur": 54
+        }
+      },
+      "dansLaBoite": false,
+      "marge": 9
+    },
+    {
+      "master": "A09-confiture-abricots-plein-vent.png",
+      "sha256": "878ff3a5d1b6954cba9c67f03f40332cd94305043b45f2e7ac8a6869331f0d09",
+      "dimensions": {
+        "largeur": 928,
+        "hauteur": 1152
+      },
+      "boite": {
+        "x": 132,
+        "y": 66,
+        "largeur": 640,
+        "hauteur": 1024
+      },
+      "signature": {
+        "localisee": true,
+        "score": 0.617,
+        "amplitude": 5.92,
+        "precision": 2,
+        "boite": {
+          "x": 781,
+          "y": 1005,
+          "largeur": 54,
+          "hauteur": 54
+        }
+      },
+      "dansLaBoite": false,
+      "marge": 9
+    },
+    {
+      "master": "A10-lentilles-blondes-plateau.png",
+      "sha256": "f4a823afe162a5f2b8fb8f5a7d8fca14b255c29a69b8b8ffdeaefcb2e9fa8971",
+      "dimensions": {
+        "largeur": 928,
+        "hauteur": 1152
+      },
+      "boite": {
+        "x": 132,
+        "y": 66,
+        "largeur": 640,
+        "hauteur": 1024
+      },
+      "signature": {
+        "localisee": true,
+        "score": 0.601,
+        "amplitude": 5.76,
+        "precision": 2,
+        "boite": {
+          "x": 781,
+          "y": 1005,
+          "largeur": 54,
+          "hauteur": 54
+        }
+      },
+      "dansLaBoite": false,
+      "marge": 9
+    },
+    {
+      "master": "A11-infusion-du-soir-sept-plantes.png",
+      "sha256": "2369ce8556801a90124d2f6b6ee8ee85a3142aae2004218af12b9ae9350cbb51",
+      "dimensions": {
+        "largeur": 928,
+        "hauteur": 1152
+      },
+      "boite": {
+        "x": 132,
+        "y": 66,
+        "largeur": 640,
+        "hauteur": 1024
+      },
+      "signature": {
+        "localisee": true,
+        "score": 0.629,
+        "amplitude": 5.32,
+        "precision": 2,
+        "boite": {
+          "x": 781,
+          "y": 1005,
+          "largeur": 54,
+          "hauteur": 54
+        }
+      },
+      "dansLaBoite": false,
+      "marge": 9
+    },
+    {
+      "master": "A12-beurre-baratte-demi-sel.png",
+      "sha256": "c5104e69f83ddeeba0f168732072f7a91a32593d7468539fabbe6840ed901399",
+      "dimensions": {
+        "largeur": 928,
+        "hauteur": 1152
+      },
+      "boite": {
+        "x": 132,
+        "y": 66,
+        "largeur": 640,
+        "hauteur": 1024
+      },
+      "signature": {
+        "localisee": true,
+        "score": 0.623,
+        "amplitude": 4.8,
+        "precision": 2,
+        "boite": {
+          "x": 781,
+          "y": 1005,
+          "largeur": 54,
+          "hauteur": 54
+        }
+      },
+      "dansLaBoite": false,
+      "marge": 9
+    },
+    {
+      "master": "A13-fromage-fermier-brebis.png",
+      "sha256": "7705b31208a810bfd963c35587e5c371b942dc722ebb4a246cdc9b06859a9e0e",
+      "dimensions": {
+        "largeur": 928,
+        "hauteur": 1152
+      },
+      "boite": {
+        "x": 132,
+        "y": 66,
+        "largeur": 640,
+        "hauteur": 1024
+      },
+      "signature": {
+        "localisee": true,
+        "score": 0.873,
+        "amplitude": 4.17,
+        "precision": 2,
+        "boite": {
+          "x": 781,
+          "y": 1005,
+          "largeur": 54,
+          "hauteur": 54
+        }
+      },
+      "dansLaBoite": false,
+      "marge": 9
+    },
+    {
+      "master": "A14-coffret-table-du-dimanche.png",
+      "sha256": "428ae16e11c99fcfa3f0292a4485e984a77420730bf9f9ea8148390f946486f7",
+      "dimensions": {
+        "largeur": 928,
+        "hauteur": 1152
+      },
+      "boite": {
+        "x": 40,
+        "y": 330,
+        "largeur": 860,
+        "hauteur": 645
+      },
+      "signature": {
+        "localisee": true,
+        "score": 0.869,
+        "amplitude": 4.15,
+        "precision": 2,
+        "boite": {
+          "x": 781,
+          "y": 1005,
+          "largeur": 54,
+          "hauteur": 54
+        }
+      },
+      "dansLaBoite": false,
+      "marge": 30
+    },
+    {
+      "master": "A15-coffret-composez-le-votre.png",
+      "sha256": "f6698de13cc1b8e22605ff1105c9984d3c70e385765791556f13552d03c918ed",
+      "dimensions": {
+        "largeur": 928,
+        "hauteur": 1152
+      },
+      "boite": {
+        "x": 40,
+        "y": 330,
+        "largeur": 860,
+        "hauteur": 645
+      },
+      "signature": {
+        "localisee": true,
+        "score": 0.864,
+        "amplitude": 4.19,
+        "precision": 2,
+        "boite": {
+          "x": 781,
+          "y": 1005,
+          "largeur": 54,
+          "hauteur": 54
+        }
+      },
+      "dansLaBoite": false,
+      "marge": 30
+    },
+    {
+      "master": "B01-huile-olive-premiere-pression-ouvert-v3.png",
+      "sha256": "30d90280fac269993095d9b3672a7029e3a5d9a15c661cad1c57150e7d3183db",
+      "dimensions": {
+        "largeur": 928,
+        "hauteur": 1152
+      },
+      "boite": {
+        "x": 132,
+        "y": 66,
+        "largeur": 640,
+        "hauteur": 1024
+      },
+      "signature": {
+        "localisee": false,
+        "score": 0.483,
+        "amplitude": 2.01,
+        "precision": 2,
+        "boite": null
+      },
+      "dansLaBoite": false,
+      "marge": null
+    },
+    {
+      "master": "B02-huile-noix-moulin-ouvert.png",
+      "sha256": "f971176713f099f0eaf1cb24c85ad09d25b1bbe88da20b531ed8334ebc44047f",
+      "dimensions": {
+        "largeur": 928,
+        "hauteur": 1152
+      },
+      "boite": {
+        "x": 132,
+        "y": 66,
+        "largeur": 640,
+        "hauteur": 1024
+      },
+      "signature": {
+        "localisee": true,
+        "score": 0.766,
+        "amplitude": 8.28,
+        "precision": 2,
+        "boite": {
+          "x": 781,
+          "y": 1006,
+          "largeur": 54,
+          "hauteur": 54
+        }
+      },
+      "dansLaBoite": false,
+      "marge": 9
+    },
+    {
+      "master": "B03-vinaigre-cidre-vieilli-fut-ouvert-v2.png",
+      "sha256": "924c1024b891d82a16c65d425fb6b50ce20fea743528362e48a3f5ab6d97dc77",
+      "dimensions": {
+        "largeur": 928,
+        "hauteur": 1152
+      },
+      "boite": {
+        "x": 132,
+        "y": 66,
+        "largeur": 640,
+        "hauteur": 1024
+      },
+      "signature": {
+        "localisee": true,
+        "score": 0.763,
+        "amplitude": 8.91,
+        "precision": 2,
+        "boite": {
+          "x": 781,
+          "y": 1006,
+          "largeur": 54,
+          "hauteur": 54
+        }
+      },
+      "dansLaBoite": false,
+      "marge": 9
+    },
+    {
+      "master": "B04-terrine-campagne-poivre-noir-ouvert.png",
+      "sha256": "314bc8a50361587e029a40e3a4a998c4180642c7115b71ce2c02d7b822c68d26",
+      "dimensions": {
+        "largeur": 928,
+        "hauteur": 1152
+      },
+      "boite": {
+        "x": 132,
+        "y": 66,
+        "largeur": 640,
+        "hauteur": 1024
+      },
+      "signature": {
+        "localisee": true,
+        "score": 0.864,
+        "amplitude": 5.3,
+        "precision": 2,
+        "boite": {
+          "x": 781,
+          "y": 1005,
+          "largeur": 54,
+          "hauteur": 54
+        }
+      },
+      "dansLaBoite": false,
+      "marge": 9
+    },
+    {
+      "master": "B05-rillettes-canard-echalotes-ouvert.jpg",
+      "sha256": "465172fe2877191377e9044ae6e8be73bfc08476abdda4bb0d7d385f60f20995",
+      "dimensions": {
+        "largeur": 928,
+        "hauteur": 1152
+      },
+      "boite": {
+        "x": 132,
+        "y": 66,
+        "largeur": 640,
+        "hauteur": 1024
+      },
+      "signature": {
+        "localisee": true,
+        "score": 0.867,
+        "amplitude": 4.23,
+        "precision": 2,
+        "boite": {
+          "x": 781,
+          "y": 1005,
+          "largeur": 54,
+          "hauteur": 54
+        }
+      },
+      "dansLaBoite": false,
+      "marge": 9
+    },
+    {
+      "master": "B06-confit-oignons-vin-doux-ouvert.jpg",
+      "sha256": "c2b14d2bbf6f62a05a1a87244c7b8a1f74c83057c1aabe093255eb6b9c8a50d4",
+      "dimensions": {
+        "largeur": 928,
+        "hauteur": 1152
+      },
+      "boite": {
+        "x": 132,
+        "y": 66,
+        "largeur": 640,
+        "hauteur": 1024
+      },
+      "signature": {
+        "localisee": true,
+        "score": 0.857,
+        "amplitude": 3.78,
+        "precision": 2,
+        "boite": {
+          "x": 781,
+          "y": 1005,
+          "largeur": 54,
+          "hauteur": 54
+        }
+      },
+      "dansLaBoite": false,
+      "marge": 9
+    },
+    {
+      "master": "B07-miel-chataignier-ouvert.jpg",
+      "sha256": "c96c99b16424c5c8604e4ad2150950373b2ee46b5147f297d493241d1066878a",
+      "dimensions": {
+        "largeur": 928,
+        "hauteur": 1152
+      },
+      "boite": {
+        "x": 132,
+        "y": 66,
+        "largeur": 640,
+        "hauteur": 1024
+      },
+      "signature": {
+        "localisee": false,
+        "score": 0.485,
+        "amplitude": 20.34,
+        "precision": 2,
+        "boite": null
+      },
+      "dansLaBoite": false,
+      "marge": null
+    },
+    {
+      "master": "B08-miel-bruyere-blanche-ouvert.jpg",
+      "sha256": "0976682d5146b93e685d76e59f9cdb7669867dd7649e17a4406dcb99a7b169f5",
+      "dimensions": {
+        "largeur": 928,
+        "hauteur": 1152
+      },
+      "boite": {
+        "x": 132,
+        "y": 66,
+        "largeur": 640,
+        "hauteur": 1024
+      },
+      "signature": {
+        "localisee": true,
+        "score": 0.744,
+        "amplitude": 4.56,
+        "precision": 2,
+        "boite": {
+          "x": 781,
+          "y": 1005,
+          "largeur": 54,
+          "hauteur": 54
+        }
+      },
+      "dansLaBoite": false,
+      "marge": 9
+    },
+    {
+      "master": "B09-confiture-abricots-plein-vent-ouvert-v2.jpg",
+      "sha256": "38d22915ae63992a7a9b691d07abd3930bd75028824c62fd1e14f7df5e44e227",
+      "dimensions": {
+        "largeur": 928,
+        "hauteur": 1152
+      },
+      "boite": {
+        "x": 132,
+        "y": 66,
+        "largeur": 640,
+        "hauteur": 1024
+      },
+      "signature": {
+        "localisee": false,
+        "score": 0.458,
+        "amplitude": 12.86,
+        "precision": 2,
+        "boite": null
+      },
+      "dansLaBoite": false,
+      "marge": null
+    },
+    {
+      "master": "B10-lentilles-blondes-plateau-ouvert.jpg",
+      "sha256": "b3306c6f97793a26a6ef2270f4920f2ac45479e41249f1845c3c1899c0713728",
+      "dimensions": {
+        "largeur": 928,
+        "hauteur": 1152
+      },
+      "boite": {
+        "x": 132,
+        "y": 66,
+        "largeur": 640,
+        "hauteur": 1024
+      },
+      "signature": {
+        "localisee": false,
+        "score": 0.493,
+        "amplitude": 7.94,
+        "precision": 2,
+        "boite": null
+      },
+      "dansLaBoite": false,
+      "marge": null
+    },
+    {
+      "master": "B11-infusion-du-soir-sept-plantes-ouvert.jpg",
+      "sha256": "d3287a23744bba6a864300e93c9edd7a61a2d08ab6baf70d2b986711eb9d634e",
+      "dimensions": {
+        "largeur": 928,
+        "hauteur": 1152
+      },
+      "boite": {
+        "x": 132,
+        "y": 66,
+        "largeur": 640,
+        "hauteur": 1024
+      },
+      "signature": {
+        "localisee": true,
+        "score": 0.65,
+        "amplitude": 8.21,
+        "precision": 2,
+        "boite": {
+          "x": 781,
+          "y": 1005,
+          "largeur": 54,
+          "hauteur": 54
+        }
+      },
+      "dansLaBoite": false,
+      "marge": 9
+    },
+    {
+      "master": "B12-beurre-baratte-demi-sel-ouvert-v3.jpg",
+      "sha256": "04d6be66ee248d296f4dfa608db2c0abfca9398ad7e62e0947ba61eb027a9e3e",
+      "dimensions": {
+        "largeur": 928,
+        "hauteur": 1152
+      },
+      "boite": {
+        "x": 132,
+        "y": 66,
+        "largeur": 640,
+        "hauteur": 1024
+      },
+      "signature": {
+        "localisee": true,
+        "score": 0.76,
+        "amplitude": 5.31,
+        "precision": 2,
+        "boite": {
+          "x": 781,
+          "y": 1005,
+          "largeur": 54,
+          "hauteur": 54
+        }
+      },
+      "dansLaBoite": false,
+      "marge": 9
+    },
+    {
+      "master": "B13-fromage-fermier-brebis-ouvert.jpg",
+      "sha256": "da8cbc8b7253499a9daaf27b858940c4cf2f5d2831a50700c7a9d1d8af059ea7",
+      "dimensions": {
+        "largeur": 928,
+        "hauteur": 1152
+      },
+      "boite": {
+        "x": 132,
+        "y": 66,
+        "largeur": 640,
+        "hauteur": 1024
+      },
+      "signature": {
+        "localisee": true,
+        "score": 0.88,
+        "amplitude": 4.31,
+        "precision": 2,
+        "boite": {
+          "x": 781,
+          "y": 1005,
+          "largeur": 54,
+          "hauteur": 54
+        }
+      },
+      "dansLaBoite": false,
+      "marge": 9
+    },
+    {
+      "master": "C01-huiles-v2.jpg",
+      "sha256": "eb8ff075ae9c27ecc90f51f5e6822c25ac3aa7101d545d882aba9c0f91fa1223",
+      "dimensions": {
+        "largeur": 5056,
+        "hauteur": 3392
+      },
+      "boite": {
+        "x": 0,
+        "y": 0,
+        "largeur": 5056,
+        "hauteur": 2844
+      },
+      "signature": {
+        "localisee": false,
+        "score": 0.439,
+        "amplitude": 1.78,
+        "precision": 7,
+        "boite": null
+      },
+      "dansLaBoite": false,
+      "marge": null
+    },
+    {
+      "master": "C02-conserves.jpg",
+      "sha256": "980417ee914b0aa3d7616020d4530ba84803cf24d68446c9e06defa8ef9a6c8c",
+      "dimensions": {
+        "largeur": 5056,
+        "hauteur": 3392
+      },
+      "boite": {
+        "x": 0,
+        "y": 0,
+        "largeur": 5056,
+        "hauteur": 2844
+      },
+      "signature": {
+        "localisee": false,
+        "score": 0.277,
+        "amplitude": 1.63,
+        "precision": 7,
+        "boite": null
+      },
+      "dansLaBoite": false,
+      "marge": null
+    },
+    {
+      "master": "C03-miels.jpg",
+      "sha256": "59e402409c69b7d0176b1a2e994a6b0c1bb7a865a0c046ea0f7874486d4572c1",
+      "dimensions": {
+        "largeur": 5056,
+        "hauteur": 3392
+      },
+      "boite": {
+        "x": 0,
+        "y": 0,
+        "largeur": 5056,
+        "hauteur": 2844
+      },
+      "signature": {
+        "localisee": false,
+        "score": 0.422,
+        "amplitude": 2.7,
+        "precision": 7,
+        "boite": null
+      },
+      "dansLaBoite": false,
+      "marge": null
+    },
+    {
+      "master": "C04-epicerie.jpg",
+      "sha256": "4674c8b9976362ef24cc75d7ab98634c57340c496a0b95ca7f006e6193e308ba",
+      "dimensions": {
+        "largeur": 5056,
+        "hauteur": 3392
+      },
+      "boite": {
+        "x": 0,
+        "y": 0,
+        "largeur": 5056,
+        "hauteur": 2844
+      },
+      "signature": {
+        "localisee": false,
+        "score": 0.474,
+        "amplitude": 1.74,
+        "precision": 7,
+        "boite": null
+      },
+      "dansLaBoite": false,
+      "marge": null
+    },
+    {
+      "master": "C05-infusions.jpg",
+      "sha256": "df5d4238965ab46c4a9b461e9ef7afdb24f5ef2b21a20233095b08959b3f1863",
+      "dimensions": {
+        "largeur": 5056,
+        "hauteur": 3392
+      },
+      "boite": {
+        "x": 0,
+        "y": 0,
+        "largeur": 5056,
+        "hauteur": 2844
+      },
+      "signature": {
+        "localisee": false,
+        "score": 0.255,
+        "amplitude": 1.89,
+        "precision": 7,
+        "boite": null
+      },
+      "dansLaBoite": false,
+      "marge": null
+    },
+    {
+      "master": "C06-frais.jpg",
+      "sha256": "aa03405754de1247698eaa83ec16a0a7269f3caef4128a562a8bdf1fc3cb44da",
+      "dimensions": {
+        "largeur": 5056,
+        "hauteur": 3392
+      },
+      "boite": {
+        "x": 0,
+        "y": 0,
+        "largeur": 5056,
+        "hauteur": 2844
+      },
+      "signature": {
+        "localisee": false,
+        "score": 0.609,
+        "amplitude": 1.6,
+        "precision": 7,
+        "boite": null
+      },
+      "dansLaBoite": false,
+      "marge": null
+    },
+    {
+      "master": "C07-coffrets.jpg",
+      "sha256": "9f5c44420be1f4ebbc48489763e82a09babbca035728a9631404d86ab247f9fd",
+      "dimensions": {
+        "largeur": 5056,
+        "hauteur": 3392
+      },
+      "boite": {
+        "x": 0,
+        "y": 0,
+        "largeur": 5056,
+        "hauteur": 2844
+      },
+      "signature": {
+        "localisee": true,
+        "score": 0.559,
+        "amplitude": 4.8,
+        "precision": 7,
+        "boite": {
+          "x": 4661,
+          "y": 3011,
+          "largeur": 284,
+          "hauteur": 284
+        }
+      },
+      "dansLaBoite": false,
+      "marge": 167
+    },
+    {
+      "master": "D01-hero-filet-huile.jpg",
+      "sha256": "2c1fcf13faa82bbb97eaa15f6a77b410a4c28ba946026e382a7941627de539a6",
+      "dimensions": {
+        "largeur": 5056,
+        "hauteur": 3392
+      },
+      "boite": {
+        "x": 0,
+        "y": 0,
+        "largeur": 5056,
+        "hauteur": 2844
+      },
+      "signature": {
+        "localisee": false,
+        "score": 0.341,
+        "amplitude": 2.73,
+        "precision": 7,
+        "boite": null
+      },
+      "dansLaBoite": false,
+      "marge": null
+    },
+    {
+      "master": "E01-coffret-table-du-dimanche-ouvert-v3.jpg",
+      "sha256": "4b99ee0b57c267e7d1cd3c4dacccba695e06db02566a408001a61088118dad38",
+      "dimensions": {
+        "largeur": 928,
+        "hauteur": 1152
+      },
+      "boite": {
+        "x": 40,
+        "y": 0,
+        "largeur": 848,
+        "hauteur": 1060
+      },
+      "signature": {
+        "localisee": false,
+        "score": 0.345,
+        "amplitude": 45.14,
+        "precision": 2,
+        "boite": null
+      },
+      "dansLaBoite": false,
+      "marge": null
+    },
+    {
+      "master": "E02-coffret-composez-le-votre-ouvert-v2.jpg",
+      "sha256": "1ed01a06b95f4642d06dc27dde72ee6d898d6e7bfad69632d5c780f67f001327",
+      "dimensions": {
+        "largeur": 928,
+        "hauteur": 1152
+      },
+      "boite": {
+        "x": 40,
+        "y": 0,
+        "largeur": 848,
+        "hauteur": 1060
+      },
+      "signature": {
+        "localisee": false,
+        "score": 0.392,
+        "amplitude": 47.23,
+        "precision": 2,
+        "boite": null
+      },
+      "dansLaBoite": false,
+      "marge": null
+    },
+    {
+      "master": "F04-boutique-miel-affiche.png",
+      "sha256": "4eb05da17c39db61e015bb1b436890fc8d880059df004421c258d7d6576a1613",
+      "dimensions": {
+        "largeur": 1280,
+        "hauteur": 720
+      },
+      "boite": {
+        "x": 0,
+        "y": 0,
+        "largeur": 1280,
+        "hauteur": 720
+      },
+      "signature": {
+        "localisee": false,
+        "score": 0.304,
+        "amplitude": 3.06,
+        "precision": 2,
+        "boite": null
+      },
+      "dansLaBoite": false,
+      "marge": null
+    },
+    {
+      "master": "F05-livraison-colis-affiche.png",
+      "sha256": "035f1c2e287bf981691151a1996e539039671cab16760914c912fb132ea314f4",
+      "dimensions": {
+        "largeur": 1280,
+        "hauteur": 720
+      },
+      "boite": {
+        "x": 0,
+        "y": 0,
+        "largeur": 1280,
+        "hauteur": 720
+      },
+      "signature": {
+        "localisee": false,
+        "score": 0.244,
+        "amplitude": 1.3,
+        "precision": 2,
+        "boite": null
+      },
+      "dansLaBoite": false,
+      "marge": null
+    },
+    {
+      "master": "F06-suivi-registre-affiche.png",
+      "sha256": "a4ae25abd5e59fba57c849ff9fdcafc97b77639f8a89aec85e0f88e14dc1449a",
+      "dimensions": {
+        "largeur": 1280,
+        "hauteur": 720
+      },
+      "boite": {
+        "x": 0,
+        "y": 0,
+        "largeur": 1280,
+        "hauteur": 720
+      },
+      "signature": {
+        "localisee": false,
+        "score": 0.239,
+        "amplitude": 1.3,
+        "precision": 2,
+        "boite": null
+      },
+      "dansLaBoite": false,
+      "marge": null
+    },
+    {
+      "master": "F07-panier-cagette-affiche.png",
+      "sha256": "339d77239bd6d85ec276b08304386da5b992a415974bfa8d77c7040ff0fb20b7",
+      "dimensions": {
+        "largeur": 1280,
+        "hauteur": 720
+      },
+      "boite": {
+        "x": 0,
+        "y": 0,
+        "largeur": 1280,
+        "hauteur": 720
+      },
+      "signature": {
+        "localisee": false,
+        "score": 0.285,
+        "amplitude": 0.71,
+        "precision": 2,
+        "boite": null
+      },
+      "dansLaBoite": false,
+      "marge": null
+    },
+    {
+      "master": "G01-commande-registre-vierge-v2.jpg",
+      "sha256": "54f296318becf5e2fe99a6a322154f7781e1c4c4b159d511bcac14a501ca7dff",
+      "dimensions": {
+        "largeur": 5504,
+        "hauteur": 3072
+      },
+      "boite": {
+        "x": 0,
+        "y": 0,
+        "largeur": 5504,
+        "hauteur": 3072
+      },
+      "signature": {
+        "localisee": false,
+        "score": 0.296,
+        "amplitude": 1.42,
+        "precision": 8,
+        "boite": null
+      },
+      "dansLaBoite": false,
+      "marge": null
+    },
+    {
+      "master": "G02-paiement-cachet-cire-v2.jpg",
+      "sha256": "fc3b053f6174ae7b1334f95121f589a4f6bb9ced075bc596031b7ee74a7c74d8",
+      "dimensions": {
+        "largeur": 5504,
+        "hauteur": 3072
+      },
+      "boite": {
+        "x": 0,
+        "y": 0,
+        "largeur": 5504,
+        "hauteur": 3072
+      },
+      "signature": {
+        "localisee": false,
+        "score": 0.304,
+        "amplitude": 0.65,
+        "precision": 8,
+        "boite": null
+      },
+      "dansLaBoite": false,
+      "marge": null
+    },
+    {
+      "master": "G03-confirmation-colis-ficele.jpg",
+      "sha256": "85021d5bd4191851f12ef89c3ea893cddc195d79fc5f80a708b4cd1d83de8956",
+      "dimensions": {
+        "largeur": 5504,
+        "hauteur": 3072
+      },
+      "boite": {
+        "x": 0,
+        "y": 0,
+        "largeur": 5504,
+        "hauteur": 3072
+      },
+      "signature": {
+        "localisee": false,
+        "score": 0.23,
+        "amplitude": 1.46,
+        "precision": 8,
+        "boite": null
+      },
+      "dansLaBoite": false,
+      "marge": null
+    }
+  ]
+}

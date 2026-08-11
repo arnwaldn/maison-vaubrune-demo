@@ -91,6 +91,7 @@ export function IlotConfirmation() {
     return (
       <div
         aria-hidden="true"
+        data-place-reservee=""
         className="mt-10 min-h-96 rounded-sm border border-filet bg-papier"
       />
     );
@@ -117,14 +118,20 @@ function RecapitulatifCommande({ commande }: { readonly commande: Commande }) {
           aria-labelledby="titre-reference"
           className="rounded-sm border border-olive/40 bg-papier p-5 sm:p-6"
         >
-          <h2 id="titre-reference" className="font-titre text-base font-semibold text-encre">
+          <h2 id="titre-reference" className="sous-titre text-encre">
             Votre référence de commande
           </h2>
-          {/* Assez grosse pour être notée d'un coup d'œil, assez sobre pour
-              tenir sur une ligne dès 640 px : à la taille d'affiche, la
-              référence se coupait à son tiret sur un écran de bureau — une
-              référence qui s'écrit sur deux lignes se recopie de travers. */}
-          <p className="mt-3 font-titre text-3xl font-semibold text-olive tabular-nums sm:text-4xl">
+          {/* UNE RÉFÉRENCE EST UNE DONNÉE, PAS UN NOM : elle part en mono
+              capitales et non en didone (C16). Le passage coûte un degré
+              d'échelle, et c'est de l'arithmétique, pas du goût — la Spline
+              Sans Mono a une chasse FIXE de 0,6 em, donc les dix-sept signes
+              de `MVB-AAAAMMJJ-XXXX` occupent 10,2 em quoi qu'il arrive. À
+              text-3xl (30 px) cela fait 306 points pour 310 disponibles sur un
+              écran de 390 : quatre points de marge, c'est-à-dire aucune. Un
+              degré plus bas, 245 points, et la référence tient sur une ligne
+              partout — ce qui est la seule chose qu'on lui demande, puisqu'une
+              référence coupée à son tiret se recopie de travers. */}
+          <p className="mt-3 font-mono text-2xl font-medium text-olive tabular-nums sm:text-3xl">
             {commande.reference}
           </p>
           <p className="mt-3 text-sm leading-relaxed text-encre-douce">
@@ -134,7 +141,7 @@ function RecapitulatifCommande({ commande }: { readonly commande: Commande }) {
         </section>
 
         <section aria-labelledby="titre-passe">
-          <h2 id="titre-passe" className="text-titre font-semibold text-encre">
+          <h2 id="titre-passe" className="text-titre text-encre">
             Ce qui vient de se passer
           </h2>
 
@@ -178,7 +185,7 @@ function RecapitulatifCommande({ commande }: { readonly commande: Commande }) {
         </section>
 
         <section aria-labelledby="titre-articles-commandes">
-          <h2 id="titre-articles-commandes" className="text-titre font-semibold text-encre">
+          <h2 id="titre-articles-commandes" className="text-titre text-encre">
             Votre commande
           </h2>
 
@@ -198,7 +205,7 @@ function RecapitulatifCommande({ commande }: { readonly commande: Commande }) {
                     {formaterEuros(calculee.article.prixCentimes)}
                   </p>
                 </div>
-                <p className="font-semibold text-encre tabular-nums">
+                <p className="font-mono font-medium text-encre tabular-nums">
                   {formaterEuros(calculee.sousTotalCentimes)}
                 </p>
               </li>
@@ -212,7 +219,7 @@ function RecapitulatifCommande({ commande }: { readonly commande: Commande }) {
 
         {commande.coordonnees === null ? null : (
           <section aria-labelledby="titre-livraison">
-            <h2 id="titre-livraison" className="text-titre font-semibold text-encre">
+            <h2 id="titre-livraison" className="text-titre text-encre">
               Livraison
             </h2>
             <address className="mt-4 text-sm leading-relaxed text-encre not-italic">
@@ -233,28 +240,28 @@ function RecapitulatifCommande({ commande }: { readonly commande: Commande }) {
           aria-labelledby="titre-montants"
           className="rounded-sm border border-filet bg-papier p-5 sm:p-6"
         >
-          <h2 id="titre-montants" className="font-titre text-base font-semibold text-encre">
+          <h2 id="titre-montants" className="sous-titre text-encre">
             Montants
           </h2>
 
           <dl className="mt-4 space-y-3 text-sm">
             <div className="flex items-baseline justify-between gap-4">
               <dt className="text-encre-douce">Sous-total</dt>
-              <dd className="font-semibold text-encre tabular-nums">
+              <dd className="font-mono font-medium text-encre tabular-nums">
                 {formaterEuros(commande.totaux.sousTotal)}
               </dd>
             </div>
             <div className="flex items-baseline justify-between gap-4">
               <dt className="text-encre-douce">Frais de port</dt>
-              <dd className="font-semibold text-encre tabular-nums">
+              <dd className="font-mono font-medium text-encre tabular-nums">
                 {formaterEuros(commande.totaux.port)}
               </dd>
             </div>
           </dl>
 
           <div className="mt-5 flex items-baseline justify-between gap-4 border-t border-filet pt-4">
-            <p className="font-titre text-base font-semibold text-encre">Total</p>
-            <p className="text-xl font-semibold text-encre tabular-nums">
+            <p className="sous-titre text-encre">Total</p>
+            <p className="font-mono text-xl font-medium text-encre tabular-nums">
               {formaterEuros(commande.totaux.total)}
             </p>
           </div>
@@ -268,7 +275,7 @@ function RecapitulatifCommande({ commande }: { readonly commande: Commande }) {
           aria-labelledby="titre-etat"
           className="rounded-sm border border-filet bg-papier p-5 sm:p-6"
         >
-          <h2 id="titre-etat" className="font-titre text-base font-semibold text-encre">
+          <h2 id="titre-etat" className="sous-titre text-encre">
             État
           </h2>
           <p className="mt-3 text-sm text-encre">
@@ -314,7 +321,7 @@ function RecapitulatifCommande({ commande }: { readonly commande: Commande }) {
 
         <Link
           href="/boutique"
-          className="block rounded-sm border border-olive bg-olive px-4 py-3 text-center text-sm font-semibold text-creme no-underline hover:bg-olive-clair"
+          className="block rounded-sm border border-olive bg-olive px-4 py-3 text-center text-sm font-semibold text-creme no-underline hover:border-encre hover:bg-encre"
         >
           Retourner à la boutique
         </Link>
@@ -343,7 +350,7 @@ function RecapitulatifCommande({ commande }: { readonly commande: Commande }) {
 function CommandeIntrouvable({ reference }: { readonly reference: string }) {
   return (
     <div className="mt-10 min-h-96 max-w-lisible pb-4">
-      <h2 className="text-titre font-semibold text-encre">Aucune commande à afficher</h2>
+      <h2 className="text-titre text-encre">Aucune commande à afficher</h2>
 
       <p className="mt-4 text-sm leading-relaxed text-encre-douce">
         {reference === ''
@@ -362,7 +369,7 @@ function CommandeIntrouvable({ reference }: { readonly reference: string }) {
 
       <Link
         href="/boutique"
-        className="mt-6 inline-block rounded-sm border border-olive bg-olive px-4 py-2.5 text-sm font-semibold text-creme no-underline hover:bg-olive-clair"
+        className="mt-6 inline-block rounded-sm border border-olive bg-olive px-4 py-2.5 text-sm font-semibold text-creme no-underline hover:border-encre hover:bg-encre"
       >
         Voir la boutique
       </Link>

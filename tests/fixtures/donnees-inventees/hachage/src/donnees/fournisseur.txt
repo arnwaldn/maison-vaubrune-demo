@@ -1,0 +1,6 @@
+Piece a conviction, seconde moitie : un SIREN ecrit comme un humain l'ecrit,
+entre guillemets et apres un deux-points. C'est la forme sous laquelle un
+identifiant reel arrive dans un fichier de ce depot, et la regle du hachage ne
+doit rien y changer.
+
+  "siren": "812345678"

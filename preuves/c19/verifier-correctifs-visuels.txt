@@ -1,0 +1,26 @@
+
+A — LE TITRE, MONTÉE MASQUÉE (retour client 9)
+==============================================================================
+    250 ms — pixels d’encre dans le héros : 1.63 %
+    700 ms — pixels d’encre dans le héros : 7.10 %
+   1300 ms — pixels d’encre dans le héros : 6.91 %
+  au repos — pixels d’encre dans le héros : 7.02 %
+
+  PIRE INSTANT 7.10 % contre 7.02 % au repos — AUCUNE MATIÈRE AJOUTÉE ✓
+
+  MASQUE AU REPOS : 0 pixel(s) franchement différent(s) sur 392000 (écart maximal 0 niveaux) — AUCUN JAMBAGE ROGNÉ ✓
+
+B — LE FONDU DES CARTES (retours client 11 et 11 bis)
+==============================================================================
+  durée déclarée              : 0.9s, 0.9s
+  À 450 ms — opacité ambiance : 0.873
+  À 450 ms — échelle ambiance : matrix(1.00141, 0, 0, 1.00141, 0, 0)
+  À 450 ms — échelle packshot : matrix(1.02915, 0, 0, 1.02915, 0, 0)
+  ÉTAT INTERMÉDIAIRE : LES DEUX IMAGES SONT MÊLÉES ✓
+
+C — LA MATIÈRE DU FOND (retour client 10)
+==============================================================================
+  grain 0.055  — plus sombre #eeeadf, plus clair #f4eee4, amplitude 3.63 pt — ocre sur le pire pixel : 5.46 (AA 4,50)
+  grain 0.14   — plus sombre #e9e5db, plus clair #f3ede4, amplitude 6.75 pt — ocre sur le pire pixel : 5.22 (AA 4,50)
+  grain 0.18   — plus sombre #e5e1d7, plus clair #f3ede3, amplitude 9.75 pt — ocre sur le pire pixel : 5.02 (AA 4,50)
+

@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 
+import { BlocTitre } from '@/composants/mise-en-page/BlocTitre';
 import { IlotListeCommandes } from '@/composants/gestion/IlotListeCommandes';
 import { COMMANDES_AMORCE, LIBELLE_JEU_ESSAI } from '@/donnees/commandes-amorce';
 
@@ -16,21 +17,30 @@ export default function PageCommandesGestion() {
   return (
     <>
       <section className="pt-12 sm:pt-14">
-        <p className="text-xs font-semibold tracking-[0.2em] text-ocre uppercase">
-          Espace marchand
-        </p>
-        <h1 className="mt-4 text-affiche font-semibold text-encre">Commandes</h1>
-        <p className="mt-5 max-w-lisible text-chapeau text-encre-douce">
-          De la plus récente à la plus ancienne. Chaque référence mène au détail, où
-          la commande se fait avancer d’un état à l’autre.
-        </p>
-        <p className="mt-4 max-w-lisible text-sm leading-relaxed text-encre-douce">
-          Les six premières viennent du {LIBELLE_JEU_ESSAI}&nbsp;; les suivantes sont
-          celles que vous passez dans la démonstration, rangées dans votre navigateur.
-        </p>
+        <BlocTitre
+          surtitre="Espace marchand"
+          titre="Commandes"
+          chapeau={
+            <>
+              De la plus récente à la plus ancienne. Chaque référence mène au détail,
+              où la commande se fait avancer d’un état à l’autre.
+            </>
+          }
+          note={
+            <>
+              Les six premières viennent du {LIBELLE_JEU_ESSAI}&nbsp;; les suivantes
+              sont celles que vous passez dans la démonstration, rangées dans votre
+              navigateur.
+            </>
+          }
+        />
       </section>
 
-      <IlotListeCommandes amorce={COMMANDES_AMORCE} />
+      {/* Même motif que le tableau de bord : l'espace marchand n'est ni le
+          tunnel ni un document légal (voir `gestion/page.tsx`). */}
+      <div data-revelation>
+        <IlotListeCommandes amorce={COMMANDES_AMORCE} />
+      </div>
     </>
   );
 }

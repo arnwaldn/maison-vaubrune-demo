@@ -1,116 +1,870 @@
 @import "tailwindcss";
 
 /* ===========================================================================
-   POLICES — deux familles, auto-hébergées, sous-ensemble latin uniquement
+   POLICES — trois familles, auto-hébergées, sous-ensemble latin uniquement
    ===========================================================================
 
-   Choix : Newsreader Variable (titres) + Work Sans Variable (texte courant).
-   Volontairement différent du site portfolio (Fraunces + Bricolage Grotesque)
-   pour que les deux vitrines ne se ressemblent pas.
+   Le trio de la refonte : Bodoni Moda (titres et affiches), Schibsted Grotesk
+   (texte courant), Spline Sans Mono (registre — références, poids, dates).
+   Bodoni Moda est chargée DEUX FOIS, en romain préchargé et en italique NON
+   préchargé.
 
-   Pourquoi Newsreader pour les titres. C'est une serif de labeur à
-   modulation marquée et terminaisons franches, dessinée pour l'écran : elle
-   évoque l'étiquette gravée et la carte imprimée, registre juste pour une
-   épicerie fine. Là où Fraunces joue la douceur et l'excentricité (axes
-   SOFT et WONK), Newsreader tient une élégance sobre qui ne fatigue pas sur
-   une fiche produit longue. Un seul fichier variable couvre 200 à 800.
+   Le raisonnement complet — pourquoi trois familles là où le socle en avait
+   deux, pourquoi ces trois-là, pourquoi l'italique attend qu'on la demande, et
+   pourquoi le mécanisme `next/font/local` + `adjustFontFallback` n'est pas
+   négociable (décalage cumulé mesuré à 0,220 sans lui) — est en tête de
+   `src/app/polices.ts`. Ce fichier-ci ne fait que brancher les variables CSS
+   produites là-bas sur les jetons de Tailwind.
 
-   Pourquoi Work Sans pour le texte. Grotesque humaniste à faible contraste,
-   dessinée pour les tailles moyennes d'écran : elle se tait à côté de la
-   serif et reste lisible à 16 px, y compris sur les mentions légales qui
-   font le gros du volume de ce projet. Bricolage Grotesque, à l'inverse,
-   est une display expressive — parfaite en titre sur le portfolio, mauvaise
-   idée en corps de texte ici.
-
-   Deux familles, pas trois : chaque famille supplémentaire est un aller-
-   retour réseau de plus avant le premier rendu, et la note de rapidité
-   est un engagement commercial sur ce projet.
-
-   Auto-hébergement : les fichiers viennent de @fontsource-variable et sont
-   empaquetés par Next dans /_next/static/media (empreinte dans le nom, donc
-   cache immuable — voir vercel.json). Aucun appel à un domaine tiers, ce qui
-   permet une CSP `font-src 'self'` et zéro cookie tiers.
-
-   Sous-ensemble : la version 5.3.0 de @fontsource-variable ne publie plus de
-   feuille par sous-ensemble (index.css et wght.css déclarent les trois
-   sous-ensembles : latin, latin-ext et vietnamese dans le même fichier). On
-   ne se sert donc pas de ces feuilles : on désigne directement le seul
-   fichier latin. Le français y est entièrement couvert — lettres accentuées,
-   ligature oe (U+0153), guillemets (U+00AB/U+00BB), apostrophe typographique
-   (U+2019) et espace insécable (U+00A0).
-
-   Déclaration : les deux @font-face ne sont pas écrites ici mais engendrées
-   par `next/font/local` (voir src/app/polices.ts, qui explique pourquoi —
-   décalage de mise en page mesuré). Ce fichier ne fait que brancher les
-   variables CSS produites sur les jetons de Tailwind.
+   Auto-hébergement : les fichiers viennent de @fontsource-variable 5.3.0 et
+   sont empaquetés par Next dans /_next/static/media (empreinte dans le nom,
+   donc cache immuable — voir vercel.json). Aucun appel à un domaine tiers, ce
+   qui permet une CSP `font-src 'self'` et zéro cookie tiers. C'est aussi
+   l'interdit n° 18 de la décision D37.
    =========================================================================== */
 
 /* ===========================================================================
-   JETONS DE DESIGN — palette « épicerie fine chaleureuse »
+   JETONS DE DESIGN — « LA MISE EN CONSERVE »
    ===========================================================================
 
-   Cinq matières : encre profonde, crème et papier, vert olive, ocre, terre
-   cuite. Les variantes claires (`-clair`) sont réservées au décor (aplats,
-   filets, silhouettes) ; les variantes de base sont assez sombres pour
-   porter du texte sur crème ou sur papier.
+   Refonte C12. Le concept directeur est l'étiquette, le registre et la matière
+   lente : une conserverie qui range, pèse, date et scelle. La palette du socle
+   (« épicerie fine chaleureuse ») est BASCULÉE vers ce registre plutôt que
+   remplacée — les jetons gardent leurs noms, les composants n'ont pas à
+   bouger, et les cinq matières d'origine survivent, rétrogradées au rang de
+   MATIÈRES (silhouettes, pastilles, aplats de famille).
 
-   Contrastes vérifiés sur le fond crème (#faf6ef) :
-     encre        #23201b  →  15,0:1   (AAA)
-     encre douce  #55503f  →   7,5:1   (AAA)
-     olive        #47552f  →   7,5:1   (AAA)
-     terre cuite  #8f4426  →   6,4:1   (AA large + AA texte courant)
-     ocre         #7a5714  →   6,1:1   (AA large + AA texte courant)
-   Sur le fond papier (#f1e8d9), le moins favorable reste l'ocre à 5,4:1 —
-   au-dessus du seuil AA de 4,5:1 pour le texte courant.
+   ---------------------------------------------------------------------------
+   Les trois fonds
+   ---------------------------------------------------------------------------
+   coquille  #F2ECE1  le fond du site — un blanc cassé de coquille d'oeuf, plus
+                      dense et moins jaune que la crème de C1 (#faf6ef)
+   verre     #F8F4EA  le fond SURÉLEVÉ — ce qui doit passer devant la coquille
+   papier    #EDE8DC  le fond DOUX — encarts, aplats calmes (aligné sur le
+                      scheme « épicerie sèche », dont c'est la teinte)
 
-   La bague de focus utilise la terre cuite : 6,4:1 sur crème, très au-dessus
-   du seuil de 3:1 exigé pour un élément d'interface non textuel.
+   `--color-creme` est CONSERVÉ comme nom et bascule sur la même valeur que
+   `--color-coquille` : les vingt-cinq `bg-creme` et dix-huit `text-creme` déjà
+   écrits continuent de dire la bonne chose. Les deux noms coexistent le temps
+   que C13 à C19 réécrivent les composants ; ils ne divergeront jamais, ils
+   sont écrits l'un sous l'autre.
 
-   Ajout C2 — la cinquième teinte des silhouettes. Le cadrage rédactionnel
-   distribue les quinze vignettes du catalogue sur cinq formes × cinq teintes,
-   dont une nommée « crème ». Tracer de la crème (#faf6ef) sur le fond crème
-   du site donnerait 1,0:1, c'est-à-dire rien du tout. Le jeton
-   `--color-creme-trace` (#857c6a) est la version soutenue de cette matière —
-   un grège chaud, distinct de l'ocre et de la terre cuite au premier coup
-   d'œil : 3,8:1 sur crème et 3,4:1 sur papier, au-dessus du seuil de 3:1 des
-   éléments graphiques. Il ne porte JAMAIS de texte, uniquement du trait.
+   ---------------------------------------------------------------------------
+   Les contrastes, RECALCULÉS sur le fond coquille (#F2ECE1)
+   ---------------------------------------------------------------------------
+   Mesurés au rapport WCAG 2.x, arrondis au centième :
+
+     encre        #1C211A  → 13,93:1  (AAA)   vert-noir de bouteille
+     encre douce  #4F5347  →  6,71:1  (AA)    gris-vert de sous-titre
+     bleu         #1F4EA8  →  6,58:1  (AA)    accent — et 6,58:1 EN APLAT,
+                                              c'est-à-dire coquille sur bleu :
+                                              le rapport est symétrique, donc
+                                              l'accent porte du texte ET reçoit
+                                              du texte
+     olive        #47552F  →  6,85:1  (AA)    matière
+     terre        #8F4426  →  5,91:1  (AA)    matière
+     ocre         #7A5714  →  5,58:1  (AA)    matière
+     filet fort   #8B8471  →  3,17:1  (AA non textuel) bordure PORTEUSE DE SENS
+     crème tracée #857C6A  →  3,51:1  (AA non textuel) trait de silhouette
+     filet        #D8CFBE  →  1,31:1  DÉCOR SEUL — un filet de séparation, qui
+                                      ne porte ni texte ni sens ; c'est la
+                                      raison d'être de `--color-filet-fort`
+
+   `--color-bleu-clair` (#7FA6E8) est l'exact symétrique : il ne vaut RIEN sur
+   coquille (2,10:1) et 6,65:1 sur encre. Il est réservé aux fonds encre, et
+   ce commentaire est le seul endroit où cette contrainte est écrite.
+
+   Pourquoi un bleu dans une épicerie. Parce que la chaîne du froid est la
+   seule information du catalogue qui ne se dit pas avec une matière : le frais
+   n'a pas de couleur d'aliment, il a une couleur de convention. Le bleu sert
+   donc l'accent d'interface ET le scheme « frais », et c'est le même.
+
+   ---------------------------------------------------------------------------
+   Les sept schemes de famille
+   ---------------------------------------------------------------------------
+   Un fond et un trait par famille du catalogue. Correspondance avec les sept
+   valeurs de `FAMILLES` (src/lib/types.ts), qui sont plus longues :
+
+     huiles     → huiles-et-vinaigres        conserves  → conserves-salees
+     miels      → miels-et-confitures        epicerie   → epicerie-seche
+     infusions  → infusions                  frais      → frais
+     coffrets   → coffrets
+
+   Contrastes du TEXTE sur ces fonds, mesurés : l'encre va de 12,73:1
+   (conserves) à 13,49:1 (miels) ; l'encre douce va de 6,13:1 (conserves, le
+   pire cas de tout le jeu) à 6,50:1 (miels). Tous AA pour le texte courant.
+   Les TRAITS, eux, sont des éléments graphiques et non du texte : ils vont de
+   3,38:1 (épicerie, la crème tracée sur son propre fond) à 6,51:1 (infusions),
+   tous au-dessus du seuil de 3:1 qui les concerne.
+
+   « frais » est le seul fond FROID des sept, et c'est délibéré : sur un étal
+   de sept aplats chauds, l'oeil trouve la chaîne du froid sans lire.
    =========================================================================== */
 
-@theme {
-  /* Matières */
-  --color-encre: #23201b;
-  --color-encre-douce: #55503f;
-  --color-creme: #faf6ef;
-  --color-papier: #f1e8d9;
-  --color-filet: #ddd0b6;
-  /* Crème soutenue : le trait des silhouettes dites « crème » (voir plus bas). */
-  --color-creme-trace: #857c6a;
+/* ---------------------------------------------------------------------------
+   `@theme static` — et pourquoi `static`
+   ---------------------------------------------------------------------------
+   Tailwind 4 n'écrit dans la feuille produite que les variables de thème
+   RÉELLEMENT consommées par une classe utilitaire. Vérifié sur la
+   construction de C11 : `--color-terre-clair`, déclaré mais sans utilitaire
+   correspondant écrit dans les composants, était absent du CSS livré.
 
-  /* Accents */
+   Ce comportement est bon pour une palette par défaut ; il est faux pour un
+   système de design que les tranches C13 à C19 consommeront par `var()` —
+   les sept schemes de famille, les jetons de mouvement, les marges. Ces
+   jetons n'engendrent aucun utilitaire : ils auraient tous disparu, et le
+   « système posé en C12 » n'aurait existé que dans ce fichier.
+
+   `static` force l'écriture de CE bloc, et de lui seul : le thème par défaut
+   de Tailwind, déclaré dans son propre `@theme default`, continue d'être
+   élagué normalement. Le coût est mesuré et tenu — plafond D36 de 12 Ko gzip,
+   contrôlé à chaque `npm run controle` par `scripts/verifier-poids-css.mjs`.
+   --------------------------------------------------------------------------- */
+
+@theme static {
+  /* --- Fonds ------------------------------------------------------------- */
+  --color-coquille: #f2ece1;
+  /* Alias historique : les composants de C1 à C11 écrivent `bg-creme`. */
+  --color-creme: #f2ece1;
+  --color-verre: #f8f4ea;
+  --color-papier: #ede8dc;
+
+  /* --- Encres ------------------------------------------------------------ */
+  --color-encre: #1c211a;
+  --color-encre-douce: #4f5347;
+
+  /* --- Accent ------------------------------------------------------------ */
+  --color-bleu: #1f4ea8;
+  /* Sur fond encre EXCLUSIVEMENT (6,65:1) — il ne vaut rien sur coquille. */
+  --color-bleu-clair: #7fa6e8;
+
+  /* --- Filets ------------------------------------------------------------ */
+  /* Décor seul : séparation sans sens, 1,31:1. */
+  --color-filet: #d8cfbe;
+  /* Bordure porteuse de sens (champ, carte cliquable) : 3,17:1. */
+  --color-filet-fort: #8b8471;
+
+  /* --- Matières (INCHANGÉES depuis C1 — silhouettes, pastilles, aplats) --- */
   --color-olive: #47552f;
   --color-olive-clair: #6e8046;
-  --color-ocre: #7a5714;
+  /*
+   * L'OCRE DES ÉTIQUETTES DESCEND — #7A5714 → #5B3E0C (C19, quatrième
+   * écriture du fond). C'est le SEUL jeton de couleur que le marbre déplace,
+   * et il ne change pas de teinte : même angle, même chroma, une valeur plus
+   * basse. Un brun doré devient un brun de tabac.
+   *
+   * LE MOTIF EST MESURÉ. L'étiquette de registre est le seul petit texte du
+   * site qui reste POSÉ SUR LA MATIÈRE sans être à l'encre — c'est sa raison
+   * d'être, elle est l'accent chaud des compositions d'ouverture, et
+   * l'effacer aurait retiré la couleur de dix-huit ouvertures de page pour un
+   * problème de contraste. À #7A5714 elle valait 3,40 contre la veine la plus
+   * sombre du marbre livré : sous AA petit texte, et sous AA tout court dès
+   * que le voile monte. À #5B3E0C elle vaut 4,81 au même endroit, et tient
+   * jusqu'à 0,53 de voile — c'est elle qui fixe la butée du curseur.
+   *
+   * CE QUE LE CHANGEMENT NE TOUCHE PAS, et c'est pourquoi il est sûr :
+   * `--color-ocre` ne sert JAMAIS de fond (seul `--color-ocre-clair` le fait,
+   * et il est inchangé), et il n'apparaît nulle part sur l'encre du pied de
+   * page — où il vaudrait 1,67, ce qui se verrait. Partout ailleurs — filets,
+   * pastilles d'état, notes des panneaux — la descente ne fait qu'AUGMENTER le
+   * contraste, mesuré sur les quatre surfaces du système :
+   *     coquille 5,58 → 8,35 · verre 5,97 → 8,94
+   *     papier   5,37 → 8,03 · crème 6,09 → 9,11
+   */
+  --color-ocre: #5b3e0c;
   --color-ocre-clair: #c89b3c;
   --color-terre: #8f4426;
   --color-terre-clair: #c0653f;
+  /* Crème soutenue : le trait des silhouettes dites « crème ». Ne porte
+     JAMAIS de texte, uniquement du trait (3,51:1 sur coquille). */
+  --color-creme-trace: #857c6a;
 
-  /* Familles — les piles de repli sont déclarées dans src/app/polices.ts */
+  /* --- Schemes de famille : un fond, un trait ---------------------------- */
+  --scheme-huiles-fond: #e8e7d6;
+  --scheme-huiles-trait: #47552f;
+  --scheme-conserves-fond: #ede1d3;
+  --scheme-conserves-trait: #8f4426;
+  --scheme-miels-fond: #f4e8cf;
+  --scheme-miels-trait: #7a5714;
+  --scheme-epicerie-fond: #ede8dc;
+  --scheme-epicerie-trait: #857c6a;
+  --scheme-infusions-fond: #e4e9dc;
+  --scheme-infusions-trait: #47552f;
+  --scheme-frais-fond: #e1e9e7;
+  --scheme-frais-trait: #1f4ea8;
+  --scheme-coffrets-fond: #dfe4ee;
+  --scheme-coffrets-trait: #1f4ea8;
+
+  /* --- Familles — les piles de repli sont dans src/app/polices.ts --------- */
   --font-titre: var(--police-titre);
+  --font-titre-italique: var(--police-titre-italique);
   --font-texte: var(--police-texte);
+  --font-mono: var(--police-mono);
 
-  /* Échelle d'affichage — fluide, sans requête de média */
-  --text-affiche: clamp(2.5rem, 1.7rem + 3.6vw, 4rem);
-  --text-affiche--line-height: 1.04;
+  /* --- Échelle typographique --------------------------------------------
+     SEPT degrés, du monument à l'étiquette. Chaque `clamp()` est à DOMINANTE
+     `rem` — la borne basse, la borne haute et le terme fixe de la partie
+     variable sont en rem, seul le coefficient de progression est en vw. C'est
+     l'interdit n° 20 de D37 et l'exigence WCAG 1.4.4 : un texte dimensionné en
+     `vw` seul ignore le réglage d'agrandissement du visiteur, qui doit tenir
+     jusqu'à 200 %.
+
+     La graisse fait partie du jeton. `--text-monument` et `--text-affiche`
+     sont en Bodoni 500 : une didone lourde en très grand corps devient une
+     tache, elle se tient en graisse moyenne. `--text-titre` remonte à 600
+     parce qu'un titre de section est plus petit et doit peser davantage.
+
+     Le plancher de Bodoni est `--text-titre`, à 1,5 rem (24 px) au plus
+     étroit — au-dessus des 20 px de l'interdit n° 10 de D37. Les quatre
+     degrés inférieurs sont en Schibsted ou en mono, jamais en didone.
+
+     LA RÉSERVE DE C12 EST LEVÉE (C13). Elle disait, à cet endroit exact, que
+     la phrase ci-dessus était vraie des JETONS et fausse du SITE RENDU : le
+     remplacement de Newsreader par Bodoni avait mis une didone sous 20 px
+     partout où un composant écrivait `font-titre` à côté d'une taille de
+     l'échelle par défaut de Tailwind — 32 endroits (3 en `text-sm`, 23 en
+     `text-base`, 6 en `text-lg`), dont deux CONSTANTES PARTAGÉES qui
+     portaient à elles seules trente éléments rendus.
+
+     C13 a repris ces 32 endroits, PUIS TROIS AUTRES que le recensement de C12
+     ne pouvait pas voir, et cette seconde moitié est la plus instructive.
+
+     LE RECENSEMENT DE C12 ET LE CONTRÔLE DE SORTIE DE C13 CHERCHAIENT TOUS
+     DEUX `font-titre`. Or il existe un second chemin vers la didone, et il
+     n'écrit ce mot nulle part : la règle `h1, h2, h3, h4` de `@layer base`,
+     quelques lignes plus bas dans ce fichier, pose `var(--font-titre)` sur
+     TOUT titre qui ne déclare pas de famille. Trois titres du site — l'encadré
+     réglementaire des CGV, le modèle de formulaire de rétractation, l'aide de
+     la page de suivi — portaient `text-xs` et rien d'autre : ils rendaient la
+     Bodoni à 12 px, et aucune recherche de `font-titre` ne pouvait les
+     trouver. Les trois étaient le même patron d'« étiquette qui s'ignore »
+     (capitales, interlettrage, graisse montée) ; ils sont passés à `etiquette`.
+
+     LA VÉRIFICATION N'EST PLUS UNE RECHERCHE DE TEXTE, ET C'EST L'ACQUIS DE
+     L'ÉPISODE : `scripts/verifier-typographie.mjs` parcourt les 142 titres du
+     dépôt, résout leurs classes — constantes partagées comprises —, en déduit
+     une famille et une taille EFFECTIVES, et couvre les DEUX chemins. Il est
+     dans `npm run controle` et onze cas de test le tiennent. Un `grep` a
+     manqué la brèche deux fois ; il ne la manquera pas une troisième.
+
+     Trois destinations, selon ce que l'élément EST :
+
+       - un libellé sériel (« Familles », « Zones », un sommaire) devient une
+         ÉTIQUETTE — mono capitales, classe `etiquette` ci-dessous ;
+       - un sous-titre de prose devient un SOUS-TITRE de texte — Schibsted,
+         graisse montée, classe `sous-titre` ci-dessous. Un sous-titre de
+         16 px n'est pas une étiquette : le passer en mono capitales aurait
+         crié là où il doit seulement guider ;
+       - un titre qui a vraiment besoin de la voix didone garde la didone et
+         monte au plancher (le nom de produit d'une carte de rayon, à 20 px).
+
+     `--text-meta` et `--text-label` sont désormais posés en entier, par les
+     deux utilitaires composés qui suivent ce bloc.
+     --------------------------------------------------------------------- */
+  --text-monument: clamp(3.5rem, 1rem + 10vw, 13rem);
+  --text-monument--line-height: 0.86;
+  --text-monument--letter-spacing: -0.03em;
+  --text-monument--font-weight: 500;
+
+  --text-affiche: clamp(2.25rem, 1.1rem + 4.8vw, 6rem);
+  --text-affiche--line-height: 0.95;
   --text-affiche--letter-spacing: -0.02em;
-  --text-titre: clamp(1.5rem, 1.2rem + 1.3vw, 2rem);
-  --text-titre--line-height: 1.18;
-  --text-titre--letter-spacing: -0.01em;
-  --text-chapeau: clamp(1.0625rem, 1rem + 0.4vw, 1.25rem);
-  --text-chapeau--line-height: 1.6;
+  --text-affiche--font-weight: 500;
 
-  /* Largeurs de composition */
+  --text-titre: clamp(1.5rem, 1.15rem + 1.5vw, 2.5rem);
+  --text-titre--line-height: 1.12;
+  --text-titre--letter-spacing: -0.01em;
+  --text-titre--font-weight: 600;
+
+  --text-chapeau: clamp(1.125rem, 1.05rem + 0.35vw, 1.375rem);
+  --text-chapeau--line-height: 1.55;
+  --text-chapeau--font-weight: 400;
+
+  --text-corps: clamp(1rem, 0.96rem + 0.18vw, 1.125rem);
+  --text-corps--line-height: 1.65;
+  --text-corps--font-weight: 400;
+
+  --text-meta: clamp(0.75rem, 0.72rem + 0.14vw, 0.875rem);
+  --text-meta--line-height: 1.45;
+  --text-meta--letter-spacing: 0.02em;
+  --text-meta--font-weight: 400;
+
+  --text-label: clamp(0.6875rem, 0.65rem + 0.16vw, 0.8125rem);
+  --text-label--line-height: 1.2;
+  --text-label--letter-spacing: 0.14em;
+  --text-label--font-weight: 500;
+
+  /* --- Largeurs et marges de composition --------------------------------- */
+  /* 68rem à 88rem : la refonte compose en pleine largeur sur grand écran. */
+  --container-page: 88rem;
+  /* La colonne de lecture ne bouge PAS : 36rem est une mesure de confort de
+     lecture (65 à 75 signes), elle n'a rien à voir avec la taille de l'écran. */
   --container-lisible: 36rem;
-  --container-page: 68rem;
+  --marge-page: clamp(1.25rem, 0.5rem + 3.2vw, 4.5rem);
+  --gouttiere: clamp(1rem, 0.6rem + 1.7vw, 2.25rem);
+
+  /* --- Mouvement (décision D37) ------------------------------------------
+     Cinq durées, un décalage, trois courbes. Pas une valeur de plus, et
+     aucune durée écrite à la main dans un composant : le vocabulaire est
+     FERMÉ. Les noms disent l'emploi, pas la vitesse.
+
+     Aucune des trois courbes ne sort de l'intervalle [0, 1] — c'est ce qui
+     les distingue d'une courbe élastique, dont la valeur dépasse son point
+     d'arrivée avant d'y revenir. Aucun rebond, aucun dépassement : la matière
+     de cette maison coule, elle ne sursaute pas.
+     --------------------------------------------------------------------- */
+  --ms-effleure: 180ms;
+  --ms-etat: 320ms;
+  --ms-revele: 620ms;
+  --ms-signature: 900ms;
+  --ms-hero: 1400ms;
+  --decalage-cascade: 70ms;
+  --ease-coule: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-verre: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --ease-scelle: cubic-bezier(0.76, 0, 0.24, 1);
+
+  /* ---------------------------------------------------------------------
+     LA MATIÈRE DU FOND — LE MARBRE DE LA MAISON (C19, troisième écriture)
+     ---------------------------------------------------------------------
+     TROIS TENTATIVES DE MATIÈRE « SUBTILE » ONT ÉCHOUÉ AU MÊME TEST, et il
+     n'y en a qu'un : le client regarde la page et dit ce qu'il voit. Grain à
+     0,055 — « le fond est toujours blanc uni ». Grain monté à 0,14, lavis
+     élargi — même verdict. Marbre à dix-neuf niveaux de plancher — même
+     verdict. On a répondu trois fois à une question qui n'était pas posée :
+     le reproche ne portait pas sur le DOSAGE d'une texture, il portait sur
+     son ABSENCE. Le client veut une matière QUI SE VOIT.
+
+     Il a fourni sa référence — un marbre blanc veiné, engendré par lui
+     (conforme à D35 : image ENGENDRÉE, jamais une banque d'images). C'est
+     elle qui est posée ici, retravaillée pour la maison par
+     `npm run preparer-marbre` (`scripts/preparer-marbre.mjs`, relevé dans
+     `preuves/c19/marbre-matiere.txt`).
+
+     POURQUOI LES DEUX PREMIÈRES MOUTURES DE MARBRE NE SE VOYAIENT PAS —
+     deux causes mesurées, aucune affaire de goût :
+
+       1. L'AFFINE PARTAIT DE L'EXTRÊME. Caler la droite sur le pixel le plus
+          sombre de la source, c'est dépenser toute la marge de contraste pour
+          une poignée de pixels : les percentiles à 0,4 % et 99,6 % la calent
+          désormais, et ce qui dépasse est écrêté. Le plancher est atteint par
+          une POPULATION, plus par un accident.
+       2. L'ENCODEUR MANGEAIT L'AMPLITUDE. Un AVIF avec pertes quantifie ; sur
+          dix-neuf niveaux utiles sa marche est du même ordre que le signal,
+          et il aplatit. Mesuré : plancher visé 236, plancher RENDU 244 —
+          l'écart demandé avait été divisé par deux avant d'atteindre l'œil.
+
+     D'OÙ LA FORME RETENUE, et c'est elle qui rend le curseur possible : LA
+     TUILE EST STOCKÉE À FORTE AMPLITUDE (plancher 176, soixante-dix-neuf
+     niveaux — l'encodeur a de quoi travailler) et la FEUILLE la ramène à
+     l'amplitude voulue par un voile de coquille. Le bruit de quantification
+     est divisé par la même chose que le signal.
+
+     L'ALGÈBRE DU VOILE, puisqu'elle décide de tout. La tuile est le PRODUIT
+     d'un gris `g` par la coquille ; le voile pose par-dessus un aplat de
+     coquille d'opacité (1 − o) :
+
+         rendu = (1−o)·coquille + o·coquille·g/255
+
+     soit un gris effectif g' = 255 − o·(255 − g). L'écart au champ est donc
+     EXACTEMENT proportionnel à `o`. C'est ce qui fait de `--marbre-opacite`
+     un vrai curseur : ±30 % dessus valent ±30 % de matière, sans reproduire
+     l'image, sans retoucher un octet.
+
+     QUATRIÈME ÉCRITURE — « LE MARBRE SE DEVINE À PEINE », DIT UNE QUATRIÈME
+     FOIS. Les trois moutures précédentes visaient 12 à 18 points d'écart et
+     l'ont atteint (13,2 relevés au 0,5ᵉ centile). LA CIBLE ÉTAIT FAUSSE : la
+     référence du client porte QUARANTE À SOIXANTE points d'écart sur fond
+     blanc, et c'est ce rendu-là qu'il demande depuis le début, réchauffé aux
+     tons de la maison. La cible passe donc à 35-45 points, et les deux leviers
+     bougent ENSEMBLE — le plancher de stockage descend de 176 à 145 (110
+     niveaux au lieu de 79) ET le voile s'ouvre de 0,22 à 0,45.
+
+     LES DEUX LEVIERS SONT REDONDANTS, ET LA MESURE LE PROUVE : 176 à 0,50 et
+     160 à 0,42 rendent le même écart (30,1 et 30,5 au 0,5ᵉ centile). Seul le
+     PRODUIT compte, exactement comme l'algèbre ci-dessus l'annonce. Ce qui les
+     départage est ailleurs : le poids de la tuile croît avec l'amplitude
+     stockée, et le plancher choisi décide de la MARGE DE CURSEUR qui reste
+     au-dessus du réglage livré. Le tableau complet est dans
+     `scripts/preparer-marbre.mjs`, à l'endroit du plancher.
+
+     MESURÉ AU RENDU FINAL, voile compris, sur les octets livrés :
+       · écart champ → veine  37,9 points de luminance sur 255 (0,5ᵉ centile),
+         48,7 au pixel le plus sombre — contre 13,2 et 17,7 à la mouture
+         précédente, ~6 pour le grain, 10 pour le premier marbre ;
+       · 63,4 % de la surface porte plus de 4 points d'écart (19,5 % avant) :
+         la matière occupe la page au lieu de la border ;
+       · AVIF 35,8 Ko, repli JPEG 54,2 Ko, une requête, toutes les pages.
+
+     CE QUI A CHANGÉ DE NATURE : LA CONTRAINTE N'ÉTAIT PAS DANS LE MARBRE,
+     ELLE ÉTAIT DANS CE QU'ON POSAIT DESSUS. Pendant trois moutures, le
+     plancher du fond était borné par l'ocre des étiquettes à 4,50 : il fallait
+     un fond très clair sous le moindre mot de douze pixels, donc un marbre
+     qu'on ne voit pas. Ce sont les DEUX ENCRES qui ont bougé, pas le seuil :
+
+       · tout ce qui est déclaré `data-sur-marbre` et n'est pas un titre passe
+         à `--color-encre` — vingt-deux chapeaux, fils d'Ariane et lignes de
+         registre, plus la baseline du héros. À 22 px un chapeau est du PETIT
+         texte au sens de WCAG (le seuil de 3,00 commence à 24) : en encre
+         douce il valait 4,09 contre la veine la plus sombre, en encre pleine
+         il vaut 8,48 ;
+       · `--color-ocre` descend de #7A5714 à #5B3E0C (motif complet et mesures
+         sur les quatre surfaces à l'endroit du jeton). L'étiquette de registre
+         reste sur la matière, parce qu'elle EST l'accent chaud des ouvertures
+         de page : elle passe de 3,40 à 5,08 contre la même veine.
+
+     Contre la veine la plus sombre (#bfbab0), au réglage livré : encre 8,48 et
+     ocre 5,08 pour un seuil de 4,50 (ces deux-là portent du petit texte sur la
+     matière) ; encre douce 4,09 et bleu 4,01 pour un seuil de 3,00 (ils n'y
+     paraissent qu'en grand, ou sur un panneau).
+
+     LA BUTÉE DU CURSEUR EST CALCULÉE, PLUS RELEVÉE. `preparer-marbre.mjs`
+     cherche par dichotomie, pour chaque encre, le voile où son contraste passe
+     sous son seuil — un tableau à cinq crans dirait « entre 0,50 et 0,60 », le
+     calcul dit 0,55 :
+         encre         tient 4,50 jusqu'à 0,92
+         encre douce   tient 3,00 jusqu'à 0,69
+         ocre          tient 4,50 jusqu'à 0,55   ← LA BUTÉE
+         bleu          tient 3,00 jusqu'à 0,68
+
+     ENTRE 0 ET 0,55, LE RÉGLAGE EST LIBRE : aucune vérification
+     d'accessibilité n'est à refaire, quel que soit le curseur. C'est ce qu'on
+     doit au client après quatre allers-retours sur ce fond — il peut monter ou
+     descendre la matière sans rien casser. Au-delà de 0,55, il faudrait
+     redescendre l'ocre encore d'un cran ; au-delà de 0,92, l'encre elle-même
+     cesserait de tenir AA petit texte.
+
+     LE RACCORD SE FAIT PAR FONDU ENROULÉ SUR LES DEUX AXES, plus par miroir.
+     Le miroir de la mouture précédente était imparable et se payait d'un
+     losange au centre — invisible tant que la matière l'était, insupportable
+     dès qu'elle se voit. Le fondu enroulé n'introduit AUCUNE symétrie ; les
+     coutures sont mesurées à 0,32 et 0,39 point d'écran contre un bruit
+     interne de 0,26 et 0,20, c'est-à-dire sous le pas de quantification.
+
+     LE LAVIS DE SECTIONS EST RETIRÉ, et proprement : un dégradé de trois tons
+     séparés par un pour cent passait DERRIÈRE une image opaque de pleine
+     page. Il n'aurait plus rien peint du tout. Le garder aurait été garder
+     une déclaration morte — l'anti-patron n° 21 de D37, sous un troisième
+     déguisement. Le grain `feTurbulence` disparaît pour l'autre raison de la
+     commande : la matière REMPLACE, elle ne se superpose pas.
+
+     `background-size: 100% auto` — la tuile fait la LARGEUR du document, donc
+     de la fenêtre. Deux conséquences voulues : aucune couture verticale ne
+     peut apparaître (la tuile ne se répète jamais horizontalement), et le
+     veinage garde la même échelle RELATIVE partout — sur un bureau de
+     1 440 px, une veine traverse quatre à cinq centimètres d'écran, ce que la
+     référence du client montrait ; sur un téléphone, elle traverse la même
+     fraction de l'écran. Pas de `background-attachment: fixed` : il ferait
+     repeindre le fond à chaque image de défilement sur les pages dont la note
+     est publiée. */
+
+  /**
+   * LA TUILE, AVIF ET SON REPLI. Même forme qu'`--ambiance` (C15) : deux
+   * adresses, chacune avec son type, pour qu'un moteur qui ne lit pas l'AVIF
+   * n'aille pas le télécharger avant de renoncer.
+   */
+  --marbre-page: image-set(
+    url('/fond/marbre-coquille.avif') type('image/avif'),
+    url('/fond/marbre-coquille.jpg') type('image/jpeg')
+  );
+
+  /**
+   * LE CURSEUR D'INTENSITÉ — UN SEUL NOMBRE, ET C'EST LE SEUL À TOUCHER.
+   *
+   * 0 = pas de marbre (coquille nue) · 1 = la tuile à son amplitude de
+   * stockage (invivable : elle est stockée forte exprès). LE RÉGLAGE EST LIBRE
+   * DE 0 À 0,55 : dans cette plage, aucune vérification d'accessibilité n'est
+   * à refaire. La butée est CALCULÉE par `npm run preparer-marbre` (dichotomie
+   * sur chaque encre, contre la veine la plus sombre de la tuile) et elle est
+   * tenue par l'ocre des étiquettes, seule encre non-encre à porter du petit
+   * texte sur la matière. Le tableau complet est cinq écrans plus haut.
+   */
+  --marbre-opacite: 0.45;
+
+}
+
+/* ===========================================================================
+   LE REGISTRE — trois classes COMPOSÉES, parce qu'un jeton `--text-*` ne sait
+   pas tout dire
+   ===========================================================================
+
+   Un jeton `--text-<nom>` de Tailwind 4 porte quatre choses au plus : la
+   taille, l'interligne, l'interlettrage et la graisse. Il ne porte NI la
+   famille, NI les variantes de fonte. Or les deux derniers degrés de l'échelle
+   n'ont de sens qu'avec les deux : `--text-meta` est du REGISTRE, donc de la
+   mono à chiffres tabulaires (des poids, des dates et des quantités qui
+   s'alignent en colonne) ; `--text-label` est de l'ÉTIQUETTE, donc de la mono
+   en capitales — son interlettrage de +0,14 em est calculé pour des capitales
+   et rendrait un bas-de-casse illisible.
+
+   C12 les avait donc posés à moitié, et l'a écrit. Les voici finis, sous la
+   seule forme qui convienne : des UTILITAIRES. Le choix n'est pas cosmétique.
+   Écrites en `@utility`, ces trois classes vivent dans la couche `utilities`,
+   c'est-à-dire au-dessus de la règle `h1, h2, h3, h4` de `@layer base` qui
+   impose la didone. Un `<h2>` peut donc porter `etiquette` et sortir en mono
+   capitales, sans `!important` et sans dépendre de l'ordre dans lequel les
+   classes sont écrites dans le `className`.
+
+   `sous-titre` est la troisième, et elle règle la dette de C12 : un titre en
+   didone sous 20 px est interdit (D37, interdit n° 10), et un sous-titre de
+   16 px n'est pas pour autant une étiquette. Il bascule vers la Schibsted,
+   graisse montée — un rôle de texte, dit par la police de texte. Son
+   interligne est écrit ici (1,35) plutôt qu'emprunté à `--text-corps` (1,65) :
+   un titre de deux lignes se tient serré, un paragraphe respire.
+
+   AUCUNE des trois ne pose d'opacité, de transformation ni de transition.
+   Elles peuvent donc habiller un élément que C17 rendra révélable sans entrer
+   en conflit avec les règles de `[data-revelation]`, qui vivent en
+   `@layer base` et que n'importe quel utilitaire battrait.
+   =========================================================================== */
+
+@utility registre {
+  font-family: var(--font-mono);
+  font-size: var(--text-meta);
+  line-height: var(--text-meta--line-height);
+  letter-spacing: var(--text-meta--letter-spacing);
+  font-weight: var(--text-meta--font-weight);
+  font-variant-numeric: tabular-nums;
+}
+
+@utility etiquette {
+  font-family: var(--font-mono);
+  font-size: var(--text-label);
+  line-height: var(--text-label--line-height);
+  letter-spacing: var(--text-label--letter-spacing);
+  font-weight: var(--text-label--font-weight);
+  text-transform: uppercase;
+}
+
+@utility sous-titre {
+  font-family: var(--font-texte);
+  font-size: var(--text-corps);
+  line-height: 1.35;
+  font-weight: 600;
+}
+
+/* ===========================================================================
+   LE PANNEAU (C19) — la feuille posée sur le marbre
+   ===========================================================================
+
+   LE FOND EST DEVENU UNE MATIÈRE, DONC LA LISIBILITÉ CHANGE DE MOYEN. Tant
+   que la page était un aplat, un texte y reposait sur une couleur unique et le
+   contraste se calculait entre deux jetons. Sur un marbre, chaque ligne repose
+   sur ce qui passe dessous — une veine ici, du champ nu deux lignes plus bas.
+   Les ratios TIENNENT (le pire couple mesuré au pixel est à 4,95 pour un seuil
+   de 4,50), mais tenir un seuil et se lire confortablement sont deux choses
+   différentes : l'œil qui suit un paragraphe de dix lignes n'a pas à traverser
+   une veine.
+
+   LA RÉPONSE EST UNE SURFACE, PAS UN EFFACEMENT. On ne rend pas le marbre plus
+   pâle — c'est ce qu'on a fait trois fois, et c'est ce que le client a refusé
+   trois fois. On pose la lecture SUR quelque chose. Le geste est celui d'une
+   table de marbre sur laquelle on dépose des feuilles.
+
+   DEUX NIVEAUX D'ÉLÉVATION, ET ILS SE DISTINGUENT PAR LEUR EMPLOI :
+
+     · `panneau` — le VERRE (#F8F4EA), plus clair que la page. C'est la feuille
+       posée sur le marbre : elle porte la lecture suivie et la saisie.
+     · `bg-papier` (#EDE8DC), plus sombre que la page — la convention qui
+       existe depuis C6 et qu'on ne touche pas. C'est la NOTE posée sur la
+       feuille : récapitulatifs, encarts de gabarit, avertissements. Elle est
+       opaque, donc aucune veine ne la traverse ; elle reste chez elle.
+
+   CE QUI VA SUR UN PANNEAU : la prose de lecture, les tableaux, le droit, les
+   formulaires. CE QUI RESTE SUR LE MARBRE : les grands titres didone, les
+   étiquettes de registre, les fils d'Ariane, et le héros — qui est une
+   composition, pas de la lecture. Ces derniers se DÉCLARENT par
+   `data-sur-marbre`, pour que `preuves/c19/marbre-in-vivo.mjs` puisse exiger
+   qu'il ne reste rien d'autre : une exception écrite se relit, une exception
+   tacite se perd.
+
+   ═══════════════════════════════════════════════════════════════════════════
+   ET SUR LE MARBRE, DEUX ENCRES — PAS UNE DE PLUS
+   ═══════════════════════════════════════════════════════════════════════════
+
+   C'est la règle que la quatrième écriture du fond a rendue nécessaire, et
+   c'est la seule chose à retenir de tout ce bloc :
+
+       tout texte posé sur la matière est en `--color-encre`,
+       sauf l'étiquette d'ouverture, qui est en `--color-ocre`.
+
+   LE MOTIF EST UN CHANGEMENT D'ÉCHELLE, PAS UNE PRÉFÉRENCE. Tant que la
+   matière valait 13 points d'écart, les quatre encres du système tenaient AA
+   petit texte contre n'importe quelle veine, et le choix de l'encre était
+   affaire de hiérarchie. À 38 points, elles ne le tiennent plus : encre douce
+   4,09 et bleu 4,01 contre la veine la plus sombre, pour un seuil de 4,50 dès
+   qu'un texte descend sous 24 px. Les deux encres restent PARFAITEMENT
+   employables — sur un panneau, sur du papier, en grand — mais plus posées
+   nues sur la matière en petit corps.
+
+   CE QUE LA RÈGLE COÛTE, ET IL FAUT LE DIRE : la nuance tonale disparaît du
+   marbre. Un compteur de famille, un fil d'Ariane, un chapeau y sont désormais
+   de la même encre que le titre. La hiérarchie n'est pas perdue pour autant —
+   elle passe par la TAILLE et par la FAMILLE (mono capitales de douze pixels
+   contre didone de quarante), qui sont les deux écarts que ce système a
+   toujours employés en premier. Ce qu'on perd en tons, on le gagne en matière,
+   et c'est l'échange que le client a demandé quatre fois.
+
+   CE QUE LA RÈGLE PERMET : le curseur `--marbre-opacite` devient réglable
+   sans nouvelle recette d'accessibilité, de 0 à 0,55. C'est `marbre-in-vivo`
+   qui le vérifie, page par page, en confrontant chaque petit texte de la
+   matière NON PAS à la veine qui passe dessous ce jour-là, mais à la pire
+   veine que la tuile puisse poser où que ce soit.
+
+   LE REMPLISSAGE EST EN `clamp()`, comme celui de `.cadre-photo` — dont ce
+   panneau est le frère et dont il copie la forme. Il n'y a pas d'ombre portée :
+   le site n'en a aucune depuis C12, et une ombre sur un marbre clair se lit
+   comme une salissure.
+
+   L'IMPRESSION LE RETIRE ENTIÈREMENT, et ce n'est pas une précaution de
+   principe. Un aplat de verre sur quinze pages de CGV serait un gris sale ; et
+   surtout, un remplissage HORIZONTAL sur l'enveloppe d'un tableau rognerait la
+   largeur imprimable et rouvrirait le défaut de C16 — les mentions légales du
+   tableau des quinze régimes coupées au bord de la feuille. Le contrôle
+   d'impression mesure `scrollWidth - clientWidth` à 794 points et n'accepte
+   que zéro ; l'annulation ci-dessous est ce qui le laisse vert. */
+@utility panneau {
+  background-color: var(--color-verre);
+  border: 1px solid var(--color-filet);
+  border-radius: 0.125rem;
+  padding: clamp(1rem, 0.7rem + 1vw, 1.75rem);
+}
+
+/* ===========================================================================
+   LA COQUILLE (C13) — l'en-tête qui se scelle, le roll-up de la navigation,
+   la pastille du panier
+   ===========================================================================
+
+   Ce bloc est en `@layer components`, donc SOUS les utilitaires : n'importe
+   quelle classe Tailwind posée dans un composant le corrige encore. C'est
+   voulu — ces règles décrivent un COMPORTEMENT (coller, se sceller, rouler),
+   pas une apparence figée, et C15 comme C16 doivent pouvoir en reprendre
+   l'apparence sans se battre contre la spécificité.
+
+   ---------------------------------------------------------------------------
+   « TRANSPARENT AU SOMMET » : ce qui est tenu, ce qui est arbitré
+   ---------------------------------------------------------------------------
+   Le plan directeur décrit un en-tête transparent au sommet, qui prend fond et
+   filet une fois passés quelque quatre-vingts pixels. La transparence LITTÉRALE
+   a été écartée, et pour une raison mesurable plutôt que par goût :
+
+   1. Le fond du site EST la coquille. Un en-tête transparent posé sur la
+      coquille est, au pixel près, un en-tête peint en coquille. La transparence
+      ne devient visible que le jour où un héros pleine largeur passe dessous —
+      c'est-à-dire en C15, avec une image faite pour ça.
+   2. En attendant, elle ne serait pas neutre : elle serait FAUSSE. L'en-tête
+      est collant ; du texte défile derrière lui. Transparent, il laisserait le
+      fil d'Ariane d'une fiche traverser la navigation — mesuré : `<main>`
+      s'ouvre sur `pt-8` (2 rem) sur la fiche produit, contre quatre-vingts
+      pixels de seuil, donc quarante-huit pixels pendant lesquels deux textes
+      se superposent.
+   3. Le critère de sortie de la tranche exige des contrastes MESURABLES À TOUT
+      MOMENT DU DÉFILEMENT. Un texte posé sur un fond transparent n'a pas de
+      contraste : il a celui de ce qui passe derrière, qui change à chaque
+      pixel.
+
+   Ce que la tranche livre à la place tient la promesse du geste sans le
+   défaut : au sommet, AUCUNE SÉPARATION — pas de filet, pas de démarcation, la
+   page est d'un seul tenant ; une fois scellé, l'en-tête monte sur le VERRE
+   (`--color-verre`, le fond « surélevé » de C12, dont c'est exactement l'emploi
+   déclaré) et laisse descendre son filet. Le fond ne devient pas visible : il
+   CHANGE, ce qui se voit mieux qu'une transparence sur fond identique.
+
+   Contrastes des deux états, recalculés : encre sur coquille 13,93:1, encre sur
+   verre 14,92:1 ; encre douce sur coquille 6,71:1, sur verre 7,19:1. Le
+   scellement AMÉLIORE les quatre.
+
+   ---------------------------------------------------------------------------
+   Le roll-up : un doublon décoratif, jamais un contenu masqué
+   ---------------------------------------------------------------------------
+   Chaque lien porte sa ligne visible ET une copie `aria-hidden` posée juste
+   sous elle, dans une fenêtre d'une ligne de haut à débordement caché. Au
+   survol, les deux montent d'une hauteur de ligne : la copie prend la place de
+   l'original. Le CONTENU n'est donc jamais masqué — c'est le doublon qui
+   attend hors champ —, le nom accessible du lien reste celui de la ligne
+   visible, et sans CSS il ne reste qu'un lien ordinaire.
+
+   La fenêtre à débordement caché est posée sur un `<span>` INTÉRIEUR et jamais
+   sur le `<a>` : la bague de focus à deux tons de C12 déborde de six pixels
+   autour de l'élément, et un `overflow: hidden` sur l'élément focalisable
+   l'aurait coupée — exactement sur les liens que le clavier traverse en
+   premier.
+
+   Le mouvement n'existe QUE sous `no-preference` (D37) ; sous mouvement réduit
+   le survol ne fait rien, et c'est la bonne réponse : le survol est un effet,
+   pas une révélation.
+   =========================================================================== */
+
+@layer components {
+  /*
+   * L'EN-TÊTE NE COLLE QU'À PARTIR DE `md`, et c'est une mesure.
+   *
+   * Sur un écran de 390 px, la navigation ne tient pas sur un rang : quatre
+   * destinations en mono capitales font 417 px à elles seules. L'en-tête y
+   * mesure donc 160,9 px — dix-neuf pour cent d'une fenêtre de 844 px. Non
+   * collant, il ne les retire qu'UNE FOIS, en haut du document ; collant, il
+   * les retirerait à chaque écran.
+   *
+   * Deuxième raison, plus dure que la première : `scroll-padding-top` doit
+   * valoir la hauteur de l'en-tête, et les pages légales comptent des dizaines
+   * d'ancres. Un en-tête collant de 161 px sur mobile obligerait à réserver
+   * autant au-dessus de chaque ancre, sur toutes les pages et à toutes les
+   * largeurs — un cinquième de fenêtre offert à un en-tête qu'on vient de
+   * quitter.
+   *
+   * En dessous de `md`, l'en-tête défile donc avec la page, et il porte son
+   * filet EN PERMANENCE : il n'a pas d'état scellé à atteindre, il ne doit pas
+   * pour autant flotter sans séparation au-dessus du contenu.
+   *
+   * ─────────────────────────────────────────────────────────────────────────
+   * C17 : LA PHRASE CI-DESSUS ÉTAIT FAUSSE SUR UN POINT, ET LA MESURE LE DIT
+   * ─────────────────────────────────────────────────────────────────────────
+   *
+   * C13 écrivait ici « un menu repliable réglerait la question, mais il
+   * demanderait du JavaScript ». Les deux moitiés sont inexactes, et
+   * `preuves/c17/menu-repli-experience.mjs` les a départagées sur le site
+   * livré, au profil de la campagne (390 × 844, mouvement réduit) :
+   *
+   * 1. IL NE DEMANDE PAS DE JAVASCRIPT. `<details>` replie et déplie en CSS
+   *    pur, sans un octet de paquet et sans nouvel îlot. L'obstacle n'a jamais
+   *    été là.
+   * 2. IL NE RÈGLE PAS LA QUESTION TOUT SEUL. Replier la seule navigation rend
+   *    38,6 px sur 160,9 — vingt-quatre pour cent. Ce qui pèse est le reste :
+   *    le bloc de marque sur deux lignes et les remplissages. Un repliable qui
+   *    rendrait l'en-tête collable devrait donc replier bien plus que le menu.
+   * 3. ET IL TOMBE SUR UN OBSTACLE QUE PERSONNE N'AVAIT NOMMÉ. Fermé par
+   *    défaut, il retire leur boîte aux trois liens ET à la pastille du panier,
+   *    qui vit dans la même liste. Or la campagne gelée clique
+   *    `lienNavigation('Boutique')` et lit `pastillePanier()` SUR CE PROFIL :
+   *    les deux gestes échouent (relevé versionné). Playwright exige une boîte
+   *    non vide pour agir.
+   *
+   * Le conflit n'est donc pas technique, il est de PÉRIMÈTRE : rendre l'en-tête
+   * collant sur mobile suppose de modifier deux gestes de `parcours.spec.ts`
+   * (ouvrir le menu avant de cliquer), et le critère de sortie de C17 interdit
+   * de toucher au harnais — « il ne se plie pas au test ». L'écart C13 n° 2
+   * reste donc ouvert, mais il a changé de nature : ce n'est plus « il faudrait
+   * du JavaScript », c'est « il faut décider que le menu mobile se replie, et
+   * mettre le harnais d'accord avec cette décision ». Une tranche qui le fera
+   * commencera par les deux lignes de la campagne, pas par le composant.
+   */
+  .entete {
+    background-color: var(--color-coquille);
+    border-bottom: 1px solid var(--color-filet);
+  }
+
+  @media (min-width: 48rem) {
+    .entete {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      border-bottom-color: transparent;
+    }
+
+    html[data-entete='scelle'] .entete {
+      background-color: var(--color-verre);
+      border-bottom-color: var(--color-filet);
+    }
+  }
+
+  /*
+   * La sentinelle : quatre-vingts pixels de haut, un pixel de large, au sommet
+   * du document. Elle ne se voit pas, ne se lit pas, ne s'attrape pas. Elle est
+   * en position absolue par rapport au bloc conteneur initial — donc elle
+   * DÉFILE avec la page, contrairement à un élément fixe —, ce qui est la seule
+   * chose qu'on lui demande : sortir de la fenêtre pour que l'observateur le
+   * dise.
+   */
+  [data-sentinelle-entete] {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 1px;
+    height: 5rem;
+    pointer-events: none;
+  }
+
+  .lien-nav-fenetre {
+    display: block;
+    position: relative;
+    overflow: hidden;
+    height: calc(var(--text-label--line-height) * 1em);
+    white-space: nowrap;
+  }
+
+  .lien-nav-ligne {
+    display: block;
+  }
+
+  /* La copie, posée exactement une ligne plus bas, hors de la fenêtre. */
+  .lien-nav-ligne + .lien-nav-ligne {
+    position: absolute;
+    top: 100%;
+    left: 0;
+  }
+
+  .pastille-chiffre {
+    display: block;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) and (min-width: 48rem) {
+  .entete {
+    transition:
+      background-color var(--ms-etat) var(--ease-verre),
+      border-color var(--ms-etat) var(--ease-verre);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+
+  .lien-nav-ligne {
+    transition: transform var(--ms-effleure) var(--ease-coule);
+  }
+
+  .lien-nav:hover .lien-nav-ligne,
+  .lien-nav:focus-visible .lien-nav-ligne {
+    transform: translateY(-100%);
+  }
+
+  /*
+   * Le chiffre du panier roule, et la pastille bat UNE fois — à l'ajout
+   * seulement. Les deux n'animent que `transform` et `opacity` (D37), donc
+   * aucun décalage cumulé : le rectangle de la pastille garde sa largeur fixe
+   * de C4, avant, pendant et après.
+   */
+  .pastille-chiffre {
+    animation: pastille-roulement var(--ms-effleure) var(--ease-coule) both;
+  }
+
+  [data-pastille-monte] {
+    animation: pastille-battement var(--ms-etat) var(--ease-verre);
+  }
+}
+
+@keyframes pastille-roulement {
+  from {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes pastille-battement {
+  0% {
+    transform: none;
+  }
+
+  45% {
+    transform: scale(1.16);
+  }
+
+  100% {
+    transform: none;
+  }
 }
 
 @layer base {
@@ -118,13 +872,143 @@
     color-scheme: light;
   }
 
+  /*
+   * `html:not(.lenis)` et non `html` — préparation du défilement adouci (D37).
+   *
+   * Lenis pose la classe `lenis` sur la racine et prend la main sur le
+   * défilement. Les deux mécanismes cumulés se battent : le navigateur anime
+   * un saut d'ancre pendant que la bibliothèque en anime un autre. La règle
+   * native se retire donc d'elle-même le jour où Lenis monte, sans qu'aucun
+   * script n'ait à la défaire.
+   */
   html {
     -webkit-text-size-adjust: 100%;
+  }
+
+  html:not(.lenis) {
     scroll-behavior: smooth;
   }
 
+  /*
+   * L'EN-TÊTE EST COLLANT DEPUIS C13, DONC LES ANCRES DOIVENT LE SAVOIR.
+   *
+   * Sans cette ligne, un clic sur une entrée de sommaire — les pages légales en
+   * comptent des dizaines — amène le titre visé EXACTEMENT sous l'en-tête, qui
+   * le recouvre. Le visiteur atterrit sur un paragraphe dont il ne voit pas le
+   * titre, et croit avoir raté sa cible.
+   *
+   * `scroll-padding-top` sur la racine règle les ancres du site entier d'une
+   * seule déclaration, là où les `scroll-mt-8` posés par les pages en C7
+   * réservaient 2 rem chacun — assez quand l'en-tête défilait avec le reste,
+   * plus assez maintenant. Ils sont conservés : ils s'additionnent à rien,
+   * c'est le plus grand des deux qui décide, et les retirer aurait été une
+   * modification de contenu dans des pages que C16 doit reprendre.
+   *
+   * 6,5 rem = la hauteur de l'en-tête (5 rem environ) plus une respiration.
+   *
+   * La règle est bornée à `md` comme le collage lui-même : en dessous,
+   * l'en-tête défile avec la page et ne recouvre rien, donc réserver de la
+   * place au-dessus des ancres coûterait un dixième de fenêtre pour rien.
+   */
+  @media (min-width: 48rem) {
+    html {
+      scroll-padding-top: 6.5rem;
+    }
+  }
+
+  /*
+   * LA HAUTEUR DE L'EN-TÊTE, EN VARIABLE (C15).
+   *
+   * Un second élément colle depuis cette tranche — la barre des familles du
+   * rayon —, et il doit s'arrêter SOUS l'en-tête. Le nombre existait déjà, en
+   * dur, dans le `scroll-padding-top` juste au-dessus ; l'écrire une seconde
+   * fois en dur aurait garanti qu'un jour les deux divergent.
+   *
+   * Elle vaut ZÉRO en dessous de `md`, et ce n'est pas une valeur de repli :
+   * c'est la vérité à cette largeur, où l'en-tête défile avec la page (mesure
+   * de C13 — collant, il occuperait 155 px, dix-huit pour cent d'une fenêtre de
+   * téléphone).
+   */
+  :root {
+    --hauteur-entete: 0px;
+  }
+
+  @media (min-width: 48rem) {
+    :root {
+      /* 6 rem = 96 px. L'en-tête en mesure 92 à 1440 px de large (mesuré par
+         `preuves/c15/panneau-collant.mjs`, qui a d'abord trouvé la barre des
+         familles DOUZE PIXELS SOUS lui : la première valeur, 5 rem, venait du
+         commentaire de `scroll-padding-top` et non d'une mesure). Quatre pixels
+         de respiration, comme le `scroll-padding-top` s'en accorde deux et
+         demi de plus pour les ancres. */
+      --hauteur-entete: 6rem;
+    }
+  }
+
+  /*
+   * ═══════════════════════════════════════════════════════════════════════
+   *  LE MARBRE — CE QUE LE VISITEUR A SOUS LES YEUX
+   * ═══════════════════════════════════════════════════════════════════════
+   *
+   * Le mécanisme, ses mesures et son curseur sont écrits en tête de fichier,
+   * au jeton `--marbre-page`. Ici, seulement ce que la règle fait.
+   *
+   * DEUX COUCHES DE FOND, et l'ordre EST le réglage : le voile de coquille
+   * par-dessus, la tuile de marbre dessous. Rien d'autre — pas de troisième
+   * couche, pas de grain ajouté par-dessus. La commande disait REMPLACER, et
+   * superposer deux textures aurait rendu un fond sale plutôt qu'un fond
+   * riche : le marbre porte déjà sa propre irrégularité.
+   *
+   * ZÉRO DÉCALAGE CUMULÉ, PAR CONSTRUCTION. Une image de FOND n'occupe aucune
+   * place dans le flux : son arrivée ne déplace rien. Et la couleur de repli
+   * est la coquille elle-même, donc l'arrivée de la tuile ne change même pas
+   * la teinte moyenne de la page — elle y ajoute des veines. C'est ce qui
+   * permet de la poser sur les vingt-deux routes sans rouvrir la question du
+   * décalage cumulé, qui est mesurée et publiée depuis C13.
+   *
+   * LE POIDS EST PAYÉ SUR TOUTES LES PAGES, et il est déclaré : 22,7 Ko en
+   * AVIF (repli JPEG 40,3 Ko), une seule requête, mise en cache pour toute la
+   * visite. Ce n'est pas un budget de D36 — les plafonds d'images de D36
+   * portent sur le rayon (180 Ko) et la fiche (120 Ko), c'est-à-dire sur les
+   * photographies de produit. Le fond entre dans `mesurer-transfert`, et il y
+   * est visible.
+   *
+   * À L'IMPRESSION, RIEN DE TOUT CELA : la feuille `print` remet un blanc
+   * pur, comme depuis C7. Un marbre tramé par une imprimante à jet serait un
+   * aplat gris sale sur quinze pages de CGV.
+   */
   body {
-    background-color: var(--color-creme);
+    /* LA COULEUR RESTE LA COQUILLE, et elle n'est pas un ornement : c'est ce
+       qui est peint AVANT que la tuile n'arrive. Le fond ne blanchit jamais,
+       aucune bascule de couleur ne se produit au chargement, donc aucun
+       décalage cumulé ni aucun clignotement. */
+    background-color: var(--color-coquille);
+
+    /* DEUX COUCHES, ET L'ORDRE EST LE MÉCANISME. La première déclarée est la
+       plus HAUTE : c'est le voile de coquille, dont l'alpha vaut (1 − o) ; le
+       marbre est dessous et transparaît à hauteur de `o`. Le voile est écrit
+       en `linear-gradient` de la même couleur deux fois parce qu'une couche de
+       `background-image` ne sait pas être un aplat autrement — `background-
+       color` est déjà pris, et il est DESSOUS la tuile, donc inutilisable ici.
+
+       `color-mix(… , transparent P%)` plutôt qu'un `rgb()` littéral : la
+       coquille reste un JETON, et le jour où elle change, le voile la suit. */
+    background-image:
+      linear-gradient(
+        color-mix(in srgb, var(--color-coquille), transparent calc(var(--marbre-opacite) * 100%)),
+        color-mix(in srgb, var(--color-coquille), transparent calc(var(--marbre-opacite) * 100%))
+      ),
+      var(--marbre-page);
+    background-repeat: no-repeat, repeat;
+
+    /* Le voile couvre toute l'aire ; la tuile fait la LARGEUR du document et
+       se répète vers le bas. Voir le commentaire du jeton pour le motif. */
+    background-size:
+      100% 100%,
+      100% auto;
+    background-position:
+      0 0,
+      0 0;
     color: var(--color-encre);
     font-family: var(--font-texte);
     font-optical-sizing: auto;
@@ -143,10 +1027,23 @@
     text-wrap: pretty;
   }
 
+  /*
+   * LA BAGUE DE FOCUS EST À DEUX TONS, et c'est une exigence de fond.
+   *
+   * Un seul trait d'encre suffit sur la coquille. Il disparaît sur un aplat
+   * sombre — le pied de page, un bouton olive, un fond encre — c'est-à-dire
+   * exactement là où le clavier a le plus besoin de savoir où il est. Le halo
+   * de coquille posé AUTOUR du trait garantit qu'au moins l'un des deux tons
+   * tranche, quel que soit le fond : encre sur clair, coquille sur sombre.
+   *
+   * `box-shadow` et non un second `outline` : il n'y a qu'un outline par
+   * élément. L'ombre ne participe pas à la mise en page, elle ne décale donc
+   * rien — la même règle que celle des animations (D37).
+   */
   :focus-visible {
-    outline: 3px solid var(--color-terre);
+    outline: 3px solid var(--color-encre);
     outline-offset: 3px;
-    border-radius: 2px;
+    box-shadow: 0 0 0 6px var(--color-coquille);
   }
 
   ::selection {
@@ -154,17 +1051,1689 @@
     color: var(--color-encre);
   }
 
+  /* =========================================================================
+     RÉVÉLATIONS AU DÉFILEMENT — LES RÈGLES ONT DÉMÉNAGÉ (C18)
+     =========================================================================
+
+     Elles ne sont plus dans cette couche. Le bloc qui les porte est écrit HORS
+     COUCHE, juste après la fermeture de `@layer base` — voir « LES RÉVÉLATIONS
+     SORTENT DE LEUR COUCHE ». Le motif y est écrit avec sa mesure : depuis
+     C17, les quinze vignettes du rayon ne se révélaient pas, elles
+     SURGISSAIENT, parce que `.carte-produit` porte sa propre `transition` dans
+     `@layer components` et qu'une couche supérieure bat la couche `base` quelle
+     que soit la spécificité.
+
+     CE QUI RESTE ICI, et qui doit y rester : le filet du mouvement réduit,
+     ci-dessous. Il est `!important`, et pour les déclarations importantes
+     l'ordre des couches est INVERSÉ — une importante posée hors couche a la
+     plus faible précédence de toutes. Le sortir d'ici l'affaiblirait.
+     ======================================================================= */
+
+  /* =========================================================================
+     MOUVEMENT RÉDUIT — le niveau 1 des trois de D37
+     =========================================================================
+
+     CE QUE CE FILET NE FAIT PAS, contrairement à ce qu'on écrit spontanément.
+     Il n'est PAS l'organe qui sauve le visiteur activant le mouvement réduit
+     en cours de visite. Ce cas-là se répare tout seul, et par construction :
+     l'état masqué n'est écrit QUE dans le bloc
+     `@media (prefers-reduced-motion: no-preference)` (désormais hors couche),
+     lequel cesse d'être appliqué à l'instant où le réglage bascule. L'`opacity:
+     0` disparaît donc de lui-même, sans que rien ne l'écrase. Croire l'inverse
+     revient à se donner un mérite que la structure des médias assurait déjà.
+
+     CE QU'IL FAIT, et pourquoi il vaut ses deux lignes : il couvre l'ÉTAT
+     MASQUÉ POSÉ EN STYLE INLINE. Le contrôleur de révélation de C17 est un
+     script ; la manière la plus naturelle d'écrire un observateur est de
+     poser `element.style.opacity = '0'` puis de le relever au passage. Un
+     style inline bat toute déclaration d'auteur — sauf une déclaration
+     d'auteur `!important`, qui le bat à son tour. C'est exactement le rapport
+     de force ici : `opacity: 1 !important` reprend la main sur un
+     `element.style.opacity` que le mouvement réduit aurait laissé à zéro,
+     parce que l'observateur n'a pas été instancié pour le relever.
+
+     C'est aussi pourquoi l'opacité ET la transformation sont toutes deux
+     rétablies explicitement, et pourquoi neutraliser la seule DURÉE ne
+     suffirait pas : une transition de durée nulle ne fait pas apparaître un
+     élément dont l'état de départ est `opacity: 0`, elle le rend invisible
+     instantanément au lieu de progressivement.
+
+     La neutralisation générale des durées est CONSERVÉE en dessous : elle ne
+     concerne plus les révélations (dont l'état final est désormais garanti
+     par les deux lignes ci-dessous) mais tout le reste — les transitions de
+     survol, les changements d'état d'interface, et les animations CSS
+     légitimes qu'une tranche ultérieure pourrait écrire.
+     ======================================================================= */
+
   @media (prefers-reduced-motion: reduce) {
-    html {
+    /*
+     * `html:not(.lenis)` et non `html` : le sélecteur doit AVOIR LA MÊME
+     * SPÉCIFICITÉ que celui qu'il annule, sans quoi il ne l'annule pas. Écrit
+     * `html`, il pèse (0,0,1) contre (0,1,1) et le défilement adouci natif
+     * survivrait au mouvement réduit — une régression silencieuse, invisible
+     * partout sauf au clic sur une ancre.
+     */
+    html:not(.lenis) {
       scroll-behavior: auto;
+    }
+
+    html.mouvement [data-revelation] {
+      opacity: 1 !important;
+      transform: none !important;
     }
 
     *,
     *::before,
     *::after {
       animation-duration: 0.01ms !important;
+      animation-delay: 0ms !important;
       animation-iteration-count: 1 !important;
       transition-duration: 0.01ms !important;
+      transition-delay: 0ms !important;
+    }
+  }
+}
+
+/* ===========================================================================
+   LES RÉVÉLATIONS SORTENT DE LEUR COUCHE (C18) — hérité I2 de la revue C17
+   ===========================================================================
+
+   CE BLOC VIVAIT DANS `@layer base` DEPUIS C12, ET C'ÉTAIT UN DÉFAUT LIVRÉ.
+
+   La revue de C17 a signalé le risque au futur : « un utilitaire
+   opacity/translate/transition posé un jour sur un bloc révélé l'éteindrait en
+   silence ». La mesure de C18 le trouve au PRÉSENT, et pas dans un utilitaire :
+   dans `@layer components`.
+
+   `.carte-produit` y déclare sa propre `transition` (le fond et le filet qui
+   passent au scheme de la famille au survol, C15). Les quinze vignettes du
+   rayon portent AUSSI `data-revelation`. Et dans le modèle des couches CSS,
+   c'est la COUCHE qui décide avant la spécificité : `components` bat `base`.
+   Relevé au style calculé sur le livrable (`preuves/c18/couche-revelation-
+   avant.txt`), sur un bloc de chaque zone :
+
+     accueil — encart          transition-property  opacity, transform    ✓
+     accueil — ligne famille   transition-property  opacity, transform    ✓
+     rayon   — vignette        transition-property  background-color,
+                                                    border-color          ✗
+     fiche   — bloc de prose   transition-property  opacity, transform    ✓
+
+   Conséquence, invisible dans tout fichier et parfaitement visible ici :
+   depuis C17, les quinze vignettes du rayon ne se RÉVÈLENT pas — elles
+   surgissent. Leur opacité passe de 0 à 1 sans transition, et leur cascade
+   n'existe pas non plus (`transition-delay` calculé : 0 s, pour un rang
+   annoncé de 1 à 6). Le seul endroit du site où la cascade avait quelque chose
+   à cascader était précisément celui où elle ne jouait pas.
+
+   HORS COUCHE, ces règles battent `base`, `components` ET `utilities` sans un
+   seul `!important` — c'est le traitement que C15 a donné au rayon en liste et
+   C17 à tout son socle de mouvement. La vigilance que la revue demandait pour
+   demain est donc réglée par construction, et pas seulement pour les
+   utilitaires.
+
+   ---------------------------------------------------------------------------
+   CE QUI RESTE VRAI, ET QUI EST TOUTE LA DOCTRINE
+   ---------------------------------------------------------------------------
+   L'ÉTAT MASQUÉ N'EXISTE QUE SOUS `html.mouvement`, ET LA CLASSE N'EST POSÉE
+   QUE SI LE MOUVEMENT RÉDUIT N'EST PAS DEMANDÉ (D37). Sans JavaScript, avant
+   hydratation, ou si le provider échoue : la règle ne s'applique pas et tout le
+   contenu est visible. L'état FINAL est l'état par défaut, l'état masqué est
+   l'exception — pas l'inverse.
+
+   La double condition — classe ET `no-preference` — n'est pas une ceinture de
+   plus. C'est la correction de la panne que D37 décrit en toutes lettres (« le
+   piège de la classe posée inconditionnellement ») : si l'état masqué
+   s'appliquait sous mouvement réduit, aucun observateur ne viendrait jamais le
+   retirer, puisque le provider n'en instancie pas. Le site resterait blanc pour
+   les personnes qui ont le plus besoin qu'il ne le soit pas — et pour les
+   campagnes de bout en bout, qui jouent sous `reducedMotion: 'reduce'`.
+
+   LE FILET DU MOUVEMENT RÉDUIT RESTE DANS `@layer base`, et ce n'est pas un
+   oubli : il est `!important`, et pour les déclarations IMPORTANTES l'ordre des
+   couches est inversé — une importante hors couche a la plus faible précédence
+   de toutes. L'y déplacer l'aurait affaibli au moment même où on croyait le
+   renforcer.
+
+   N'ANIME QUE `opacity` ET `transform` (D37) : les deux seules propriétés qui
+   ne déclenchent pas de recalcul de mise en page, donc les deux seules qui ne
+   fabriquent pas de décalage cumulé. La place de l'élément est réservée dès le
+   rendu serveur ; il apparaît là où il est déjà.
+   =========================================================================== */
+
+@media (prefers-reduced-motion: no-preference) {
+  /* -------------------------------------------------------------------------
+     L'ÉTAT MASQUÉ NE TRANSITE PAS — SEULE LA RÉVÉLATION TRANSITE
+     -------------------------------------------------------------------------
+     Le premier correctif de C18 laissait la `transition` sur cette règle-ci,
+     c'est-à-dire sur l'état MASQUÉ. Conséquence, que seule une campagne
+     pouvait montrer : poser `html.mouvement` faisait passer chaque bloc de
+     l'état par défaut (visible) à l'état masqué EN FONDANT — 620 ms, retardés
+     jusqu'à 420 ms par la cascade. Un fondu de sortie que personne ne demande,
+     que personne ne voit (les blocs concernés sont sous la flottaison), et qui
+     rend toute mesure prise juste après l'hydratation dépendante de l'instant
+     où elle est prise.
+
+     LE PREMIER CAS DE `mouvement.spec.ts`, ÉCRIT EN C17, L'A DIT AVANT NOUS.
+     Il lit l'opacité d'une vignette sous la flottaison dès que la classe est
+     posée et attend zéro. Il passait — parce que la vignette, privée de
+     transition par sa couche, tombait à zéro d'un coup. Le correctif de la
+     couche lui a donné une transition, et le cas est devenu rouge : « attendu
+     0, reçu 0,89 ». Ce n'est pas le test qui avait tort. La bascule vers
+     l'état masqué est une préparation interne, pas un geste : elle doit être
+     INSTANTANÉE, et le cas de C17 exprimait exactement cela sans le savoir.
+     Le harnais ne s'est pas plié ; c'est la feuille qui s'est corrigée.
+
+     D'où la forme retenue : l'état masqué ne déclare AUCUNE transition, et
+     c'est la règle de l'état RÉVÉLÉ qui porte la sienne. Un élément dont le
+     style d'arrivée déclare une transition sur une propriété qui change à cet
+     instant précis la joue — c'est le comportement normatif, celui-là même dont
+     dépend déjà `@starting-style` ailleurs dans cette feuille.
+     ------------------------------------------------------------------------- */
+  html.mouvement [data-revelation] {
+    /* LE RETARD EST REMIS À ZÉRO SUR LA RÈGLE DE BASE (C19, dette m2 de C18).
+       Une propriété personnalisée HÉRITE : sans cette ligne, un bloc révélé
+       imbriqué dans un bloc de rang 4 recevait le retard de son parent, en
+       plus du sien s'il en avait un. Aucune imbrication de ce genre n'existe
+       aujourd'hui, et c'est précisément pourquoi il fallait la fermer
+       maintenant — le jour où elle apparaîtra, le symptôme sera « ce bloc
+       attend sans raison », c'est-à-dire quelque chose que personne ne
+       cherchera dans une variable héritée. Le repli `, 0s)` des déclarations
+       de transition ne suffisait pas : il ne joue que si la variable est
+       ABSENTE, or une variable héritée est présente. */
+    --retard-revelation: 0s;
+
+    opacity: 0;
+    /* LA COURSE PASSE DE 24 À 36 PIXELS (retour client n° 18, C19-ter — « les
+       textes manquent d'animation à l'ouverture et AU DÉFILEMENT, tu peux faire
+       mieux »).
+
+       Le geste jouait ; il était trop court pour se lire. Vingt-quatre pixels
+       sous `--ease-coule`, qui dépasse quatre-vingts pour cent de sa course au
+       tiers du temps, se traduisent par une arrivée perçue de SEPT pixels : à
+       cette amplitude, l'œil voit un fondu et rien d'autre. Trente-six en
+       laissent voir onze, c'est-à-dire une hauteur d'x — le seuil à partir
+       duquel un mouvement vertical se lit comme un mouvement.
+
+       LA BORNE HAUTE N'EST PAS UN GOÛT, ET ELLE EST DEUX FOIS TENUE. Au-delà
+       d'une hauteur de ligne, un bloc qui monte croise le bloc précédent, et le
+       geste cesse d'être « se poser » pour devenir « voler » — le verbe que
+       l'image directrice de D37 exclut. Et une amplitude qui grandirait encore
+       ferait entrer le bloc DEPUIS L'EXTÉRIEUR de la fenêtre sur les blocs
+       révélés au ras du bord, ce qui rendrait le mouvement dépendant du seuil de
+       l'observateur.
+
+       Le décalage cumulé ne bouge pas d'un millième : `transform` ne déplace
+       rien d'autre que ce qu'il peint, la place de l'élément est réservée par
+       le rendu serveur, et la mesure est refaite sous les deux régimes. */
+    transform: translateY(36px);
+  }
+
+  /* -------------------------------------------------------------------------
+     LE RANG DE CASCADE EST UNE VALEUR, PLUS UNE DÉCLARATION CONCURRENTE
+     -------------------------------------------------------------------------
+     La cascade s'écrivait en six règles posant `transition-delay`. Elles
+     entraient alors en concurrence avec toute règle qui déclare `transition`
+     en forme raccourcie — laquelle remet le retard à zéro —, et le vainqueur
+     dépendait d'une comparaison de spécificité entre deux sélecteurs qui, ici,
+     pèsent le même poids. Le correctif a été trouvé une première fois par
+     l'ordre d'écriture, ce qui marchait et ne tenait à rien : la règle suivante
+     écrite par distraction au mauvais endroit aurait rouvert le défaut.
+
+     Le retard passe donc par une PROPRIÉTÉ PERSONNALISÉE, que les déclarations
+     de transition consomment. Une valeur ne se dispute pas la préséance avec
+     une autre déclaration : elle est simplement là, ou elle vaut son repli de
+     zéro. Le plafond de six reste écrit dans la feuille et non dans la
+     discipline de celui qui l'appelle — sans lui, une grille de quinze
+     vignettes ferait attendre la dernière plus d'une seconde après la
+     première, ce qui n'est plus une cascade mais une file d'attente.
+     ------------------------------------------------------------------------- */
+  html.mouvement [data-revelation][data-revelation-retard='1'] {
+    --retard-revelation: calc(var(--decalage-cascade) * 1);
+  }
+
+  html.mouvement [data-revelation][data-revelation-retard='2'] {
+    --retard-revelation: calc(var(--decalage-cascade) * 2);
+  }
+
+  html.mouvement [data-revelation][data-revelation-retard='3'] {
+    --retard-revelation: calc(var(--decalage-cascade) * 3);
+  }
+
+  html.mouvement [data-revelation][data-revelation-retard='4'] {
+    --retard-revelation: calc(var(--decalage-cascade) * 4);
+  }
+
+  html.mouvement [data-revelation][data-revelation-retard='5'] {
+    --retard-revelation: calc(var(--decalage-cascade) * 5);
+  }
+
+  html.mouvement [data-revelation][data-revelation-retard='6'] {
+    --retard-revelation: calc(var(--decalage-cascade) * 6);
+  }
+
+  html.mouvement [data-revelation][data-revele] {
+    opacity: 1;
+    transform: none;
+    transition:
+      opacity var(--ms-revele) var(--ease-coule) var(--retard-revelation, 0s),
+      transform var(--ms-revele) var(--ease-coule) var(--retard-revelation, 0s);
+  }
+
+  /* -------------------------------------------------------------------------
+     LA VIGNETTE DU RAYON EST À LA FOIS RÉVÉLÉE ET SURVOLÉE — d'où UNE liste
+     -------------------------------------------------------------------------
+     Sortir les révélations de leur couche ne suffisait pas, et c'est la mesure
+     qui l'a montré : `.carte-produit` porte SA PROPRE `transition` (le fond et
+     le filet qui passent au scheme de la famille au survol, C15). Or un élément
+     n'a qu'UNE liste de transitions — celle de la déclaration qui gagne, quelle
+     qu'elle soit. Hors couche, la révélation gagnerait et la carte perdrait son
+     fondu de survol ; dans la couche, la carte gagnait et la révélation perdait
+     le sien, ce qui était l'état livré depuis C17.
+
+     Il n'y a pas de gagnant à désigner : les quatre propriétés se déclarent
+     ENSEMBLE, ici, là où l'état gagne. Chaque durée reste celle de son geste —
+     `--ms-revele` pour ce qui se révèle, `--ms-etat` pour ce qui répond au
+     survol —, et le vocabulaire de D37 n'est pas rouvert. Le retard de cascade
+     ne s'applique qu'aux deux premières : un survol qui attendrait soixante-dix
+     millisecondes avant de répondre serait un survol cassé.
+
+     La déclaration de `@layer components` reste en place et n'est pas morte :
+     elle sert sous mouvement réduit et sans JavaScript, c'est-à-dire partout où
+     `html.mouvement` est absente et où ce bloc-ci ne s'applique pas.
+     ------------------------------------------------------------------------- */
+  html.mouvement .carte-produit[data-revelation][data-revele] {
+    transition:
+      opacity var(--ms-revele) var(--ease-coule) var(--retard-revelation, 0s),
+      transform var(--ms-revele) var(--ease-coule) var(--retard-revelation, 0s),
+      background-color var(--ms-etat) var(--ease-verre),
+      border-color var(--ms-etat) var(--ease-verre);
+  }
+}
+
+/* ===========================================================================
+   LA VITRINE (C15) — le cadre des photographies, la carte du rayon,
+   la rangée des familles, la bascule du rayon
+   ===========================================================================
+
+   ---------------------------------------------------------------------------
+   LE CADRE : rendre INTENTIONNEL un écart de ton qui l'était déjà
+   ---------------------------------------------------------------------------
+   Le fond des photographies est un papier écru mesuré à #ebe0cc ; le fond de la
+   page est la coquille #f2ece1. Les deux ne coïncident pas, et ils ne doivent
+   pas : le plan directeur commande « un fond unique pour les quinze » AU STUDIO,
+   pas la couleur de la page. Une photographie dont le fond se confond avec la
+   page n'est plus une photographie, c'est un détourage — et l'ombre signature,
+   qui vit dans les masters, n'aurait plus rien sur quoi tomber.
+
+   Ce que la direction artistique réclamait n'était donc pas une re-génération de
+   la série : c'était que l'écart CESSE DE RESSEMBLER À UNE ERREUR. D'où ce
+   cadre : un passe-partout de verre, un filet, et sous l'image un cartouche de
+   registre. Le tirage est POSÉ sur la page ; l'écart de ton devient la marge du
+   passe-partout, c'est-à-dire une intention.
+
+   ---------------------------------------------------------------------------
+   LA CARTE : le fondu croisé ne coûte RIEN à qui ne survole pas
+   ---------------------------------------------------------------------------
+   La vue d'ambiance du survol n'est pas une balise `<img>`, c'est un FOND CSS
+   posé sur une couche, et sa `background-image` n'est déclarée que dans la
+   règle de survol. Une image de fond n'est demandée au réseau que lorsqu'une
+   règle qui la porte s'applique réellement : tant que personne ne survole, ce
+   sont quinze images qui ne sont jamais téléchargées.
+
+   Le calcul qui a décidé : quinze principales en AVIF 320 pèsent 128,6 Ko et le
+   plafond du rayon est de 180 Ko (décision D36). Quinze ambiances de plus le
+   feraient passer à environ 250 Ko. Le chargement paresseux ne suffisait pas —
+   il ne fait que différer, et un visiteur qui déroule le rayon les charge
+   toutes. L'effet est donc payé À L'USAGE, par celui qui le déclenche.
+
+   Le prix de ce choix est écrit : le fondu est ASYMÉTRIQUE. Il entre en 320 ms ;
+   il sort d'un coup, parce que la déclaration qui porte l'image cesse de
+   s'appliquer dès que le survol s'arrête. Sous la couche il y a le packshot,
+   jamais du vide : la sortie se lit comme un retour à la vue principale, pas
+   comme une disparition. Et au tout premier survol, si l'image n'est pas encore
+   arrivée, il ne se passe rien de laid — la couche monte transparente et
+   l'image apparaît quand elle est là.
+
+   `hover: hover` exclut les écrans tactiles (où « survoler » veut dire
+   « toucher », c'est-à-dire suivre le lien) et `no-preference` exclut le
+   mouvement réduit, conformément à D37.
+   =========================================================================== */
+
+@layer components {
+  /*
+   * LE CADRE D'UNE PHOTOGRAPHIE.
+   *
+   * `figure` porte le passe-partout ; `figcaption`, quand il y en a un, porte le
+   * cartouche de registre. Le filet du cartouche est `--color-filet` (décor) et
+   * non `--color-filet-fort` : il sépare deux choses qui vont ensemble, il ne
+   * délimite pas un avertissement.
+   *
+   * DEPUIS LE RETOUR CLIENT N° 22, LE CARTOUCHE N'EST PLUS QUE CELUI DES FICHES.
+   * Les héros des huit pages ont perdu le leur — une légende qui nomme ce qu'on
+   * voit —, les figures produits gardent le leur — un rang d'inventaire, une
+   * référence, un poids, une ligne de garde, c'est-à-dire de l'information qui
+   * ne se lit nulle part ailleurs. La règle ci-dessous est donc SERVIE PAR UN
+   * SEUL ORGANE aujourd'hui, et elle reste écrite pour la classe : `.cadre-photo`
+   * est le cadre de toute photographie de ce site, et le jour où une figure
+   * quelconque légendera de nouveau son image, elle n'aura rien à redemander.
+   */
+  .cadre-photo {
+    background-color: var(--color-verre);
+    border: 1px solid var(--color-filet);
+    padding: clamp(0.5rem, 0.35rem + 0.5vw, 0.875rem);
+  }
+
+  .cadre-photo > figcaption {
+    margin-top: clamp(0.5rem, 0.35rem + 0.5vw, 0.875rem);
+    padding-top: 0.5rem;
+    border-top: 1px solid var(--color-filet);
+    color: var(--color-encre-douce);
+  }
+
+  /*
+   * LA SCÈNE DU HÉROS — la photographie et la vidéo dans la même boîte (C19).
+   *
+   * C'est la PHOTOGRAPHIE qui décide de la hauteur : elle est en flux normal,
+   * avec ses dimensions intrinsèques, et elle reste le plus grand affichage de
+   * contenu de la page. La vidéo est retirée du flux et vient se poser dessus.
+   * Aucune des deux ne peut donc déplacer l'autre — le décalage cumulé de
+   * l'accueil reste nul, et il est remesuré à chaque tranche.
+   *
+   * `isolation: isolate` : la scène crée son propre contexte d'empilement, si
+   * bien que la vidéo passe au-dessus de la photographie SANS avoir à entrer en
+   * concurrence avec quoi que ce soit d'autre dans la page — le bloc de
+   * balayage de la signature, en particulier, vit dans l'autre colonne et n'a
+   * aucune raison de rencontrer celui-ci.
+   */
+  .scene-heros {
+    position: relative;
+    isolation: isolate;
+  }
+
+  /*
+   * LA VIDÉO N'EXISTE VISUELLEMENT QU'UNE FOIS QU'ELLE JOUE.
+   *
+   * `opacity: 0` au repos, et ce n'est pas seulement esthétique : tant qu'elle
+   * n'a pas décodé sa première image, un lecteur affiche un rectangle vide (ou
+   * son affiche, qu'on ne lui donne pas — voir `VideoHeros.tsx`). Le poser
+   * transparent règle les deux d'un coup, et rend le raccord possible.
+   *
+   * LE FONDU EST DÉCLENCHÉ PAR L'ATTRIBUT, que la frontière cliente pose sur
+   * l'événement `playing`. La transition vit donc HORS de toute porte
+   * `html.mouvement` — mais le déclencheur, lui, n'est jamais posé sous
+   * mouvement réduit, puisque l'effet sort avant même de chercher l'élément.
+   * L'état masqué n'est jamais persistant : une vidéo qui ne jouerait pas
+   * laisse simplement voir la photographie, c'est-à-dire le site d'hier.
+   */
+  .video-heros {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .video-heros[data-video-heros='joue'] {
+    opacity: 1;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .video-heros {
+      transition: opacity var(--ms-revele) var(--ease-coule);
+    }
+  }
+
+  /*
+   * LA CARTE DU RAYON. Le fond passe au scheme de la famille au survol. Les
+   * schemes sont posés en variable par le composant (`--scheme-fond`,
+   * `--scheme-trait`) : la carte ne connaît pas les sept familles, elle reçoit
+   * sa couleur.
+   *
+   * ─────────────────────────────────────────────────────────────────────────
+   * LA COULEUR DE FILET EST POSÉE ICI, ET C'EST TOUT LE CORRECTIF DU ROUND 1
+   * ─────────────────────────────────────────────────────────────────────────
+   *
+   * La carte s'écrivait `border border-filet` dans son composant, et la règle de
+   * survol ci-dessous changeait `border-color`. Elle ne l'a JAMAIS changée :
+   * `border-filet` est un utilitaire Tailwind, donc de la couche `utilities` ;
+   * cette règle-ci vit dans `components` ; et dans le modèle des couches CSS
+   * c'est la COUCHE qui décide avant la spécificité. Le trait de famille au
+   * survol n'existait pas — un décor qu'on croyait livré et que personne ne
+   * pouvait voir.
+   *
+   * C'est le MÊME piège que la bascule liste (voir plus bas, « le rayon en
+   * liste »), retrouvé à soixante lignes de sa correction et sous un autre
+   * déguisement. La leçon opérationnelle vaut d'être écrite une fois pour
+   * toutes : TOUTE PROPRIÉTÉ QU'UNE RÈGLE D'ÉTAT VEUT CHANGER DOIT ÊTRE POSÉE
+   * DANS LA MÊME COUCHE QUE CETTE RÈGLE. On ne sort donc pas la règle de survol
+   * de sa couche — on y fait entrer la valeur de repos, en retirant
+   * `border-filet` du composant. Repos et survol se départagent alors par
+   * l'ordre d'écriture, à l'intérieur de la même couche, et le survol gagne
+   * parce qu'il est écrit après.
+   *
+   * Un test de bout en bout lit désormais `getComputedStyle` au repos ET au
+   * survol (`tests/e2e/vitrine.spec.ts`) : une règle qui ne s'applique pas ne se
+   * voit dans aucune relecture de feuille, elle ne se voit qu'au style calculé.
+   */
+  /*
+   * ─────────────────────────────────────────────────────────────────────────
+   * LE FONDU DEVIENT SYMÉTRIQUE, LENT ET DIFFUS (retour client, C19)
+   * ─────────────────────────────────────────────────────────────────────────
+   *
+   * Le principe a plu — « excellente idée » — mais le geste a été jugé TROP
+   * BRUTAL. Il l'était, et pas par réglage : il l'était PAR CONSTRUCTION, et
+   * l'écart avait été déclaré tel quel en C15. `background-image` n'était
+   * déclarée QUE dans la règle de survol, de sorte que la couche d'ambiance
+   * n'existait plus à l'instant où le doigt partait — une transition d'opacité
+   * n'avait alors plus rien à faire fondre. On entrait en 320 ms et on sortait
+   * en zéro.
+   *
+   * Ce que ce choix protégeait était réel et reste protégé : quinze vues
+   * d'ambiance téléchargées d'avance auraient porté le rayon d'environ 129 Ko
+   * à près de 250, pour un plafond de 180. Le chargement paresseux ne suffisait
+   * pas — il diffère, il n'annule pas.
+   *
+   * LA SORTIE PAR LE HAUT est un délégué minuscule dans la frontière cliente
+   * EXISTANTE : au PREMIER survol d'une carte, il pose `data-ambiance-chargee`
+   * sur elle, et la règle ci-dessous déclare alors l'image EN PERMANENCE pour
+   * cette carte-là. La couche persiste donc, le retour a quelque chose à
+   * fondre, et une carte que personne n'a survolée ne demande toujours rien.
+   * Le budget au repos est INCHANGÉ, à l'octet près, et c'est mesuré.
+   *
+   * TROIS RÉGLAGES, TOUS DANS LE VOCABULAIRE FERMÉ DE D37 :
+   * `--ms-revele` (620 ms) au lieu de `--ms-etat` (320) — c'est la révélation
+   * d'une matière, et le tableau de D37 nomme cet emploi ; `--ease-coule` au
+   * lieu d'`--ease-verre`, parce qu'elle dépose au lieu de poser ; et une
+   * échelle de 1,02 à 1 sur la seule couche d'ambiance, qui donne au fondu la
+   * profondeur que « diffus » demandait. AUCUN FLOU : `filter: blur()` est un
+   * effet de peinture, il n'entre dans aucune des deux propriétés que D37
+   * autorise, et il coûte cher sur une grille de quinze cartes.
+   *
+   * ═════════════════════════════════════════════════════════════════════════
+   *  RETOUR CLIENT SUIVANT — « TOUJOURS TROP RAPIDE ET PEU FLUIDE »
+   * ═════════════════════════════════════════════════════════════════════════
+   *
+   * Le fondu de 620 ms ci-dessus a été livré, déployé, et jugé inchangé. Le
+   * diagnostic a été fait IN VIVO plutôt que par lecture
+   * (`preuves/c19/fondu-cartes-diagnostic.mjs`), et il trouve DEUX causes
+   * distinctes qui ne demandaient pas le même correctif.
+   *
+   * ─────────────────────────────────────────────────────────────────────────
+   * CAUSE 1 — LA COURBE MANGE LA DURÉE. Le nombre disait 620 ; la mesure dit
+   * que l'opacité franchit 0,42 à 135 ms, 0,87 à 268 ms et 0,97 à 400. C'est
+   * `--ease-coule` qui fait cela, et elle le fait exactement comme sa
+   * définition l'annonce — le commentaire de la signature du héros l'écrit
+   * depuis C18 : elle dépasse quatre-vingts pour cent de progression au tiers
+   * du temps. Sur une TRANSLATION c'est une qualité (l'objet arrive et se
+   * pose) ; sur une OPACITÉ c'est une durée détruite, parce que l'œil ne voit
+   * plus rien bouger passé 0,9.
+   *
+   * D'où la répartition retenue, et les deux courbes appartiennent au
+   * vocabulaire fermé :
+   *
+   *   transform (la respiration)  →  `--ease-coule`, qui dépose ;
+   *   opacity   (le fondu)        →  `--ease-verre`, qui étale.
+   *
+   * Le calcul qui tranche, à 900 ms : `--ease-coule` atteint 0,90 en 306 ms,
+   * `--ease-verre` en 489. Le fondu perçu est SOIXANTE POUR CENT plus long
+   * pour la même durée déclarée. « Le nombre ne dit rien sans sa courbe » est
+   * écrit trois fois dans ce fichier ; c'est la première fois qu'on l'applique
+   * à une opacité.
+   *
+   * ─────────────────────────────────────────────────────────────────────────
+   * CAUSE 2 — LE PREMIER SURVOL COURT À VIDE. L'image d'ambiance n'est
+   * déclarée qu'à l'instant du premier survol : elle est donc téléchargée et
+   * décodée PENDANT le fondu, et elle se peint d'un coup à l'opacité courante.
+   * Mesuré en local, où le réseau ne coûte rien : l'image devient peignable à
+   * 99 ms, quand la couche est DÉJÀ à 0,158 — le premier sixième du fondu est
+   * perdu. Sur un vrai réseau, l'image arrive après 300 à 600 ms et la couche
+   * est à 0,95 : c'est le « pop » que le client décrit, et aucune durée n'y
+   * peut rien.
+   *
+   * Le correctif est un DÉCALAGE DU DÉPART, pas un préchargement : le délégué
+   * de `fournisseurs.tsx` ne pose plus `data-ambiance-chargee` à l'approche
+   * mais au DÉCODAGE, et les deux règles de survol ci-dessous exigent cet
+   * attribut. Le packshot reste net jusque-là, le fondu part sur une image
+   * prête, et le mur d'images de `/boutique` ne bouge pas d'un octet — une
+   * carte que personne n'approche ne demande toujours rien.
+   *
+   * ─────────────────────────────────────────────────────────────────────────
+   * LA RESPIRATION CROISÉE (suggestion client, adoptée) — « une petite
+   * animation entre les 2 images ». Le packshot sortant s'ouvre de 1 à 1,03,
+   * la matière entrante se pose de 1,05 à 1. Le mouvement porte la transition
+   * et masque la rupture ; il est symétrique au retour, puisque les deux états
+   * ne sont que le repos et le survol de la même transition.
+   *
+   * LE PACKSHOT NE PERD PAS SON OPACITÉ, et c'est un choix de composition, pas
+   * un oubli : la couche d'ambiance est OPAQUE et couvre tout le cadre. Tant
+   * que le packshot reste à 1, le composite est un fondu enchaîné propre
+   * (a·ambiance + (1−a)·packshot). Le faire descendre à 0 en même temps
+   * laisserait passer le fond de la carte au croisement — un blanc au milieu
+   * du geste, c'est-à-dire exactement la rupture que la respiration existe
+   * pour supprimer.
+   */
+  /*
+   * LA VIGNETTE DEVIENT UN PANNEAU (C19), ET LA VALEUR DE REPOS CHANGE ICI —
+   * PAS AILLEURS.
+   *
+   * Chaque carte porte un nom, un résumé de deux lignes et un prix : de la
+   * prose, donc quelque chose qui doit reposer sur une surface maintenant que
+   * la page est un marbre. Quinze cartes transparentes sur une matière, c'est
+   * quinze fois deux lignes de texte posées sur des veines.
+   *
+   * LE REPOS PASSE DE `transparent` À `--color-verre`, et il passe ICI parce
+   * que c'est ici que la règle d'état le change au survol. Poser un utilitaire
+   * `bg-verre` sur l'élément aurait été l'anti-patron n° 21 de D37 dans sa
+   * forme exacte — la couche `utilities` bat `components`, donc la couleur de
+   * famille du survol n'aurait plus jamais gagné. Ce dépôt a déjà payé cette
+   * faute trois fois (C15 deux fois, C16 une), et la règle opérationnelle qui
+   * en est sortie dit précisément ceci : toute propriété qu'une règle d'état
+   * veut changer se pose dans la MÊME COUCHE que cette règle.
+   *
+   * La transition ne bouge pas : `background-color` y était déjà, parce que la
+   * carte allait déjà de `transparent` à sa couleur de famille. Elle va
+   * maintenant du verre à cette couleur, ce qui est un fondu plus court et
+   * mieux tenu — un aplat vers un aplat, au lieu d'un transparent vers un
+   * aplat qui laissait voir le fond de page au milieu du geste.
+   */
+  .carte-produit {
+    background-color: var(--color-verre);
+    border-color: var(--color-filet);
+    transition:
+      background-color var(--ms-signature) var(--ease-verre),
+      border-color var(--ms-signature) var(--ease-verre);
+  }
+
+  .carte-visuel {
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* LE PACKSHOT RESPIRE. `transform: scale(1)` est écrit au repos plutôt que
+     laissé à `none` pour que la transition ait toujours deux bornes lisibles,
+     y compris au premier calcul de style. */
+  .carte-visuel .visuel-produit {
+    transform: scale(1);
+  }
+
+  .carte-ambiance {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transform: scale(1.05);
+    /* L'ANCRAGE EST UNE VARIABLE, ET SON REPLI EST LE CENTRE (C19-ter). Treize
+       produits sur quinze ont deux vues au même rapport : `cover` n'y retire
+       rien et l'ancrage ne décide de rien. Les deux coffrets, dont la seconde
+       vue est un zénithal 4:5 dans une boîte 4:3, reçoivent `center bottom` du
+       composant — le raisonnement et la planche de comparaison sont écrits à
+       l'endroit de la décision, dans `CarteProduit.tsx`. */
+    background-position: var(--ambiance-ancrage, center);
+    background-size: cover;
+    background-repeat: no-repeat;
+  }
+
+  /*
+   * L'IMAGE N'EST DÉCLARÉE QUE POUR LES CARTES DÉJÀ SURVOLÉES UNE FOIS.
+   *
+   * C'est cette ligne, et elle seule, qui rend la symétrie possible : elle vit
+   * HORS de la règle de survol, donc la couche ne disparaît plus quand le
+   * survol cesse. L'attribut est posé par le délégué de `fournisseurs.tsx`, et
+   * il ne l'est jamais au repos — une carte jamais approchée ne déclare aucune
+   * `background-image`, donc ne demande aucun octet.
+   */
+  .carte-produit[data-ambiance-chargee] .carte-ambiance {
+    background-image: var(--ambiance);
+  }
+
+  /*
+   * LE REGISTRE QUI MONTE. Il est là au repos, à sa place, simplement décalé
+   * d'un tiers d'interligne et transparent : rien n'apparaît, quelque chose se
+   * POSE. Sa hauteur est réservée en permanence par le flux — c'est ce qui
+   * garantit qu'aucun décalage cumulé ne se produit au survol.
+   */
+  .carte-registre {
+    opacity: 0;
+    transform: translateY(0.35rem);
+
+    /* ═══════════════════════════════════════════════════════════════════════
+       DEUX LIGNES RÉSERVÉES, TOUJOURS — et c'est un correctif de DÉCALAGE
+       ═══════════════════════════════════════════════════════════════════════
+
+       Le décalage cumulé de `/boutique` valait 0,0073 chez Lighthouse pour un
+       plafond de 0,002, et il a résisté à trois tranches parce que l'outil
+       maison du dépôt, lui, n'en voyait que 0,0011. La cause, nommée par
+       Lighthouse (« Web font loaded ») puis isolée en bloquant les fichiers de
+       police : CE bloc-ci changeait de hauteur de QUATORZE PIXELS à l'arrivée
+       des polices — deux lignes avec le repli, une seule avec la mono — sur
+       quinze cartes, dont la grille reflue.
+
+       C'EST LE DÉFAUT DE C13, MOT POUR MOT, À UN AUTRE ENDROIT : le registre
+       mono a un repli PROPORTIONNEL (les proportions verticales coïncident, les
+       LARGEURS non), et une mise en page dont LE NOMBRE DE RANGS DÉPEND DE LA
+       LARGEUR DU TEXTE décale tout ce qui la suit à l'instant de l'échange. La
+       leçon avait été écrite ; elle n'avait été appliquée qu'au pied de page.
+
+       Le correctif est le même qu'alors : on retire la dépendance. La ligne de
+       garde réserve DEUX lignes quoi qu'elle contienne, donc sa hauteur ne se
+       négocie plus avec la police. Le prix est visible et il est petit : chaque
+       carte gagne une ligne de hauteur réservée — invisible au repos, puisque
+       ce bloc y est transparent — et la grille cesse de bouger.
+
+       `min-height` et non `height` : si un jour un produit portait une ligne de
+       garde de trois segments longs, elle s'écrirait sur trois lignes plutôt
+       que d'être coupée. La hauteur ne peut alors que croître de façon stable,
+       jamais osciller avec le chargement d'une police.
+
+       `2lh` désigne deux fois l'interligne CALCULÉ de cet élément-ci : la valeur
+       suit le jeton `--text-label` sans le recopier. Un moteur qui ignorerait
+       l'unité laisse simplement tomber la déclaration, et l'on retrouve le
+       comportement d'avant — un décalage, pas une casse. */
+    min-height: 2lh;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    /* DEUX COURBES SUR UN MÊME GESTE, ET CHACUNE A SA RAISON MESURÉE (voir le
+       bloc « cause 1 » ci-dessus) : la matière SE POSE, donc `--ease-coule` ;
+       elle GAGNE EN PRÉSENCE, donc `--ease-verre`, qui étale l'opacité sur
+       toute la durée au lieu de la dépenser dans le premier tiers. */
+    .carte-ambiance {
+      transition:
+        opacity var(--ms-signature) var(--ease-verre),
+        transform var(--ms-signature) var(--ease-coule);
+    }
+
+    .carte-visuel .visuel-produit {
+      transition: transform var(--ms-signature) var(--ease-coule);
+    }
+
+    /* LE REGISTRE GARDE SA DURÉE. Il n'est pas la matière : c'est une ligne de
+       texte qui se pose, et `--ms-revele` nomme exactement cet emploi. Lui
+       donner 900 ms le ferait traîner derrière un geste qu'il accompagne. */
+    .carte-registre {
+      transition:
+        opacity var(--ms-revele) var(--ease-coule),
+        transform var(--ms-revele) var(--ease-coule);
+    }
+  }
+
+  @media (hover: hover) {
+    .carte-produit:hover,
+    .carte-produit:focus-within {
+      background-color: var(--scheme-fond);
+      border-color: var(--scheme-trait);
+    }
+
+    /* LE FONDU NE PART QUE SUR UNE IMAGE PRÊTE. `data-ambiance-chargee` n'est
+       plus posé à l'approche mais au DÉCODAGE (délégué de `fournisseurs.tsx`) :
+       exiger l'attribut ici, c'est faire commencer le geste à l'instant où il a
+       quelque chose à montrer. Sans cette condition, le premier survol dépense
+       son fondu sur une couche vide et l'image se peint d'un coup à l'opacité
+       courante — mesuré à 0,158 en local, au-delà de 0,95 sur un vrai réseau. */
+    .carte-produit[data-ambiance-chargee]:hover .carte-ambiance,
+    .carte-produit[data-ambiance-chargee]:focus-within .carte-ambiance {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .carte-produit[data-ambiance-chargee]:hover .visuel-produit,
+    .carte-produit[data-ambiance-chargee]:focus-within .visuel-produit {
+      transform: scale(1.03);
+    }
+
+    .carte-produit:hover .carte-registre,
+    .carte-produit:focus-within .carte-registre {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  /*
+   * SANS SURVOL POSSIBLE — écrans tactiles —, le registre est visible en
+   * permanence. Il porte une information (le poids, la garde) : la réserver à
+   * un geste que l'appareil ne sait pas faire reviendrait à la supprimer.
+   */
+  @media (hover: none) {
+    .carte-registre {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  /*
+   * LA RANGÉE DES FAMILLES (accueil) — sept macros, un seul cadre.
+   *
+   * Le survol d'un nom fait monter la macro correspondante dans le cadre
+   * d'aperçu. `:has()` porte tout le mécanisme : aucun JavaScript, aucun état.
+   * Les images sont, là encore, des fonds CSS déclarés dans la règle de survol —
+   * sept macros téléchargées d'avance sur une page d'accueil seraient le
+   * contraire de ce que cette tranche cherche.
+   */
+  /*
+   * LE CADRE D'APERÇU — ET IL COLLE (retour client n° 13, C19-ter).
+   *
+   * ─────────────────────────────────────────────────────────────────────────
+   * LE DÉFAUT, MESURÉ : le cadre mesure 480 × 270 et la liste des sept
+   * familles 680 × 527. Le cadre est donc DEUX FOIS PLUS COURT que la colonne
+   * qu'il accompagne : à hauteur de la sixième famille, il a déjà quitté le
+   * haut de la fenêtre, et le fondu croisé qu'on vient de déclencher joue hors
+   * de vue. Le client l'a dit exactement ainsi — « les changements se font trop
+   * haut pour être vus quand on descend la liste ».
+   *
+   * LE CORRECTIF EST DU CSS PUR, et il ne coûte pas un octet de JavaScript :
+   * le cadre colle au même repère que tout ce qui colle sur ce site —
+   * `--hauteur-entete`, la variable posée en C15 pour que la barre du rayon
+   * s'arrête SOUS l'en-tête plutôt que douze pixels dessous. La respiration
+   * d'une gouttière (1,5 rem) l'en écarte, comme le `scroll-padding-top` s'en
+   * accorde une pour les ancres.
+   *
+   * `align-self: start` est NÉCESSAIRE et n'est pas une précaution : un élément
+   * de grille étiré occupe toute la hauteur de sa rangée, et un élément qui
+   * remplit sa rangée n'a nulle part où coller. Il se trouve que le rapport
+   * 16:9 gagne déjà contre l'étirement sur ce moteur — la mesure le dit, 270 px
+   * pour une rangée de 527 — mais cette victoire est une propriété du moteur,
+   * pas de la feuille. On l'écrit.
+   *
+   * LA POSITION DE REPOS EST ÉCRITE ICI, ET C'EST L'ANTI-PATRON N° 21 DE D37
+   * QUI L'EXIGE : les couches d'aperçu sont en `position: absolute` et ont
+   * besoin d'un ancêtre positionné. L'utilitaire `relative` le donnait ; il
+   * aurait aussi BATTU cette règle-ci, la couche `utilities` passant avant
+   * `components` quelle que soit la spécificité. La règle collante aurait été
+   * écrite, lisible, plausible — et n'aurait jamais rien fait. Les deux états
+   * vivent donc dans la même couche, et un cas de campagne lit le style
+   * CALCULÉ.
+   */
+  .apercu-cadre {
+    position: relative;
+  }
+
+  @media (min-width: 64rem) {
+    .apercu-cadre {
+      position: sticky;
+      top: calc(var(--hauteur-entete) + 1.5rem);
+      align-self: start;
+    }
+  }
+
+  .apercu-famille {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    background-position: center;
+    background-size: cover;
+  }
+
+  /*
+   * UNE MACRO EST VISIBLE AU REPOS, ET C'EST LA PREMIÈRE.
+   *
+   * Sans elle, le cadre d'aperçu est un rectangle gris tant que personne ne
+   * survole — et un rectangle gris dans une page finie ne se lit pas comme une
+   * attente, il se lit comme une image cassée. La première famille du rayon
+   * paie donc son image (14 Ko en AVIF), les six autres restent gratuites
+   * jusqu'au survol. C'est le bon partage : une image de plus sur une page qui
+   * en charge deux, contre sept de plus.
+   *
+   * Les couches se recouvrent dans l'ordre du DOM : celle d'une famille
+   * survolée est écrite après celle-ci, donc elle passe dessus sans qu'il faille
+   * éteindre quoi que ce soit.
+   */
+  .apercu-defaut {
+    opacity: 1;
+    background-image: var(--macro);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .apercu-famille {
+      transition: opacity var(--ms-revele) var(--ease-verre);
+    }
+  }
+
+  @media (hover: hover) {
+    .familles:has(.famille-1:hover) .apercu-1,
+    .familles:has(.famille-1:focus-visible) .apercu-1,
+    .familles:has(.famille-2:hover) .apercu-2,
+    .familles:has(.famille-2:focus-visible) .apercu-2,
+    .familles:has(.famille-3:hover) .apercu-3,
+    .familles:has(.famille-3:focus-visible) .apercu-3,
+    .familles:has(.famille-4:hover) .apercu-4,
+    .familles:has(.famille-4:focus-visible) .apercu-4,
+    .familles:has(.famille-5:hover) .apercu-5,
+    .familles:has(.famille-5:focus-visible) .apercu-5,
+    .familles:has(.famille-6:hover) .apercu-6,
+    .familles:has(.famille-6:focus-visible) .apercu-6,
+    .familles:has(.famille-7:hover) .apercu-7,
+    .familles:has(.famille-7:focus-visible) .apercu-7 {
+      background-image: var(--macro);
+      opacity: 1;
+    }
+  }
+
+  /*
+   * LE LIEN DE FAMILLE et son indicateur.
+   *
+   * Un filet posé sous le nom, à l'échelle horizontale NULLE au repos, qui se
+   * déplie depuis la gauche au survol et au focus. Une échelle ne pousse rien :
+   * la ligne occupe sa place dès le premier rendu, elle change seulement de
+   * largeur. Sa couleur est celle de la famille (`--scheme-trait`), posée par
+   * la page ; sans elle, elle retombe sur le filet porteur.
+   */
+  .lien-famille {
+    position: relative;
+    display: inline-block;
+    padding-bottom: 0.25rem;
+    color: var(--color-encre-douce);
+  }
+
+  .lien-famille::after {
+    content: '';
+    position: absolute;
+    inset-inline: 0;
+    bottom: 0;
+    height: 2px;
+    background-color: var(--scheme-trait, var(--color-filet-fort));
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+
+  .lien-famille:hover,
+  .lien-famille:focus-visible {
+    color: var(--color-encre);
+  }
+
+  .lien-famille:hover::after,
+  .lien-famille:focus-visible::after {
+    transform: scaleX(1);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .lien-famille::after {
+      transition: transform var(--ms-etat) var(--ease-coule);
+    }
+  }
+
+  /*
+   * LA BASCULE GRILLE / LISTE du rayon (View Transitions same-document).
+   *
+   * Ces deux règles ne font que RALENTIR la transition par défaut du navigateur
+   * et lui donner la courbe de la maison ; sans elles, il ferait un fondu de
+   * 250 ms dans sa propre courbe. Quand l'API n'existe pas, le rayon change de
+   * forme sans transition — et il change quand même de forme.
+   */
+  ::view-transition-old(rayon),
+  ::view-transition-new(rayon) {
+    animation-duration: var(--ms-etat);
+    animation-timing-function: var(--ease-verre);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    ::view-transition-old(rayon),
+    ::view-transition-new(rayon) {
+      animation: none;
+    }
+  }
+}
+
+/* ===========================================================================
+   LE RAYON EN LISTE — HORS COUCHE, ET C'EST LA SEULE FAÇON QUE ÇA MARCHE
+   ===========================================================================
+
+   La grille devient une colonne et la carte se couche : l'image à gauche, à
+   largeur fixe, le texte à droite. Aucune balise ne change — c'est la raison
+   d'être de la bascule par attribut.
+
+   CES RÈGLES NE SONT DANS AUCUNE COUCHE, et ce n'est pas un oubli. Les cartes
+   du rayon portent `sm:grid-cols-2 lg:grid-cols-3`, qui sont des utilitaires
+   Tailwind, donc de la couche `utilities`. Dans le modèle des couches CSS,
+   c'est la COUCHE qui décide avant la spécificité : une règle de `components`
+   perd contre un utilitaire même avec un sélecteur dix fois plus précis. La
+   première rédaction les avait mises dans `@layer components` ; le bouton
+   « Liste » posait bien son attribut, la transition de vue s'exécutait bien, et
+   le rayon restait en grille — un geste qui marche et ne fait rien, ce qui est
+   la pire des pannes parce qu'elle ne ressemble pas à une panne. Trouvée à la
+   capture.
+
+   Hors couche, elles battent les utilitaires ; à l'intérieur d'elles-mêmes,
+   c'est l'ordre d'écriture qui départage, d'où la requête de média après la
+   règle de base.
+   =========================================================================== */
+
+html[data-affichage-rayon='liste'] .rayon-grille {
+  grid-template-columns: 1fr;
+}
+
+html[data-affichage-rayon='liste'] .carte-produit > a {
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 1.25rem;
+}
+
+html[data-affichage-rayon='liste'] .carte-visuel {
+  flex: none;
+  width: 6.5rem;
+}
+
+@media (min-width: 40rem) {
+  html[data-affichage-rayon='liste'] .carte-visuel {
+    width: 9rem;
+  }
+}
+
+/* ===========================================================================
+   LE MONUMENT DU HÉROS (C18) — UN MOT NE SORT JAMAIS DE SA COLONNE
+   ===========================================================================
+
+   RETOUR CLIENT DU 10/08, et le premier défaut de cette refonte qu'aucune
+   mesure du dépôt ne pouvait voir. Sur la prévisualisation de branche, en
+   grande fenêtre, le monument « Maison Vaubrune » passait SOUS la carte du
+   héros : le « e » final de « Vaubrune » était tronqué par le bord gauche de
+   l'image.
+
+   ---------------------------------------------------------------------------
+   LA CAUSE — un type qui grandit avec la FENÊTRE dans une colonne qui a cessé
+   de grandir avec elle
+   ---------------------------------------------------------------------------
+   `--text-monument` vaut `clamp(3.5rem, 1rem + 10vw, 13rem)` : il grandit avec
+   la fenêtre jusqu'à 1 920 px. Le conteneur de page, lui, est plafonné à
+   `--container-page` (88 rem = 1 408 px), donc il cesse de grandir dès
+   1 472 px de fenêtre — et la colonne gauche du héros, qui est la moitié de ce
+   conteneur, se fige alors à 644 px.
+
+   Entre ces deux largeurs, le corps continue de monter (163 → 208 px) pendant
+   que la place n'augmente plus d'un pixel. Et `grid-cols-2` de Tailwind
+   s'écrit `repeat(2, minmax(0, 1fr))` : le minimum automatique de la piste est
+   ANNULÉ, si bien que le mot ne pousse pas la colonne — il en sort, par la
+   droite, dans la gouttière puis sur l'image.
+
+   Relevé avant correctif (`preuves/c18/geometrie-heros-avant.txt`), mot le
+   plus long mesuré à la plage de sélection, jamais estimé :
+
+     fenêtre   colonne   corps    « Vaubrune »   débord   recouvre l'image
+      1280       580     144,0        616 px      36 px          0
+      1440       644     160,0        684 px      40 px          0
+      1600       644     176,0        752 px     108 px         52 px
+      1900       644     206,0        881 px     237 px        181 px
+      2560       644     208,0        889 px     245 px        189 px
+
+   Deux choses se lisent dans ce tableau, et la seconde est la plus utile : le
+   mot débordait DÉJÀ de sa colonne à 1 280 px — c'est-à-dire au profil de la
+   campagne de bureau — et personne ne le voyait, parce que la gouttière de
+   56 px absorbait les 36 px de débord. Le recouvrement n'est donc pas un
+   défaut neuf apparu en grande fenêtre : c'est un débord ancien qui a fini par
+   traverser la gouttière.
+
+   ---------------------------------------------------------------------------
+   LE CORRECTIF — le corps se borne à la COLONNE, pas à la fenêtre
+   ---------------------------------------------------------------------------
+   La colonne devient un conteneur de requête (`container-type: inline-size`)
+   et le corps du monument est plafonné en `cqi`, c'est-à-dire en pour-cent de
+   la largeur RÉELLE de la colonne. Le jeton garde sa valeur et son emploi
+   partout ailleurs — le pied de page, qui porte le même jeton sur toute la
+   largeur de la page, n'est pas concerné, et il a été mesuré pour le prouver
+   plutôt que supposé indemne.
+
+   LA CONSTANTE EST MESURÉE. « Vaubrune » occupe 4,275 fois son corps dans
+   cette police, à cet interlettrage et avec cet axe optique — un rapport
+   constant aux cinq largeurs relevées. La colonne peut donc porter au plus
+   100 / 4,275 = 23,39 cqi ; on garde trois pour cent de marge, d'où 22,6.
+
+   CE QUE CE PLAFOND COÛTE, écrit plutôt que tu : sur l'accueil, le monument
+   cesse de grandir vers 1 440 px et se fige à ~145 px au lieu des 208 que le
+   jeton promet. Le jeton ne ment pas pour autant — il tient sa promesse là où
+   un conteneur pleine largeur la lui donne. Ici elle était intenable : 208 px
+   de didone dans 644 px de colonne, c'est un mot de 889 px.
+
+   POURQUOI PAS L'AUTRE ARBITRAGE — laisser le mot passer AU-DESSUS de l'image,
+   entier, comme le font certaines refontes primées. Parce que ce dépôt a déjà
+   tranché deux fois dans l'autre sens, et par une mesure : C13 a écarté
+   l'en-tête transparent et C15 le monument posé sur le héros pour la même
+   raison — « un texte sur une photographie n'a pas de contraste MESURABLE, il
+   a celui du pixel qui passe derrière », et ce projet vend une note
+   d'accessibilité de 100. Un monument par-dessus l'image rouvrirait exactement
+   cette question, sur le plus grand affichage de contenu de la page. La
+   décision client du 10/08 de remplacer la macro par une vidéo en boucle la
+   rouvrirait une troisième fois, en pire : le pixel qui passe derrière
+   changerait vingt-cinq fois par seconde.
+
+   ---------------------------------------------------------------------------
+   HORS COUCHE, ET C'EST L'INTERDIT N° 21 APPLIQUÉ
+   ---------------------------------------------------------------------------
+   `text-monument` est un utilitaire Tailwind, donc de la couche `utilities`,
+   et il pose `font-size`. Une règle de `@layer components` qui voudrait
+   raffiner ce `font-size` serait battue par la couche, quelle que soit sa
+   spécificité : elle serait écrite, lisible, plausible, et sans effet — le
+   défaut exact que D37 a gravé en C17. Hors couche, elle gagne sans un seul
+   `!important`, et un cas de campagne lit le style CALCULÉ à trois largeurs
+   qu'aucun profil ne couvre.
+   =========================================================================== */
+
+.colonne-monument {
+  /* LE PREMIER ÉCRAN D'UNE VISITE — et il n'y en a qu'un. `--ms-hero` nomme
+     « l'entrée en scène du premier écran, une seule fois par visite » : c'est
+     ici, et nulle part ailleurs. Le geste y est gratuit parce que le plus grand
+     affichage de contenu de l'accueil est la MACRO, pas le monument (mesure au
+     rapport de C19-ter). */
+  --duree-signature: var(--ms-hero);
+  container-type: inline-size;
+}
+
+.monument-heros {
+  font-size: min(var(--text-monument), 22.6cqi);
+}
+
+/* ===========================================================================
+   LE TUNNEL (C16) — UN SEUL GESTE, ET IL PORTE SUR LE NOMBRE
+   ===========================================================================
+
+   « La sobriété est le message. » Le tunnel n'a ni scheme de famille, ni
+   photographie, ni révélation, ni Lenis. Il a UNE micro-transition, et elle ne
+   touche que ce qui change réellement : le CHIFFRE.
+
+   ---------------------------------------------------------------------------
+   POURQUOI 320 ms ET NON LES 260 DU PLAN DIRECTEUR
+   ---------------------------------------------------------------------------
+   Le plan écrit « suppression de ligne 260 ms, recalcul du total en fondu ».
+   260 n'existe pas : D37 ferme le vocabulaire sur cinq durées — 180, 320, 620,
+   900, 1400 — et dit « pas une valeur de plus ». Écrire 260 ms ici rouvrirait
+   une décision gravée pour gagner soixante millisecondes que personne ne peut
+   distinguer.
+
+   Le choix entre les deux durées voisines n'est pas un arrondi, il se déduit
+   des NOMS, qui disent l'emploi et pas la vitesse : `--ms-effleure` (180) est
+   pour ce qui répond sous le doigt — un survol, un bouton ; `--ms-etat` (320)
+   est pour ce qui passe d'un état à un autre. Un montant qui valait 56,90 €
+   et vaut 69,80 € a changé d'état. C'est donc `--ms-etat`.
+
+   ---------------------------------------------------------------------------
+   COMMENT LE FONDU SE DÉCLENCHE SANS UNE LIGNE DE JAVASCRIPT
+   ---------------------------------------------------------------------------
+   Le montant est rendu dans un `<span>` dont la CLÉ REACT est sa propre valeur.
+   Quand la valeur change, React ne met pas à jour le nœud : il en monte un
+   neuf. `@starting-style` s'applique alors, et le nombre entre en fondu. Zéro
+   état, zéro minuterie, zéro octet de JavaScript — c'est exactement le patron
+   de la pastille du panier écrit en C13, transposé au montant.
+
+   La transition ne porte QUE sur `opacity` (D37) : aucune géométrie ne bouge,
+   donc aucun décalage cumulé. Aucune largeur minimale n'est posée — les
+   `min-w-*` du tunnel ont été RETIRÉS en C16, mesure à l'appui (342→342,
+   332→332) : l'avance égale des chiffres vient de la chasse fixe de la mono,
+   et `tabular-nums` couvre la fenêtre d'échange de police (repli
+   proportionnel — leçon CLS de C13). Remettre une largeur « qui manque »
+   serait défaire cette mesure.
+
+   `display: inline-block` est la seule autre déclaration, et elle est
+   nécessaire : `@starting-style` ne s'applique qu'à un élément qui a une boîte
+   propre, et un `<span>` en flux ne transite pas son opacité de façon fiable
+   selon les moteurs. Elle est DANS la requête de média, donc sous mouvement
+   réduit le `<span>` reste un span ordinaire.
+
+   ---------------------------------------------------------------------------
+   CE QUE CETTE TRANCHE NE LIVRE PAS, ET POURQUOI
+   ---------------------------------------------------------------------------
+   La sortie d'une ligne supprimée n'est PAS animée. Ce n'est pas un oubli :
+   c'est impossible en CSS pur. React retire le nœud du document à l'instant du
+   clic ; il n'y a plus rien à faire transiter. `transition-behavior:
+   allow-discrete` anime un `display` qui change, pas un élément qui disparaît
+   de l'arbre. Le rendre animable demanderait de garder la ligne montée pendant
+   la durée du fondu, donc un état de sortie et une minuterie dans un composant
+   client — du JavaScript ajouté au tunnel pour un adieu à une ligne de panier,
+   contre la phrase qui ouvre la tranche.
+
+   Ce que le geste rend visible à la place, et qui est la vraie information : le
+   TOTAL change, donc il fond. La conséquence est montrée là où elle compte.
+
+   ---------------------------------------------------------------------------
+   EFFET DE BORD ASSUMÉ : le premier rendu fond aussi
+   ---------------------------------------------------------------------------
+   `@starting-style` s'applique à la première apparition d'un élément, pas
+   seulement à ses remplacements. Les montants entrent donc en fondu au moment
+   où l'îlot remplace sa place réservée. C'est le moment où le panier restauré
+   apparaît : le fondu y adoucit un échange qui était sec. Il ne s'agit pas
+   d'une révélation au sens de D37 (rien n'est déclenché par le défilement,
+   rien n'est masqué au repos, et sans JavaScript la page est entière) ; le
+   décalage cumulé est inchangé, l'animation ne portant que sur l'opacité.
+   =========================================================================== */
+
+@media (prefers-reduced-motion: no-preference) {
+  [data-chiffre] {
+    display: inline-block;
+    transition: opacity var(--ms-etat) var(--ease-verre);
+  }
+
+  @starting-style {
+    [data-chiffre] {
+      opacity: 0;
+    }
+  }
+}
+
+/* ===========================================================================
+   LE SOCLE DE MOUVEMENT (C17) — le défilement adouci, l'arrivée de route,
+   et l'entrée en scène du premier écran
+   ===========================================================================
+
+   TOUT CE BLOC EST HORS COUCHE, et c'est l'interdit n° 21 de D37 appliqué à
+   lui-même. Une règle d'état écrite dans `@layer components` est battue par
+   n'importe quel utilitaire Tailwind portant la même propriété — c'est ce qui
+   a rendu inertes le trait de famille et la bascule du rayon en C15, et les
+   degrés typographiques en C16. Ces règles-ci changent `opacity`, `transform`
+   et `clip-path` sur des éléments qui portent des classes utilitaires ; hors
+   couche, elles gagnent sans qu'on ait à écrire un seul `!important`.
+
+   ---------------------------------------------------------------------------
+   LE STRICT NÉCESSAIRE DE LENIS, RECOPIÉ PLUTÔT QU'IMPORTÉ
+   ---------------------------------------------------------------------------
+   La bibliothèque livre sa propre feuille (`lenis/dist/lenis.css`). L'importer
+   la ferait entrer dans le CSS DE PREMIER CHARGEMENT des vingt-deux routes,
+   c'est-à-dire dans le budget de 12 Ko de D36, pour un mécanisme qui ne
+   concerne que trois d'entre elles et seulement hors mouvement réduit. On
+   recopie donc les deux règles qui comptent et on laisse dehors celles qui ne
+   servent à rien ici — le verrou de défilement (`lenis-stopped` : rien de ce
+   site ne bloque le défilement), la neutralisation des iframes (le site n'en a
+   aucune) et la bascule automatique.
+
+   La troisième règle de la bibliothèque — celle qui force `scroll-behavior:
+   auto` sous `.lenis` — n'est PAS recopiée, parce que C12 l'a rendue inutile
+   par construction : le défilement natif adouci est écrit `html:not(.lenis)`.
+   La classe que Lenis pose éteint la règle d'elle-même, sans qu'aucun script
+   ne la défasse et sans `!important`. C'est la préparation de C12 qui paie
+   ici, exactement là où elle avait été posée.
+   =========================================================================== */
+
+html.lenis,
+html.lenis body {
+  /* Lenis mesure le contenu et pilote le défilement : une hauteur contrainte
+     sur la racine ou le corps lui donnerait deux vérités sur la même page. */
+  height: auto;
+}
+
+html.lenis [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+/* ---------------------------------------------------------------------------
+   L'ARRIVÉE DE ROUTE — un fondu, et seulement d'un écran à l'autre
+   ---------------------------------------------------------------------------
+   Le raisonnement complet (pourquoi 900 ms plutôt que les 260 du plan, et
+   pourquoi ce fondu NE JOUE PAS au premier chargement) est en tête de
+   `TransitionPage`, dans `src/lib/fournisseurs.tsx`. En deux lignes : le jeton
+   `--ms-signature` est celui dont D37 nomme littéralement l'emploi
+   « transition de page » ; et la règle vit sous `html.mouvement`, posée après
+   hydratation, si bien qu'au premier rendu aucun `@starting-style` ne concerne
+   cet élément — la page s'affiche complète, immobile, et l'indice de rapidité
+   visuelle ne recule pas.
+
+   L'animation ne porte QUE sur l'opacité : aucune géométrie ne bouge, donc
+   aucun décalage cumulé, et un élément à opacité partielle reste parfaitement
+   cliquable — le parcours d'achat joué sous mouvement le prouve.
+   --------------------------------------------------------------------------- */
+
+/* ---------------------------------------------------------------------------
+   LA GÉOMÉTRIE DE LA SIGNATURE — HORS DE TOUT RÉGIME DE MOUVEMENT
+   ---------------------------------------------------------------------------
+   Ces déclarations ne bougent rien : elles donnent à la ligne un repère
+   (`position: relative`), lui disent où s'arrêter (`width: fit-content` — un
+   masque qui déborderait de son texte laisserait voir la montée à côté de la
+   ligne) et découpent le MASQUE dans lequel le texte monte.
+
+   ELLES SONT ÉCRITES ICI, ET NON DANS LE BLOC `no-preference` JUSTE EN
+   DESSOUS, POUR UNE RAISON QUI VAUT AU-DELÀ DE CE GESTE : `width: fit-content`
+   change le retour à la ligne. Placée sous la requête de préférence, elle
+   donnerait à deux visiteurs deux mises en page différentes selon un réglage
+   d'accessibilité, et une capture faite sous un régime cesserait de décrire
+   l'autre. Le mouvement se règle, la mise en page ne se règle pas.
+
+   ═══════════════════════════════════════════════════════════════════════════
+    C19 — TROISIÈME RETOUR CLIENT SUR CE GESTE : LES RECTANGLES DISPARAISSENT
+   ═══════════════════════════════════════════════════════════════════════════
+
+   Le balayage par blocs pleins livré plus tôt dans cette tranche a été REGARDÉ
+   sur le déployé et rejeté : « de grands rectangles noirs pas très
+   esthétiques ». L'orchestrateur l'a confirmé de ses yeux — à 450 ms les cinq
+   blocs se chevauchent en une masse d'encre difforme par-dessus le premier
+   écran. Le patron d'origine (révélation de texte par blocs) est abandonné.
+
+   Ce qui le remplace garde l'ÉNERGIE et supprime le BLOC : le texte monte
+   derrière un masque INVISIBLE aux dimensions de sa propre ligne. Aucun
+   pseudo-élément, aucune couleur, aucun pixel sombre ne se pose jamais sur le
+   héros — la seule chose qui bouge est le texte lui-même.
+
+   ---------------------------------------------------------------------------
+   LE MASQUE EST UN `clip-path`, ET IL NE COUPE QUE PAR LE BAS
+   ---------------------------------------------------------------------------
+   `overflow: clip` aurait fait la même chose, mais il coupe des QUATRE côtés :
+   les jambages, les accents et les débords latéraux d'une didone sortiraient
+   rognés au repos. `inset()` prend quatre valeurs indépendantes — on ouvre
+   largement en haut et sur les côtés (valeurs négatives, le masque déborde la
+   boîte), on ferme au ras du bas, et c'est là et seulement là que le texte
+   disparaît.
+
+   LE DÉBORD DU BAS EST LA PIÈCE DÉLICATE, et il vient de la Bodoni.
+   L'interlignage du monument est de 0,86 : la boîte de ligne est PLUS COURTE
+   que l'encre qu'elle porte, si bien qu'un jambage descend sous le bord
+   inférieur de la boîte. Couper au ras de la boîte rognerait le « g » d'un mot
+   qui en aurait un. On s'accorde donc un débord vertical — `padding-bottom`
+   compensé par une marge négative de même valeur, de sorte que la mise en page
+   ne bouge pas d'un pixel — et le masque coupe SOUS ce débord. Vérifié sur
+   capture au repos et pendant l'entrée (`preuves/c19/`).
+
+   LA MARGE NÉGATIVE NE PEUT PORTER QUE SUR LE BAS : les enveloppes de lignes
+   portent des marges HAUTES d'utilitaire (`mt-5`, `mt-6`, `mt-8`), et ce bloc
+   étant hors de toute couche, un `margin` complet les écraserait toutes.
+
+   ---------------------------------------------------------------------------
+   LA LIGNE DU BOUTON N'EST PAS MASQUÉE, ET C'EST UNE QUESTION D'ACCESSIBILITÉ
+   ---------------------------------------------------------------------------
+   Un `clip-path` coupe tout ce que ses descendants peignent, BAGUE DE FOCUS
+   COMPRISE. Celle de ce site déborde de douze pixels (trait de 3 px, décalage
+   de 3 px, halo de 6 px) : masquer la ligne du bouton reviendrait à rogner
+   par le bas l'anneau de mise au point du seul élément focalisable du premier
+   écran — la régression exacte que la campagne d'accessibilité de C8 avait
+   payée sur trois tableaux. La ligne du bouton porte donc
+   `data-signature-libre` : elle garde la montée et le fondu, sans masque et
+   avec une course courte. Un bouton d'encre pleine qui monte est déjà une
+   forme ; il n'a pas besoin qu'on lui en ajoute une.
+   --------------------------------------------------------------------------- */
+
+[data-signature='ligne'] {
+  position: relative;
+}
+
+[data-signature='ligne']:not([data-signature-libre]) {
+  /* `width: fit-content` N'APPARTIENT QU'AUX LIGNES MASQUÉES, et il a changé de
+     place en C19-ter. Son motif est écrit au-dessus : un masque plus large que
+     son texte laisserait voir la montée à côté de la ligne. Une ligne LIBRE n'a
+     pas de masque — la déclaration n'y servait rien, et elle y nuisait dès que
+     la ligne portait une surface : un `border-b` de pleine largeur s'arrêtait au
+     dernier caractère, un panneau de verre se rétractait autour de sa prose.
+     La généralisation de l'entrée à toutes les pages (retour client n° 18) a
+     rendu ces deux cas réels ; la règle suit ce qu'elle sert. */
+  width: fit-content;
+  /* Le débord, puis sa compensation : la boîte du masque descend sous les
+     jambages, et la mise en page ne s'en aperçoit pas. */
+  padding-bottom: 0.24em;
+  margin-bottom: -0.24em;
+  /* Haut et côtés grands ouverts (le masque déborde), bas au ras. */
+  clip-path: inset(-80% -25% 0 -25%);
+}
+
+/* Les deux mots du monument, chacun sur sa ligne et chacun dans sa boîte. Le
+   pied de page les sépare déjà depuis C13, pour une autre raison (une seule
+   ligne débordait entre 1 000 et 1 900 px) ; ici c'est le balayage qui le
+   demande, et la séparation explicite RENFORCE au passage la garde de C18 :
+   le plafond en `cqi` avait été calculé sur « Vaubrune », le mot le plus long,
+   et c'est désormais lui, seul, qui décide de la largeur d'une ligne. */
+.monument-mot {
+  display: block;
+}
+
+/* LA MONTÉE MASQUÉE — deux propriétés, et pas une de plus.
+   ===========================================================================
+   `opacity` ET `transform`, LES SEULES QUE D37 AUTORISE, ET LES SEULES QUE
+   CHROME CONFIE AU COMPOSITEUR
+   ===========================================================================
+   La leçon de mesure de cette tranche vaut d'être relue avant de toucher à ces
+   images-clés : une écriture antérieure y faisait basculer `transform-origin`,
+   propriété NON compositable, et a coûté CINQ POINTS DE RAPIDITÉ sur l'accueil
+   (97 → 92, temps de blocage de 50 à 200 ms — la valeur plafond de D36,
+   atteinte pile). Une seule apparition d'une propriété non compositable dans
+   les images-clés rapatrie TOUTE l'animation sur le fil principal.
+
+   Le geste actuel n'écrit donc que `opacity` et `transform: translateY`. Le
+   masque, lui, ne bouge PAS : c'est une propriété statique de l'enveloppe.
+   Il n'y a plus rien à animer d'autre que le texte.
+
+   ---------------------------------------------------------------------------
+   LE FONDU EST COURT, ET IL A UNE RAISON CHIFFRÉE
+   ---------------------------------------------------------------------------
+   L'opacité atteint sa pleine valeur à DIX POUR CENT de la course, soit 140 ms
+   sur 1 400. Ce n'est pas une timidité : sous `--ease-coule`, la montée a déjà
+   parcouru un peu plus de la moitié de son chemin à cet instant, si bien que
+   la fenêtre pendant laquelle de l'encre pâle est visible dure moins d'un
+   dixième de seconde et ne concerne que le bas de la ligne.
+
+   L'ancienne écriture garantissait mieux : un `steps(1, end)` faisait passer le
+   texte de l'invisible au plein SOUS le bloc, sans aucun état intermédiaire.
+   Cette garantie appartenait au bloc — un masque invisible n'a rien sous quoi
+   cacher un fondu. Le geste rejoint donc le régime commun du site, où toutes
+   les révélations de contenu montent en opacité pendant 620 ms (C17) : la
+   fenêtre est ici QUATRE FOIS PLUS COURTE que celle que le reste du site
+   accepte déjà, et c'est la comparaison qui décide, pas une préférence. */
+@keyframes signature-montee {
+  from {
+    opacity: 0;
+    transform: translateY(var(--montee-signature));
+  }
+
+  10% {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html.mouvement [data-transition-page] {
+    transition: opacity var(--ms-signature) var(--ease-coule);
+  }
+
+  @starting-style {
+    html.mouvement [data-transition-page] {
+      opacity: 0;
+    }
+  }
+
+  /* -------------------------------------------------------------------------
+     « LA MISE EN BOUTEILLE » — L'ACCUEIL, ET IL ACCUEILLE À FROID (C18, C19)
+     -------------------------------------------------------------------------
+     EXIGENCE CLIENT DU 10/08 : « une animation d'ouverture du titre, classe,
+     chaleureuse, accueillante, douce et lente, premium ». C'est la signature ①
+     du plan directeur, appliquée au TEXTE seul.
+
+     C17 avait livré cette cascade derrière la porte `html.mouvement`, donc
+     jouée seulement quand on REVENAIT à l'accueil depuis le site. À froid —
+     c'est-à-dire à la seule arrivée qui compte, celle d'un visiteur qui découvre
+     la maison — le premier écran s'affichait complet et immobile. Le rapport de
+     C17 en faisait un écart assumé et énumérait trois manières de faire
+     autrement, toutes fermées : un préchargeur (interdit n° 7), un script
+     bloquant qui poserait la classe avant le premier rendu (il masquerait le
+     contenu même si le paquet échouait), l'état masqué écrit en dur dans la
+     feuille (même panne).
+
+     LA QUATRIÈME VOIE, que la revue de C17 a nommée et que cette tranche
+     emprunte : `@starting-style` SANS la porte `html.mouvement`. Elle échappe
+     aux trois pannes parce qu'elle ne masque jamais rien de façon persistante —
+     `@starting-style` ne décrit que le style de DÉPART d'une transition, et un
+     moteur qui ne le connaît pas affiche simplement l'état d'arrivée. Sans
+     JavaScript, avec un paquet qui échoue, sur un navigateur ancien : le texte
+     est là. La dégradation est « pas d'animation », jamais « invisible » — ce
+     qui est exactement la promesse que D37 fait pour les révélations, obtenue
+     ici sans le moindre script.
+
+     LA MACRO, ELLE, RESTE DERRIÈRE LA PORTE, et c'est la ligne de partage de
+     cette tranche : le texte accueille, l'image ne bouge pas. Elle est le plus
+     grand affichage de contenu de la page, et le raisonnement de C17 sur
+     l'indice de rapidité visuelle vaut toujours pour elle. (Il vaudra plus
+     encore quand la vidéo décidée le 10/08 prendra sa place en C19.)
+
+     VOCABULAIRE STRICT (D37) : `--ms-hero` (1400 ms, « l'entrée en scène du
+     premier écran, une seule fois par visite » — la ligne du tableau est écrite
+     pour ce geste-ci), `--decalage-cascade` (70 ms) multiplié par un rang que
+     le composant plafonne, `--ease-coule`. Le nombre trompe sans sa courbe :
+     `cubic-bezier(0.16, 1, 0.30, 1)` dépasse quatre-vingts pour cent de
+     progression au tiers du temps, si bien que 1 400 ms se voient comme une
+     entrée d'un demi-seconde suivie d'une longue immobilisation. C'est « douce
+     et lente » sans être une attente.
+
+     Deux propriétés, et pas une de plus : `opacity` et `transform`. Aucune
+     géométrie ne bouge, donc le décalage cumulé reste nul — vérifié sous les
+     deux régimes.
+
+     ═══════════════════════════════════════════════════════════════════════
+      C19 — DEUX RETOURS SUCCESSIFS, ET LA FORME QUI RESTE : LA MONTÉE MASQUÉE
+     ═══════════════════════════════════════════════════════════════════════
+
+     SECOND RETOUR CLIENT sur ce geste : « beaucoup trop discrète, plus visible
+     et plus remarquable ». Le fondu de C18 fonctionnait — la série d'opacités
+     avait été relevée sur la prévisualisation avant qu'on ne tranche — ce
+     n'était donc pas une panne mais une INTENSITÉ, et allonger un geste discret
+     le rend lent, pas remarquable. Il fallait un geste d'une autre NATURE : un
+     bord net, une forme qui traverse.
+
+     TROISIÈME RETOUR, sur la réponse : le bloc plein qui balayait chaque ligne
+     donnait « de grands rectangles noirs pas très esthétiques » — vérifié de
+     visu sur le déployé, les cinq blocs se chevauchant à mi-course en une masse
+     d'encre par-dessus le premier écran. Le patron des révélations par blocs
+     est ABANDONNÉ sur verdict client.
+
+     CE QUI RESTE EN GARDE L'ÉNERGIE ET SUPPRIME LA MATIÈRE : chaque ligne monte
+     de sa propre hauteur derrière un masque INVISIBLE, découpé au ras de la
+     ligne (la géométrie et son débord sont écrits plus haut, hors de tout
+     régime de mouvement). Aucun pseudo-élément, aucune couleur, aucun pixel
+     sombre ne se pose jamais sur le héros : la seule chose qui bouge est le
+     texte, et la seule chose qui le cache est un découpage.
+
+     DEUX PROPRIÉTÉS ANIMÉES, ET C'EST UNE DE MOINS QU'AVANT : `opacity` et
+     `transform: translateY`. Aucune géométrie de mise en page ne bouge — donc
+     décalage cumulé nul, re-mesuré.
+
+     ---------------------------------------------------------------------------
+     POURQUOI DEUX ÉLÉMENTS PAR LIGNE — la raison change, la structure reste
+     ---------------------------------------------------------------------------
+     Le masque doit rester dans une boîte FIXE pendant que le texte monte. Une
+     transformation posée sur l'enveloppe emporterait son propre découpage, et
+     le masque monterait avec ce qu'il masque. L'enveloppe
+     (`data-signature="ligne"`) porte le `clip-path` et ne bouge jamais ;
+     l'élément intérieur (`data-signature="texte"`) porte le texte et monte.
+
+     ---------------------------------------------------------------------------
+     DES ANIMATIONS ET NON DES TRANSITIONS — la quatrième voie tient toujours
+     ---------------------------------------------------------------------------
+     `@starting-style` ne décrit qu'un DÉPART, et il faut ici une course dont la
+     fin est connue à l'avance et qui joue au premier calcul de style, sans
+     script et sans classe posée après hydratation. Ce sont donc des images-clés.
+
+     LA PROPRIÉTÉ QUI COMPTE EST CONSERVÉE, et c'est la seule qui compte : rien
+     n'est masqué de façon persistante. `animation-fill-mode: backwards`
+     n'applique l'état de départ que PENDANT le retard, jamais après, et le
+     texte n'a AUCUN style de repos qui le cache — pas d'opacité nulle, pas de
+     translation, rien. Sans JavaScript, avec un paquet qui échoue, sur un
+     navigateur ancien : le premier écran est complet et lisible. La dégradation
+     reste « pas d'animation », jamais « invisible ». Le masque lui-même est
+     inoffensif dans ce cas : il ne retire que ce qui se trouve SOUS la ligne,
+     c'est-à-dire rien quand le texte est à sa place.
+
+     ---------------------------------------------------------------------------
+     UNE SEULE DURÉE, ET LE VOCABULAIRE EST INCHANGÉ
+     ---------------------------------------------------------------------------
+     `--ms-hero` (1400 ms, « l'entrée en scène du premier écran, une seule fois
+     par visite ») et `--ease-coule`. La courbe redevient celle du plan
+     directeur : elle avait dû céder la place à `--ease-verre` tant qu'un bloc
+     couvrait la ligne — sous `--ease-coule`, la montée était terminée DERRIÈRE
+     le bloc, donc invisible. Le bloc parti, l'objection tombe avec lui, et
+     `--ease-coule` rend exactement ce que le client avait demandé au premier
+     jour : « douce et lente, premium » — quatre-vingts pour cent de la course
+     au tiers du temps, puis une longue immobilisation.
+
+     L'ÉTAGEMENT NE CHANGE PAS : `--decalage-cascade` (70 ms) multiplié par des
+     rangs ESPACÉS (1, 3, 5, 6 — le composant les écrit), soit 420 ms d'écart
+     entre la première ligne et la dernière. On voit quatre gestes, pas un seul
+     épais.
+     ------------------------------------------------------------------------- */
+
+  /* -------------------------------------------------------------------------
+     LE BLOC-TITRE DES VINGT ET UNE AUTRES PAGES — MÊME GESTE, AUTRE DURÉE
+     -------------------------------------------------------------------------
+     C19-ter décline l'entrée du héros sur toutes les pages (retour client
+     n° 18, redit une seconde fois). Le geste est le MÊME — mêmes images-clés,
+     même masque, même courbe, même cascade — mais sa durée change, et ce n'est
+     pas un ajustement de goût : c'est une LOI DE MESURE, découverte ici et
+     valable pour tout ce dépôt.
+
+     ═══════════════════════════════════════════════════════════════════════
+      LE PLUS GRAND AFFICHAGE DE CONTENU ATTEND LA FIN DE L'ANIMATION QUI LE
+      PORTE — quelle que soit cette animation
+     ═══════════════════════════════════════════════════════════════════════
+
+     Relevé sur les CGV, cinq régimes, trois passes chacun, même construction,
+     même serveur (`travaux-images/diag-lcp.mjs`, résumé au rapport) :
+
+       entrée complète .......................... 1 700 ms
+       sans animation du tout ......................ted 188 ms
+       sans masque (clip-path) .................. 1 700 ms
+       sans animation du TITRE seul ................. 184 ms
+       titre en opacité SEULE (course nulle) .... 1 696 ms
+       titre, durée ramenée à 320 ms ................ 600 ms
+
+     Trois conclusions, et la troisième est celle qui décide. (1) Ce n'est PAS
+     le masque : le retirer ne rend pas une milliseconde. (2) Ce n'est PAS la
+     translation : une course nulle coûte exactement autant. (3) C'est la
+     PRÉSENCE d'une animation sur l'élément mesuré, et le coût vaut sa DURÉE —
+     Chrome ré-émet un candidat à chaque image tant que l'élément est animé, et
+     c'est le dernier qui compte.
+
+     ═══════════════════════════════════════════════════════════════════════
+      CE QUE CELA CHANGE, ET CE QUE CELA NE CHANGE PAS
+     ═══════════════════════════════════════════════════════════════════════
+
+     Sur l'accueil et sur toute page qui porte une IMAGE de tête, le plus
+     grand affichage est cette image : le titre peut courir 1 400 ms sans coûter
+     une milliseconde. Mesuré sur `/livraison` : 160 ms sans l'entrée, 172 avec.
+     (Aucun décompte n'est écrit ici : elles étaient cinq en C19-ter, elles sont
+     huit depuis C21a, et un nombre gravé dans ce commentaire aurait vieilli deux
+     fois en une journée.)
+     C'est la raison pour laquelle C18 avait pu adopter la quatrième voie sans
+     rien payer, et personne ne l'avait comprise ainsi — on croyait que le geste
+     était gratuit ; il l'était parce qu'il ne portait pas la mesure.
+
+     Sur les pages de TEXTE — les cinq documents légaux, le tunnel, les cinq
+     écrans marchands, la 404 —, le titre EST la mesure. La durée y est donc
+     `--ms-signature`, et le vocabulaire de D37 n'est pas rouvert d'un iota : la
+     ligne du tableau se lit « révélation d'un bloc de tête, TRANSITION DE
+     PAGE », ce qui est exactement l'emploi. `--ms-hero`, lui, nomme « l'entrée
+     en scène du premier écran, UNE SEULE FOIS PAR VISITE » — et il n'y a qu'un
+     premier écran par visite : celui de l'accueil.
+
+     Le geste perçu ne perd rien de sa nature : `--ease-coule` dépasse
+     quatre-vingts pour cent de sa course au tiers du temps, si bien que 900 ms
+     se voient comme une arrivée de trois cents millisecondes suivie d'une
+     immobilisation. Ce qui raccourcit est la QUEUE du geste, pas son énergie.
+     ------------------------------------------------------------------------- */
+  [data-signature='texte'] {
+    display: inline-block;
+    /* LA COURSE VAUT UNE LIGNE ET DIX POUR CENT, et le pour-cent se résout sur
+       la hauteur de CET élément — c'est-à-dire sur sa propre boîte de ligne.
+       Le monument monte donc de cent quarante pixels et l'étiquette de quinze,
+       chacun d'une hauteur de texte : le geste est le même à toutes les
+       échelles sans qu'aucune borne n'ait à le rattraper. Les dix pour cent de
+       plus garantissent qu'au premier instant l'encre est bien SOUS le masque
+       et non à cheval sur son bord. */
+    --montee-signature: 110%;
+    /* LA DURÉE EST UNE VARIABLE, ET SON DÉFAUT EST `--ms-signature`. C'est
+       l'inversion que la mesure ci-dessus impose : le geste long appartient au
+       PREMIER ÉCRAN D'UNE VISITE, c'est-à-dire à l'accueil et à lui seul, qui
+       l'obtient en posant `--duree-signature` sur sa colonne. Partout ailleurs,
+       « révélation d'un bloc de tête, transition de page » — la ligne du tableau
+       de D37 qui décrit exactement cet emploi. Écrire la durée en variable
+       plutôt qu'en seconde règle évite au passage la question de l'ordre et de
+       la spécificité : une valeur ne se dispute pas la préséance avec une
+       déclaration, elle est là ou elle vaut son repli. C'est la leçon du rang de
+       cascade de C19, à un autre endroit. */
+    animation: signature-montee var(--duree-signature, var(--ms-signature))
+      var(--ease-coule) backwards;
+    animation-delay: calc(var(--decalage-cascade) * var(--rang-signature, 0));
+  }
+
+  /* -------------------------------------------------------------------------
+     LE TITRE N'ENTRE QUE LÀ OÙ IL NE PORTE PAS LA MESURE
+     -------------------------------------------------------------------------
+     C'est la règle la plus importante de cette tranche, et elle est née d'une
+     mesure qui a démenti l'intention. Le retour client n° 18 demandait une
+     entrée sur TOUTES les pages ; la contrainte du contrat disait « le plus
+     grand affichage de contenu jamais retardé ». Les deux semblaient
+     compatibles. Elles ne le sont pas partout, et le relevé le dit sans
+     ambiguïté (`travaux-images/diag-lcp.mjs`, trois passes par régime, même
+     construction, même serveur) :
+
+       page              élément mesuré        sans entrée   avec entrée
+       ----------------  --------------------  -----------   -----------
+       fiche produit     IMG (la galerie)          168 ms        160 ms
+       /panier           IMG (la cagette)          112 ms        124 ms
+       /gestion          SPAN (le titre)           148 ms      1 152 ms
+       CGV               SPAN (le titre)           188 ms      1 212 ms
+
+     LA LOI QUE CES QUATRE LIGNES DONNENT : le plus grand affichage attend la
+     FIN de l'animation qui le porte. Ce n'est ni le masque ni la translation —
+     les retirer ne rend pas une milliseconde, et une course NULLE coûte
+     exactement autant. C'est la PRÉSENCE d'une animation sur l'élément mesuré.
+
+     D'où la règle : le titre entre là où une IMAGE porte la mesure, et il reste
+     en place là où c'est lui. Ce n'est pas une exception concédée à
+     contrecœur — c'est la même frontière que l'interdit n° 19 de D37 trace
+     depuis C11 (« un document juridique et un formulaire de paiement se
+     lisent ; ils ne se mettent pas en scène »), retrouvée par la mesure et non
+     par la doctrine. Les deux tombent au même endroit, ce qui est le meilleur
+     signe qu'aucune des deux ne se trompe.
+
+     ET CES PAGES NE SONT PAS FIGÉES POUR AUTANT : leur étiquette, leur chapeau
+     et leur note entrent normalement — coût mesuré, 148 ms contre 148. La seule
+     chose qui ne bouge pas est la ligne qui, sur ces pages-là, EST la mesure.
+
+     Le marqueur est STRUCTUREL et non déclaratif : le porte celui qui apporte
+     l'image de tête — la colonne du monument de l'accueil, le héros à deux
+     colonnes des pages illustrées, l'en-tête d'une fiche produit. Une
+     page qui perdrait son image perdrait l'attribut avec elle, et son titre
+     cesserait d'être animé le jour même — au lieu de le rester en silence.
+
+     UNE EXCEPTION DEPUIS C21a, ET ELLE EST DE DOCTRINE, PAS DE MESURE. Les
+     trois pages du tunnel ont gagné une image de tête, et cette image porte
+     bien la mesure — relevé à l'appui, `/commande` passe de 1 736 à 1 068 ms et
+     l'élément mesuré devient l'`<img>`. La règle ci-dessus les autoriserait donc
+     à animer leur titre. Elles ne le font pas : l'interdit n° 19 cité plus haut
+     nomme le formulaire de paiement, et la doctrine C16 nomme le tunnel entier.
+     C'est le seul endroit du site où « ce que la mesure permet » et « ce que la
+     doctrine décide » divergent, et c'est écrit ici pour qu'on ne prenne pas
+     cette divergence pour un oubli. `<HerosIllustre>` retire alors l'attribut
+     par sa propriété `titreAnime` ; un cas de `tunnel.spec.ts` lit le style
+     calculé DES DEUX CÔTÉS, sans quoi le drapeau finirait par manquer.
+     ------------------------------------------------------------------------- */
+  h1[data-signature='ligne'] [data-signature='texte'] {
+    animation-name: none;
+  }
+
+  [data-titre-anime] h1[data-signature='ligne'] [data-signature='texte'] {
+    animation-name: signature-montee;
+  }
+
+  /* LA LIGNE LIBRE — celle du bouton, qui n'a pas de masque (bague de focus,
+     voir la géométrie plus haut). Sans masque, une course d'une hauteur entière
+     ferait passer le bouton par-dessus la section suivante : elle est ramenée à
+     la course bornée de C18, qui ne sort jamais de la respiration du bloc. */
+  [data-signature-libre] [data-signature='texte'] {
+    --montee-signature: clamp(1.5rem, 0.55em, 4rem);
+  }
+
+  /* -------------------------------------------------------------------------
+     LA MACRO S'OUVRE — mais seulement quand on revient à l'accueil
+     -------------------------------------------------------------------------
+     Le recadrage passe de douze pour cent à zéro pendant que l'échelle se pose
+     de 1,06 à 1. `clip-path` est la troisième propriété que D37 admet, et
+     seulement sur un élément à BOÎTE FIXE : la figure est dimensionnée par le
+     rendu serveur, le recadrage ne change donc pas la place occupée et ne
+     déclenche aucun recalcul de mise en page.
+
+     `html.mouvement` est CONSERVÉE ici, à l'inverse du texte ci-dessus. Ce
+     n'est pas une inégalité de traitement, c'est la protection de la note : une
+     ouverture de l'image au chargement partirait d'un état que la page a déjà
+     rendu, et l'indice de rapidité visuelle mesure la PROGRESSION de
+     l'affichage. La macro joue donc sa signature à l'arrivée par navigation, le
+     texte la joue toujours.
+     ------------------------------------------------------------------------- */
+
+  html.mouvement [data-signature='macro'] {
+    /* L'échelle de la macro déborde son passe-partout d'un peu plus de trois
+       pour cent : le cadre le retient. `clip` et non `hidden` — il n'y a rien à
+       faire défiler dans une figure, et `clip` n'ouvre pas de conteneur de
+       défilement, donc pas d'arrêt de tabulation involontaire (le défaut que la
+       campagne d'accessibilité de C8 avait trouvé sur trois tableaux). */
+    overflow: clip;
+  }
+
+  html.mouvement [data-signature='macro'] img {
+    clip-path: inset(0);
+    transition:
+      clip-path var(--ms-hero) var(--ease-coule),
+      transform var(--ms-hero) var(--ease-coule);
+  }
+
+  @starting-style {
+    html.mouvement [data-signature='macro'] img {
+      clip-path: inset(12%);
+      transform: scale(1.06);
     }
   }
 }
@@ -201,6 +2770,35 @@
 
    `print-color-adjust: exact` n'est PAS demandé : on ne force pas l'impression
    des aplats chez quelqu'un qui a réglé son navigateur pour les éviter.
+
+   Aucune règle de cette feuille ne référence un jeton de couleur : elles
+   n'écrivent que `#fff` et `#000`. La bascule de palette de C12 ne pouvait
+   donc pas les casser, et la vérification a été faite à l'impression réelle de
+   /retractation plutôt que par lecture (preuve dans preuves/c12/).
+
+   ---------------------------------------------------------------------------
+   AJOUT C12 — la photographie ne s'imprime pas, la silhouette reprend la main
+   ---------------------------------------------------------------------------
+   Décision D35 : les silhouettes SVG ne disparaissent pas de ce projet, elles
+   changent d'emploi et deviennent la structure de REPLI. L'impression est la
+   deuxième de leurs quatre situations — une photographie y coûte de l'encre
+   pour un rendu médiocre, là où un trait à deux couleurs porte mieux
+   l'information.
+
+   La convention est posée ICI et honorée par C14, qui livrera les visuels :
+
+     .visuel-produit              le conteneur d'un visuel de produit ;
+     .visuel-produit img          la photographie engendrée (et son <picture>,
+                                  ses <source>) — masquée à l'impression ;
+     [data-repli-silhouette]      la silhouette SVG posée dans le même
+                                  conteneur, masquée à l'écran par les classes
+                                  du composant, RÉTABLIE ici.
+
+   Écrire cette règle avant les images plutôt qu'après est le seul moyen
+   qu'elle existe : une feuille d'impression est ce que personne ne pense à
+   rouvrir, et une fiche produit imprimée avec un aplat photographique de
+   pleine page est exactement le genre de défaut qui se découvre chez le
+   client.
    =========================================================================== */
 
 @media print {
@@ -208,13 +2806,75 @@
     color-scheme: light;
   }
 
+  /* LE RACCOURCI `background` EST DÉLIBÉRÉ, et il fait plus qu'il n'en a
+     l'air : il remet à leur valeur initiale TOUTES les sous-propriétés, donc
+     `background-image`, `background-size` et `background-repeat` — c'est-à-dire
+     la tuile de marbre ET son voile, posés en C19. Écrire `background-color`
+     seul les aurait laissés, et une imprimante aurait tramé un marbre sur du
+     papier. Le papier est déjà du papier. */
   body {
     background: #fff;
     color: #000;
   }
 
-  header,
-  footer {
+  /*
+   * LA COQUILLE SORT DU PAPIER — MAIS ELLE SEULE.
+   *
+   * Cette règle a masqué `header, footer` AU SÉLECTEUR NU de C7 à C14, et le
+   * défaut ne s'est vu qu'à l'impression d'une fiche produit : `<header>` et
+   * `<footer>` sont des balises de SECTIONNEMENT, pas des noms d'organes. La
+   * fiche produit ouvre son bloc titre + prix + photographies dans un
+   * `<header>` — parfaitement légitime — et l'imprimait donc SANS TITRE, SANS
+   * PRIX et SANS silhouette. Le PDF de la tranche C14 en portait la preuve.
+   *
+   * La règle vise désormais les deux organes de la coquille, qui se déclarent
+   * (`data-chrome-entete`, `data-chrome-pied`). Deux raisons de préférer
+   * l'attribut à un `body > header, body > footer` :
+   *
+   *   1. il dit ce que l'élément EST, et non où il se trouve — c'est la leçon
+   *      de C13 (« contrôler la propriété, pas son indice ») ;
+   *   2. il survit aux enveloppes. Les tranches C15 à C18 posent un contrôleur
+   *      de révélation, Lenis sur trois routes et des transitions de vue : la
+   *      première enveloppe qui ajoute un `<div>` autour de la mise en page
+   *      ferait cesser `body > header` de correspondre, en silence, et la
+   *      coquille reviendrait s'imprimer sans qu'aucun contrôle ne bouge.
+   *
+   * Le contrôle, lui, est dans `preuves/c14/impression-c14.mjs` : il interroge
+   * la VISIBILITÉ RÉELLE (`checkVisibility`), qui tient compte des ancêtres —
+   * un `getComputedStyle(n).display` ne pouvait pas voir un élément masqué par
+   * son parent, ce qui est exactement la façon dont ce défaut a survécu à un
+   * test vert.
+   */
+  [data-chrome-entete],
+  [data-chrome-pied] {
+    display: none !important;
+  }
+
+  /*
+   * La sentinelle de l'en-tête (C13) est hors du `<header>` — elle doit sortir
+   * de la fenêtre pendant que celui-ci reste collé, donc elle ne peut pas être
+   * dedans. Elle n'imprime aucune encre (un pixel de large, aucun fond), mais
+   * un élément en position absolue laissé dans un document paginé est le genre
+   * de chose qui fabrique une première page vide chez un moteur d'impression et
+   * pas chez un autre. Elle est retirée explicitement.
+   */
+  [data-sentinelle-entete] {
+    display: none !important;
+  }
+
+  /*
+   * LA VIDÉO DU HÉROS NE S'IMPRIME PAS (C19).
+   *
+   * Une vidéo sur du papier rend, au mieux, une image arrêtée qu'on n'a pas
+   * choisie ; au pire, un rectangle vide — la nôtre étant à l'opacité nulle
+   * tant qu'elle n'a pas joué, et personne n'imprime après avoir regardé
+   * couler de l'huile pendant six secondes. La photographie qu'elle recouvre,
+   * elle, porte déjà sa propre règle d'impression (`impression="masquer"`,
+   * C14). Retirée explicitement, comme la sentinelle juste au-dessus : le
+   * défaut d'impression de C14 est venu d'un organe qu'on avait cru masqué
+   * parce que son PARENT l'était.
+   */
+  .video-heros {
     display: none !important;
   }
 
@@ -247,5 +2907,180 @@
   /* Le cadre de signature ne doit pas se retrouver seul en fin de page. */
   dl > div {
     break-inside: avoid;
+  }
+
+  /* La photographie sort, la silhouette entre (décision D35, mise en oeuvre C14). */
+  .visuel-produit picture,
+  .visuel-produit source,
+  .visuel-produit img {
+    display: none !important;
+  }
+
+  .visuel-produit [data-repli-silhouette] {
+    display: block !important;
+  }
+
+  /*
+   * La COULEUR DE RÉSERVATION est un organe d'écran : elle empêche le rectangle
+   * blanc de clignoter avant que la photographie n'arrive. Sur le papier il n'y
+   * a rien à attendre, et un aplat beige derrière un dessin au trait ne fait que
+   * consommer de l'encre. Elle est posée en style en ligne par le composant —
+   * d'où le `!important`, qui est ici la règle et non l'exception.
+   */
+  .visuel-produit {
+    background: transparent !important;
+  }
+
+  /*
+   * UNE SEULE SILHOUETTE PAR FICHE (arbitrage C14, round 1).
+   *
+   * La silhouette est celle du PRODUIT, pas de la vue : `principal` et
+   * `ambiance` rétablissaient donc le MÊME dessin, à la même taille, l'un sous
+   * l'autre sur une A4. D35 demande qu'un produit imprimé reste identifiable —
+   * un dessin y suffit ; deux ne disent rien de plus et occupent une demi-page.
+   * La vue marquée sort entièrement, photographie et dessin compris.
+   */
+  [data-visuel-impression='masquer'] {
+    display: none !important;
+  }
+
+  /*
+   * UNE FIGURE DONT LE VISUEL NE S'IMPRIME PAS N'A RIEN À FAIRE SUR LE PAPIER.
+   *
+   * ─── CE QU'ELLE A CORRIGÉ (C21a) ──────────────────────────────────────────
+   *
+   * La règle ci-dessus retire la vue marquée ; elle ne retirait pas le
+   * `<figcaption>` qui la nomme, parce qu'il est son FRÈRE et non son enfant.
+   * Le papier gardait donc une ligne d'étiquette seule — « REGISTRE OUVERT ET
+   * CRAYON — CE QUI S'ENGAGE » suspendue au-dessus du récapitulatif d'une
+   * commande imprimée. Mesuré, pas supposé : sous `print`, `checkVisibility`
+   * comptait 0 image et 1 cartouche sur les trois pages du tunnel
+   * (`preuves/c21/vu-tunnel.txt`). Le défaut était ANTÉRIEUR au tunnel — il
+   * datait de C19-ter et vivait partout où une image de tête sort du papier ;
+   * personne ne l'avait vu parce qu'aucune de ces pages-là n'est un document
+   * qu'on imprime, et `/commande` en est un.
+   *
+   * ─── CE QU'ELLE CORRIGE AUJOURD'HUI : PLUS RIEN, ET C'EST MESURÉ (C21b) ────
+   *
+   * Le retour client n° 22 a retiré le cartouche de TOUS les héros. La règle
+   * n'a donc plus d'orphelin à retirer, et le relevé le dit sans détour
+   * (`preuves/c21/cartouches-apres-c21b.txt`, section 3) : sur `/commande` et
+   * `/livraison`, la règle neutralisée à l'exécution laisse UNE FIGURE VIDE de
+   * ZÉRO POINT DE HAUT, sans image et sans cartouche. Avant le retrait, la même
+   * contre-épreuve rendait une figure de 32 points portant sa légende.
+   *
+   * ET ELLE N'A JAMAIS RIEN FAIT SUR UNE FICHE PRODUIT — le commentaire de C21a
+   * le supposait, la contre-épreuve le dément : la vue d'ambiance porte
+   * `print:hidden` sur la figure ENTIÈRE depuis C15 (elle sort du papier sans
+   * cette règle), et la vue principale n'est pas marquée `masquer` mais
+   * `silhouette`, donc le sélecteur ne la rencontre même pas. Avec ou sans, le
+   * papier de la fiche est identique au point près.
+   *
+   * ─── POURQUOI ELLE RESTE, DIT HONNÊTEMENT ─────────────────────────────────
+   *
+   * C'est désormais une PRÉCAUTION DE FORME et non une protection mesurée —
+   * exactement le statut auquel le garde `@supports` du bandeau a été ramené au
+   * round 1 de C18, et pour la même raison : on garde la règle, on cesse de lui
+   * prêter un effet qu'elle n'a plus. Ce qu'elle ferme est la CLASSE de défaut,
+   * pas ses occurrences : une figure dont le visuel est marqué n'a rien à faire
+   * sur le papier, qu'elle porte une légende ou une figure vide, et le jour où
+   * une figure quelconque recevra de nouveau un cartouche — ou un cadre visible
+   * à l'impression — le papier n'aura rien à réapprendre. C'est pour cela
+   * qu'elle est écrite ici et non en `print:hidden` sur chaque `<figure>` :
+   * autant de copies d'une même correction, c'est la promesse d'une oubliée
+   * (leçon des « étiquettes qui s'ignorent », C13). AUCUN DÉCOMPTE DE HÉROS
+   * N'EST ÉCRIT ICI, et l'ancienne rédaction montrait pourquoi : elle annonçait
+   * « un huitième héros écrit demain » alors que le site en portait déjà huit.
+   *
+   * `:has()` est ici le seul sélecteur qui dise la chose : « la figure qui
+   * CONTIENT un visuel masqué ». Un moteur qui l'ignorerait retomberait sur le
+   * comportement d'hier — une figure vide sur le papier —, jamais sur une page
+   * cassée : la dégradation est celle qu'on vient de corriger, pas une pire.
+   */
+  .cadre-photo:has([data-visuel-impression='masquer']) {
+    display: none !important;
+  }
+
+  /*
+   * LE BLOC D'ACHAT NE S'IMPRIME PAS (C15).
+   *
+   * Le PDF de la fiche produit sorti en C14 portait, page 3, le sélecteur de
+   * format, le champ de quantité et le bouton « Ajouter au panier ». La feuille
+   * d'impression n'avait jamais eu de règle sur les formulaires de la vitrine :
+   * elle avait été écrite pour les documents légaux, où il n'y en a pas.
+   *
+   * Un bouton imprimé est un bouton mort. Pire, sur une fiche produit, c'est un
+   * bon de commande apparent qu'on peut croire remplissable : le contraire de ce
+   * que ce projet passe son temps à écarter. L'organe se DÉCLARE
+   * (`data-bloc-achat`), comme l'en-tête et le pied depuis C14 — un sélecteur de
+   * position aurait cessé de correspondre à la première enveloppe posée.
+   *
+   * Ce qui reste sur le papier : le titre, le prix, le tableau des formats (il
+   * informe, il n'engage pas) et UNE silhouette.
+   */
+  [data-bloc-achat] {
+    display: none !important;
+  }
+
+  /*
+   * UN CADRE QUI DÉFILE NE DÉFILE PAS SUR DU PAPIER : IL COUPE (C16).
+   *
+   * Défaut trouvé en relisant le PDF de `/retractation`, et PRÉEXISTANT — le PDF
+   * produit en C14 porte exactement la même coupure. Le tableau des quinze
+   * régimes de rétractation porte `min-w-3xl`, soit 768 points, pour qu'il reste
+   * lisible dans son cadre à défilement à 390 px (D27/C8). La largeur imprimable
+   * d'une A4 est ici de 794 points (marges de `page.pdf` nulles, aucun @page) :
+   * la dernière colonne — celle qui porte la
+   * MENTION LÉGALE affichée au client — sortait donc du cadre, et
+   * `overflow-x: auto` la coupait net. On lisait « susceptible de se détériorer
+   * o », « vous disp », « articles L. 221-18 et suiv ».
+   *
+   * Ce n'est pas un défaut d'esthétique. Le document imprimé est un LIVRABLE de
+   * ce projet, et une phrase de droit tronquée sur un papier qui circule est
+   * pire qu'une phrase absente : elle a l'air complète.
+   *
+   * La règle rend au cadre son rôle de papier — il ne retient plus rien — et
+   * relâche le plancher de largeur du tableau, qui redevient une grille qui
+   * s'adapte à la page. Le texte y gagne des lignes, ce qui est exactement ce
+   * qu'un tableau fait quand il n'a plus la place : il descend.
+   */
+  [data-cadre-defilant] {
+    overflow: visible !important;
+  }
+
+  [data-cadre-defilant] table {
+    min-width: 0 !important;
+  }
+
+  /* Le cadre d'écran des photographies n'a rien à faire sur le papier. */
+  .cadre-photo {
+    border: 0 !important;
+    background: transparent !important;
+    padding: 0 !important;
+  }
+
+  .cadre-photo > figcaption {
+    border-top: 0 !important;
+  }
+
+  /*
+   * LE PANNEAU N'EXISTE QUE POUR LE MARBRE — donc il n'existe pas sur le
+   * papier. Deux motifs, et le second est le sérieux :
+   *
+   *   1. un aplat de verre imprimé rend un gris sale sur toute la surface, et
+   *      la feuille de C7 promet un fond blanc pur depuis huit tranches ;
+   *   2. le REMPLISSAGE HORIZONTAL rognerait la largeur imprimable. Le
+   *      tableau des quinze régimes de rétractation porte `min-w-3xl`
+   *      (768 pt) pour rester lisible à 390 px, et la largeur imprimable
+   *      d'une A4 vaut 794 pt : trente points de remplissage suffisent à
+   *      recouper les mentions légales que C16 a passé une tranche à
+   *      réparer. Le contrôle mesure `scrollWidth - clientWidth` et n'accepte
+   *      que zéro — cette règle est ce qui le laisse vert.
+   */
+  .panneau {
+    border: 0 !important;
+    background: transparent !important;
+    padding: 0 !important;
+    border-radius: 0 !important;
   }
 }

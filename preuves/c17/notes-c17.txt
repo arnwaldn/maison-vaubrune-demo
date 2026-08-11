@@ -1,0 +1,11 @@
+RELEVE -c17 : notes, temps de blocage et decalage cumule (Lighthouse 13.4.1)
+
+page                     rapidite  a11y  bp  seo   FCP     LCP     TBT     CLS
+------------------------------------------------------------------------------
+Accueil                     97    100  100  100   1.5 s   2.5 s   60 ms       0
+Rayon                       96    100  100  100   1.7 s   2.7 s   40 ms   0.007
+Fiche huile d’olive         97    100  100  100   1.7 s   2.5 s   40 ms       0
+Panier                      97    100  100  100   1.5 s   2.5 s   60 ms       0
+
+PIRE TEMPS DE BLOCAGE : 61 ms pour un plafond de 200 ms (D36/C17).
+Seuils : {"performance":90,"accessibility":100,"seo":96,"best-practices":100}

@@ -181,7 +181,11 @@ export default function PageMentionsLegales() {
                 'aucune commande n’y est expédiée. Les mentions ci-dessous ' +
                 'décrivent ce qu’une boutique réelle affiche à cet endroit ; ' +
                 'elles ne désignent aucune entreprise existante et aucune donnée ' +
-                'n’a été inventée pour les remplir.'}
+                'n’a été inventée pour les remplir. Les photographies, les ' +
+                'illustrations et les vidéos de ce site ont été engendrées par ' +
+                'une ' +
+                'intelligence artificielle et ne représentent aucun produit, aucun ' +
+                'lieu et aucune personne réels.'}
             </T>
           </>
         }

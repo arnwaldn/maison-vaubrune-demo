@@ -1,0 +1,45 @@
+L'ÉTAT MASQUÉ DES RÉVÉLATIONS — style calculé, sous html.mouvement
+Un bloc SOUS LA FLOTTAISON de chaque zone : celui que le contrôleur n’a
+pas encore révélé, donc celui qui porte l’état masqué.
+
+accueil — encart de fiction
+   MASQUÉ    opacité             0
+             transformation      matrix(1, 0, 0, 1, 0, 24)
+             (rang annoncé : —)
+   RÉVÉLÉ    opacité             1
+             transition-property opacity, transform
+             transition-duration 0.62s, 0.62s
+             transition-delay    0s, 0s
+   → CONFORME : masqué d’un coup, révélé en fondu, D37 respecté.
+
+accueil — ligne de famille (cascade)
+   MASQUÉ    opacité             0
+             transformation      matrix(1, 0, 0, 1, 0, 24)
+             (rang annoncé : 6)
+   RÉVÉLÉ    opacité             1
+             transition-property opacity, transform
+             transition-duration 0.62s, 0.62s
+             transition-delay    0.42s, 0.42s
+   → CONFORME : masqué d’un coup, révélé en fondu, D37 respecté.
+
+rayon — vignette (cascade)
+   MASQUÉ    opacité             0
+             transformation      matrix(1, 0, 0, 1, 0, 24)
+             (rang annoncé : 1)
+   RÉVÉLÉ    opacité             1
+             transition-property opacity, transform, background-color, border-color
+             transition-duration 0.62s, 0.62s, 0.32s, 0.32s
+             transition-delay    0.07s, 0.07s, 0s, 0s
+   → CONFORME : masqué d’un coup, révélé en fondu, D37 respecté.
+
+fiche — bloc de prose
+   MASQUÉ    opacité             0
+             transformation      matrix(1, 0, 0, 1, 0, 24)
+             (rang annoncé : —)
+   RÉVÉLÉ    opacité             1
+             transition-property opacity, transform
+             transition-duration 0.62s, 0.62s
+             transition-delay    0s, 0s
+   → CONFORME : masqué d’un coup, révélé en fondu, D37 respecté.
+
+VERDICT : les quatre blocs se révèlent, aucun ne surgit.

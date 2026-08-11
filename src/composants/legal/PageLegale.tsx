@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import type { ReactNode } from 'react';
 
+import { BlocTitre } from '@/composants/mise-en-page/BlocTitre';
 import { typographier } from '@/lib/typographie';
 
 /**
@@ -38,10 +39,25 @@ import { typographier } from '@/lib/typographie';
 /* Classes partagées                                                           */
 /* -------------------------------------------------------------------------- */
 
-export const CLASSE_ARTICLE = 'mt-12 scroll-mt-8';
-export const CLASSE_TITRE_ARTICLE = 'text-titre font-semibold text-encre';
+/*
+ * L'ARTICLE LÉGAL EST UN PANNEAU DEPUIS C19, et cette ligne à elle seule pose
+ * la surface sous une cinquantaine d'articles répartis sur les cinq documents.
+ *
+ * Le fond de la page est un marbre veiné : un document de droit est ce qui se
+ * lit le plus longuement de tout le site, donc ce qui supporte le moins de
+ * traverser une veine tous les trois mots. La constante partagée est le bon
+ * endroit — elle l'était déjà pour la dette typographique de C12, qui avait
+ * montré que deux constantes portaient à elles seules trente éléments rendus.
+ *
+ * `scroll-mt-8` RESTE, et il compte plus qu'avant : chaque article est
+ * désormais une cible d'ancre dont le haut est celui du PANNEAU, pas celui de
+ * son titre. Sans cette marge de défilement, une ancre poserait le bord du
+ * panneau au ras de l'en-tête scellé.
+ */
+export const CLASSE_ARTICLE = 'panneau mt-12 scroll-mt-8';
+export const CLASSE_TITRE_ARTICLE = 'text-titre text-encre';
 export const CLASSE_SOUS_TITRE =
-  'mt-8 font-titre text-base font-semibold text-encre';
+  'mt-8 sous-titre text-encre';
 export const CLASSE_TEXTE =
   'mt-4 max-w-lisible text-sm leading-relaxed text-encre-douce';
 export const CLASSE_LISTE =
@@ -84,15 +100,27 @@ export function EnTeteLegale({
       {...(identifiant === undefined ? {} : { id: identifiant })}
       className="scroll-mt-8 pt-12 pb-8 sm:pt-16 sm:pb-10"
     >
-      <p className="text-xs font-semibold tracking-[0.2em] text-ocre uppercase">
-        <T>{surtitre}</T>
-      </p>
-      <h1 className="mt-4 text-affiche font-semibold text-encre">
-        <T>{titre}</T>
-      </h1>
-      <p className="mt-5 max-w-lisible text-chapeau text-encre-douce">
-        <T>{chapeau}</T>
-      </p>
+      {/* LE CHAPEAU RESTE SUR LE MARBRE, ET IL LE DÉCLARE (C19). Le trio
+          surtitre + titre + chapeau est la COMPOSITION d'ouverture du document,
+          pas encore sa lecture — le mettre sur un panneau ferait commencer la
+          feuille avant le document. Mesuré au pixel comme tout le reste :
+          `data-sur-marbre` est ce qui permet à `marbre-in-vivo.mjs` d'exiger
+          qu'il ne reste AUCUN autre texte courant sur la matière. Une exception
+          écrite se relit ; une exception tacite se perd.
+
+          C'EST CE TRIO-LÀ, ET LUI SEUL, QUI ENTRE SUR UN DOCUMENT LÉGAL
+          (C19-ter). L'interdit n° 19 de D37 — « animer les pages légales ou le
+          tunnel » — est LU À SON MOTIF, qui est écrit à côté de lui : « un
+          document juridique et un formulaire de paiement se LISENT ; une
+          révélation au défilement sur des conditions générales est une gêne à la
+          lecture d'un texte opposable ». Ce qui est fermé, c'est la mise en
+          scène du CORPS ; aucune section de ce document ne porte
+          `data-revelation`, et aucune n'en portera. Le bloc-titre, lui, est
+          l'identité de la page : il entre une fois, à l'arrivée, sans rien
+          masquer de persistant et sans retarder d'une milliseconde la lecture du
+          texte, qui est peint entier dès la première image. La frontière est
+          gravée à l'amendement C19-ter de la décision 009. */}
+      <BlocTitre surtitre={<T>{surtitre}</T>} titre={<T>{titre}</T>} chapeau={<T>{chapeau}</T>} />
     </section>
   );
 }
@@ -133,7 +161,7 @@ export function EncadreGabarit({
     >
       <p
         id="etiquette-gabarit"
-        className="bg-terre px-5 py-2.5 text-xs font-semibold tracking-[0.18em] text-creme uppercase sm:px-7"
+        className="etiquette bg-terre px-5 py-2.5 text-creme sm:px-7"
       >
         Gabarit — démonstration, épicerie fictive
       </p>
@@ -206,17 +234,22 @@ export function TableauGabarit({
   readonly lignes: readonly LigneGabarit[];
 }) {
   return (
-    <div className="mt-5 overflow-x-auto">
+    <div data-cadre-defilant="" className="mt-5 overflow-x-auto">
       <table className="w-full border-collapse text-sm">
         <caption className="sr-only">
           <T>{legende}</T>
         </caption>
         <thead>
+          {/* Les en-têtes de COLONNE sont des libellés sériels : ils partent en
+              étiquette. Les en-têtes de LIGNE, eux, restent de la prose — ce
+              sont des phrases françaises (« Dénomination sociale », « Directeur
+              de la publication »), et vingt-deux d'entre elles en capitales
+              mono crieraient un document qui doit se lire. */}
           <tr className="border-b border-filet text-left">
-            <th scope="col" className="pb-2 pr-6 font-semibold text-encre">
+            <th scope="col" className="etiquette pr-6 pb-2 text-encre">
               Information
             </th>
-            <th scope="col" className="pb-2 font-semibold text-encre">
+            <th scope="col" className="etiquette pb-2 text-encre">
               Valeur
             </th>
           </tr>
@@ -264,21 +297,30 @@ export function SommaireInterne({
   readonly identifiant: string;
   readonly entrees: readonly EntreeSommaire[];
 }) {
+  /* LE SOMMAIRE PASSE SUR UN PANNEAU (C19). Les deux filets qui le bornaient
+     faisaient leur travail sur un aplat ; sur un marbre, ils se noient dans le
+     veinage et douze à seize entrées de mono s'étalent sur la matière. C'est le
+     même raisonnement qu'à l'encart de fiction de l'accueil : la prémisse a
+     changé, pas la conclusion — un index doit se DÉTACHER du texte qu'il
+     annonce, et une surface le détache mieux que deux traits. `print:hidden`
+     reste : un sommaire cliquable n'a rien à faire sur du papier. */
   return (
-    <nav
-      aria-labelledby={identifiant}
-      className="mt-12 border-y border-filet py-5 print:hidden"
-    >
+    <nav aria-labelledby={identifiant} className="panneau mt-12 print:hidden">
       <h2
         id={identifiant}
-        className="font-titre text-sm font-semibold tracking-[0.08em] text-encre uppercase"
+        className="etiquette text-encre"
       >
         <T>{titre}</T>
       </h2>
+      {/* LE SOMMAIRE PART AU REGISTRE (C16). Ce n'est pas de la prose : c'est
+          un index, c'est-à-dire une liste sérielle de repères numérotés, et la
+          mono est la voix de ce qui s'indexe dans cette maison. Le bénéfice
+          n'est pas décoratif — un sommaire qui se lit comme le texte qu'il
+          annonce se confond avec lui, et on le relit au lieu de s'y déplacer. */}
       <ol className="mt-3 grid gap-x-8 gap-y-2 sm:grid-cols-2 lg:grid-cols-3">
         {entrees.map((entree) => (
           <li key={entree.ancre}>
-            <a href={`#${entree.ancre}`} className={`text-sm text-encre-douce ${CLASSE_LIEN}`}>
+            <a href={`#${entree.ancre}`} className={`registre text-encre-douce ${CLASSE_LIEN}`}>
               <T>{entree.libelle}</T>
             </a>
           </li>

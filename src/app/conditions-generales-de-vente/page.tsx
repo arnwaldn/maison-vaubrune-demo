@@ -189,7 +189,7 @@ export default function PageConditionsGeneralesDeVente() {
         }
       />
 
-      <p className="mt-6 max-w-lisible text-sm leading-relaxed text-encre-douce">
+      <p className="panneau mt-6 max-w-lisible text-sm leading-relaxed text-encre-douce">
         <T>{'Version : '}</T>
         <AComplete champ="date de la version des conditions générales de vente" />
       </p>
@@ -900,7 +900,7 @@ function EncadreD211() {
     >
       <h3
         id="titre-encadre-d211"
-        className="border-b border-encre-douce/30 px-5 py-2.5 text-xs font-semibold tracking-[0.18em] text-encre uppercase sm:px-7"
+        className="etiquette border-b border-encre-douce/30 px-5 py-2.5 text-encre sm:px-7"
       >
         Encadré réglementaire
       </h3>

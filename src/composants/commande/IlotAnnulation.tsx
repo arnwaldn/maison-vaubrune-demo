@@ -43,7 +43,7 @@ export function IlotAnnulation() {
 
   return (
     <div className="mt-10 min-h-96 max-w-lisible pb-4">
-      <h2 className="text-titre font-semibold text-encre">Votre panier est intact</h2>
+      <h2 className="text-titre text-encre">Votre panier est intact</h2>
 
       <p className="mt-4 text-sm leading-relaxed text-encre">
         {pretALEmploi && attenteReglee && articles > 0 ? (
@@ -73,7 +73,7 @@ export function IlotAnnulation() {
       <div className="mt-6 flex flex-wrap gap-4">
         <Link
           href="/panier"
-          className="rounded-sm border border-olive bg-olive px-4 py-2.5 text-sm font-semibold text-creme no-underline hover:bg-olive-clair"
+          className="rounded-sm border border-olive bg-olive px-4 py-2.5 text-sm font-semibold text-creme no-underline hover:border-encre hover:bg-encre"
         >
           Revenir au panier
         </Link>

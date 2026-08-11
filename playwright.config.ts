@@ -47,6 +47,47 @@ import { defineConfig, devices } from '@playwright/test';
  * une campagne qu'on finit par ne plus lancer. Le même Chromium sert par
  * ailleurs de navigateur de mesure à Lighthouse
  * (`scripts/mesurer-notes.mjs`), ce qui rend les deux résultats comparables.
+ *
+ * ---------------------------------------------------------------------------
+ * LES 74 TESTS JOUENT SUR UN SITE IMMOBILE (tranche C11)
+ * ---------------------------------------------------------------------------
+ *
+ * `contextOptions: { reducedMotion: 'reduce' }` est posé sur les deux profils.
+ * Chromium annonce alors au site le réglage d'accessibilité « mouvement
+ * réduit », que la doctrine d'animation (décision D37) oblige à respecter à
+ * trois niveaux — dont la NON-INSTANCIATION de l'observateur de révélation et
+ * l'absence totale de défilement adouci.
+ *
+ * Le réglage passe par `contextOptions` et non par une option `use` de premier
+ * niveau : dans la version installée (1.62), `reducedMotion` n'existe que sur
+ * les options de CONTEXTE de navigation, et l'écrire à côté de `viewport` ne
+ * compile pas. Le constat vaut d'être noté ici — il coûte une construction
+ * échouée à qui l'ignore.
+ *
+ * Ce n'est pas une commodité de test, c'est la séparation de deux questions
+ * qu'on ne doit jamais mélanger :
+ *
+ * - « le site fonctionne-t-il ? » — les campagnes de ce fichier, jouées sur un
+ *   site immobile, où un élément est à sa place ou n'y est pas. (Leur NOMBRE
+ *   n'est pas écrit ici : il a changé à chaque tranche depuis C8, et deux
+ *   phrases de ce commentaire ont annoncé « 74 tests » jusqu'à la tranche C16,
+ *   c'est-à-dire dix de moins que la vérité, à cinq lignes d'une ligne
+ *   corrigée. Un commentaire qui ne cite pas de compte ne peut pas mentir ; le
+ *   compte du jour se lit dans la sortie de `npm run test:parcours`.) Une
+ *   campagne fonctionnelle qui
+ *   attend la fin d'un fondu de 620 ms avant chaque assertion mesure la
+ *   patience de Playwright, pas le produit ; et elle devient instable le jour
+ *   où une durée change.
+ * - « le mouvement se comporte-t-il bien ? » — c'est le troisième projet
+ *   ci-dessous, et il a ses propres tests.
+ *
+ * Le troisième profil, `mouvement`, est INERTE pour l'instant : son
+ * `testMatch` désigne `tests/e2e/mouvement.spec.ts`, qui n'existe pas encore
+ * et que la tranche C17 écrira. `Playwright` ne considère pas un projet sans
+ * fichier comme un échec ; c'est `--forbid-only` et non le vide qui arrête une
+ * campagne. Le projet est déclaré dès maintenant pour que C17 n'ait qu'à
+ * écrire le fichier — et pour que la question « où teste-t-on le mouvement ? »
+ * ait déjà sa réponse dans le dépôt.
  */
 
 const PORT = 3000;
@@ -63,10 +104,29 @@ const ADRESSE = `http://localhost:${String(PORT)}`;
  */
 const EN_INTEGRATION_CONTINUE = process.env['CI'] !== undefined;
 
+/**
+ * LE FICHIER DU MOUVEMENT — écrit UNE fois, employé TROIS fois.
+ *
+ * Le projet `mouvement` le ramasse (`testMatch`) ; les deux profils
+ * fonctionnels l'écartent (`testIgnore`). Les trois emplois doivent désigner
+ * exactement le même fichier, d'où la constante.
+ *
+ * Le `testIgnore` n'est pas une précaution de style, c'est un piège désamorcé.
+ * Sans lui, le jour où C17 crée `tests/e2e/mouvement.spec.ts`, les deux profils
+ * fonctionnels le ramassent AUSSI — et ils tournent sous `reducedMotion:
+ * 'reduce'`, c'est-à-dire dans l'état où, par doctrine (D37), il ne se passe
+ * strictement rien. Une campagne de mouvement jouée sur un site immobile
+ * échoue à tous les coups, et elle échoue au moment le plus coûteux : dans la
+ * tranche qui vient d'écrire les tests, qui croira les avoir mal écrits.
+ * Poser la garde maintenant coûte deux lignes ; la poser en C17 coûte une
+ * demi-journée de doute.
+ */
+const FICHIER_DU_MOUVEMENT = /mouvement\.spec\.ts$/;
+
 export default defineConfig({
   testDir: './tests/e2e',
 
-  /* Les quatre fichiers de cette campagne sont indépendants : chacun ouvre son
+  /* Les cinq fichiers de cette campagne sont indépendants : chacun ouvre son
      propre contexte, donc son propre stockage local. Rien ne les sérialise. */
   fullyParallel: true,
 
@@ -101,16 +161,49 @@ export default defineConfig({
   projects: [
     {
       name: 'bureau-1280',
-      use: { ...devices['Desktop Chrome'], viewport: { width: 1280, height: 800 } },
+      testIgnore: FICHIER_DU_MOUVEMENT,
+      use: {
+        ...devices['Desktop Chrome'],
+        viewport: { width: 1280, height: 800 },
+        contextOptions: { reducedMotion: 'reduce' },
+      },
     },
     {
       name: 'mobile-390',
+      testIgnore: FICHIER_DU_MOUVEMENT,
       use: {
         ...devices['Desktop Chrome'],
         viewport: { width: 390, height: 844 },
         isMobile: true,
         hasTouch: true,
         deviceScaleFactor: 3,
+        contextOptions: { reducedMotion: 'reduce' },
+      },
+    },
+    {
+      /*
+       * LE PROFIL DU MOUVEMENT — déclaré en C11, peuplé en C17.
+       *
+       * Seul profil SANS `reducedMotion`, donc le seul où les révélations, le
+       * défilement adouci et les transitions jouent réellement. Il n'exécute
+       * pour l'instant aucun fichier : `tests/e2e/mouvement.spec.ts` n'existe
+       * pas, et `testMatch` ne désigne que lui — les cinq campagnes
+       * existantes ne peuvent donc pas être rejouées ici par mégarde, ce qui
+       * doublerait le temps de campagne sans rien vérifier de plus.
+       *
+       * Bureau seulement : le mouvement se règle à la largeur où il se
+       * dessine, et le profil mobile est déjà couvert par les campagnes
+       * fonctionnelles.
+       */
+      name: 'mouvement',
+      testMatch: FICHIER_DU_MOUVEMENT,
+      use: {
+        ...devices['Desktop Chrome'],
+        viewport: { width: 1280, height: 800 },
+        /* Écrit, et non omis. Un réglage absent se lit « on n'y a pas pensé » ;
+           celui-ci est le seul du dépôt qui laisse le site bouger, et il doit
+           se voir. */
+        contextOptions: { reducedMotion: 'no-preference' },
       },
     },
   ],

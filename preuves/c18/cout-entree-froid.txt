@@ -1,0 +1,44 @@
+LE COÛT DE L ENTRÉE À FROID DU TEXTE DU HÉROS (exigence client du 10/08)
+
+Profil bridé de mesurer-notes, quatre URL. SEULE la page d accueil porte
+la modification : les trois autres n ont pas une ligne qui change, elles
+servent donc de RÈGLE DU BRUIT.
+
+page      relevé                                    note   1er aff.  plus grand aff.  blocage  décalage
+--------------------------------------------------------------------------------------------------------
+Accueil   C17 — sommet précédent                      97      1.53 s          2.53 s      59 ms   0.00000
+Rayon     C17 — sommet précédent                      96      1.67 s          2.65 s      36 ms   0.00729
+Fiche hui C17 — sommet précédent                      97      1.67 s          2.52 s      45 ms   0.00042
+Panier    C17 — sommet précédent                      97      1.52 s          2.52 s      61 ms   0.00006
+
+Accueil   C18 — AVANT l entrée à froid                97      1.54 s          2.54 s      61 ms   0.00006
+Rayon     C18 — AVANT l entrée à froid                95      1.68 s          2.69 s      37 ms   0.00729
+Fiche hui C18 — AVANT l entrée à froid                99      1.67 s          1.97 s      24 ms   0.00042
+Panier    C18 — AVANT l entrée à froid                96      1.52 s          2.54 s      82 ms   0.00006
+
+Accueil   C18 — APRÈS, passe 1                        96      1.54 s          2.57 s      93 ms   0.00006
+Rayon     C18 — APRÈS, passe 1                        96      1.67 s          2.68 s      36 ms   0.00729
+Fiche hui C18 — APRÈS, passe 1                        98      1.67 s          2.13 s      32 ms   0.00042
+Panier    C18 — APRÈS, passe 1                        95      1.52 s          2.73 s      68 ms   0.00006
+
+Accueil   C18 — APRÈS, passe 2 (même construction)    97      1.55 s          2.43 s      52 ms   0.00006
+Rayon     C18 — APRÈS, passe 2 (même construction)    96      1.68 s          2.66 s      31 ms   0.00729
+Fiche hui C18 — APRÈS, passe 2 (même construction)    98      1.67 s          2.13 s      50 ms   0.00042
+Panier    C18 — APRÈS, passe 2 (même construction)    96      1.52 s          2.53 s      67 ms   0.00006
+
+LECTURE
+
+1. Les trois pages TÉMOINS bougent alors que rien ne les concerne : le rayon
+   PERD un point puis le REGAGNE (96, 95, 96, 96), la fiche en perd un (99,
+   98, 98), le panier oscille (97, 96, 95, 96). Le plus grand affichage du
+   panier varie de 2,52 à 2,73 s — 210 ms — sur des octets identiques.
+
+2. L accueil vaut 96 à la première passe et 97 à la seconde, SUR LA MÊME
+   CONSTRUCTION. Le point « perdu » ne survit donc pas à sa propre mesure.
+
+3. Le premier affichage de l accueil ne bouge pas (1,54 s avant et après) et
+   le décalage cumulé reste à 0,00006 — l animation ne portant que sur
+   l opacité et une translation, aucune géométrie ne se déplace.
+
+VERDICT : l entrée à froid du texte est GRATUITE. Elle est adoptée, et
+l ADR 009 gagne sa phrase sur la quatrième voie.

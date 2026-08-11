@@ -7,6 +7,8 @@
 - **Objet** : l'alerte laissée ouverte par la tranche C1 dans le README,
   § « En-têtes de sécurité ». La politique de sécurité du contenu héritée du
   site portfolio portait `script-src 'self'`, qui interdit tout script en ligne.
+- **Amendement C19 (2026-08-10)** : `media-src 'self'` ajouté — voir la section
+  dédiée en fin de document. La directive `script-src`, elle, n'est pas touchée.
 
 ## Le constat, mesuré
 
@@ -159,6 +161,37 @@ dynamiques de toute façon. La marche à suivre tient en trois gestes :
 jeton dans la mise en page racine, et `script-src 'self' 'nonce-…'
 'strict-dynamic'` — l'en-tête sortant alors de `vercel.json` pour être posé par
 l'intercepteur. Les mesures seront à refaire, et elles baisseront.
+
+## Amendement C19 — `media-src 'self'`, et pourquoi il ne concède rien
+
+La vidéo du héros (décision client du 10/08, interdit n° 17 de D37 levé) a
+besoin d'une directive que la politique ne portait pas. Elle est ajoutée dans
+les termes les plus stricts possibles.
+
+**Ce qui se passait sans elle** : `media-src` n'a pas de valeur par défaut
+propre — elle retombe sur `default-src`, qui vaut ici `'self'`. La vidéo aurait
+donc chargé sans erreur, et c'est précisément le motif de l'ajout : une
+directive qui n'est pas écrite est une directive que la prochaine modification
+de `default-src` emporte sans qu'on s'en aperçoive. **L'écrire, c'est la rendre
+visible dans un audit** — et c'est le sens de ces neuf en-têtes depuis C1.
+
+**Ce qu'elle concède** : rien. `'self'` n'autorise que le domaine de
+publication. Aucun média tiers, aucune adresse `data:` ni `blob:`, aucun flux
+externe. Les deux fichiers autorisés sont versionnés dans le dépôt, produits
+par `npm run preparer-video` depuis un master relu, déshabillés de leurs
+métadonnées et pesés par une garde. La surface ouverte est **exactement deux
+fichiers statiques**.
+
+**La comparaison qui situe cet amendement** : `script-src 'unsafe-inline'`
+(2026-08-06) était une CONCESSION, argumentée sur trois voies écartées et
+compensée par le fait qu'aucun contenu de tiers n'est jamais rendu.
+`media-src 'self'` est un RESSERREMENT : la politique dit désormais
+explicitement ce qu'elle tolérait implicitement.
+
+**Vérification** : le parcours de recette de C19 est joué avec la vidéo EN
+LECTURE, console sous surveillance et écouteur `securitypolicyviolation` posé —
+zéro message, zéro exception, zéro violation. Une vidéo qui aurait été bloquée
+par la politique se serait vue là, et nulle part ailleurs.
 
 ## Vérification
 

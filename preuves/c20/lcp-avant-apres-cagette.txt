@@ -1,0 +1,90 @@
+LE PLUS GRAND AFFICHAGE DE /panier, AVANT ET APRÈS LA CAGETTE — C20, 2026-08-11
+================================================================================
+
+LA QUESTION, ET POURQUOI ELLE EST PLUS SÉRIEUSE ICI QUE SUR LES DEUX AUTRES.
+
+D37 amendé en C19-ter dit que l'entrée de titre ne joue QUE sur les pages où une
+IMAGE porte le plus grand affichage — une animation posée sur l'élément mesuré
+coûte sa propre durée. /panier porte cette entrée, et /panier est en plus l'une
+des QUATRE URL dont ce projet publie les notes : ce qui n'était qu'une règle
+d'architecture sur /livraison et /suivi est ici la condition d'un chiffre vendu.
+
+MÉTHODE. Quatre tirages joués À LA SUITE dans la même session de machine, deux
+sur le sommet d'avant la cagette (550eef6, illustration 3:2) et deux sur le
+sommet d'après (2c42263, affiche 16:9 + vidéo). L'ordre compte : la tranche
+précédente a payé pour l'apprendre — deux mesures prises à une heure d'écart ne
+se comparent pas. Chaque relevé porte le commit qu'il a mesuré, et l'outil
+l'inscrit lui-même dans son en-tête.
+
+--------------------------------------------------------------------------------
+
+  état     plus grand affichage      surface       élément mesuré
+  ---------------------------------------------------------------------------
+  avant    928 · 932 ms              83 898 px²    <img> illustration-1024.avif
+  après    952 · 924 ms              70 446 px²    <img> affiche-1024.avif
+
+--------------------------------------------------------------------------------
+
+CE QUE ÇA DIT, ET CE QUE ÇA NE DIT PAS.
+
+1. LE PLUS GRAND AFFICHAGE RESTE UNE IMAGE, dans les quatre tirages. C'est la
+   seule affirmation dont cette page a besoin, c'est la condition qui autorise
+   l'entrée de titre à rester en place, et elle est VÉRIFIÉE et non supposée. La
+   vidéo ne devient jamais l'élément mesuré : elle est à l'opacité nulle jusqu'à
+   sa première image jouée, et elle arrive bien après.
+
+2. LES FOURCHETTES SE CHEVAUCHENT, ET C'EST TOUT CE QU'ON PEUT EN DIRE. 928-932
+   contre 924-952 : la valeur basse s'améliore de quatre millisecondes, la haute
+   se dégrade de vingt. À deux tirages par état, aucune des deux n'est un signal.
+   ON NE RÉPÈTE DONC PAS ICI LE « AUCUN RECUL » ÉCRIT POUR /livraison ET /suivi :
+   là-bas les quatre valeurs penchaient du même côté, ici elles ne penchent pas.
+
+3. LE GAIN ARITHMÉTIQUE EXISTE POURTANT, ET IL EST PLUS GRAND QU'AILLEURS.
+   L'affiche 16:9 vaut 70 446 px² là où l'illustration 3:2 en valait 83 898 —
+   SEIZE POUR CENT de moins, contre cinq sur /livraison. Une image plus courte à
+   largeur égale pèse moins et se peint plus tôt. Que ce gain ne se lise pas dans
+   la mesure signifie qu'il est plus petit que le bruit de cette page, pas qu'il
+   n'existe pas. L'écrire dans l'autre sens serait de la lecture de marc de café.
+
+4. LA TUILE DE MARBRE RESTE HORS DE CAUSE : elle finit 742 à 770 ms APRÈS le plus
+   grand affichage, le plus grand écart des quatre pages publiées.
+
+--------------------------------------------------------------------------------
+LE DÉCALAGE CUMULÉ — DEUX RÉGIMES, AVANT ET APRÈS
+--------------------------------------------------------------------------------
+
+  page     régime       avant      après
+  --------------------------------------------
+  panier   réduit       0.0000     0.0001
+  panier   mouvement    0.0000     0.0000
+
+CE CHIFFRE-LÀ N'EST PAS « INCHANGÉ AU DIX-MILLIÈME », ET IL FAUT LE DIRE PLUTÔT
+QUE L'ARRONDIR DANS LE BON SENS. Une ligne bouge. Ce qui la fait bouger est
+identifié dans le détail du relevé, et ce n'est pas l'affiche :
+
+    panier — réduit :
+       0.00006
+          <SPAN> y 120 → 120 | inline-flex h-6 w-9 shrink-0 …
+
+C'est la PASTILLE DU PANIER, organe de C13, que cette tranche ne touche pas. Son
+ordonnée ne change même pas (120 → 120) : ce qui se déplace est la largeur du
+rectangle au moment où le panier est relu dans le stockage local. Le décalage
+vaut 0,00006, c'est-à-dire UN TIERS du dix-millième dont il fait basculer
+l'affichage, et trente-trois fois moins que le plafond maison.
+
+QUE CE SOIT DU BRUIT EST PROUVÉ PAR UN RELEVÉ QU'ON N'A PAS EU À FABRIQUER : sur
+le MÊME code, le relevé d'avant-cagette de ce matin
+(preuves/c20/diag-cls-avant-c20.txt) porte l'assignation INVERSE — panier réduit
+0.0000 et panier mouvement 0.0001. La pastille tombe donc d'un côté ou de l'autre
+selon le tour, exactement comme C18 l'avait constaté (« deux lignes de CLS
+échangent leur bruit de pastille »). L'affiche, elle, ne décale rien : ses
+dimensions intrinsèques sont déclarées et la vidéo est posée par-dessus dans la
+même boîte.
+
+ÉCART HÉRITÉ, NON MASQUÉ : /commande reste à 0.0020 pour un plafond maison de
+0,002 — l'écart ouvert par C19, hors des quatre URL publiées. `diag-cls` rend
+donc code 1 AVANT COMME APRÈS, et pour la même raison.
+
+RELEVÉS BRUTS : lcp-avant-cagette.txt, lcp-avant-cagette-bis.txt (commit
+550eef6), lcp-apres-cagette.txt, lcp-apres-cagette-bis.txt (commit 2c42263),
+diag-cls-avant-cagette.txt, diag-cls-apres-cagette.txt.

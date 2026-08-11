@@ -1,0 +1,57 @@
+PREUVE ROUGE PUIS VERTE — m1 (répertoire de la mono, contrôle cmap)
+===================================================================
+
+CE QU'ON PROUVE. Le nouveau contrôle de `scripts/preparer-police-mono.mjs`
+compare les points de code DÉCLARÉS au répertoire à ceux que le woff2 produit
+porte RÉELLEMENT, et il distingue deux écarts : le glyphe que la source avait et
+que le sous-ensemblage a perdu (échec sec), et celui que la source n'a jamais eu
+(échec, sauf s'il figure aux ABSENCES CONNUES avec son motif).
+
+Le défaut d'origine : 145 points déclarés, 143 dans le fichier. `pyftsubset` ne
+se plaint pas d'un caractère absent de la source — il le laisse dehors, et le
+fichier produit est parfaitement valide, simplement incomplet. Ÿ (U+0178) et
+l'espace fine insécable (U+202F) étaient tombés en silence.
+
+L'exemption est accordée à un FAIT, pas à un nom : le contrôle relit la source,
+et une absence déclarée dont la source porte pourtant le glyphe fait échouer la
+préparation. C'est la règle de D30 transposée aux polices — une exemption qui ne
+sert plus doit tomber.
+
+
+ROUGE — une absence retirée (U+202F) et une absence bidon ajoutée (U+0041)
+---------------------------------------------------------------------------
+
+[ OK   ] 36476 octets → 13176 octets (22.8 Ko de moins par page, 64 %)
+          src/polices/spline-sans-mono-registre.woff2
+[ ÉCHEC] répertoire : 145 points de code déclarés, 143 dans le fichier, 2 absence(s) connue(s) de la source
+          U+0041 A — exemption bidon, pour la preuve rouge
+          U+0178 Ÿ — absent du fichier « latin » de @fontsource (il est dans « latin-ext »)
+[ ÉCHEC] U+202F est déclaré au répertoire et absent de la source : ajoutez-le à ABSENCES_CONNUES avec son motif, ou retirez-le du répertoire
+[ ÉCHEC] U+0041 (A) est inscrit aux absences connues alors que la source le porte désormais : l’exemption ne sert plus, retirez-la
+------------------------------------------------------------------------
+2 anomalie(s) de déclaration.
+
+(code de sortie 1)
+
+
+VERT — les deux absences réelles déclarées avec leur motif
+---------------------------------------------------------------------------
+
+[ OK   ] 36476 octets → 13176 octets (22.8 Ko de moins par page, 64 %)
+          src/polices/spline-sans-mono-registre.woff2
+[ OK   ] répertoire : 145 points de code déclarés, 143 dans le fichier, 2 absence(s) connue(s) de la source
+          U+0178 Ÿ — absent du fichier « latin » de @fontsource (il est dans « latin-ext »)
+          U+202F espace fine insécable — absent de TOUS les fichiers de la famille — la police ne le dessine pas
+------------------------------------------------------------------------
+Déclaration et fichier concordent.
+
+(code de sortie 0)
+
+
+CE QUE LE CONTRÔLE A APPRIS AU PASSAGE, et qui vaut d'être su : la famille
+Spline Sans Mono NE DESSINE PAS l'espace fine insécable, dans aucun de ses
+quatre fichiers. Ce n'est donc pas le sous-ensemblage de C14 qui l'a perdue —
+elle n'a jamais été là. Là où `typographier()` en pose une dans un texte rendu en
+mono, le navigateur va la chercher ailleurs, c'est-à-dire une chasse étrangère
+dans une ligne à chasse fixe. Le relevé des 64 caractères réellement rendus en
+mono sur les 23 routes n'en contient aucune à ce jour.

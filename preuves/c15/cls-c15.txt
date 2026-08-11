@@ -1,0 +1,18 @@
+
+===== / — CLS 0.0000 (0 decalages) =====
+
+===== /boutique — CLS 0.0011 (1 decalages) =====
+  0.00106
+     <undefined> y 296 -> 296 | 
+        «  familles. Les prix sont indiqués toutes taxe »
+
+===== /boutique/huile-olive-premiere-pression — CLS 0.0000 (0 decalages) =====
+
+===== /boutique/coffret-table-du-dimanche — CLS 0.0003 (1 decalages) =====
+  0.00033
+     <SPAN> y 244 -> 244 | text-encre-douce tabular-nums
+        « No 14 / 15 »
+     <SPAN> y 120 -> 120 | inline-flex h-6 w-9 shrink-0 items-center justify-center overflow-hidden rounded-full border border-
+        «  »
+     <undefined> y 243 -> 243 | 
+        « o »

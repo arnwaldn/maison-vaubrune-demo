@@ -1,0 +1,28 @@
+LE BANDEAU DES SEPT FAMILLES — geste, coût, et contre-épreuve
+
+RÉGIME : mouvement
+   animation-timeline: view() supportée   oui
+   piste : 7309 px dans un cadre de 1216 px
+   débordement horizontal du DOCUMENT     0 px
+   police calculée                        policeTitre, "policeTitre Fallback", Didot, "Bodoni MT", "Iowan Old Style", Georgia, serif
+   style calculé                          normal
+   transformation au repos                matrix(1, 0, 0, 1, 0, 0)
+   transformation après défilement        matrix(1, 0, 0, 1, -3654.55, 0)
+   fichiers de police téléchargés         3
+   dont l'italique (non préchargée)       aucun
+   → CONFORME : la piste se déplace avec le défilement.
+
+RÉGIME : mouvement réduit
+   animation-timeline: view() supportée   oui
+   piste : 7309 px dans un cadre de 1216 px
+   débordement horizontal du DOCUMENT     0 px
+   police calculée                        policeTitre, "policeTitre Fallback", Didot, "Bodoni MT", "Iowan Old Style", Georgia, serif
+   style calculé                          normal
+   transformation au repos                none
+   transformation après défilement        none
+   fichiers de police téléchargés         3
+   dont l'italique (non préchargée)       aucun
+   → CONFORME : rien ne bouge sous mouvement réduit.
+
+VERDICT : le bandeau bouge quand on défile, se tait sous mouvement réduit,
+et n'ouvre aucun débordement horizontal.

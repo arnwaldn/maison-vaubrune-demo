@@ -1,0 +1,100 @@
+ATTRIBUTION DU PLUS GRAND AFFICHAGE — tranche C19, recette finale
+date   : 2026-08-11 10 h 31 (Paris)
+commit : 2c42263
+bridage: réseau 1,6 Mb/s · latence 150 ms · processeur ÷ 4, APPLIQUÉ par le
+         protocole de débogage — à ne pas confondre avec le bridage SIMULÉ
+         du profil mobile de Lighthouse, qui est ce que mesure `mesurer-notes`.
+==============================================================================
+
+Accueil  (/)
+------------------------------------------------------------------------------
+  premier affichage    : 1000 ms
+  plus grand affichage : 1020 ms  —  <img.block.h-auto.w-full>  70335 px²
+                         image : /editorial/accueil/hero-1024.avif
+
+  ce qui finit de charger dans la fenêtre du retard :
+     1152 ms    46 Ko  script     /_next/static/chunks/255-3d881dfa8c72bc56.js
+      885 ms     4 Ko  script     /_next/static/chunks/app/layout-2a348f6df75f2ce3.js
+      808 ms     1 Ko  script     /_next/static/chunks/app/page-97766b91b8f009b0.js
+
+  les ressources les plus lourdes de la page :
+     408 Ko  fin à  4503 ms  video      /editorial/accueil/boucle-1280.av1.mp4
+      53 Ko  fin à  1293 ms  script     /_next/static/chunks/4bd1b696-c023c6e3521b1417.js
+      46 Ko  fin à  1777 ms  css        /_next/static/media/dae0c9f40ba3b9b7-s.p.woff2
+      46 Ko  fin à  1152 ms  script     /_next/static/chunks/255-3d881dfa8c72bc56.js
+      45 Ko  fin à  1779 ms  css        /_next/static/media/67480a5ef8cc4d5f-s.p.woff2
+      36 Ko  fin à  1464 ms  css        /fond/marbre-coquille.avif
+
+Rayon  (/boutique)
+------------------------------------------------------------------------------
+  premier affichage    : 1080 ms
+  plus grand affichage : 1112 ms  —  <img.block.h-auto.w-full>  61087 px²
+                         image : /editorial/boutique/affiche-1024.avif
+
+  ce qui finit de charger dans la fenêtre du retard :
+     1240 ms    46 Ko  script     /_next/static/chunks/255-3d881dfa8c72bc56.js
+      931 ms    26 Ko  img        /editorial/boutique/affiche-1024.avif
+      899 ms     4 Ko  script     /_next/static/chunks/app/layout-2a348f6df75f2ce3.js
+      899 ms     2 Ko  script     /_next/static/chunks/app/boutique/page-a8dca4c8864de148.js
+
+  les ressources les plus lourdes de la page :
+     614 Ko  fin à  5529 ms  video      /editorial/boutique/boucle-1280.av1.mp4
+      53 Ko  fin à  1395 ms  script     /_next/static/chunks/4bd1b696-c023c6e3521b1417.js
+      46 Ko  fin à  2034 ms  css        /_next/static/media/dae0c9f40ba3b9b7-s.p.woff2
+      46 Ko  fin à  1240 ms  script     /_next/static/chunks/255-3d881dfa8c72bc56.js
+      45 Ko  fin à  2003 ms  css        /_next/static/media/67480a5ef8cc4d5f-s.p.woff2
+      36 Ko  fin à  1471 ms  css        /fond/marbre-coquille.avif
+
+Fiche huile d’olive  (/boutique/huile-olive-premiere-pression)
+------------------------------------------------------------------------------
+  premier affichage    : 1104 ms
+  plus grand affichage : 1144 ms  —  <img.block.h-auto.w-full>  117528 px²
+                         image : /produits/huile-olive-premiere-pression/principal-640.avif
+
+  ce qui finit de charger dans la fenêtre du retard :
+     1255 ms    53 Ko  script     /_next/static/chunks/4bd1b696-c023c6e3521b1417.js
+     1192 ms    46 Ko  script     /_next/static/chunks/255-3d881dfa8c72bc56.js
+      909 ms     3 Ko  script     /_next/static/chunks/app/boutique/%5Bproduit%5D/page-d8c5215353f0c57e.js
+
+  les ressources les plus lourdes de la page :
+      53 Ko  fin à  1255 ms  script     /_next/static/chunks/4bd1b696-c023c6e3521b1417.js
+      46 Ko  fin à  1915 ms  css        /_next/static/media/dae0c9f40ba3b9b7-s.p.woff2
+      46 Ko  fin à  1192 ms  script     /_next/static/chunks/255-3d881dfa8c72bc56.js
+      45 Ko  fin à  1915 ms  css        /_next/static/media/67480a5ef8cc4d5f-s.p.woff2
+      36 Ko  fin à  1415 ms  css        /fond/marbre-coquille.avif
+
+Panier  (/panier)
+------------------------------------------------------------------------------
+  premier affichage    : 904 ms
+  plus grand affichage : 924 ms  —  <img.block.h-auto.w-full>  70446 px²
+                         image : /editorial/panier/affiche-1024.avif
+
+  ce qui finit de charger dans la fenêtre du retard :
+     1106 ms     3 Ko  script     /_next/static/chunks/app/panier/page-287c339ee4e0a15b.js
+     1105 ms     3 Ko  script     /_next/static/chunks/668-efff29a2cf8abb92.js
+      896 ms     2 Ko  script     /_next/static/chunks/528-1a52b620e89202cc.js
+      886 ms     4 Ko  script     /_next/static/chunks/app/layout-2a348f6df75f2ce3.js
+      856 ms     1 Ko  script     /_next/static/chunks/app/page-97766b91b8f009b0.js
+      855 ms    22 Ko  img        /editorial/panier/affiche-1024.avif
+
+  les ressources les plus lourdes de la page :
+     445 Ko  fin à  4407 ms  video      /editorial/panier/boucle-1280.av1.mp4
+      53 Ko  fin à  1402 ms  script     /_next/static/chunks/4bd1b696-c023c6e3521b1417.js
+      46 Ko  fin à  1906 ms  css        /_next/static/media/dae0c9f40ba3b9b7-s.p.woff2
+      46 Ko  fin à  1261 ms  script     /_next/static/chunks/255-3d881dfa8c72bc56.js
+      45 Ko  fin à  1906 ms  css        /_next/static/media/67480a5ef8cc4d5f-s.p.woff2
+      36 Ko  fin à  1686 ms  css        /fond/marbre-coquille.avif
+
+==============================================================================
+LA TUILE DE MARBRE EST-ELLE DEVANT LE PLUS GRAND AFFICHAGE ?
+------------------------------------------------------------------------------
+  page                    premier aff.   plus grand aff.   fin du marbre   écart
+  Accueil                    1000 ms          1020 ms          1464 ms   +444 ms
+  Rayon                      1080 ms          1112 ms          1471 ms   +359 ms
+  Fiche huile d’olive        1104 ms          1144 ms          1415 ms   +271 ms
+  Panier                      904 ms           924 ms          1686 ms   +762 ms
+
+  Un écart POSITIF veut dire que la tuile finit APRÈS le plus grand
+  affichage : elle n’est pas sur son chemin. Elle est découverte par la
+  feuille de style, donc après le premier rendu, et elle arrive derrière.
+==============================================================================

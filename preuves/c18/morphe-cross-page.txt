@@ -1,0 +1,24 @@
+LE MORPH CARTE → FICHE — ce que le drapeau expérimental fait réellement
+
+RÉGIME : mouvement
+   startViewTransition disponible          oui
+   appels du routeur                       0
+   groupe du visuel apparié                non
+   groupe du titre apparié                 non
+   pseudo-éléments relevés                 0
+   opacité minimale du fondu de route      0.000
+
+RÉGIME : mouvement réduit
+   startViewTransition disponible          oui
+   appels du routeur                       0
+   groupe du visuel apparié                non
+   groupe du titre apparié                 non
+   pseudo-éléments relevés                 0
+   opacité minimale du fondu de route      1.000
+
+CE QUE CE RELEVÉ ÉTABLIT
+
+Il ne décide de rien : le verdict est arithmétique et il est ailleurs (le
+premier chargement). Il établit ce que le rejet abandonne, pour que les
+conditions de ré-évaluation de la décision 010 portent sur un fait et non
+sur une supposition.

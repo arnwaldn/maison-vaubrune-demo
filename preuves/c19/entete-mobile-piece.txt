@@ -1,0 +1,39 @@
+
+L'EN-TÊTE MOBILE — PIÈCE DE DÉCISION (390 × 844, densité 2)
+==========================================================================
+
+CE QUE L'EN-TÊTE OCCUPE AUJOURD'HUI
+--------------------------------------------------------------------------
+  hauteur totale de l'en-tête       160.9 px
+  dont le bloc de marque            49.2 px
+  dont la navigation                62.6 px
+  hauteur de la fenêtre             844 px
+  part de l'écran                   19.1 %
+
+  capture 1 : preuves/c19/entete-mobile-1-actuel.png  (état actuel, haut de page)
+  capture 2 : preuves/c19/entete-mobile-2-apres-defilement.png  (l’en-tête est parti)
+  capture 3 : preuves/c19/entete-mobile-3-maquette-repliee.png  (maquette, NON livrée)
+
+CE QUE LE REPLI RENDRAIT
+--------------------------------------------------------------------------
+  en-tête actuel                    160.9 px
+  en-tête replié (maquette)         82.2 px
+  rendu à l'écran                   78.7 px, soit 49 % de sa hauteur
+
+CE QUE LA DÉCISION COÛTE, ET C'EST LÀ QUE LE CLIENT TRANCHE
+--------------------------------------------------------------------------
+  POUR   l'en-tête pourrait alors COLLER sous 48 rem : la navigation et le
+         panier resteraient joignables sans remonter la page — c'est le
+         vrai sujet, visible sur la capture 2 ;
+         `scroll-padding-top` redeviendrait juste au-dessus des ancres des
+         pages légales (écart n° 2 de C13, ouvert depuis).
+  CONTRE la ligne d'accroche « ÉPICERIE FINE — DÉMONSTRATION » disparaît du
+         premier écran mobile, or elle porte le mot « démonstration » et
+         c'est une promesse tenue partout ailleurs sur ce site ;
+         fermé par défaut, le menu retire leur boîte aux trois liens ET à la
+         pastille du panier : DEUX cas de la campagne gelée les cliquent et
+         les lisent sur ce profil, ils devront être réécrits.
+
+  Aucune ligne de code n'est livrée. La maquette ci-dessus est posée en
+  style inline, dans le navigateur, et disparaît avec lui.
+

@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 
 import { IlotAnnulation } from '@/composants/commande/IlotAnnulation';
+import { BlocTitre } from '@/composants/mise-en-page/BlocTitre';
 
 /**
  * LE RETOUR D'UN PAIEMENT ANNULÉ.
@@ -29,14 +30,16 @@ export default function PageAnnulee() {
   return (
     <div className="mx-auto max-w-page px-5 sm:px-8">
       <section className="pt-12 sm:pt-16">
-        <p className="text-xs font-semibold tracking-[0.2em] text-ocre uppercase">
-          Commande
-        </p>
-        <h1 className="mt-4 text-affiche font-semibold text-encre">Paiement annulé</h1>
-        <p className="mt-5 max-w-lisible text-chapeau text-encre-douce">
-          Le paiement a été interrompu. Aucun montant n’a été engagé, aucune commande
-          n’a été enregistrée.
-        </p>
+        <BlocTitre
+          surtitre="Commande"
+          titre="Paiement annulé"
+          chapeau={
+            <>
+              Le paiement a été interrompu. Aucun montant n’a été engagé, aucune
+              commande n’a été enregistrée.
+            </>
+          }
+        />
       </section>
 
       <IlotAnnulation />

@@ -125,10 +125,30 @@ describe('donneesProduit', () => {
     );
   });
 
-  it('n’invente NI note moyenne, NI avis, NI marque, NI image', () => {
+  /**
+   * LA LISTE DES CHAMPS EST FERMÉE, ET C'EST ELLE LE CONTRÔLE.
+   *
+   * Elle s'écrivait « NI note moyenne, NI avis, NI marque, NI image » jusqu'en
+   * C14, où le site n'avait aucune photographie. `image` y est entré en C15, et
+   * la distinction mérite d'être dite parce qu'elle est la ligne exacte de la
+   * décision D33 : ce balisage refuse ce qui serait INVENTÉ — une note qu'aucun
+   * client n'a donnée, une adresse que `marchand.ts` laisse à `null`, une marque
+   * qui n'existe pas —, il ne refuse pas ce qui EXISTE. Les images existent :
+   * elles sont produites par le pipeline depuis un master relu, versionnées et
+   * servies par le site.
+   */
+  it('n’invente NI note moyenne, NI avis, NI marque, NI adresse', () => {
     const champs = Object.keys(balisage);
 
-    expect(champs).toEqual(['@context', '@type', 'name', 'description', 'url', 'offers']);
+    expect(champs).toEqual([
+      '@context',
+      '@type',
+      'name',
+      'description',
+      'url',
+      'image',
+      'offers',
+    ]);
   });
 });
 
@@ -178,5 +198,98 @@ describe('donneesOrganisation', () => {
   it('dit dans sa description qu’il s’agit d’une démonstration', () => {
     expect(organisation.description).toContain('démonstration');
     expect(organisation.description).toContain('fictive');
+  });
+});
+
+/* -------------------------------------------------------------------------- */
+/* Les images du produit (C15)                                                 */
+/* -------------------------------------------------------------------------- */
+
+describe('donneesProduit — le champ image', () => {
+  it('publie les deux vues, dans l’ordre de la fiche', () => {
+    const donnees = donneesProduit(HUILE, SITE);
+
+    expect(donnees.image).toEqual([
+      `${SITE}/produits/huile-olive-premiere-pression/principal-640.jpg`,
+      `${SITE}/produits/huile-olive-premiere-pression/ambiance-640.jpg`,
+    ]);
+  });
+
+  /**
+   * L'ADRESSE EST ABSOLUE, ET C'EST LA MOITIÉ DE L'INTÉRÊT DU CHAMP.
+   *
+   * Un moteur qui reçoit `/produits/…` n'a aucun moyen de la résoudre : il lit
+   * le balisage hors de la page, souvent hors du domaine. Une image relative
+   * dans un JSON-LD est un champ qui existe et ne sert à rien.
+   */
+  it('écrit des adresses absolues, jamais des chemins de site', () => {
+    for (const adresse of donneesProduit(HUILE, SITE).image ?? []) {
+      expect(adresse.startsWith(`${SITE}/`)).toBe(true);
+    }
+  });
+
+  /**
+   * LE REPLI JPEG, ET NON L'AVIF. Le balisage s'adresse à des lecteurs qu'on ne
+   * choisit pas — moissonneurs, aperçus de messagerie, robots anciens. Le seul
+   * format que tous savent lire est celui du repli.
+   */
+  it('désigne le repli JPEG et la plus grande largeur livrée', () => {
+    for (const adresse of donneesProduit(HUILE, SITE).image ?? []) {
+      expect(adresse.endsWith('-640.jpg')).toBe(true);
+    }
+  });
+
+  it('les quinze fiches en portent deux, toutes distinctes', () => {
+    const toutes = CATALOGUE.flatMap((produit) => donneesProduit(produit, SITE).image ?? []);
+
+    expect(toutes).toHaveLength(30);
+    expect(new Set(toutes).size).toBe(30);
+  });
+
+  /**
+   * UN PRODUIT SANS VISUEL NE PUBLIE PAS DE CHAMP VIDE. Publier `image: []`
+   * serait annoncer une liste et n'en donner aucune : le champ se tait.
+   */
+  /**
+   * UN PRODUIT PEUT N'AVOIR QU'UNE VUE, et le type le dit depuis C14 :
+   * `ambiance` est optionnelle. Les quinze fiches en portent deux aujourd'hui,
+   * mais un produit ajouté avec son seul packshot doit publier une image, pas
+   * une liste à trou.
+   */
+  it('publie une seule adresse quand la vue d’ambiance manque', () => {
+    const sansAmbiance: Produit = {
+      ...HUILE,
+      visuel: { principal: HUILE.visuel!.principal },
+    };
+
+    expect(donneesProduit(sansAmbiance, SITE).image).toEqual([
+      `${SITE}/produits/huile-olive-premiere-pression/principal-640.jpg`,
+    ]);
+  });
+
+  /**
+   * LA LARGEUR EST LUE, JAMAIS ÉCRITE. Si le pipeline cessait un jour de
+   * déclarer ses largeurs, le champ retomberait sur la dimension intrinsèque
+   * plutôt que de composer `…-undefined.jpg`.
+   */
+  it('retombe sur la dimension intrinsèque si aucune largeur n’est déclarée', () => {
+    const sansLargeurs: Produit = {
+      ...HUILE,
+      visuel: { principal: { ...HUILE.visuel!.principal, largeurs: [] } },
+    };
+
+    expect(donneesProduit(sansLargeurs, SITE).image).toEqual([
+      `${SITE}/produits/huile-olive-premiere-pression/principal-640.jpg`,
+    ]);
+  });
+
+  it('se tait sur un produit sans visuel', () => {
+    const sansVisuel: Produit = { ...HUILE };
+    delete (sansVisuel as { visuel?: unknown }).visuel;
+
+    const donnees = donneesProduit(sansVisuel, SITE);
+
+    expect(donnees.image).toBeUndefined();
+    expect(Object.keys(donnees)).not.toContain('image');
   });
 });

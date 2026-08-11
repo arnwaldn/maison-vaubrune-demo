@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 
+import { BlocTitre } from '@/composants/mise-en-page/BlocTitre';
 import { IlotCatalogueMarchand } from '@/composants/gestion/IlotCatalogueMarchand';
 import { CATALOGUE } from '@/donnees/catalogue';
 
@@ -34,15 +35,17 @@ export default function PageCatalogueGestion() {
   return (
     <>
       <section className="pt-12 sm:pt-14">
-        <p className="text-xs font-semibold tracking-[0.2em] text-ocre uppercase">
-          Espace marchand
-        </p>
-        <h1 className="mt-4 text-affiche font-semibold text-encre">Catalogue</h1>
-        <p className="mt-5 max-w-lisible text-chapeau text-encre-douce">
-          Quinze références, vingt-trois formats. Modifiez un prix, un stock, un
-          résumé&nbsp;: le rayon et les fiches suivent immédiatement, y compris dans
-          un autre onglet déjà ouvert.
-        </p>
+        <BlocTitre
+          surtitre="Espace marchand"
+          titre="Catalogue"
+          chapeau={
+            <>
+              Quinze références, vingt-trois formats. Modifiez un prix, un stock, un
+              résumé&nbsp;: le rayon et les fiches suivent immédiatement, y compris
+              dans un autre onglet déjà ouvert.
+            </>
+          }
+        />
 
         <div className="mt-6 max-w-lisible rounded-sm border border-ocre-clair bg-papier px-4 py-3 text-sm leading-relaxed text-encre">
           <p>
@@ -63,7 +66,11 @@ export default function PageCatalogueGestion() {
         </div>
       </section>
 
-      <IlotCatalogueMarchand catalogue={CATALOGUE} />
+      {/* Même motif que le tableau de bord : l'espace marchand n'est ni le
+          tunnel ni un document légal (voir `gestion/page.tsx`). */}
+      <div data-revelation>
+        <IlotCatalogueMarchand catalogue={CATALOGUE} />
+      </div>
     </>
   );
 }

@@ -1,0 +1,166 @@
+{
+  "$commentaire": [
+    "RELEVÉ DES VIDÉOS LIVRÉES — écrit par `npm run preparer-video`, versionné.",
+    "",
+    "Il porte ce que les pages ont besoin de savoir et que personne ne doit",
+    "recopier : la chaîne `codecs` de chaque source, lue dans le fichier produit.",
+    "Sans elle, un navigateur sans AV1 prendrait la première source et",
+    "n’afficherait rien.",
+    "",
+    "LE RELEVÉ EST INDEXÉ PAR CLEF, et cette clef est la seule chose qui circule",
+    "entre une page et ce fichier : ni un chemin, ni un codec, ni une dimension.",
+    "Ajouter une vidéo au site, c’est donc ajouter UNE entrée à la liste `VIDEOS`",
+    "de `scripts/preparer-video.mjs` — ce fichier suit tout seul, et la page ne",
+    "nomme que la clef. Aucun décompte n’est écrit ici : il vieillirait.",
+    "",
+    "L’empreinte du master dont chaque paire descend est écrite ici ET dans",
+    "`scripts/preparer-video.mjs`. Les masters, eux, restent hors du dépôt."
+  ],
+  "videos": {
+    "accueil": {
+      "masterEmpreinte": "6ea52b0bac038c3790efdc717ffaf3de8cf170bdc13b863b2c5e2d955aedeecd",
+      "dossier": "editorial/accueil",
+      "sources": [
+        {
+          "fichier": "boucle-1280.av1.mp4",
+          "codec": "av1",
+          "type": "video/mp4; codecs=\"av01.0.05M.08\"",
+          "largeur": 1280,
+          "hauteur": 720,
+          "images": 147,
+          "secondes": 6.125,
+          "octets": 417256,
+          "empreinte": "23cf1e4d3d78a43d48016c02eec8ef34ce14b1640544d1c8e0b51a1829876db7"
+        },
+        {
+          "fichier": "boucle-1280.h264.mp4",
+          "codec": "h264",
+          "type": "video/mp4; codecs=\"avc1.64001f\"",
+          "largeur": 1280,
+          "hauteur": 720,
+          "images": 147,
+          "secondes": 6.125,
+          "octets": 1103144,
+          "empreinte": "2bff15653fc7667b65cecd3aeca2400f67c82dce8ce832c26a6eb92e3303c550"
+        }
+      ],
+      "gainAv1": "2.64×"
+    },
+    "boutique": {
+      "masterEmpreinte": "3fcb4e3123125d81f04a5e26330e0c5a5d2a79fc7d79fc588d612937af09c736",
+      "dossier": "editorial/boutique",
+      "sources": [
+        {
+          "fichier": "boucle-1280.av1.mp4",
+          "codec": "av1",
+          "type": "video/mp4; codecs=\"av01.0.05M.08\"",
+          "largeur": 1280,
+          "hauteur": 720,
+          "images": 134,
+          "secondes": 5.583,
+          "octets": 628933,
+          "empreinte": "f9529b3cb9266495df63bb59b947fb1a0a587ac318da3eec048f74d37d38ee7d"
+        },
+        {
+          "fichier": "boucle-1280.h264.mp4",
+          "codec": "h264",
+          "type": "video/mp4; codecs=\"avc1.64001f\"",
+          "largeur": 1280,
+          "hauteur": 720,
+          "images": 134,
+          "secondes": 5.583,
+          "octets": 1121552,
+          "empreinte": "730147e934059bdab1413efeddc42fcfca70b900d6927926e1e1e6ffe380b58f"
+        }
+      ],
+      "gainAv1": "1.78×"
+    },
+    "livraison": {
+      "masterEmpreinte": "90459cf410e4ad2d3752ca58f26302809bc902081d14a30c0cd4c50b9de4fd3c",
+      "dossier": "editorial/livraison",
+      "sources": [
+        {
+          "fichier": "boucle-1280.av1.mp4",
+          "codec": "av1",
+          "type": "video/mp4; codecs=\"av01.0.05M.08\"",
+          "largeur": 1280,
+          "hauteur": 720,
+          "images": 190,
+          "secondes": 7.917,
+          "octets": 334005,
+          "empreinte": "405a23b0def24f0c33d6115378175b314b7729f418c0d56f4ce6defbe846d9c3"
+        },
+        {
+          "fichier": "boucle-1280.h264.mp4",
+          "codec": "h264",
+          "type": "video/mp4; codecs=\"avc1.64001f\"",
+          "largeur": 1280,
+          "hauteur": 720,
+          "images": 190,
+          "secondes": 7.917,
+          "octets": 797597,
+          "empreinte": "9def94635eed65f8ceb5d26438d1b158ed2316e34f34a0c71cb288f7f86a9b8a"
+        }
+      ],
+      "gainAv1": "2.39×"
+    },
+    "suivi": {
+      "masterEmpreinte": "e84079f72a2b57c2fbfc2507fe6a818ec8c6591a6af3b79f53344217aeff147c",
+      "dossier": "editorial/suivi",
+      "sources": [
+        {
+          "fichier": "boucle-1280.av1.mp4",
+          "codec": "av1",
+          "type": "video/mp4; codecs=\"av01.0.05M.08\"",
+          "largeur": 1280,
+          "hauteur": 720,
+          "images": 190,
+          "secondes": 7.917,
+          "octets": 222081,
+          "empreinte": "ea6e68f3f1e189afcc015f72616dd31b6c0c9d20a9be3b89440a76ab8035ae92"
+        },
+        {
+          "fichier": "boucle-1280.h264.mp4",
+          "codec": "h264",
+          "type": "video/mp4; codecs=\"avc1.64001f\"",
+          "largeur": 1280,
+          "hauteur": 720,
+          "images": 190,
+          "secondes": 7.917,
+          "octets": 846325,
+          "empreinte": "597f3b421bff7a42926cdfbcf4295a7db13ee5252823362703bfd125d57a5deb"
+        }
+      ],
+      "gainAv1": "3.81×"
+    },
+    "panier": {
+      "masterEmpreinte": "3a7a6604ecab00dcf8111d57e5fed5aa692e2aed5537b62b0a85bcdf9fd9890f",
+      "dossier": "editorial/panier",
+      "sources": [
+        {
+          "fichier": "boucle-1280.av1.mp4",
+          "codec": "av1",
+          "type": "video/mp4; codecs=\"av01.0.05M.08\"",
+          "largeur": 1280,
+          "hauteur": 720,
+          "images": 190,
+          "secondes": 7.917,
+          "octets": 455815,
+          "empreinte": "a4a57502b84465e16327a162ac783710905c2a570f253a30caf093337dc3965d"
+        },
+        {
+          "fichier": "boucle-1280.h264.mp4",
+          "codec": "h264",
+          "type": "video/mp4; codecs=\"avc1.64001f\"",
+          "largeur": 1280,
+          "hauteur": 720,
+          "images": 190,
+          "secondes": 7.917,
+          "octets": 753825,
+          "empreinte": "250cf44da0c95c040e82ada5ba6f877cf896a383df63c0c8a856c2a8d1a2cf1a"
+        }
+      ],
+      "gainAv1": "1.65×"
+    }
+  }
+}

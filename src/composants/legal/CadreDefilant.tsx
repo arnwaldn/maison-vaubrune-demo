@@ -61,6 +61,12 @@ export function CadreDefilant({
 }) {
   return (
     <div
+      /* `data-cadre-defilant` : l'organe se DÉCLARE, comme l'en-tête et le pied
+         depuis C14. La feuille d'impression a besoin de le désigner — un cadre
+         qui défile n'a aucun sens sur du papier, où il ne fait que COUPER ce
+         qu'il ne peut pas montrer. Un sélecteur de position ou de classe
+         utilitaire aurait cessé de correspondre à la première refonte. */
+      data-cadre-defilant=""
       className={`${className} overflow-x-auto`}
       tabIndex={0}
       role="region"

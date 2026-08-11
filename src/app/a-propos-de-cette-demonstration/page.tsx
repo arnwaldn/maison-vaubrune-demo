@@ -5,6 +5,7 @@ import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
 
 import { LienLegal, T } from '@/composants/legal/PageLegale';
+import { BlocTitre } from '@/composants/mise-en-page/BlocTitre';
 import { CATALOGUE } from '@/donnees/catalogue';
 import { FAMILLES, CODES_ZONE } from '@/lib/types';
 
@@ -237,6 +238,25 @@ const SIMULE: readonly Entree[] = [
     ),
   },
   {
+    titre: 'Les visuels.',
+    corps: (
+      <T>
+        {'Les photographies de produits, les vues d’ambiance, les macros de famille ' +
+          'et les boucles vidéo de ce site ont été ' +
+          'ENGENDRÉES PAR UNE INTELLIGENCE ' +
+          'ARTIFICIELLE, à partir de consignes écrites, puis relues une par une, ' +
+          'recadrées, ré-encodées et dépouillées de leurs métadonnées avant d’entrer ' +
+          'dans le site. Aucune n’est une photographie de banque d’images, aucune ne ' +
+          'montre une personne, aucune ne reproduit une marque ou un signe officiel. ' +
+          'Les produits qu’elles montrent n’existent pas : il aurait été malhonnête ' +
+          'de les photographier, et plus malhonnête encore de laisser croire qu’on ' +
+          'l’avait fait. Sur une boutique livrée, ces images sont remplacées par les ' +
+          'photographies du marchand — c’est le seul poste de ce site qui change ' +
+          'd’origine et non de nature.'}
+      </T>
+    ),
+  },
+  {
     titre: 'L’identité du marchand.',
     corps: (
       <T>
@@ -356,24 +376,22 @@ export default function PageAProposDeCetteDemonstration() {
   return (
     <div className="mx-auto max-w-page px-5 pb-16 sm:px-8">
       <section className="pt-12 pb-8 sm:pt-16 sm:pb-10">
-        <p className="text-xs font-semibold tracking-[0.2em] text-ocre uppercase">
-          Démonstration
-        </p>
-        <h1 className="mt-4 text-affiche font-semibold text-encre">
-          À propos de cette démonstration
-        </h1>
-        <p className="mt-5 max-w-lisible text-chapeau text-encre-douce">
-          <T>
-            {'Maison Vaubrune est une épicerie fine fictive. Ce site est une ' +
-              'boutique en ligne complète, construite pour être regardée de près : ' +
-              'le catalogue, le panier, le calcul des frais de port, le passage de ' +
-              'commande et les documents légaux y fonctionnent réellement. Ce qui ne ' +
-              'peut pas exister sans marchand réel — l’encaissement, l’expédition, ' +
-              'les courriels — est simulé, et le site le dit à l’endroit où cela se ' +
-              'produit plutôt que dans une note en bas de page.'}
-          </T>
-        </p>
-        <p className="mt-4 max-w-lisible text-sm leading-relaxed text-encre-douce">
+        <BlocTitre
+          surtitre="Démonstration"
+          titre="À propos de cette démonstration"
+          chapeau={
+            <T>
+              {'Maison Vaubrune est une épicerie fine fictive. Ce site est une ' +
+                'boutique en ligne complète, construite pour être regardée de près : ' +
+                'le catalogue, le panier, le calcul des frais de port, le passage de ' +
+                'commande et les documents légaux y fonctionnent réellement. Ce qui ne ' +
+                'peut pas exister sans marchand réel — l’encaissement, l’expédition, ' +
+                'les courriels — est simulé, et le site le dit à l’endroit où cela se ' +
+                'produit plutôt que dans une note en bas de page.'}
+            </T>
+          }
+        />
+        <p className="panneau mt-6 max-w-lisible text-sm leading-relaxed text-encre-douce">
           <T>
             {'Cette page dresse la frontière exacte entre les trois : ce qui ' +
               'fonctionne, ce qui est simulé, et ce qu’ajoute une boutique livrée à ' +
@@ -392,11 +410,11 @@ export default function PageAProposDeCetteDemonstration() {
             key={colonne.identifiant}
             id={colonne.identifiant}
             aria-labelledby={`titre-${colonne.identifiant}`}
-            className="scroll-mt-8"
+            className="panneau scroll-mt-8"
           >
             <h2
               id={`titre-${colonne.identifiant}`}
-              className="text-titre font-semibold text-balance text-encre"
+              className="text-titre text-balance text-encre"
             >
               <T>{colonne.titre}</T>
             </h2>
@@ -422,10 +440,10 @@ export default function PageAProposDeCetteDemonstration() {
         aria-labelledby="titre-documents"
         className="mt-14 border-t border-filet pt-10"
       >
-        <h2 id="titre-documents" className="text-titre font-semibold text-encre">
+        <h2 id="titre-documents" className="text-titre text-encre">
           Les documents
         </h2>
-        <p className="mt-4 max-w-lisible text-sm leading-relaxed text-encre-douce">
+        <p className="panneau mt-6 max-w-lisible text-sm leading-relaxed text-encre-douce">
           <T>{'Les quatre documents de vente sont publiés : '}</T>
           <LienLegal vers="/mentions-legales">
             <T>{'mentions légales'}</T>

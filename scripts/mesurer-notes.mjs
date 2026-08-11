@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * LES QUATRE NOTES, MESURÉES ET PUBLIÉES — trois URL, un fichier daté.
+ * LES QUATRE NOTES, MESURÉES ET PUBLIÉES — quatre URL, un fichier daté.
  *
  * ═══════════════════════════════════════════════════════════════════════════
  *  CE QUE CE SCRIPT REND VRAI
@@ -14,7 +14,7 @@
  * d'une commande est une promesse qu'il faut croire.
  *
  * Ce script est cette commande. Il construit s'il le faut, sert la production,
- * mesure TROIS URL au même profil, compare chaque note à son seuil, et écrit
+ * mesure QUATRE URL au même profil, compare chaque note à son seuil, et écrit
  * un relevé daté que l'on versionne. Une note sous son seuil rend un code de
  * sortie non nul.
  *
@@ -59,7 +59,7 @@
  * que confondre les deux relevés reviendrait à publier la note d'un site pour
  * celle d'un autre.
  *
- * Usage : `node scripts/mesurer-notes.mjs [--date AAAA-MM-JJ] [--port 4310]`
+ * Usage : `node scripts/mesurer-notes.mjs [--date AAAA-MM-JJ] [--suffixe c14] [--port 4310]`
  *         `node scripts/mesurer-notes.mjs --base https://exemple.vercel.app`
  */
 
@@ -82,12 +82,19 @@ const TEMOIN_DE_CONSTRUCTION = join(RACINE, '.next', 'BUILD_ID');
 /* -------------------------------------------------------------------------- */
 
 /**
- * TROIS URL, et le choix n'est pas cosmétique.
+ * QUATRE URL, et le choix n'est pas cosmétique.
  *
  * - L'ACCUEIL, parce que c'est la page que l'on ouvre en premier et la plus
  *   légère : elle donne la santé du socle.
+ * - LE RAYON, ajouté en C16 et c'est une DETTE QU'ON SOLDE. `/boutique` porte
+ *   quinze vignettes photographiques, c'est-à-dire le plus gros poste d'images
+ *   du site (129,1 Ko sur un plafond de 180) et le seul écran dont le budget
+ *   ait dû être tenu par une décision explicite plutôt que par le hasard des
+ *   `sizes` (round 1 de C15). La page la plus TRANSFORMÉE par la refonte
+ *   n'avait donc aucune note mesurée, et un plafond d'images qui ne se voit
+ *   dans aucune note publiée n'est surveillé par personne.
  * - UNE FICHE PRODUIT, parce que c'est la page la plus lourde de la vitrine —
- *   deux tableaux, une illustration, le bloc d'ajout au panier, le balisage
+ *   deux tableaux, deux photographies, le bloc d'ajout au panier, le balisage
  *   JSON-LD — et parce qu'il y en a quinze : ce qu'elle mesure, elle le
  *   mesure quinze fois.
  * - LE PANIER, parce que c'est la page la plus CHARGÉE EN JAVASCRIPT du site
@@ -99,9 +106,14 @@ const TEMOIN_DE_CONSTRUCTION = join(RACINE, '.next', 'BUILD_ID');
  * portent `robots: noindex` et obtiendraient un 66 de référencement qui dirait
  * la consigne donnée et non la qualité du travail (décisions D21 et D19). Ils
  * sont relevés à part, dans le compte rendu de tranche.
+ *
+ * L'ordre est celui de la NAVIGATION — on entre par l'accueil, on passe au
+ * rayon, on ouvre une fiche, on va au panier — et non celui de l'ancienneté :
+ * un relevé se lit comme un parcours.
  */
 const URL_MESUREES = [
   { chemin: '/', intitule: 'Accueil' },
+  { chemin: '/boutique', intitule: 'Rayon' },
   { chemin: '/boutique/huile-olive-premiere-pression', intitule: 'Fiche huile d’olive' },
   { chemin: '/panier', intitule: 'Panier' },
 ];
@@ -109,19 +121,34 @@ const URL_MESUREES = [
 /**
  * LES SEUILS. Une note en dessous arrête le script.
  *
- * Rapidité à 92 et non à 90 : les relevés de C1 à C7 tiennent entre 97 et 98
- * au profil mobile, et un seuil posé quinze points sous la mesure ne garde
- * rien. 92 laisse la marge d'un runner chargé sans laisser passer une
- * régression réelle.
+ * RAPIDITÉ : 92 de C1 à C9, **90 depuis la tranche C11** (décision D36,
+ * arbitrage validé par le client le 2026-08-06). C'est le seul seuil de ce
+ * projet qui ait jamais baissé, et il faut donc dire pourquoi plutôt que de
+ * laisser croire à un ajustement de confort :
+ *
+ * - LA MARGE MESURÉE EST DE HUIT POINTS, PAS DE SIX. Les relevés du 06/08
+ *   donnent 98 et 99 en rapidité, en local comme en ligne. Ce n'est pas la
+ *   note qui baisse, c'est le plancher.
+ * - LES IMAGES ARRIVENT (décision D35). Le plus grand affichage de contenu
+ *   d'une fiche deviendra une image et non plus un titre — un poste qui dépend
+ *   du réseau du visiteur bien plus que du code.
+ * - L'OFFRE VEND « quatre notes ≥ 90 mesurées et datées ». Le seuil de la
+ *   garde s'aligne enfin sur le chiffre annoncé, au lieu de vivre sa vie deux
+ *   points au-dessus.
+ *
+ * Ce que la baisse ne fait PAS : autoriser une régression invisible. Les
+ * relevés restent versionnés et datés dans `mesures/`, et une note qui
+ * tomberait de 98 à 91 tiendrait le seuil tout en étant une perte de sept
+ * points, lisible dans le fichier. Un seuil est un plancher, pas un objectif.
  *
  * Accessibilité, bonnes pratiques et référencement sont STRUCTURELS : ils ne
  * dépendent ni de la machine ni du réseau, et le site les tient à 100 depuis
- * C1. Le seuil de référencement est à 96 plutôt qu'à 100 parce qu'un seul
- * audit manqué y coûte plusieurs points d'un coup — et qu'on veut alors lire
- * l'écart dans un rapport, pas découvrir un zéro.
+ * C1. Ils ne bougent pas d'un point. Le seuil de référencement est à 96 plutôt
+ * qu'à 100 parce qu'un seul audit manqué y coûte plusieurs points d'un coup —
+ * et qu'on veut alors lire l'écart dans un rapport, pas découvrir un zéro.
  */
 const SEUILS = {
-  performance: 92,
+  performance: 90,
   accessibility: 100,
   seo: 96,
   'best-practices': 100,
@@ -187,6 +214,25 @@ const DATE = lireOption('--date', JOUR_PARIS.format(new Date()));
  * part dans un fichier séparé.
  */
 const BASE_DISTANTE = lireOption('--base', null);
+
+/**
+ * LE SUFFIXE DE TRANCHE — `--suffixe c14` écrit `lighthouse-<date>-c14.json`.
+ *
+ * Ajouté en C14, et le motif est un incident, pas une commodité : C12 et C13
+ * ont mesuré le MÊME JOUR, et le relevé de C13 a écrasé celui de C12. Les
+ * valeurs de C12 n'ont survécu que parce qu'elles étaient dans l'historique
+ * git, ce qui n'est pas ce qu'on entend par « relevé versionné et daté ».
+ *
+ * Une tranche par jour est une hypothèse que ce projet a déjà démentie deux
+ * fois. Le suffixe est facultatif — un relevé de recette n'en a pas besoin —
+ * et il n'est validé que sur sa forme : des minuscules, des chiffres, des
+ * tirets, rien qui puisse sortir du dossier des mesures.
+ */
+const SUFFIXE = lireOption('--suffixe', null);
+
+if (SUFFIXE !== null && !/^[a-z0-9-]+$/.test(SUFFIXE)) {
+  throw new Error('--suffixe attend des minuscules, des chiffres et des tirets');
+}
 
 if (BASE_DISTANTE !== null && !BASE_DISTANTE.startsWith('https://')) {
   throw new Error(
@@ -480,8 +526,11 @@ async function principal() {
 
     mkdirSync(DOSSIER_MESURES, { recursive: true });
 
+    const marque = SUFFIXE === null ? '' : `-${SUFFIXE}`;
     const nomFichier =
-      BASE_DISTANTE === null ? `lighthouse-${DATE}.json` : `lighthouse-en-ligne-${DATE}.json`;
+      BASE_DISTANTE === null
+        ? `lighthouse-${DATE}${marque}.json`
+        : `lighthouse-en-ligne-${DATE}${marque}.json`;
     writeFileSync(
       join(DOSSIER_MESURES, nomFichier),
       `${JSON.stringify(releve, null, 2)}\n`,

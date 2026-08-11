@@ -751,7 +751,7 @@ function ModeleFormulaire() {
     >
       <h3
         id="titre-modele"
-        className="border-b border-encre-douce/30 px-5 py-2.5 text-xs font-semibold tracking-[0.18em] text-encre uppercase sm:px-7"
+        className="etiquette border-b border-encre-douce/30 px-5 py-2.5 text-encre sm:px-7"
       >
         Modèle de formulaire de rétractation
       </h3>

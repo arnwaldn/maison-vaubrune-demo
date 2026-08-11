@@ -1,0 +1,41 @@
+date   : 2026-08-11 (Paris), tranche C21b
+commit : bba5ae8 SEUL — etat AVANT le retrait (arbre propre)
+
+DÉCALAGE CUMULÉ SOUS LES DEUX RÉGIMES — tranche C17
+Bridage de C13 : 412 × 823 densité 1,75, réseau 1,6 Mb/s, processeur ÷ 4.
+Chaque page est chargée, laissée six secondes, puis PARCOURUE en entier.
+Plafond du projet : 0.002
+
+page       régime            au chargement    après parcours   sources
+────────────────────────────────────────────────────────────────────────────
+commande   réduit                   0.0001           0.0001     1
+commande   mouvement                0.0001           0.0001     1
+livraison  réduit                   0.0001           0.0001     1
+livraison  mouvement                0.0001           0.0001     1
+/commande/confirmationréduit                   0.0001           0.0001     1
+/commande/confirmationmouvement                0.0001           0.0001     1
+
+PIRE VALEUR : 0.0001 pour un plafond de 0.002.
+VERDICT : le socle de mouvement ne fabrique aucun décalage. Les révélations
+n'animent qu'opacity et transform, et la mesure le confirme sous les DEUX régimes.
+
+DÉTAIL DES DÉCALAGES RELEVÉS
+────────────────────────────────────────────────────────────────────────────
+commande — réduit :
+   0.00006
+      <SPAN> y 120 → 120 | inline-flex h-6 w-9 shrink-0 items-center justify-center overflow-hidd
+commande — mouvement :
+   0.00006
+      <SPAN> y 120 → 120 | inline-flex h-6 w-9 shrink-0 items-center justify-center overflow-hidd
+livraison — réduit :
+   0.00008
+      <undefined> y 523 → 523 | 
+livraison — mouvement :
+   0.00007
+      <undefined> y 524 → 524 | 
+/commande/confirmation — réduit :
+   0.00006
+      <SPAN> y 120 → 120 | inline-flex h-6 w-9 shrink-0 items-center justify-center overflow-hidd
+/commande/confirmation — mouvement :
+   0.00006
+      <SPAN> y 120 → 120 | inline-flex h-6 w-9 shrink-0 items-center justify-center overflow-hidd

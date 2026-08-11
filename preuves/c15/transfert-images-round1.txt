@@ -1,0 +1,61 @@
+RELEVE DU ROUND 1 — item I2, apres bridage des vignettes du rayon a 320.
+=========================================================================
+
+AVANT (memes commandes, meme profil bureau 1440 x 900 densite 2) :
+  /boutique  au chargement 144,2 Ko (7 images)
+             apres defilement 387,4 Ko (16 images) — plafond 180 Ko
+             DEPASSEMENT : 387,4 Ko pour un plafond de 180 Ko
+             les quatre plus lourdes etaient des principal-640.avif
+             (40,0 / 36,7 / 35,4 / 34,1 Ko)
+
+APRES : le meme profil telecharge 129,1 Ko, c est-a-dire exactement ce que
+telecharge le profil mobile. Le plafond cesse d etre une propriete de
+l appareil qui mesure.
+
+
+Octets d’image transférés — deux profils bridés, plafonds D36
+------------------------------------------------------------------------------
+
+PROFIL mobile 412 x 823, densite 1,75
+/
+          au chargement :   11.4 Ko (2 image(s))
+          après défilement :   11.4 Ko (2 image(s))
+            /editorial/accueil/hero-1024.avif                            10.9 Ko
+            /icon.svg                                                     0.4 Ko
+/boutique
+          au chargement :   11.3 Ko (3 image(s))
+          après défilement :  129.1 Ko (16 image(s)) — plafond 180 Ko
+            /produits/terrine-campagne-poivre-noir/principal-320.avif    12.6 Ko
+            /produits/fromage-fermier-brebis/principal-320.avif          12.0 Ko
+            /produits/lentilles-blondes-plateau/principal-320.avif       11.6 Ko
+            /produits/rillettes-canard-echalotes/principal-320.avif      11.3 Ko
+/boutique/huile-olive-premiere-pression
+          au chargement :   30.6 Ko (3 image(s))
+          après défilement :   30.6 Ko (3 image(s)) — plafond 120 Ko
+            /produits/huile-olive-premiere-pression/ambiance-640.avif    16.8 Ko
+            /produits/huile-olive-premiere-pression/principal-640.avif   13.4 Ko
+            /icon.svg                                                     0.4 Ko
+
+PROFIL bureau 1440 x 900, densite 2
+/
+          au chargement :   32.0 Ko (3 image(s))
+          après défilement :   32.0 Ko (3 image(s))
+            /editorial/accueil/hero-1440.avif                            17.5 Ko
+            /editorial/huiles-et-vinaigres/macro-1024.avif               14.1 Ko
+            /icon.svg                                                     0.4 Ko
+/boutique
+          au chargement :   50.7 Ko (7 image(s))
+          après défilement :  129.1 Ko (16 image(s)) — plafond 180 Ko
+            /produits/terrine-campagne-poivre-noir/principal-320.avif    12.6 Ko
+            /produits/fromage-fermier-brebis/principal-320.avif          12.0 Ko
+            /produits/lentilles-blondes-plateau/principal-320.avif       11.6 Ko
+            /produits/rillettes-canard-echalotes/principal-320.avif      11.3 Ko
+/boutique/huile-olive-premiere-pression
+          au chargement :   30.6 Ko (3 image(s))
+          après défilement :   30.6 Ko (3 image(s)) — plafond 120 Ko
+            /produits/huile-olive-premiere-pression/ambiance-640.avif    16.8 Ko
+            /produits/huile-olive-premiere-pression/principal-640.avif   13.4 Ko
+            /icon.svg                                                     0.4 Ko
+------------------------------------------------------------------------------
+Tous les plafonds sont tenus.
+

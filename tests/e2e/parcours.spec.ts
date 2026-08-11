@@ -1,6 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
 
-import { attendreHydratation, euros, lienNavigation, ouvrir, pastillePanier } from './aides';
+import { attendrePage, euros, lienNavigation, ouvrir, pastillePanier } from './aides';
 
 /**
  * LE PARCOURS FUMIGATOIRE — une seule histoire, racontée en entier.
@@ -164,21 +164,6 @@ function lignesDuPanier(page: Page) {
     .filter({ has: page.getByRole('button', { name: /^Retirer/ }) });
 }
 
-/**
- * Attend l'arrivée effective sur une adresse, PUIS son hydratation.
- *
- * Les liens du site sont des `<Link>` : le clic déclenche une navigation
- * côté client, qui n'est pas terminée quand la promesse du clic se résout.
- * Sans cette attente, la barrière d'hydratation trouverait la page PRÉCÉDENTE
- * déjà hydratée et rendrait la main aussitôt — le test lirait alors l'écran
- * d'avant, et échouerait pour une raison qui n'a rien à voir avec ce qu'il
- * vérifie.
- */
-async function attendrePage(page: Page, chemin: string): Promise<void> {
-  await page.waitForURL((url) => url.pathname === chemin);
-  await attendreHydratation(page);
-}
-
 /* -------------------------------------------------------------------------- */
 /* L'histoire entière                                                          */
 /* -------------------------------------------------------------------------- */
@@ -311,6 +296,70 @@ test('de l’accueil au suivi : commander, payer, préparer, suivre', async ({ p
 
     const bloc = page.getByRole('region', { name: 'Votre référence de commande' });
     await expect(bloc).toContainText(attendue);
+
+    /* ═══════════════════════════════════════════════════════════════════════
+       LA RÉFÉRENCE EST L'INFORMATION REINE, ET ELLE SE LIT SANS DÉFILER.
+
+       Le héros illustré de C21a met une image de 332 × 185 points et son cadre
+       entre le chapeau et cette référence sur un téléphone : au premier jet,
+       elle finissait à 897 px pour une fenêtre de 844, c'est-à-dire qu'il fallait
+       défiler pour lire ce que la page existe pour donner. Quatre retraits
+       mesurés l'ont ramenée à 836 — huit points de marge.
+
+       HUIT POINTS NE SE SURVEILLENT PAS À L'ŒIL, d'où ce contrôle. Il ne vit pas
+       dans `tunnel.spec.ts` parce qu'il lui faudrait rejouer un achat entier
+       pour obtenir une référence, et qu'un second achat scripté finirait par
+       diverger de celui-ci. Ici, l'achat est déjà fait.
+
+       Le critère est la FENÊTRE du profil, jamais un nombre écrit : à 1280 × 800
+       comme à 390 × 844, ce qui est promis est « on la lit sans défiler ».
+
+       Et il porte sur la LIGNE de la référence, pas sur le panneau qui
+       l'entoure : celui-ci porte en plus trois lignes de prose (« C'est elle qui
+       désigne cette commande partout… ») dont personne n'a promis qu'elles
+       tiendraient au-dessus de la ligne. Mesurer le panneau ferait échouer le
+       contrôle pour une raison qui n'est pas celle qu'il annonce.
+
+       ───────────────────────────────────────────────────────────────────────
+       LE SEUIL EST RESSERRÉ EN C21b, PARCE QUE LE RETRAIT L'AVAIT DÉTENDU.
+
+       Les huit points de marge étaient le prix d'un cadre QUI PORTAIT UN
+       CARTOUCHE. Le retour client n° 22 l'a emporté, et la référence remonte de
+       trente points : 836 → 806 sur un téléphone, soit trente-huit points de
+       marge (`preuves/c21/vu-tunnel-c21b.txt`). Laisser le critère à « au-dessus
+       de la flottaison » reviendrait à ne plus rien garder du gain — la marge
+       pourrait fondre de trente points sans qu'une ligne rougisse.
+
+       Le seuil resserré reste sans nombre écrit : la référence doit être lue
+       entièrement AVEC, EN PLUS, DE QUOI COMMENCER LA LIGNE SUIVANTE — la
+       hauteur de son propre libellé, prise dans le DOM. Ce n'est pas une marge
+       de confort choisie à l'œil : c'est ce que la page elle-même mesure, donc
+       une quantité qui suit la typographie du jour et la largeur de l'écran.
+
+       Il MORD, et ce n'est pas une figure de style : le libellé mesure 24 points
+       sur un téléphone (mesuré en faisant échouer l'assertion exprès), donc
+       806 + 24 = 830 aujourd'hui pour une fenêtre de 844 — quatorze points de
+       marge —, contre 836 + 24 = 860 sur l'état d'hier. Le contrôle d'hier
+       restait vert avec le cartouche ; celui-ci serait rouge. */
+    const flottaison = await bloc
+      .getByText(attendue, { exact: true })
+      .evaluate((noeud) => {
+        const libelle = document.querySelector('#titre-reference');
+
+        return {
+          basDeLaReference: Math.round(noeud.getBoundingClientRect().bottom),
+          hauteurDuLibelle:
+            libelle === null ? 0 : Math.round(libelle.getBoundingClientRect().height),
+          hauteurFenetre: window.innerHeight,
+        };
+      });
+
+    /* Un libellé introuvable rendrait zéro et détendrait le seuil en silence —
+       le contrôle vérifie donc d'abord qu'il a bien mesuré quelque chose. */
+    expect(flottaison.hauteurDuLibelle).toBeGreaterThan(0);
+    expect(flottaison.basDeLaReference + flottaison.hauteurDuLibelle).toBeLessThanOrEqual(
+      flottaison.hauteurFenetre,
+    );
 
     await expect(page.getByText('Votre panier a été vidé.')).toBeVisible();
     await expect(pastillePanier(page)).toHaveText('0');

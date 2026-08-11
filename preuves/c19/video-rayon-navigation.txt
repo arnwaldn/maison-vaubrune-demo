@@ -1,0 +1,44 @@
+LA VIDÉO DU RAYON SELON LE CHEMIN EMPRUNTÉ — recette finale C19
+base : http://localhost:3000
+fenêtre 1280 × 800, mouvement AUTORISÉ (prefers-reduced-motion: no-preference)
+==============================================================================
+
+A. CHARGEMENT À FROID de /boutique (adresse tapée, ou rechargement)
+------------------------------------------------------------------------------
+  état du lecteur après six secondes :
+    marque            : data-video-heros="joue"
+    temps courant     : 0.35 s → 1.55 s sur 1,2 s d'attente
+    readyState        : 4 (0 = rien n'a été demandé au lecteur)
+    source chargée    : boucle-1280.av1.mp4
+
+B. NAVIGATION CLIENTE : accueil, puis CLIC sur « Boutique »
+------------------------------------------------------------------------------
+  état du lecteur après six secondes :
+    marque            : data-video-heros="attente"
+    temps courant     : 0.00 s → 0.00 s sur 1,2 s d'attente
+    readyState        : 0 (0 = rien n'a été demandé au lecteur)
+    source chargée    : boucle-1280.av1.mp4
+
+C. NAVIGATION CLIENTE EN SENS INVERSE : /boutique à froid, puis CLIC sur « Accueil »
+------------------------------------------------------------------------------
+  état du lecteur de l’ACCUEIL après six secondes :
+    marque            : data-video-heros="attente"
+    temps courant     : 0.00 s → 0.00 s sur 1,2 s d'attente
+    readyState        : 0 (0 = rien n'a été demandé au lecteur)
+    source chargée    : boucle-1280.av1.mp4
+
+==============================================================================
+VERDICT
+------------------------------------------------------------------------------
+  rayon à froid              : la vidéo JOUE
+  rayon en cliquant          : la vidéo NE JOUE PAS
+  accueil en cliquant        : la vidéo NE JOUE PAS
+
+  LE DÉFAUT N’APPARTIENT PAS AU RAYON, IL APPARTIENT AU CHEMIN. Les DEUX
+  vidéos se taisent dès qu’on arrive sur leur page en cliquant. Seule
+  joue celle de la page par laquelle la visite a COMMENCÉ.
+
+  LES DEUX CHEMINS NE DONNENT PAS LE MÊME SITE. La vidéo du rayon ne
+  démarre que sur un chargement à froid. Or personne n’arrive sur un
+  rayon en tapant son adresse : on y arrive en cliquant.
+==============================================================================

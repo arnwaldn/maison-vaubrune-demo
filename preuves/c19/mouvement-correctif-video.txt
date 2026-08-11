@@ -1,0 +1,22 @@
+[WebServer]   Construction existante réutilisée (.next/BUILD_ID présent).
+[WebServer]   Service de la production sur http://localhost:3000
+[WebServer]    ▲ Next.js 15.5.22
+[WebServer]    - Local:        http://localhost:3000
+[WebServer]    - Network:      http://192.168.0.50:3000
+[WebServer] 
+[WebServer]  ✓ Starting...
+[WebServer]  ✓ Ready in 785ms
+
+Running 9 tests using 8 workers
+
+  ✓  3 [mouvement] › tests\e2e\mouvement.spec.ts:234:5 › le fondu de route joue à la navigation, jamais au chargement, et rend la page entière (3.1s)
+  ✓  1 [mouvement] › tests\e2e\mouvement.spec.ts:106:5 › un bloc sous la flottaison est masqué, se révèle au défilement, et ne rejoue jamais (5.6s)
+  ✓  5 [mouvement] › tests\e2e\mouvement.spec.ts:812:5 › le héros monte derrière un masque, à froid, sans qu’aucun bloc ne le couvre (6.8s)
+  ✓  2 [mouvement] › tests\e2e\mouvement.spec.ts:549:5 › le parcours d’achat rend les mêmes montants exacts sur un site qui bouge (7.9s)
+  ✓  8 [mouvement] › tests\e2e\mouvement.spec.ts:1161:5 › la vidéo du héros joue sous mouvement, et ne se télécharge pas sous reduce (7.7s)
+  ✓  6 [mouvement] › tests\e2e\mouvement.spec.ts:699:5 › l’état masqué des révélations résiste aux couches, dans les trois zones (8.1s)
+  ✓  9 [mouvement] › tests\e2e\mouvement.spec.ts:1497:5 › l’ambiance d’une carte revient aussi lentement qu’elle est venue (5.5s)
+  ✓  7 [mouvement] › tests\e2e\mouvement.spec.ts:1321:5 › les deux vidéos jouent quand on arrive sur leur page en cliquant (9.8s)
+  ✓  4 [mouvement] › tests\e2e\mouvement.spec.ts:319:5 › le défilement adouci vit sur trois routes, jamais dans le tunnel, et pas du tout sous mouvement réduit (10.0s)
+
+  9 passed (13.1s)

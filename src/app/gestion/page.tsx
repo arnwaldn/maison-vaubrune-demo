@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 
+import { BlocTitre } from '@/composants/mise-en-page/BlocTitre';
 import { IlotTableauDeBord } from '@/composants/gestion/IlotTableauDeBord';
 import { CATALOGUE } from '@/donnees/catalogue';
 import { COMMANDES_AMORCE, LIBELLE_JEU_ESSAI } from '@/donnees/commandes-amorce';
@@ -29,22 +30,34 @@ export default function PageGestion() {
   return (
     <>
       <section className="pt-12 sm:pt-14">
-        <p className="text-xs font-semibold tracking-[0.2em] text-ocre uppercase">
-          Espace marchand
-        </p>
-        <h1 className="mt-4 text-affiche font-semibold text-encre">Tableau de bord</h1>
-        <p className="mt-5 max-w-lisible text-chapeau text-encre-douce">
-          Ce que le marchand voit en ouvrant sa boutique&nbsp;: où en sont les
-          commandes, ce qu’elles ont rapporté, ce qui manque en rayon.
-        </p>
-        <p className="mt-4 max-w-lisible text-sm leading-relaxed text-encre-douce">
-          Les chiffres ci-dessous portent sur le {LIBELLE_JEU_ESSAI} — six commandes
-          fabriquées pour que cet écran ait quelque chose à montrer — augmenté des
-          commandes que vous passez vous-même dans la démonstration.
-        </p>
+        <BlocTitre
+          surtitre="Espace marchand"
+          titre="Tableau de bord"
+          chapeau={
+            <>
+              Ce que le marchand voit en ouvrant sa boutique&nbsp;: où en sont les
+              commandes, ce qu’elles ont rapporté, ce qui manque en rayon.
+            </>
+          }
+          note={
+            <>
+              Les chiffres ci-dessous portent sur le {LIBELLE_JEU_ESSAI} — six
+              commandes fabriquées pour que cet écran ait quelque chose à montrer —
+              augmenté des commandes que vous passez vous-même dans la démonstration.
+            </>
+          }
+        />
       </section>
 
-      <IlotTableauDeBord amorce={COMMANDES_AMORCE} produits={PRODUITS} />
+      {/* LE TABLEAU DE BORD MARCHAND ENTRE LUI AUSSI (retour client n° 18).
+          Ces cinq écrans ne sont NI le tunnel NI un document légal : personne
+          n'y vérifie un montant avant de payer, personne n'y lit un texte
+          opposable. L'interdit n° 19 de D37 ne les vise pas, et un espace
+          marchand qui s'affiche d'un bloc au milieu d'un site qui respire se
+          lit comme la partie qu'on n'a pas finie. */}
+      <div data-revelation>
+        <IlotTableauDeBord amorce={COMMANDES_AMORCE} produits={PRODUITS} />
+      </div>
     </>
   );
 }

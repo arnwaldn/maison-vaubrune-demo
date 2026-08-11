@@ -36,6 +36,13 @@ import { calculerTotaux } from '@/lib/panier/totaux';
  * cent cinquante pixels au moment de l'hydratation. Mesuré à 0,053 de
  * décalage cumulé (CLS) par Lighthouse avant correction, 0 après.
  *
+ * Elle porte `data-place-reservee` depuis la tranche C11. Les huit places
+ * réservées du projet le portent, et c'est leur DISPARITION que les campagnes
+ * de bout en bout attendent — un attribut qui ne désigne qu'elles, là où
+ * `div[aria-hidden="true"]` désignait aussi tout ce qu'une refonte visuelle
+ * pourrait poser de décoratif. L'`aria-hidden` reste : il dit autre chose, et à
+ * quelqu'un d'autre.
+ *
  * ---------------------------------------------------------------------------
  * Le bouton « Passer commande »
  * ---------------------------------------------------------------------------
@@ -53,6 +60,7 @@ export function IlotPanier({ catalogue }: { readonly catalogue: readonly Article
     return (
       <div
         aria-hidden="true"
+        data-place-reservee=""
         className="mt-10 min-h-96 rounded-sm border border-filet bg-papier"
       />
     );
@@ -96,7 +104,7 @@ export function IlotPanier({ catalogue }: { readonly catalogue: readonly Article
         {commandable ? (
           <Link
             href="/commande"
-            className="block rounded-sm border border-olive bg-olive px-4 py-3 text-center text-sm font-semibold text-creme no-underline hover:bg-olive-clair"
+            className="block rounded-sm border border-olive bg-olive px-4 py-3 text-center text-sm font-semibold text-creme no-underline hover:border-encre hover:bg-encre"
           >
             Passer commande
           </Link>
@@ -129,7 +137,12 @@ export function IlotPanier({ catalogue }: { readonly catalogue: readonly Article
 
 function PanierVide() {
   return (
-    <div className="mt-10 min-h-96 max-w-lisible pb-4">
+    /* PANNEAU (C19) : l'état vide est de la prose posée sur le fond de page, et
+       le fond de page est un marbre. `min-h-96` RESTE — c'est la hauteur
+       commune qui a fait tomber à zéro le décalage cumulé de 0,053 relevé en
+       C4 au remplacement de la place réservée, et un panneau ne la remplace
+       pas : il se pose dedans. */
+    <div className="panneau mt-10 min-h-96 max-w-lisible">
       <p className="text-chapeau text-encre-douce">Votre panier est vide.</p>
       <p className="mt-4 text-sm leading-relaxed text-encre-douce">
         Le rayon compte quinze références et vingt-trois formats, du condiment au
@@ -137,7 +150,7 @@ function PanierVide() {
       </p>
       <Link
         href="/boutique"
-        className="mt-6 inline-block rounded-sm border border-olive bg-olive px-4 py-2.5 text-sm font-semibold text-creme no-underline hover:bg-olive-clair"
+        className="mt-6 inline-block rounded-sm border border-olive bg-olive px-4 py-2.5 text-sm font-semibold text-creme no-underline hover:border-encre hover:bg-encre"
       >
         Voir la boutique
       </Link>

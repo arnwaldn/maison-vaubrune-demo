@@ -1,0 +1,11 @@
+LENIS HORS DU GRAPHE D'ENTRÉE — preuve .next/static (tranche C17)
+
+1. Morceaux déclarés par app-build-manifest.json : 38 (dont 37 de JavaScript)
+2. Morceaux d'entrée portant le marqueur « lenis-smooth » : 0 (aucun)
+3. Feuilles d'entrée citant le sélecteur « .lenis » : 1 — ATTENDU, ce sont les deux règles de globals.css, qui ne s'appliquent que si la classe existe.
+
+4. Le morceau qui PORTE réellement la bibliothèque :
+   691.abb2341bef7f799b.js — 18669 octets bruts, 5426 gzip
+   déclaré au manifeste d'entrée ? NON
+
+VERDICT : Lenis vit dans UN morceau à la demande, qu'aucune route ne déclare au premier chargement.

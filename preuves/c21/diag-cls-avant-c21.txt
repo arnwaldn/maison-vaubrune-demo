@@ -1,0 +1,40 @@
+DÉCALAGE CUMULÉ SOUS LES DEUX RÉGIMES — tranche C17
+Bridage de C13 : 412 × 823 densité 1,75, réseau 1,6 Mb/s, processeur ÷ 4.
+Chaque page est chargée, laissée six secondes, puis PARCOURUE en entier.
+Plafond du projet : 0.002
+
+page       régime            au chargement    après parcours   sources
+────────────────────────────────────────────────────────────────────────────
+commande   réduit                   0.0020           0.0020     2
+commande   mouvement                0.0001           0.0001     1
+/paiement/simulationréduit                   0.0012           0.0012     2
+/paiement/simulationmouvement                0.0000           0.0000     0
+/commande/confirmationréduit                   0.0001           0.0001     1
+/commande/confirmationmouvement                0.0001           0.0001     1
+
+PIRE VALEUR : 0.0020 pour un plafond de 0.002.
+VERDICT : ÉCHEC — un décalage dépasse le plafond.
+
+
+DÉTAIL DES DÉCALAGES RELEVÉS
+────────────────────────────────────────────────────────────────────────────
+commande — réduit :
+   0.00006
+      <SPAN> y 120 → 120 | inline-flex h-6 w-9 shrink-0 items-center justify-center overflow-hidd
+   0.00198
+      <P> y 597 → 613 | text-chapeau text-encre-douce
+      <A> y 677 → 693 | mt-6 inline-block rounded-sm border border-olive bg-olive px-4 py-2.5 
+commande — mouvement :
+   0.00006
+      <SPAN> y 120 → 120 | inline-flex h-6 w-9 shrink-0 items-center justify-center overflow-hidd
+/paiement/simulation — réduit :
+   0.00006
+      <SPAN> y 120 → 120 | inline-flex h-6 w-9 shrink-0 items-center justify-center overflow-hidd
+   0.00111
+      <undefined> y 408 → 408 | 
+/commande/confirmation — réduit :
+   0.00006
+      <SPAN> y 120 → 120 | inline-flex h-6 w-9 shrink-0 items-center justify-center overflow-hidd
+/commande/confirmation — mouvement :
+   0.00006
+      <SPAN> y 120 → 120 | inline-flex h-6 w-9 shrink-0 items-center justify-center overflow-hidd

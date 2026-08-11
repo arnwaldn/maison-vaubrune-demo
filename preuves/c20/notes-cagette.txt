@@ -1,0 +1,66 @@
+LES QUATRE NOTES PUBLIÉES APRÈS LA CAGETTE — TROIS TIRAGES, C20, 2026-08-11
+================================================================================
+
+commit  : 2c42263
+méthode : `npm run mesurer-notes` (Lighthouse, profil mobile bridé, production
+          servie en local). `node` TUÉ avant chaque tirage, charge processeur
+          relevée juste avant : 9 %, 12 %, 6 %. Trois tirages parce qu'une note
+          isolée ne dit rien — c'est la FOURCHETTE qui fait foi.
+relevés : mesures/lighthouse-2026-08-11-c20-cagette{,-bis,-ter}.json
+          preuves/c20/notes-cagette-{1,2,3}.txt (sorties complètes)
+
+--------------------------------------------------------------------------------
+RAPIDITÉ — les trois tirages, dans l'ordre où ils ont été joués
+--------------------------------------------------------------------------------
+
+  page                    1     2     3     fourchette    seuil
+  ---------------------------------------------------------------------
+  Accueil                94    93    93     93 – 94        90
+  Rayon                  90    90    90     90 – 90        90
+  Fiche huile d'olive    92    94    92     92 – 94         90
+  Panier                 93    93    93     93 – 93        90
+
+Accessibilité, bonnes pratiques et référencement : 100 sur les quatre pages, aux
+trois tirages. **48 notes sur 48 au-dessus de leur seuil**, code de sortie 0 aux
+trois tirages.
+
+--------------------------------------------------------------------------------
+CE QUE /panier RÉPOND, ET IL FAUT LE LIRE EN ENTIER
+--------------------------------------------------------------------------------
+
+  C19                        94 – 95
+  C20, avant la cagette      93 – 94   (94 · 93 · 94)
+  C20, après la cagette      93 – 93   (93 · 93 · 93)
+
+LE BAS DE LA FOURCHETTE NE BOUGE PAS ; LE HAUT PERD UN POINT, ET CETTE FOIS
+QUELQUE CHOSE PEUT EN RÉPONDRE. Le relevé de ce matin déclarait un point d'écart
+sur une page dont NI l'image NI le premier chargement n'avaient changé — écart
+non imputable sur pièces, et écrit comme tel. Ici la page a réellement gagné
+445,1 Ko d'AV1 et changé son image de tête. Le candidat existe, ce qui ne le rend
+pas coupable : trois tirages qui rendent trois fois le même nombre disent surtout
+que 93 est la VALEUR de cette page aujourd'hui, et non le bas d'une fourchette.
+
+CE QUI EST VÉRIFIÉ PAR AILLEURS, ET QUI RESTREINT LES EXPLICATIONS POSSIBLES :
+
+  - le premier chargement JavaScript de /panier vaut 114 kB, à l'octet, avant
+    comme après (`npm run build`) ;
+  - le socle partagé vaut 103 kB, inchangé ;
+  - le plus grand affichage reste un `<img>`, et sa fourchette chevauche celle
+    d'avant (preuves/c20/lcp-avant-apres-cagette.txt) ;
+  - la vidéo ne part qu'après l'événement `load` du document, et pas du tout
+    sous mouvement réduit — prouvé au réseau par la campagne du mouvement.
+
+Trois points au-dessus du seuil de 90, et au-dessus du plancher de 92 en deçà
+duquel la tranche devait rendre un arbitrage. Aucun arbitrage n'est donc demandé,
+mais le chiffre est écrit ici pour que la tranche suivante compare à 93 — et non
+à 94, ni à 95.
+
+--------------------------------------------------------------------------------
+LE RAYON RESTE À 90 POUR UN SEUIL DE 90
+--------------------------------------------------------------------------------
+
+Trois tirages, trois fois 90. Ce n'est ni neuf ni imputable à cette tranche : la
+valeur est constante depuis C19 (« ce n'est pas du bruit, c'est sa valeur »), et
+la page porte encore la vidéo du miel, que le retour client n° 20 demande de
+remplacer. Le remplaçant n'est pas livré — quota de génération épuisé, aucune
+dépense engagée — donc rien de cette tranche n'y touche.

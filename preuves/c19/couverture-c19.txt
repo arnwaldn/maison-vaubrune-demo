@@ -1,0 +1,54 @@
+COUVERTURE — 100 % lignes ET branches sur le périmètre NOMMÉ (D16, 17 fichiers)
+date   : 2026-08-11 03:33
+commit : 869ebda
+======================================================================
+
+
+> maison-vaubrune@0.1.0 test:couverture
+> vitest run --coverage
+
+
+ RUN  v4.1.10 <racine du depot>
+      Coverage enabled with v8
+
+
+ Test Files  25 passed (25)
+      Tests  582 passed (582)
+   Start at  03:33:25
+   Duration  11.07s (transform 4.34s, setup 0ms, import 7.74s, tests 27.34s, environment 9ms)
+
+ % Coverage report from v8
+-------------------|---------|----------|---------|---------|-------------------
+File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+-------------------|---------|----------|---------|---------|-------------------
+All files          |     100 |      100 |     100 |     100 |                   
+ lib               |     100 |      100 |     100 |     100 |                   
+  argent.ts        |     100 |      100 |     100 |     100 |                   
+  ...navigateur.ts |     100 |      100 |     100 |     100 |                   
+  catalogue.ts     |     100 |      100 |     100 |     100 |                   
+  ...tructurees.ts |     100 |      100 |     100 |     100 |                   
+  expedition.ts    |     100 |      100 |     100 |     100 |                   
+  vitrine.ts       |     100 |      100 |     100 |     100 |                   
+  zones.ts         |     100 |      100 |     100 |     100 |                   
+ lib/commandes     |     100 |      100 |     100 |     100 |                   
+  depot-local.ts   |     100 |      100 |     100 |     100 |                   
+  etats.ts         |     100 |      100 |     100 |     100 |                   
+  horodatage.ts    |     100 |      100 |     100 |     100 |                   
+  reference.ts     |     100 |      100 |     100 |     100 |                   
+ lib/gestion       |     100 |      100 |     100 |     100 |                   
+  ...n-marchand.ts |     100 |      100 |     100 |     100 |                   
+ lib/paiement      |     100 |      100 |     100 |     100 |                   
+  validation.ts    |     100 |      100 |     100 |     100 |                   
+ lib/panier        |     100 |      100 |     100 |     100 |                   
+  ...gue-panier.ts |     100 |      100 |     100 |     100 |                   
+  persistance.ts   |     100 |      100 |     100 |     100 |                   
+  reducteur.ts     |     100 |      100 |     100 |     100 |                   
+  totaux.ts        |     100 |      100 |     100 |     100 |                   
+-------------------|---------|----------|---------|---------|-------------------
+
+=============================== Coverage summary ===============================
+Statements   : 100% ( 615/615 )
+Branches     : 100% ( 400/400 )
+Functions    : 100% ( 148/148 )
+Lines        : 100% ( 594/594 )
+================================================================================

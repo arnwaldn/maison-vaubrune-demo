@@ -4,6 +4,7 @@ import { join } from 'node:path';
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
 
+import { BlocTitre } from '@/composants/mise-en-page/BlocTitre';
 import { typographier } from '@/lib/typographie';
 
 /**
@@ -145,16 +146,16 @@ export default function PageModelesDeCourriels() {
   return (
     <>
       <section className="pt-12 sm:pt-14">
-        <p className="text-xs font-semibold tracking-[0.2em] text-ocre uppercase">
-          Espace marchand
-        </p>
-        <h1 className="mt-4 text-affiche font-semibold text-encre">
-          Modèles de courriels
-        </h1>
-        <p className="mt-5 max-w-lisible text-chapeau text-encre-douce">
-          Les {MODELES.length} messages qu’une boutique livrée expédie au fil d’une
-          commande, écrits et prêts à brancher.
-        </p>
+        <BlocTitre
+          surtitre="Espace marchand"
+          titre="Modèles de courriels"
+          chapeau={
+            <>
+              Les {MODELES.length} messages qu’une boutique livrée expédie au fil
+              d’une commande, écrits et prêts à brancher.
+            </>
+          }
+        />
 
         <p className="mt-6 max-w-lisible rounded-sm border border-ocre-clair bg-papier px-4 py-3 text-sm leading-relaxed text-encre">
           <span className="font-semibold">
@@ -165,23 +166,29 @@ export default function PageModelesDeCourriels() {
           remis à un serveur de courrier.
         </p>
 
-        <p className="mt-4 max-w-lisible text-sm leading-relaxed text-encre-douce">
+        <p className="panneau mt-6 max-w-lisible text-sm leading-relaxed text-encre-douce">
           Les passages sur fond clair, entre doubles accolades, sont les
           emplacements que le système remplit à l’envoi&nbsp;: référence, prénom,
           montants, dates. Tout le reste est écrit une fois pour toutes.
         </p>
       </section>
 
+      {/* Même motif que le tableau de bord : l'espace marchand n'est ni le
+          tunnel ni un document légal (voir `gestion/page.tsx`). Ici les blocs
+          forment une SÉRIE, donc la cascade a de quoi cascader — plafond de six
+          rangs, D37. */}
       <div className="mt-12 space-y-12 pb-4">
-        {MODELES.map((modele) => (
+        {MODELES.map((modele, rang) => (
           <article
             key={modele.fichier}
             aria-labelledby={`modele-${modele.fichier}`}
             className="rounded-sm border border-filet bg-papier p-5 sm:p-6"
+            data-revelation
+            data-revelation-retard={Math.min(rang, 6)}
           >
             <h2
               id={`modele-${modele.fichier}`}
-              className="text-titre font-semibold text-encre"
+              className="text-titre text-encre"
             >
               {typographier(modele.titre)}
             </h2>
@@ -266,7 +273,7 @@ function rendre(lignes: readonly string[]): ReactNode[] {
 
     if (nettoyee.startsWith('### ')) {
       rendu.push(
-        <h4 key={cle} className="mt-6 font-titre text-base font-semibold text-encre">
+        <h4 key={cle} className="mt-6 sous-titre text-encre">
           {typographier(nettoyee.slice(4))}
         </h4>,
       );
@@ -275,7 +282,7 @@ function rendre(lignes: readonly string[]): ReactNode[] {
 
     if (nettoyee.startsWith('## ')) {
       rendu.push(
-        <h3 key={cle} className="mt-6 font-titre text-lg font-semibold text-encre">
+        <h3 key={cle} className="mt-6 sous-titre text-encre">
           {typographier(nettoyee.slice(3))}
         </h3>,
       );

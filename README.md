@@ -70,20 +70,28 @@ npm run start   # sert la construction de production sur le port 3000
 npm run typecheck   # tsc --noEmit, zéro erreur attendue
 
 npm run verifier-catalogue  # 18 contrôles de cohérence du catalogue
-npm run verifier-donnees    # 4 contrôles : aucune donnée d'entreprise inventée
-npm run verifier-marques    # 6 contrôles : aucune marque réelle, aucune appellation
+npm run verifier-donnees    # 6 contrôles : aucune donnée d'entreprise inventée
+npm run verifier-marques    # 8 contrôles : aucune marque réelle, aucune appellation
+npm run verifier-images     # 12 contrôles : nommage, manifeste, poids, dimensions
+npm run verifier-typographie # 1 contrôle : aucune didone sous 20 px
+npm run verifier-poids-css  # 2 contrôles : poids gzip des feuilles construites
 npm run test:unitaires      # Vitest, modules purs
 npm run test:parcours       # Playwright, parcours de bout en bout (2 profils)
-npm run mesurer-notes       # Lighthouse sur 3 URL, écrit un relevé daté
+npm run mesurer-notes       # Lighthouse sur 4 URL, écrit un relevé daté
 npm run controle            # toute la chaîne, dans cet ordre
 ```
 
-`npm run controle` enchaîne, et s'arrête à la première anomalie :
+`npm run controle` enchaîne DIX étapes, et s'arrête à la première anomalie :
 
 ```
 typecheck → verifier-catalogue → verifier-donnees → verifier-marques
-         → test:unitaires → build → test:parcours
+         → verifier-images → verifier-typographie → test:unitaires
+         → build → verifier-poids-css → test:parcours
 ```
+
+Les six gardes totalisent **47 contrôles** (18 + 6 + 8 + 12 + 1 + 2).
+`verifier-poids-css` vient APRÈS `build` et non avant : il mesure un livrable,
+il ne peut pas rendre vert sans construction.
 
 Les parcours viennent EN DERNIER parce qu'ils s'exécutent sur la construction
 de production que l'étape précédente vient de produire — jamais sur le serveur
@@ -94,8 +102,10 @@ qui fait foi (voir `mesures/LISEZ-MOI.md`).
 
 Aucune variable d'environnement n'est nécessaire pour construire ou lancer le
 projet : `NEXT_PUBLIC_URL_SITE` sert uniquement à écrire des adresses absolues
-dans les métadonnées, le plan du site et le fichier robots, et retombe sur
-`http://localhost:3000` quand elle n'est pas définie.
+dans les métadonnées, le plan du site et le fichier robots. Depuis C9, elle
+retombe sur l'ADRESSE DE PRODUCTION quand elle n'est pas définie, et non sur
+`http://localhost:3000` — une construction qui oublie la variable publie ainsi
+un plan du site juste. L'environnement reprend toujours la main en développement.
 
 ## Le paiement
 
@@ -267,16 +277,29 @@ pièces qui prouvent que la garde échoue quand elle doit échouer
 ## Les parcours de bout en bout
 
 ```bash
-npm run test:parcours                      # les deux profils
+npm run test:parcours                      # les trois profils
 npx playwright test --project=bureau-1280  # un seul
+npx playwright test --project=mouvement    # le site qui bouge
 npx playwright test --ui                   # en mode interactif
 ```
 
-Playwright joue quatre campagnes sur **deux profils** — un bureau à 1280 px et
-un mobile à 390 px, les deux largeurs auxquelles ce projet a été dessiné — et
-sur la **construction de production**, servie par
-`scripts/servir-production.mjs`. Le serveur de développement rend les pages
-autrement : une campagne verte sur `next dev` ne dirait rien du site livré.
+Playwright joue sept campagnes sur **trois profils**, et sur la **construction
+de production**, servie par `scripts/servir-production.mjs`. Le serveur de
+développement rend les pages autrement : une campagne verte sur `next dev` ne
+dirait rien du site livré.
+
+Deux des trois profils — un bureau à 1280 px et un mobile à 390 px, les deux
+largeurs auxquelles ce projet a été dessiné — jouent sous **mouvement réduit**.
+Ce n'est pas une commodité de test, c'est la séparation de deux questions qu'on
+ne mélange pas : « le site fonctionne-t-il ? » se vérifie sur un site immobile,
+où un élément est à sa place ou n'y est pas ; une campagne fonctionnelle qui
+attend la fin d'un fondu avant chaque assertion mesure la patience de Playwright
+et devient instable le jour où une durée change.
+
+Le troisième profil, `mouvement`, est le seul où le site bouge — et il ne joue
+qu'un fichier, `mouvement.spec.ts`. Les deux autres l'écartent explicitement :
+joué sur un site immobile, il échouerait à tous les coups, puisque par doctrine
+il ne s'y passe rien.
 
 **`parcours.spec.ts` — l'histoire entière, en un seul test.** Accueil, rayon,
 fiche de l'huile d'olive, deux flacons de 50 cl au panier, un fromage, puis le
@@ -305,6 +328,68 @@ page, et chaque description de page porte le mot « démonstration ». Ce filet
 est **obligatoire** : `typedRoutes` ne garde pas les `<Link>` morts (vérifié
 deux fois, le motif est écrit dans `next.config.ts`).
 
+**`vitrine.spec.ts`** — le rayon lu au **style calculé**, jamais à la source.
+Elle vérifie que la bascule grille/liste recompose vraiment les cartes, que le
+bouton reste d'accord avec l'affichage après un aller-retour de navigation, que
+la carte prend le trait de sa famille au survol, et qu'aucun cadre de galerie
+n'est plus haut que l'image qu'il contient. Elle existe parce qu'une règle CSS
+qui ne s'applique pas — parce qu'elle vit dans une couche qu'un utilitaire
+bat — est **indiscernable d'une règle absente** quand on relit un fichier, et
+parfaitement discernable dans `getComputedStyle`. Trois défauts d'affichage
+livrés et invisibles ont été trouvés ainsi.
+
+**`tunnel.spec.ts`** — les mêmes armes, tournées vers les pages où l'on paie.
+Elle lit le **style calculé** et la géométrie, jamais la source. Parmi ce qu'elle
+garde : les chiffres du panier sortent réellement en chasse fixe — en comparant
+leur famille à celle d'une étiquette du registre **et** à celle de la prose, parce
+que les deux moitiés comptent ; deux montants de même longueur occupent la même
+place quels que soient leurs chiffres ; le fondu du total dure 320 ms sous
+`no-preference` et ne dure plus rien sous mouvement réduit ; les libellés sériels
+gardent une graisse **dans l'axe 400-500 de la mono sous-ensemblée** ; l'écran de
+paiement simulé ne porte **aucun** organe de saisie (décision D22, qui n'était
+gardée par aucun test avant elle) ; et depuis que le tunnel a reçu une image de
+tête, celle-ci vient bien du dossier de **sa** page, elle porte son alternative
+entière, elle n'est plus légendée, et le titre, lui, n'a toujours pas le droit de
+se mettre en scène.
+
+**Cette énumération n'est pas fermée, et c'est délibéré** : trois retours client
+ont déjà ajouté des cas à cette campagne, et une liste qui se voudrait complète
+aurait vieilli à chacun. Le décompte qui fait foi est celui que `npm run controle`
+imprime, jamais celui qu'un fichier de documentation recopie.
+
+Elle ne vérifie aucun montant : c'est le travail de `parcours.spec.ts`, aux
+valeurs exactes, et deux campagnes qui affirment le même chiffre finissent par
+diverger.
+
+**`mouvement.spec.ts`** — la seule qui tourne sur un site qui bouge, et donc la
+seule qui puisse voir ce que le mouvement casse. Elle vérifie qu'un bloc sous la
+ligne de flottaison est bien masqué puis révélé au défilement **et que le
+contrôleur cesse de l'observer** (prouvé en comptant les appels, pas en lisant
+un attribut : l'attribut dit qu'un élément a été révélé, pas qu'on a cessé de le
+surveiller) ; que le fondu d'arrivée de route joue à la navigation et **jamais
+au premier chargement**, en laissant la page entière ; que le défilement adouci
+vit sur ses trois routes, quitte le tunnel, descend une ancre en douceur pour
+atterrir **au même endroit que le régime natif**, et n'est **pas téléchargé du
+tout** sous mouvement réduit — avec sa contre-épreuve ; et que le parcours
+d'achat rend les mêmes montants exacts là où les pages fondent et où les blocs
+se révèlent.
+
+Elle vérifie aussi, depuis la tranche suivante, que l'état masqué des
+révélations **résiste aux couches CSS** — un bloc de chacune des trois zones,
+lu au style calculé dans ses deux états ; et que le texte du héros **entre à
+froid** en balayant ses quatre lignes, pendant que l'image, elle, ne bouge pas
+d'une image.
+
+Quatre défauts réels ont été trouvés par elle seule, et ils étaient invisibles
+partout ailleurs : le tunnel gardait par intermittence le défilement adouci
+(la bibliothèque retamponnait la racine depuis une minuterie que sa propre
+destruction ne purge pas) ; les ancres atterrissaient cent pixels trop bas
+(une compensation ajoutée pour un manque qui n'existait pas) ; les quinze
+vignettes du rayon **surgissaient au lieu de se révéler** depuis que le socle de
+mouvement existait, parce qu'une règle de `@layer components` battait l'état
+masqué ; et le monument de l'accueil **passait sous la photographie** au-delà de
+1 472 px de fenêtre — celui-là, c'est le client qui l'a vu le premier.
+
 ## La garde des marques réelles
 
 ```bash
@@ -332,6 +417,188 @@ où le nom sert de MESURE de densité de marques déposées. Si la phrase change
 l'exemption tombe — et une exemption qui ne sert plus fait échouer la garde,
 pour qu'une liste d'exceptions ne s'allonge pas en silence.
 
+## Les visuels
+
+**Toutes les images de ce site, et toutes ses vidéos, ont été ENGENDRÉES PAR UNE
+INTELLIGENCE ARTIFICIELLE.** C'est écrit ici, sur
+`/a-propos-de-cette-demonstration` et dans les mentions légales, parce qu'une
+démonstration qui montre des images engendrées sans le dire ferait exactement
+ce qu'elle reproche aux autres : maquiller. La décision et son raisonnement
+complet sont dans
+[`contenu/decisions/007-visuels-generes.md`](contenu/decisions/007-visuels-generes.md)
+(D35, qui amende D6).
+
+Ce que cela recouvre, et ce que cela ne recouvre pas :
+
+- **les masters**, engendrés à partir de consignes écrites et relus un par un à
+  trois contrôles — l'étiquette au caractère près, le cadrage, et la signature
+  décorative que le moteur pose dans un coin. **Certains ne sont plus livrés**
+  sans avoir quitté le manifeste : ce sont les natures mortes qui ont engendré
+  les boucles vidéo, et leur empreinte trace cette filiation. La liste fait foi
+  dans [`travaux-images/manifeste.json`](travaux-images/manifeste.json), qui est
+  la SOURCE du pipeline et non sa sortie ;
+- **leurs dérivés**, produits par `npm run preparer-images` : recadrage sur des
+  boîtes déclarées, deux formats (AVIF et son repli JPEG), plusieurs largeurs,
+  métadonnées ARRACHÉES et re-vérifiées après coup. Le pipeline les énumère
+  lui-même, un par un et avec le hachage du master dont chacun descend, dans les
+  deux relevés de livraison
+  ([`public/produits/manifeste-livre.json`](public/produits/manifeste-livre.json)
+  et
+  [`public/editorial/manifeste-livre.json`](public/editorial/manifeste-livre.json)) ;
+- **les boucles vidéo**, produites par `npm run preparer-video` depuis des
+  séquences montées à part — deux rendus par boucle, un AV1 et son repli H.264.
+  Le détail par boucle n'est PAS recopié ici : il est écrit par le pipeline dans
+  [`public/editorial/videos-livrees.json`](public/editorial/videos-livrees.json),
+  avec le poids, les dimensions, la durée et l'empreinte de chaque fichier — une
+  liste tenue à la main dans ce README aurait vieilli à chaque vidéo ajoutée, et
+  elle avait déjà vieilli deux fois. Le plafond est de 1,2 Mo **par rendu
+  réellement téléchargé**, quel que soit le codec (ADR 009 amendé), et c'est la
+  garde des images qui le tient, fichier par fichier ;
+- **aucune photographie de banque d'images**, **aucune personne**, **aucune
+  marque ni signe officiel** — trois interdits fermés par D35 et tenus par deux
+  gardes, l'une sur le texte, l'autre sur les octets des binaires ;
+- **les silhouettes SVG** dessinées à la main en C2 n'ont pas disparu : elles
+  sont devenues la structure de REPLI (produit sans visuel, impression, espace
+  marchand, états vides).
+
+Sur une boutique livrée, ces images sont remplacées par les photographies du
+marchand. C'est le seul poste de ce site qui change d'ORIGINE et non de nature :
+le pipeline, les plafonds de poids, les gardes et les formats restent les mêmes.
+
+## Le fond : une matière, et un contraste qui ne se négocie pas
+
+Le fond du site n'est pas une couleur, c'est une **matière** — un marbre clair
+sous un voile, plus un grain de papier très fin. Elle est arrivée en C19, sur
+trois retours successifs du client (« trop monochrome, trop vide », puis « le
+fond est toujours blanc uni », puis la proposition du marbre lui-même).
+
+Ce qu'elle coûte et ce qu'elle tient, en chiffres mesurés sur les octets
+réellement servis :
+
+| | valeur | référence |
+|---|---|---|
+| tuile de marbre | **35,8 Ko** en AVIF (repli JPEG 54,2 Ko) | fond de `body` : payé sur **toutes** les pages |
+| écart champ → veine | **37,9** points de luminance sur 255 | cible 35-45 ; la référence du client en porte 40 à 60 |
+| surface en relief | **63,4 %** de la tuile | — |
+| voile appliqué | `--marbre-opacite: 0.45` | **curseur libre de 0 à 0,55** |
+| grain de papier | amplitude **5,5 à 7,4** points de luminance | SVG en ligne, ≤ 2 Ko, aucune animation |
+
+**La butée de 0,55 n'est pas un chiffre rond, elle est calculée.** Le voile
+éclaircit la matière ; le baisser la fonce, et une veine plus sombre finit par
+manger le contraste d'une encre. La butée a donc été trouvée par dichotomie,
+encre par encre, contre la veine la plus sombre de la tuile : **c'est l'ocre des
+étiquettes qui borne le curseur**, à 5,08 pour un seuil de 4,50. Les valeurs
+sont lues dans la feuille de style et jamais recopiées — un curseur dont la
+limite serait écrite à la main dans un commentaire mentirait à la première
+retouche.
+
+Deux conséquences qui ont demandé du travail plutôt qu'un réglage :
+
+- **trente recolorations** : tout ce qui se pose sur la matière passe de l'encre
+  douce à l'encre pleine. La règle tient en une ligne — *sur la matière, tout
+  est encre, sauf l'étiquette d'ouverture qui reste ocre* — et la nuance tonale
+  y disparaît : la hiérarchie s'y lit par la taille et par la famille, plus par
+  la densité du gris. C'est un écart assumé avec le système de C12 ;
+- **l'ocre a changé de valeur**, `#7A5714` → `#5B3E0C`. Il passait de 3,40 à
+  5,08 sur la pire veine, et il s'améliore partout ailleurs. Il n'est jamais un
+  fond.
+
+À l'impression, rien de tout cela n'existe : la feuille `print` rend un **blanc
+pur**, et la matière n'y laisse aucune trace.
+
+## Le mouvement
+
+Le site bouge, et il est parfait immobile. La doctrine complète — cinq durées,
+trois courbes, vingt-et-un anti-patterns — est dans
+[`contenu/decisions/009-doctrine-mouvement.md`](contenu/decisions/009-doctrine-mouvement.md)
+(D37). Ce qu'il faut en retenir tient en quatre points :
+
+- **Sans JavaScript, tout est visible.** L'état masqué des révélations n'existe
+  que sous une classe posée après hydratation. Un paquet qui échoue donne un
+  site complet, jamais un site vide.
+- **Sous `prefers-reduced-motion: reduce`, rien ne bouge — et rien ne se
+  télécharge non plus.** Le défilement adouci n'est pas chargé, et **aucune
+  vidéo n'est demandée, sur aucune page** — y compris après une navigation
+  cliente, mesuré au réseau. La différence entre « ne pas jouer » et « ne pas
+  télécharger » se prouve au réseau, et la campagne du mouvement la prouve.
+- **Deux propriétés animées, `opacity` et `transform`**, plus `clip-path` sur
+  une boîte fixe. Aucune géométrie de mise en page ne bouge, donc aucun
+  décalage n'est ajouté.
+- **L'entrée de l'accueil joue À FROID**, sans préchargeur et sans script :
+  chaque ligne du monument monte de sa propre hauteur derrière un masque
+  INVISIBLE — une boîte fixe qui découpe ce qui dépasse par le bas. Aucun bloc
+  coloré n'apparaît à aucun instant. Les quatre lignes sont étagées de 70 ms
+  sur des rangs espacés, soit 420 ms entre la première et la dernière : on voit
+  quatre gestes, pas un seul épais.
+
+  > La première version de cette entrée faisait entrer un bloc plein qui
+  > recouvrait la ligne puis se retirait en la découvrant (le patron classique
+  > du « rideau »). Le client l'a refusée de ses yeux, et il avait raison : à
+  > mi-course les quatre blocs se chevauchaient en une masse sombre sur le
+  > héros. Le masque a remplacé le bloc, l'énergie du geste est restée, et la
+  > courbe du plan directeur a pu revenir — sous un bloc, la montée se
+  > terminait derrière lui, donc invisible.
+
+## Le décalage cumulé, page par page
+
+Ce projet a longtemps annoncé « décalage cumulé ≤ 0,002 » sans autre précision.
+La tranche C19 a tranché en faveur de l'exactitude : **voici les chiffres des
+quatre URL publiées, mesurés par Lighthouse au profil mobile bridé**, qui est
+l'instrument dont ce README publie toutes les autres valeurs. Quatre tirages du
+11/08 ; le tableau garde le PIRE de chaque page.
+
+| Page | décalage cumulé (pire des 4 tirages) | plafond |
+|---|---|---|
+| accueil | 0,00000 | 0,002 |
+| rayon (`/boutique`) | 0,00077 | 0,002 |
+| fiche produit | 0,00000 | 0,002 |
+| panier | 0,00006 | 0,002 |
+
+**Les quatre tiennent le plafond**, et trois d'entre elles n'enregistrent aucun
+décalage du tout sur les quatre tirages. Le rayon relève 0,00063 sur trois
+tirages et 0,00077 sur le quatrième — c'est ce dernier qui est publié.
+
+**La cause du rayon est connue et nommée** : un échange de police. Les polices de
+repli ont des métriques ajustées (c'est ce qui a fait tomber le décalage de 0,220
+à 0,002 en C1), mais leurs LARGEURS ne coïncident pas au caractère près — et une
+mise en page dont le NOMBRE DE RANGS dépend de la largeur du texte se décale à
+l'instant de l'échange. Trois endroits de ce type ont été trouvés et corrigés :
+la ligne de garde des cartes et la liste des sept familles en C19, puis le
+bandeau des sept familles repris en RANG FLEX à la racine en C19-ter — un rang
+flex ne se replie jamais, donc le nombre de rangs cesse de dépendre du texte.
+Cette dernière reprise a fait tomber la mesure de l'outil maison sur le rayon de
+**0,0047 à 0,0018**.
+
+**Deux instruments, deux chiffres, et le rapport s'est INVERSÉ.** L'outil de
+diagnostic du dépôt mesure sous bridage RÉSEAU et relève 0,0018 sur le rayon ;
+Lighthouse mesure sous bridage PROCESSEUR et relève 0,00077. Jusqu'en C19,
+Lighthouse était de loin la lecture la plus sévère des deux (0,0073 contre
+0,0011) et l'ordre s'est retourné avec la reprise du bandeau. **Lighthouse
+continue de faire foi, et ce n'est pas parce qu'il alarme le plus** : c'est
+l'instrument que ce projet publie, et un engagement énoncé dans les termes d'un
+instrument ne peut pas être vérifié par un autre. Les deux valeurs sont sous le
+plafond, elles sont publiées toutes les deux, et le raisonnement complet est dans
+`mesures/LISEZ-MOI.md`.
+
+**UNE PAGE ÉTAIT AU-DESSUS, ET CE N'EST PLUS SA MESURE QUI LE DIT — C'EST SA MISE
+EN PAGE.** Hors des quatre URL publiées, `/commande` mesurait **0,00204 sous
+mouvement réduit** à l'outil maison, pour un plafond qui vaut lui-même cinquante
+fois celui de Google. Elle mesure **0,0001** depuis que le retour client n° 21 lui
+a donné une image de tête, et plus aucune page du site ne dépasse le plafond
+maison.
+
+**Ce nombre est tombé, le mouvement n'a pas disparu.** Les deux mouvements réels
+ont été retrouvés et nommés : sur le panneau « il n'y a rien à commander », le
+chapeau et le bouton descendent ENSEMBLE de seize pixels, une fois, après
+hydratation — c'est donc ce qui les précède qui grandit d'une ligne. Ils
+descendent toujours des mêmes seize pixels. Ce qui a changé est leur PLACE : le
+héros illustré pousse le panneau sous la ligne de flottaison, et un décalage qui
+se produit hors de la fenêtre ne compte pas dans la mesure. **La cause reste donc
+ouverte**, et elle est écrite ici plutôt que soldée : une page qui rendrait ce
+panneau plus haut le ferait remonter dans la fenêtre, avec son décalage. Sous
+Lighthouse, la même page n'est pas mesurée (D19/D21 la laissent hors des URL
+publiées).
+
 ## Refaire les mesures
 
 Les quatre notes (rapidité, accessibilité, bonnes pratiques, référencement)
@@ -344,11 +611,11 @@ node scripts/mesurer-notes.mjs --base https://maison-vaubrune-demo.vercel.app   
 ```
 
 Elle construit le site si `.next/` est absent, le sert en production sur un
-port libre, mesure **trois URL** au profil **mobile bridé** — l'accueil, la
-fiche de l'huile d'olive et le panier —, compare chaque note à son seuil
-(rapidité 92, accessibilité 100, bonnes pratiques 100, référencement 96), écrit
+port libre, mesure **quatre URL** au profil **mobile bridé** — l'accueil, le
+rayon, la fiche de l'huile d'olive et le panier —, compare chaque note à son seuil
+(rapidité 90, accessibilité 100, bonnes pratiques 100, référencement 96), écrit
 `mesures/lighthouse-<date>.json` et **sort en erreur** si une note passe sous
-son seuil. Le mode d'emploi complet, le choix des trois URL et ce que « hors
+son seuil. Le mode d'emploi complet, le choix des quatre URL et ce que « hors
 ligne » signifie exactement sont dans `mesures/LISEZ-MOI.md`.
 
 Avec **`--base https://…`**, le script ne construit rien et ne sert rien : il

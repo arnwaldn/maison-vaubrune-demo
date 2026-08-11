@@ -1,0 +1,61 @@
+LE MARBRE DE LA MAISON — matière visible, contraste tenu
+==============================================================================
+
+  source : 1408 × 768
+  gris   : extrêmes 0 → 252, percentiles 0.4 % = 208 et 99.6 % = 248
+  L'ancienne mouture calait sur l'extrême (0) : 208 niveaux de marge dépensés par une poignée de pixels.
+
+  droite : a = 2.7500, b = -427.00 → stockage sur [145, 255], soit 110 niveaux
+
+  tuile  : 1183 × 645 (bandes de fondu 225 × 123, aucun miroir)
+
+  poids  : AVIF 35.8 Ko, repli JPEG 54.2 Ko (payés sur toutes les pages : c’est un fond de `body`)
+
+  CE QUE VOIT L’ŒIL, VOILE DE LA FEUILLE APPLIQUÉ (--marbre-opacite: 0.45)
+    champ le plus clair          #f4eee2  luma 238.2
+    champ (97ᵉ centile)                    luma 235.1
+    veine (0,5ᵉ centile)                   luma 197.2
+    veine la plus sombre         #bfbab0  luma 186.4
+
+    ÉCART CHAMP → VEINE          37.9 points sur 255   (cible 35 à 45 — la référence du client en porte 40 à 60 sur fond blanc)
+    écart au pixel le plus sombre 48.7 points
+    surface à plus de 4 points sous le champ : 63.4 % de la tuile
+
+  LES QUATRE ENCRES CONTRE LA VEINE LA PLUS SOMBRE
+    seuil 4,50 pour celles qui portent du PETIT texte sur la matière,
+    3,00 pour celles qui n’y paraissent qu’en grand — voir l’en-tête du script.
+    encre                        8.48   seuil 4.50   marge +3.98   porte du petit texte sur le marbre
+    encre douce                  4.09   seuil 3.00   marge +1.09   jamais en petit sur le marbre
+    ocre (étiquettes)            5.08   seuil 4.50   marge +0.58   porte du petit texte sur le marbre
+    bleu (chaîne du froid)       4.01   seuil 3.00   marge +1.01   jamais en petit sur le marbre
+
+  Les 4 encres tiennent leur seuil sur la veine la plus sombre.
+
+  LA BUTÉE DU CURSEUR — le plus haut `--marbre-opacite` que chaque encre supporte
+    encre                      tient son seuil de 4.50 jusqu’à 0.92
+    encre douce                tient son seuil de 3.00 jusqu’à 0.69
+    ocre (étiquettes)          tient son seuil de 4.50 jusqu’à 0.55
+    bleu (chaîne du froid)     tient son seuil de 3.00 jusqu’à 0.68
+
+    BUTÉE = 0.55, tenue par « ocre (étiquettes) ». Réglage livré : 0.45.
+    Le curseur est LIBRE de 0 à 0.55 : dans cette plage, aucune
+    vérification d’accessibilité n’est à refaire, quel que soit le réglage.
+
+  LE RACCORD — écart MOYEN des bords qui se touchent, en points d’écran
+    couture verticale   1.06   témoin (2 colonnes voisines) 0.95
+    couture horizontale 1.18   témoin (2 lignes voisines)   0.69
+    Les coutures restent dans le bruit interne : aucune bande ne se verra.
+
+  LE CURSEUR `--marbre-opacite` — la plage entière, sans reproduire l’image
+    (les deux encres qui portent du petit texte sur la matière, seuil 4,50)
+    0.30  écart extrême  34.6 pts   encre 10.11   ocre 6.06
+    0.36  écart extrême  41.5 pts   encre 9.44   ocre 5.66
+    0.42  écart extrême  48.4 pts   encre 8.79   ocre 5.27
+    0.45  écart extrême  51.8 pts   encre 8.48   ocre 5.08  ← retenu
+    0.50  écart extrême  57.6 pts   encre 7.98   ocre 4.78
+    0.60  écart extrême  69.1 pts   encre 7.03   ocre 4.21
+    0.75  écart extrême  86.4 pts   encre 5.75   ocre 3.45
+    1.00  écart extrême 115.2 pts   encre 3.99   ocre 2.39  (l’ENCRE elle-même passerait sous AA petit texte)
+
+  Aperçu du rendu (voile compris) : travaux-images/marbre/apercu-rendu.png
+

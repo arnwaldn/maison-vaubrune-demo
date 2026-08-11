@@ -28,7 +28,12 @@ const TEINTE: Record<EtatCommande, string> = {
 export function PastilleEtat({ etat }: { readonly etat: EtatCommande }) {
   return (
     <span
-      className={`inline-block rounded-sm border px-2 py-0.5 text-[0.6875rem] font-semibold tracking-[0.12em] whitespace-nowrap uppercase ${TEINTE[etat]}`}
+      /* C16 — la pastille écrivait `text-[0.6875rem] tracking-[0.12em]
+         uppercase` à la main, c'est-à-dire le degré `--text-label` recopié en
+         valeur arbitraire : une étiquette qui s'ignorait. Elle prend son nom.
+         Le libellé y gagne la mono, qui est la voix des choses sérielles, et
+         l'échelle cesse d'être figée à 11 px sur tous les écrans. */
+      className={`etiquette inline-block rounded-sm border px-2 py-0.5 whitespace-nowrap ${TEINTE[etat]}`}
     >
       {LIBELLE_ETAT[etat]}
     </span>

@@ -167,8 +167,29 @@ export function StockVarianteVitrine({
 /* Étiquettes                                                                  */
 /* -------------------------------------------------------------------------- */
 
-const CLASSE_ETIQUETTE =
-  'rounded-sm border px-2 py-0.5 text-[0.6875rem] font-semibold tracking-[0.12em] uppercase';
+/**
+ * UNE ÉTIQUETTE QUI S'IGNORAIT (corrigé en C15).
+ *
+ * Cette constante s'écrivait `text-[0.6875rem] font-semibold tracking-[0.12em]
+ * uppercase` — c'est-à-dire la définition de l'utilitaire `etiquette` posé en
+ * C13, recopiée à la main, à un millième près et en valeur arbitraire. Trois
+ * conséquences, toutes constatées :
+ *
+ *   1. elle ne descendait d'AUCUN jeton : `--text-label` a une taille fluide
+ *      (0,6875 → 0,8125 rem) et un interlignage, cette copie était figée à la
+ *      borne basse ;
+ *   2. elle ne suivait donc aucune évolution du système — la brèche exacte que
+ *      la garde typographique de C13 a été écrite pour fermer, sur les TITRES ;
+ *   3. le badge « Sélection » apparaît et disparaît selon la surcouche
+ *      marchand, et son texte n'ayant pas la même chasse que celui du jeton, il
+ *      valait 0,0001 de décalage cumulé à chaque échange.
+ *
+ * Elle DESCEND désormais de `etiquette`. Le reste — la bordure, l'arrondi,
+ * l'espacement interne — appartient bien à la carte et reste ici. La couleur,
+ * elle, est passée du couple ocre/olive à `--scheme-trait` là où la carte en
+ * pose un : une étiquette de la famille, dans la couleur de la famille.
+ */
+const CLASSE_ETIQUETTE = 'etiquette rounded-sm border px-2 py-0.5';
 
 /**
  * Les étiquettes d'un produit : « Frais », « Sélection », « Indisponible ».

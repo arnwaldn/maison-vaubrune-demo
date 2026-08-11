@@ -1,0 +1,62 @@
+PREUVE ROUGE PUIS VERTE — C1 du round 1 de C14 (impression de la fiche)
+=======================================================================
+
+CE QU'ON PROUVE. Le nouveau contrôle `preuves/c14/impression-c14.mjs` PEUT
+rendre faux. L'ancien ne le pouvait pas : il comptait des nœuds dont
+`getComputedStyle(n).display` valait autre chose que `none`, un critère aveugle
+aux ancêtres. La règle `@media print { header, footer { display: none } }`
+masquait le `<header>` de contenu de la fiche produit — titre, prix et les deux
+photographies — sans que le `display` calculé des `<img>` bouge d'un iota. Le
+contrôle rendait « conforme » sur un PDF sans titre ni prix.
+
+COMMENT LA PREUVE A ÉTÉ FAITE. La règle NUE a été temporairement rétablie dans
+`src/app/globals.css` (le sélecteur `[data-chrome-entete], [data-chrome-pied]`
+remplacé par `header, footer`), le site reconstruit, le contrôle relancé. Il
+doit ÉCHOUER, et nommer le défaut. Puis la règle correcte a été remise, le site
+reconstruit, le contrôle relancé : il doit passer.
+
+À noter dans le rouge : `/retractation` et les CGV restent CONFORMES sous la
+règle nue. C'est attendu et c'est ce qui explique que le défaut ait survécu à
+C13 — ces deux pages n'ont pas de `<header>` de contenu, la règle nue ne leur
+retirait donc que la coquille. Le défaut ne pouvait apparaître que sur une page
+qui ouvre un `<header>` à elle : la fiche produit, arrivée en C14.
+
+
+ROUGE — règle nue rétablie (`header, footer`), code de sortie 1
+---------------------------------------------------------------------------
+
+Impression — la coquille sort, le contenu reste (D35 / feuille de C12)
+----------------------------------------------------------------------------
+  FICHE PILOTE
+    écran      : 2 photo(s), 0 silhouette(s), en-tête 1, pied 1, titre « Huile d’olive de première pression »
+    impression : 0 photo(s), 0 silhouette(s), en-tête 0, pied 0, sentinelle 0
+    impression : titre « Huile d’olive de première pression » ABSENT, prix « à partir de 12,90 €Sélection » ABSENT
+  RÉTRACTATION
+    impression : en-tête 0, pied 0, sentinelle 0, titre 1, emplacements <mark> 7
+  CGV
+    impression : en-tête 0, pied 0, sentinelle 0, titre 1, emplacements <mark> 11
+----------------------------------------------------------------------------
+  PDF : impression-fiche-huile-olive.pdf, impression-retractation.pdf, impression-cgv.pdf
+   -> impression : on attend UNE silhouette (arbitrage round 1), pas 0
+   -> impression : LE BLOC TITRE + PRIX DE LA FICHE A DISPARU — c’est le défaut C1 du round 1
+   -> impression : le nom du produit ne s’imprime pas
+   -> impression : le prix ne s’imprime pas
+4 anomalie(s).
+
+
+VERT — règle restreinte au chrome du site, code de sortie 0
+---------------------------------------------------------------------------
+
+Impression — la coquille sort, le contenu reste (D35 / feuille de C12)
+----------------------------------------------------------------------------
+  FICHE PILOTE
+    écran      : 2 photo(s), 0 silhouette(s), en-tête 1, pied 1, titre « Huile d’olive de première pression »
+    impression : 0 photo(s), 1 silhouette(s), en-tête 0, pied 0, sentinelle 0
+    impression : titre « Huile d’olive de première pression » VISIBLE, prix « à partir de 12,90 €Sélection » VISIBLE
+  RÉTRACTATION
+    impression : en-tête 0, pied 0, sentinelle 0, titre 1, emplacements <mark> 7
+  CGV
+    impression : en-tête 0, pied 0, sentinelle 0, titre 1, emplacements <mark> 11
+----------------------------------------------------------------------------
+  PDF : impression-fiche-huile-olive.pdf, impression-retractation.pdf, impression-cgv.pdf
+Conforme.

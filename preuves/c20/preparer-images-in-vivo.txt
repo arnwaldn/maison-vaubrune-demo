@@ -1,0 +1,344 @@
+
+> maison-vaubrune@0.1.0 preparer-images
+> node scripts/preparer-images.mjs
+
+
+Pipeline des visuels — ingestion, recadrage, déshabillage, encodage, relevé
+----------------------------------------------------------------------------
+          produits/huile-olive-premiere-pression/principal-320.avif   320×512     5.2 Ko
+          produits/huile-olive-premiere-pression/principal-320.jpg    320×512     8.2 Ko
+          produits/huile-olive-premiere-pression/principal-480.avif   480×768     9.4 Ko
+          produits/huile-olive-premiere-pression/principal-480.jpg    480×768    15.4 Ko
+          produits/huile-olive-premiere-pression/principal-640.avif   640×1024   13.4 Ko
+          produits/huile-olive-premiere-pression/principal-640.jpg    640×1024   23.8 Ko
+          produits/huile-olive-premiere-pression/partage-1200x630.jpg 1200×630    11.8 Ko
+          produits/huile-olive-premiere-pression/ambiance-320.avif    320×512     6.1 Ko
+          produits/huile-olive-premiere-pression/ambiance-320.jpg     320×512     9.4 Ko
+          produits/huile-olive-premiere-pression/ambiance-480.avif    480×768    11.3 Ko
+          produits/huile-olive-premiere-pression/ambiance-480.jpg     480×768    18.0 Ko
+          produits/huile-olive-premiere-pression/ambiance-640.avif    640×1024   16.8 Ko
+          produits/huile-olive-premiere-pression/ambiance-640.jpg     640×1024   28.3 Ko
+          produits/huile-noix-moulin/principal-320.avif               320×512     5.7 Ko
+          produits/huile-noix-moulin/principal-320.jpg                320×512     8.6 Ko
+          produits/huile-noix-moulin/principal-480.avif               480×768    10.1 Ko
+          produits/huile-noix-moulin/principal-480.jpg                480×768    16.0 Ko
+          produits/huile-noix-moulin/principal-640.avif               640×1024   14.5 Ko
+          produits/huile-noix-moulin/principal-640.jpg                640×1024   24.8 Ko
+          produits/huile-noix-moulin/partage-1200x630.jpg            1200×630    12.3 Ko
+          produits/huile-noix-moulin/ambiance-320.avif                320×512     5.8 Ko
+          produits/huile-noix-moulin/ambiance-320.jpg                 320×512     8.8 Ko
+          produits/huile-noix-moulin/ambiance-480.avif                480×768    10.3 Ko
+          produits/huile-noix-moulin/ambiance-480.jpg                 480×768    16.0 Ko
+          produits/huile-noix-moulin/ambiance-640.avif                640×1024   14.5 Ko
+          produits/huile-noix-moulin/ambiance-640.jpg                 640×1024   24.4 Ko
+          produits/vinaigre-cidre-vieilli-fut/principal-320.avif      320×512     4.9 Ko
+          produits/vinaigre-cidre-vieilli-fut/principal-320.jpg       320×512     8.0 Ko
+          produits/vinaigre-cidre-vieilli-fut/principal-480.avif      480×768     8.8 Ko
+          produits/vinaigre-cidre-vieilli-fut/principal-480.jpg       480×768    14.2 Ko
+          produits/vinaigre-cidre-vieilli-fut/principal-640.avif      640×1024   12.6 Ko
+          produits/vinaigre-cidre-vieilli-fut/principal-640.jpg       640×1024   21.9 Ko
+          produits/vinaigre-cidre-vieilli-fut/partage-1200x630.jpg   1200×630    11.3 Ko
+          produits/vinaigre-cidre-vieilli-fut/ambiance-320.avif       320×512     5.9 Ko
+          produits/vinaigre-cidre-vieilli-fut/ambiance-320.jpg        320×512     8.8 Ko
+          produits/vinaigre-cidre-vieilli-fut/ambiance-480.avif       480×768    10.5 Ko
+          produits/vinaigre-cidre-vieilli-fut/ambiance-480.jpg        480×768    16.2 Ko
+          produits/vinaigre-cidre-vieilli-fut/ambiance-640.avif       640×1024   15.2 Ko
+          produits/vinaigre-cidre-vieilli-fut/ambiance-640.jpg        640×1024   24.9 Ko
+          produits/terrine-campagne-poivre-noir/principal-320.avif    320×512    12.6 Ko
+          produits/terrine-campagne-poivre-noir/principal-320.jpg     320×512    16.7 Ko
+          produits/terrine-campagne-poivre-noir/principal-480.avif    480×768    23.8 Ko
+          produits/terrine-campagne-poivre-noir/principal-480.jpg     480×768    32.4 Ko
+          produits/terrine-campagne-poivre-noir/principal-640.avif    640×1024   36.7 Ko
+          produits/terrine-campagne-poivre-noir/principal-640.jpg     640×1024   51.9 Ko
+          produits/terrine-campagne-poivre-noir/partage-1200x630.jpg 1200×630    21.4 Ko
+          produits/terrine-campagne-poivre-noir/ambiance-320.avif     320×512    17.8 Ko
+          produits/terrine-campagne-poivre-noir/ambiance-320.jpg      320×512    22.2 Ko
+          produits/terrine-campagne-poivre-noir/ambiance-480.avif     480×768    32.9 Ko
+          produits/terrine-campagne-poivre-noir/ambiance-480.jpg      480×768    42.9 Ko
+          produits/terrine-campagne-poivre-noir/ambiance-640.avif     640×1024   48.9 Ko
+          produits/terrine-campagne-poivre-noir/ambiance-640.jpg      640×1024   67.2 Ko
+          produits/rillettes-canard-echalotes/principal-320.avif      320×512    11.3 Ko
+          produits/rillettes-canard-echalotes/principal-320.jpg       320×512    15.5 Ko
+          produits/rillettes-canard-echalotes/principal-480.avif      480×768    22.0 Ko
+          produits/rillettes-canard-echalotes/principal-480.jpg       480×768    30.3 Ko
+          produits/rillettes-canard-echalotes/principal-640.avif      640×1024   33.7 Ko
+          produits/rillettes-canard-echalotes/principal-640.jpg       640×1024   48.1 Ko
+          produits/rillettes-canard-echalotes/partage-1200x630.jpg   1200×630    19.8 Ko
+          produits/rillettes-canard-echalotes/ambiance-320.avif       320×512    12.8 Ko
+          produits/rillettes-canard-echalotes/ambiance-320.jpg        320×512    16.8 Ko
+          produits/rillettes-canard-echalotes/ambiance-480.avif       480×768    24.3 Ko
+          produits/rillettes-canard-echalotes/ambiance-480.jpg        480×768    32.6 Ko
+          produits/rillettes-canard-echalotes/ambiance-640.avif       640×1024   37.2 Ko
+          produits/rillettes-canard-echalotes/ambiance-640.jpg        640×1024   51.8 Ko
+          produits/confit-oignons-vin-doux/principal-320.avif         320×512    10.6 Ko
+          produits/confit-oignons-vin-doux/principal-320.jpg          320×512    15.4 Ko
+          produits/confit-oignons-vin-doux/principal-480.avif         480×768    20.8 Ko
+          produits/confit-oignons-vin-doux/principal-480.jpg          480×768    29.4 Ko
+          produits/confit-oignons-vin-doux/principal-640.avif         640×1024   32.8 Ko
+          produits/confit-oignons-vin-doux/principal-640.jpg          640×1024   47.4 Ko
+          produits/confit-oignons-vin-doux/partage-1200x630.jpg      1200×630    19.6 Ko
+          produits/confit-oignons-vin-doux/ambiance-320.avif          320×512    13.3 Ko
+          produits/confit-oignons-vin-doux/ambiance-320.jpg           320×512    18.3 Ko
+          produits/confit-oignons-vin-doux/ambiance-480.avif          480×768    25.6 Ko
+          produits/confit-oignons-vin-doux/ambiance-480.jpg           480×768    35.6 Ko
+          produits/confit-oignons-vin-doux/ambiance-640.avif          640×1024   40.1 Ko
+          produits/confit-oignons-vin-doux/ambiance-640.jpg           640×1024   56.8 Ko
+          produits/miel-chataignier/principal-320.avif                320×512     8.0 Ko
+          produits/miel-chataignier/principal-320.jpg                 320×512    12.9 Ko
+          produits/miel-chataignier/principal-480.avif                480×768    14.3 Ko
+          produits/miel-chataignier/principal-480.jpg                 480×768    24.1 Ko
+          produits/miel-chataignier/principal-640.avif                640×1024   22.1 Ko
+          produits/miel-chataignier/principal-640.jpg                 640×1024   37.1 Ko
+          produits/miel-chataignier/partage-1200x630.jpg             1200×630    16.4 Ko
+          produits/miel-chataignier/ambiance-320.avif                 320×512    10.1 Ko
+          produits/miel-chataignier/ambiance-320.jpg                  320×512    15.7 Ko
+          produits/miel-chataignier/ambiance-480.avif                 480×768    18.8 Ko
+          produits/miel-chataignier/ambiance-480.jpg                  480×768    29.3 Ko
+          produits/miel-chataignier/ambiance-640.avif                 640×1024   28.8 Ko
+          produits/miel-chataignier/ambiance-640.jpg                  640×1024   45.4 Ko
+          produits/miel-bruyere-blanche/principal-320.avif            320×512     9.8 Ko
+          produits/miel-bruyere-blanche/principal-320.jpg             320×512    14.2 Ko
+          produits/miel-bruyere-blanche/principal-480.avif            480×768    18.5 Ko
+          produits/miel-bruyere-blanche/principal-480.jpg             480×768    27.4 Ko
+          produits/miel-bruyere-blanche/principal-640.avif            640×1024   29.1 Ko
+          produits/miel-bruyere-blanche/principal-640.jpg             640×1024   43.1 Ko
+          produits/miel-bruyere-blanche/partage-1200x630.jpg         1200×630    17.9 Ko
+          produits/miel-bruyere-blanche/ambiance-320.avif             320×512    11.8 Ko
+          produits/miel-bruyere-blanche/ambiance-320.jpg              320×512    16.0 Ko
+          produits/miel-bruyere-blanche/ambiance-480.avif             480×768    21.8 Ko
+          produits/miel-bruyere-blanche/ambiance-480.jpg              480×768    31.0 Ko
+          produits/miel-bruyere-blanche/ambiance-640.avif             640×1024   34.9 Ko
+          produits/miel-bruyere-blanche/ambiance-640.jpg              640×1024   49.2 Ko
+          produits/confiture-abricots-plein-vent/principal-320.avif   320×512    10.3 Ko
+          produits/confiture-abricots-plein-vent/principal-320.jpg    320×512    14.9 Ko
+          produits/confiture-abricots-plein-vent/principal-480.avif   480×768    18.8 Ko
+          produits/confiture-abricots-plein-vent/principal-480.jpg    480×768    27.7 Ko
+          produits/confiture-abricots-plein-vent/principal-640.avif   640×1024   28.5 Ko
+          produits/confiture-abricots-plein-vent/principal-640.jpg    640×1024   43.2 Ko
+          produits/confiture-abricots-plein-vent/partage-1200x630.jpg 1200×630    18.7 Ko
+          produits/confiture-abricots-plein-vent/ambiance-320.avif    320×512    12.9 Ko
+          produits/confiture-abricots-plein-vent/ambiance-320.jpg     320×512    17.7 Ko
+          produits/confiture-abricots-plein-vent/ambiance-480.avif    480×768    24.0 Ko
+          produits/confiture-abricots-plein-vent/ambiance-480.jpg     480×768    33.7 Ko
+          produits/confiture-abricots-plein-vent/ambiance-640.avif    640×1024   36.6 Ko
+          produits/confiture-abricots-plein-vent/ambiance-640.jpg     640×1024   53.0 Ko
+          produits/lentilles-blondes-plateau/principal-320.avif       320×512    11.6 Ko
+          produits/lentilles-blondes-plateau/principal-320.jpg        320×512    14.2 Ko
+          produits/lentilles-blondes-plateau/principal-480.avif       480×768    24.2 Ko
+          produits/lentilles-blondes-plateau/principal-480.jpg        480×768    28.6 Ko
+          produits/lentilles-blondes-plateau/principal-640.avif       640×1024   40.0 Ko
+          produits/lentilles-blondes-plateau/principal-640.jpg        640×1024   48.2 Ko
+          produits/lentilles-blondes-plateau/partage-1200x630.jpg    1200×630    18.4 Ko
+          produits/lentilles-blondes-plateau/ambiance-320.avif        320×512    14.6 Ko
+          produits/lentilles-blondes-plateau/ambiance-320.jpg         320×512    18.2 Ko
+          produits/lentilles-blondes-plateau/ambiance-480.avif        480×768    28.5 Ko
+          produits/lentilles-blondes-plateau/ambiance-480.jpg         480×768    35.7 Ko
+          produits/lentilles-blondes-plateau/ambiance-640.avif        640×1024   44.5 Ko
+          produits/lentilles-blondes-plateau/ambiance-640.jpg         640×1024   57.5 Ko
+          produits/infusion-du-soir-sept-plantes/principal-320.avif   320×512     9.4 Ko
+          produits/infusion-du-soir-sept-plantes/principal-320.jpg    320×512    12.2 Ko
+          produits/infusion-du-soir-sept-plantes/principal-480.avif   480×768    20.7 Ko
+          produits/infusion-du-soir-sept-plantes/principal-480.jpg    480×768    24.8 Ko
+          produits/infusion-du-soir-sept-plantes/principal-640.avif   640×1024   34.1 Ko
+          produits/infusion-du-soir-sept-plantes/principal-640.jpg    640×1024   42.0 Ko
+          produits/infusion-du-soir-sept-plantes/partage-1200x630.jpg 1200×630    16.0 Ko
+          produits/infusion-du-soir-sept-plantes/ambiance-320.avif    320×512    14.0 Ko
+          produits/infusion-du-soir-sept-plantes/ambiance-320.jpg     320×512    17.7 Ko
+          produits/infusion-du-soir-sept-plantes/ambiance-480.avif    480×768    27.9 Ko
+          produits/infusion-du-soir-sept-plantes/ambiance-480.jpg     480×768    34.9 Ko
+          produits/infusion-du-soir-sept-plantes/ambiance-640.avif    640×1024   44.0 Ko
+          produits/infusion-du-soir-sept-plantes/ambiance-640.jpg     640×1024   56.5 Ko
+          produits/beurre-baratte-demi-sel/principal-320.avif         320×512     8.9 Ko
+          produits/beurre-baratte-demi-sel/principal-320.jpg          320×512    12.9 Ko
+          produits/beurre-baratte-demi-sel/principal-480.avif         480×768    17.5 Ko
+          produits/beurre-baratte-demi-sel/principal-480.jpg          480×768    24.8 Ko
+          produits/beurre-baratte-demi-sel/principal-640.avif         640×1024   28.2 Ko
+          produits/beurre-baratte-demi-sel/principal-640.jpg          640×1024   39.9 Ko
+          produits/beurre-baratte-demi-sel/partage-1200x630.jpg      1200×630    16.9 Ko
+          produits/beurre-baratte-demi-sel/ambiance-320.avif          320×512     9.9 Ko
+          produits/beurre-baratte-demi-sel/ambiance-320.jpg           320×512    13.9 Ko
+          produits/beurre-baratte-demi-sel/ambiance-480.avif          480×768    19.5 Ko
+          produits/beurre-baratte-demi-sel/ambiance-480.jpg           480×768    27.0 Ko
+          produits/beurre-baratte-demi-sel/ambiance-640.avif          640×1024   31.2 Ko
+          produits/beurre-baratte-demi-sel/ambiance-640.jpg           640×1024   43.5 Ko
+          produits/fromage-fermier-brebis/principal-320.avif          320×512    12.0 Ko
+          produits/fromage-fermier-brebis/principal-320.jpg           320×512    14.5 Ko
+          produits/fromage-fermier-brebis/principal-480.avif          480×768    23.0 Ko
+          produits/fromage-fermier-brebis/principal-480.jpg           480×768    28.4 Ko
+          produits/fromage-fermier-brebis/principal-640.avif          640×1024   35.4 Ko
+          produits/fromage-fermier-brebis/principal-640.jpg           640×1024   46.2 Ko
+          produits/fromage-fermier-brebis/partage-1200x630.jpg       1200×630    18.9 Ko
+          produits/fromage-fermier-brebis/ambiance-320.avif           320×512    12.6 Ko
+          produits/fromage-fermier-brebis/ambiance-320.jpg            320×512    14.6 Ko
+          produits/fromage-fermier-brebis/ambiance-480.avif           480×768    24.1 Ko
+          produits/fromage-fermier-brebis/ambiance-480.jpg            480×768    29.0 Ko
+          produits/fromage-fermier-brebis/ambiance-640.avif           640×1024   36.7 Ko
+          produits/fromage-fermier-brebis/ambiance-640.jpg            640×1024   46.5 Ko
+          produits/coffret-table-du-dimanche/principal-320.avif       320×240     4.1 Ko
+          produits/coffret-table-du-dimanche/principal-320.jpg        320×240     5.3 Ko
+          produits/coffret-table-du-dimanche/principal-480.avif       480×360     7.7 Ko
+          produits/coffret-table-du-dimanche/principal-480.jpg        480×360    10.4 Ko
+          produits/coffret-table-du-dimanche/principal-640.avif       640×480    12.6 Ko
+          produits/coffret-table-du-dimanche/principal-640.jpg        640×480    16.9 Ko
+          produits/coffret-table-du-dimanche/partage-1200x630.jpg    1200×630    23.9 Ko
+          produits/coffret-table-du-dimanche/ambiance-320.avif        320×400    13.8 Ko
+          produits/coffret-table-du-dimanche/ambiance-320.jpg         320×400    18.5 Ko
+          produits/coffret-table-du-dimanche/ambiance-480.avif        480×600    26.8 Ko
+          produits/coffret-table-du-dimanche/ambiance-480.jpg         480×600    36.3 Ko
+          produits/coffret-table-du-dimanche/ambiance-640.avif        640×800    42.1 Ko
+          produits/coffret-table-du-dimanche/ambiance-640.jpg         640×800    58.8 Ko
+          produits/coffret-composez-le-votre/principal-320.avif       320×240     4.2 Ko
+          produits/coffret-composez-le-votre/principal-320.jpg        320×240     5.5 Ko
+          produits/coffret-composez-le-votre/principal-480.avif       480×360     8.1 Ko
+          produits/coffret-composez-le-votre/principal-480.jpg        480×360    10.6 Ko
+          produits/coffret-composez-le-votre/principal-640.avif       640×480    13.2 Ko
+          produits/coffret-composez-le-votre/principal-640.jpg        640×480    17.4 Ko
+          produits/coffret-composez-le-votre/partage-1200x630.jpg    1200×630    24.5 Ko
+          produits/coffret-composez-le-votre/ambiance-320.avif        320×400    10.2 Ko
+          produits/coffret-composez-le-votre/ambiance-320.jpg         320×400    14.9 Ko
+          produits/coffret-composez-le-votre/ambiance-480.avif        480×600    18.7 Ko
+          produits/coffret-composez-le-votre/ambiance-480.jpg         480×600    28.1 Ko
+          produits/coffret-composez-le-votre/ambiance-640.avif        640×800    29.6 Ko
+          produits/coffret-composez-le-votre/ambiance-640.jpg         640×800    45.0 Ko
+          editorial/huiles-et-vinaigres/macro-640.avif                640×360     8.2 Ko
+          editorial/huiles-et-vinaigres/macro-640.jpg                 640×360    15.6 Ko
+          editorial/huiles-et-vinaigres/macro-1024.avif              1024×576    14.1 Ko
+          editorial/huiles-et-vinaigres/macro-1024.jpg               1024×576    30.0 Ko
+          editorial/conserves-salees/macro-640.avif                   640×360    29.1 Ko
+          editorial/conserves-salees/macro-640.jpg                    640×360    35.0 Ko
+          editorial/conserves-salees/macro-1024.avif                 1024×576    57.2 Ko
+          editorial/conserves-salees/macro-1024.jpg                  1024×576    74.0 Ko
+          editorial/miels-et-confitures/macro-640.avif                640×360    18.3 Ko
+          editorial/miels-et-confitures/macro-640.jpg                 640×360    25.2 Ko
+          editorial/miels-et-confitures/macro-1024.avif              1024×576    34.0 Ko
+          editorial/miels-et-confitures/macro-1024.jpg               1024×576    52.3 Ko
+          editorial/epicerie-seche/macro-640.avif                     640×360    15.3 Ko
+          editorial/epicerie-seche/macro-640.jpg                      640×360    23.9 Ko
+          editorial/epicerie-seche/macro-1024.avif                   1024×576    28.1 Ko
+          editorial/epicerie-seche/macro-1024.jpg                    1024×576    47.3 Ko
+          editorial/infusions/macro-640.avif                          640×360    29.0 Ko
+          editorial/infusions/macro-640.jpg                           640×360    37.2 Ko
+          editorial/infusions/macro-1024.avif                        1024×576    54.3 Ko
+          editorial/infusions/macro-1024.jpg                         1024×576    76.8 Ko
+          editorial/frais/macro-640.avif                              640×360    12.9 Ko
+          editorial/frais/macro-640.jpg                               640×360    20.3 Ko
+          editorial/frais/macro-1024.avif                            1024×576    23.2 Ko
+          editorial/frais/macro-1024.jpg                             1024×576    40.4 Ko
+          editorial/coffrets/macro-640.avif                           640×360    13.1 Ko
+          editorial/coffrets/macro-640.jpg                            640×360    19.2 Ko
+          editorial/coffrets/macro-1024.avif                         1024×576    28.0 Ko
+          editorial/coffrets/macro-1024.jpg                          1024×576    40.5 Ko
+          editorial/accueil/hero-640.avif                             640×360     6.2 Ko
+          editorial/accueil/hero-640.jpg                              640×360    12.4 Ko
+          editorial/accueil/hero-1024.avif                           1024×576    10.9 Ko
+          editorial/accueil/hero-1024.jpg                            1024×576    23.9 Ko
+          editorial/accueil/hero-1440.avif                           1440×810    17.5 Ko
+          editorial/accueil/hero-1440.jpg                            1440×810    39.8 Ko
+          editorial/accueil/partage-1200x630.jpg                     1200×630    27.8 Ko
+          editorial/boutique/affiche-640.avif                         640×360    14.5 Ko
+          editorial/boutique/affiche-640.jpg                          640×360    20.4 Ko
+          editorial/boutique/affiche-1024.avif                       1024×576    25.7 Ko
+          editorial/boutique/affiche-1024.jpg                        1024×576    39.6 Ko
+          editorial/livraison/affiche-640.avif                        640×360     8.3 Ko
+          editorial/livraison/affiche-640.jpg                         640×360    13.8 Ko
+          editorial/livraison/affiche-1024.avif                      1024×576    16.8 Ko
+          editorial/livraison/affiche-1024.jpg                       1024×576    27.8 Ko
+          editorial/suivi/affiche-640.avif                            640×360     7.0 Ko
+          editorial/suivi/affiche-640.jpg                             640×360    12.0 Ko
+          editorial/suivi/affiche-1024.avif                          1024×576    13.1 Ko
+          editorial/suivi/affiche-1024.jpg                           1024×576    24.0 Ko
+          editorial/panier/affiche-640.avif                           640×360    11.0 Ko
+          editorial/panier/affiche-640.jpg                            640×360    16.5 Ko
+          editorial/panier/affiche-1024.avif                         1024×576    21.7 Ko
+          editorial/panier/affiche-1024.jpg                          1024×576    33.5 Ko
+----------------------------------------------------------------------------
+          produits/huile-olive-premiere-pression          176.9 Ko tous formats et largeurs
+          produits/huile-noix-moulin                      171.9 Ko tous formats et largeurs
+          produits/vinaigre-cidre-vieilli-fut             163.3 Ko tous formats et largeurs
+          produits/terrine-campagne-poivre-noir           427.5 Ko tous formats et largeurs
+          produits/rillettes-canard-echalotes             356.2 Ko tous formats et largeurs
+          produits/confit-oignons-vin-doux                365.6 Ko tous formats et largeurs
+          produits/miel-chataignier                       283.1 Ko tous formats et largeurs
+          produits/miel-bruyere-blanche                   324.7 Ko tous formats et largeurs
+          produits/confiture-abricots-plein-vent          340.0 Ko tous formats et largeurs
+          produits/lentilles-blondes-plateau              384.2 Ko tous formats et largeurs
+          produits/infusion-du-soir-sept-plantes          354.1 Ko tous formats et largeurs
+          produits/beurre-baratte-demi-sel                294.2 Ko tous formats et largeurs
+          produits/fromage-fermier-brebis                 341.8 Ko tous formats et largeurs
+          produits/coffret-table-du-dimanche              277.1 Ko tous formats et largeurs
+          produits/coffret-composez-le-votre              230.0 Ko tous formats et largeurs
+          editorial/huiles-et-vinaigres                    67.9 Ko tous formats et largeurs
+          editorial/conserves-salees                      195.2 Ko tous formats et largeurs
+          editorial/miels-et-confitures                   129.9 Ko tous formats et largeurs
+          editorial/epicerie-seche                        114.6 Ko tous formats et largeurs
+          editorial/infusions                             197.2 Ko tous formats et largeurs
+          editorial/frais                                  96.8 Ko tous formats et largeurs
+          editorial/coffrets                              100.8 Ko tous formats et largeurs
+          editorial/accueil                               138.7 Ko tous formats et largeurs
+          editorial/boutique                              100.2 Ko tous formats et largeurs
+          editorial/livraison                              66.8 Ko tous formats et largeurs
+          editorial/suivi                                  56.1 Ko tous formats et largeurs
+          editorial/panier                                 82.7 Ko tous formats et largeurs
+----------------------------------------------------------------------------
+          fiche pilote, deux vues AVIF 640 (pire cas) : 30.2 Ko sur 120 Ko
+          fiche pilote, deux vues AVIF 480 (profil mesuré) : 20.7 Ko
+          rayon entier, quinze principales AVIF 320 : 128.6 Ko sur 180 Ko
+          rayon entier, quinze principales AVIF 480 : 247.7 Ko
+          42 entrée(s) retenue(s), 3 écartée(s) par le manifeste
+          A01-huile-olive-premiere-pression-v3.png — étincelle x 781-835, y 1006-1060, 9 point(s) hors de la boîte (score 0.552, amplitude 10.93, précision ±2)
+          B01-huile-olive-premiere-pression-ouvert-v3.png — AUCUNE SIGNATURE RECONNUE (score 0.483, amplitude 2.01) : soit le master n’en porte pas, soit le détecteur l’a manquée. La relecture à l’œil (D35) reste due.
+          A02-huile-noix-moulin.png — étincelle x 781-835, y 1006-1060, 9 point(s) hors de la boîte (score 0.563, amplitude 10.18, précision ±2)
+          B02-huile-noix-moulin-ouvert.png — étincelle x 781-835, y 1006-1060, 9 point(s) hors de la boîte (score 0.766, amplitude 8.28, précision ±2)
+          A03-vinaigre-cidre-vieilli-fut.png — étincelle x 781-835, y 1005-1059, 9 point(s) hors de la boîte (score 0.742, amplitude 9.1, précision ±2)
+          B03-vinaigre-cidre-vieilli-fut-ouvert-v2.png — étincelle x 781-835, y 1006-1060, 9 point(s) hors de la boîte (score 0.763, amplitude 8.91, précision ±2)
+          A04-terrine-campagne-poivre-noir.png — étincelle x 781-835, y 1005-1059, 9 point(s) hors de la boîte (score 0.908, amplitude 5.11, précision ±2)
+          B04-terrine-campagne-poivre-noir-ouvert.png — étincelle x 781-835, y 1005-1059, 9 point(s) hors de la boîte (score 0.864, amplitude 5.3, précision ±2)
+          A05-rillettes-canard-echalotes.png — étincelle x 781-835, y 1005-1059, 9 point(s) hors de la boîte (score 0.906, amplitude 5.08, précision ±2)
+          B05-rillettes-canard-echalotes-ouvert.jpg — étincelle x 781-835, y 1005-1059, 9 point(s) hors de la boîte (score 0.867, amplitude 4.23, précision ±2)
+          A06-confit-oignons-vin-doux.png — étincelle x 781-835, y 1005-1059, 9 point(s) hors de la boîte (score 0.904, amplitude 5.32, précision ±2)
+          B06-confit-oignons-vin-doux-ouvert.jpg — étincelle x 781-835, y 1005-1059, 9 point(s) hors de la boîte (score 0.857, amplitude 3.78, précision ±2)
+          A07-miel-chataignier.png — étincelle x 781-835, y 1005-1059, 9 point(s) hors de la boîte (score 0.596, amplitude 5.4, précision ±2)
+          B07-miel-chataignier-ouvert.jpg — AUCUNE SIGNATURE RECONNUE (score 0.485, amplitude 20.34) : soit le master n’en porte pas, soit le détecteur l’a manquée. La relecture à l’œil (D35) reste due.
+          A08-miel-bruyere-blanche.png — étincelle x 781-835, y 1005-1059, 9 point(s) hors de la boîte (score 0.597, amplitude 5.66, précision ±2)
+          B08-miel-bruyere-blanche-ouvert.jpg — étincelle x 781-835, y 1005-1059, 9 point(s) hors de la boîte (score 0.744, amplitude 4.56, précision ±2)
+          A09-confiture-abricots-plein-vent.png — étincelle x 781-835, y 1005-1059, 9 point(s) hors de la boîte (score 0.617, amplitude 5.92, précision ±2)
+          B09-confiture-abricots-plein-vent-ouvert-v2.jpg — AUCUNE SIGNATURE RECONNUE (score 0.458, amplitude 12.86) : soit le master n’en porte pas, soit le détecteur l’a manquée. La relecture à l’œil (D35) reste due.
+          A10-lentilles-blondes-plateau.png — étincelle x 781-835, y 1005-1059, 9 point(s) hors de la boîte (score 0.601, amplitude 5.76, précision ±2)
+          B10-lentilles-blondes-plateau-ouvert.jpg — AUCUNE SIGNATURE RECONNUE (score 0.493, amplitude 7.94) : soit le master n’en porte pas, soit le détecteur l’a manquée. La relecture à l’œil (D35) reste due.
+          A11-infusion-du-soir-sept-plantes.png — étincelle x 781-835, y 1005-1059, 9 point(s) hors de la boîte (score 0.629, amplitude 5.32, précision ±2)
+          B11-infusion-du-soir-sept-plantes-ouvert.jpg — étincelle x 781-835, y 1005-1059, 9 point(s) hors de la boîte (score 0.65, amplitude 8.21, précision ±2)
+          A12-beurre-baratte-demi-sel.png — étincelle x 781-835, y 1005-1059, 9 point(s) hors de la boîte (score 0.623, amplitude 4.8, précision ±2)
+          B12-beurre-baratte-demi-sel-ouvert-v3.jpg — étincelle x 781-835, y 1005-1059, 9 point(s) hors de la boîte (score 0.76, amplitude 5.31, précision ±2)
+          A13-fromage-fermier-brebis.png — étincelle x 781-835, y 1005-1059, 9 point(s) hors de la boîte (score 0.873, amplitude 4.17, précision ±2)
+          B13-fromage-fermier-brebis-ouvert.jpg — étincelle x 781-835, y 1005-1059, 9 point(s) hors de la boîte (score 0.88, amplitude 4.31, précision ±2)
+          A14-coffret-table-du-dimanche.png — étincelle x 781-835, y 1005-1059, 30 point(s) hors de la boîte (score 0.869, amplitude 4.15, précision ±2)
+          E01-coffret-table-du-dimanche-ouvert-v3.jpg — AUCUNE SIGNATURE RECONNUE (score 0.345, amplitude 45.14) : soit le master n’en porte pas, soit le détecteur l’a manquée. La relecture à l’œil (D35) reste due.
+          A15-coffret-composez-le-votre.png — étincelle x 781-835, y 1005-1059, 30 point(s) hors de la boîte (score 0.864, amplitude 4.19, précision ±2)
+          E02-coffret-composez-le-votre-ouvert-v2.jpg — AUCUNE SIGNATURE RECONNUE (score 0.392, amplitude 47.23) : soit le master n’en porte pas, soit le détecteur l’a manquée. La relecture à l’œil (D35) reste due.
+          C01-huiles-v2.jpg — AUCUNE SIGNATURE RECONNUE (score 0.439, amplitude 1.78) : soit le master n’en porte pas, soit le détecteur l’a manquée. La relecture à l’œil (D35) reste due.
+          C02-conserves.jpg — AUCUNE SIGNATURE RECONNUE (score 0.277, amplitude 1.63) : soit le master n’en porte pas, soit le détecteur l’a manquée. La relecture à l’œil (D35) reste due.
+          C03-miels.jpg — AUCUNE SIGNATURE RECONNUE (score 0.422, amplitude 2.7) : soit le master n’en porte pas, soit le détecteur l’a manquée. La relecture à l’œil (D35) reste due.
+          C04-epicerie.jpg — AUCUNE SIGNATURE RECONNUE (score 0.474, amplitude 1.74) : soit le master n’en porte pas, soit le détecteur l’a manquée. La relecture à l’œil (D35) reste due.
+          C05-infusions.jpg — AUCUNE SIGNATURE RECONNUE (score 0.255, amplitude 1.89) : soit le master n’en porte pas, soit le détecteur l’a manquée. La relecture à l’œil (D35) reste due.
+          C06-frais.jpg — AUCUNE SIGNATURE RECONNUE (score 0.609, amplitude 1.6) : soit le master n’en porte pas, soit le détecteur l’a manquée. La relecture à l’œil (D35) reste due.
+          C07-coffrets.jpg — étincelle x 4661-4945, y 3011-3295, 167 point(s) hors de la boîte (score 0.559, amplitude 4.8, précision ±7)
+          D01-hero-filet-huile.jpg — AUCUNE SIGNATURE RECONNUE (score 0.341, amplitude 2.73) : soit le master n’en porte pas, soit le détecteur l’a manquée. La relecture à l’œil (D35) reste due.
+          F04-boutique-miel-affiche.png — AUCUNE SIGNATURE RECONNUE (score 0.304, amplitude 3.06) : soit le master n’en porte pas, soit le détecteur l’a manquée. La relecture à l’œil (D35) reste due.
+          F05-livraison-colis-affiche.png — AUCUNE SIGNATURE RECONNUE (score 0.244, amplitude 1.3) : soit le master n’en porte pas, soit le détecteur l’a manquée. La relecture à l’œil (D35) reste due.
+          F06-suivi-registre-affiche.png — AUCUNE SIGNATURE RECONNUE (score 0.239, amplitude 1.3) : soit le master n’en porte pas, soit le détecteur l’a manquée. La relecture à l’œil (D35) reste due.
+          F07-panier-cagette-affiche.png — AUCUNE SIGNATURE RECONNUE (score 0.285, amplitude 0.71) : soit le master n’en porte pas, soit le détecteur l’a manquée. La relecture à l’œil (D35) reste due.
+          public\produits refait : 196 dérivé(s) d’images retiré(s), 0 fichier(s) d’un autre pipeline préservé(s)
+          public\editorial refait : 52 dérivé(s) d’images retiré(s), 11 fichier(s) d’un autre pipeline préservé(s)
+             préservé (autre pipeline) : accueil/boucle-1280.av1.mp4
+             préservé (autre pipeline) : accueil/boucle-1280.h264.mp4
+             préservé (autre pipeline) : boutique/boucle-1280.av1.mp4
+             préservé (autre pipeline) : boutique/boucle-1280.h264.mp4
+             préservé (autre pipeline) : livraison/boucle-1280.av1.mp4
+             préservé (autre pipeline) : livraison/boucle-1280.h264.mp4
+             préservé (autre pipeline) : panier/boucle-1280.av1.mp4
+             préservé (autre pipeline) : panier/boucle-1280.h264.mp4
+             préservé (autre pipeline) : suivi/boucle-1280.av1.mp4
+             préservé (autre pipeline) : suivi/boucle-1280.h264.mp4
+             préservé (autre pipeline) : videos-livrees.json
+246 dérivé(s) produits, aucune anomalie.
+

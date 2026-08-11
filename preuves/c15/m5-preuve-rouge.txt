@@ -1,0 +1,33 @@
+
+ RUN  v4.1.10 <racine du depot>
+
+ ❯ tests/unitaires/etincelle.spec.ts (8 tests | 1 failed) 662ms
+     × REFUSE une étincelle dont le score passe juste sous le seuil, et le seuil est gardé 108ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/unitaires/etincelle.spec.ts > la localisation de l’étincelle > REFUSE une étincelle dont le score passe juste sous le seuil, et le seuil est gardé
+AssertionError: expected true to be false // Object.is equality
+
+- Expected
++ Received
+
+- false
++ true
+
+ ❯ tests/unitaires/etincelle.spec.ts:200:33
+    198|     const signature = localiserSignature(vignette, fenetre);
+    199|
+    200|     expect(signature.localisee).toBe(false);
+       |                                 ^
+    201|     expect(signature.boite).toBeNull();
+    202|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 7 passed (8)
+   Start at  07:42:50
+   Duration  1.04s (transform 60ms, setup 0ms, import 87ms, tests 662ms, environment 0ms)
+

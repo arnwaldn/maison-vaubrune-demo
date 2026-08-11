@@ -1,0 +1,12 @@
+GÉOMÉTRIE DU HÉROS — monument contre carte image
+Retour client du 10/08 : le monument passe sous la carte en grande fenêtre.
+
+largeur  colonne   corps   mot le+long  ratio   débord   recouvre   verdict
+──────────────────────────────────────────────────────────────────────────────
+1280         580   144.0 Vaubrune 616   4.275       36          0   débord seul
+1440         644   160.0 Vaubrune 684   4.275       40          0   débord seul
+1600         644   176.0 Vaubrune 752   4.275      108         52   RECOUVREMENT
+1900         644   206.0 Vaubrune 881   4.275      237        181   RECOUVREMENT
+2560         644   208.0 Vaubrune 889   4.275      245        189   RECOUVREMENT
+
+VERDICT : ÉCHEC — le monument recouvre la carte de 189 px au pire.

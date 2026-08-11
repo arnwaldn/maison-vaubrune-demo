@@ -1,0 +1,139 @@
+PREUVE ROUGE — 6e contrôle de la garde des images (round 1 de C15, item C1)
+===========================================================================
+
+Le contrôle « Chaque fichier mesure ce que son nom et le relevé annoncent »
+vient d’être écrit ; les seize images de partage sont celles de la livraison.
+Commande : npm run verifier-images
+Sommet du dépôt à cet instant : 9e135b2
+
+
+> maison-vaubrune@0.1.0 verifier-images
+> tsx scripts/verifier-images.mjs
+
+
+Garde des images — un dossier par nom admis, un vocabulaire fermé, des dimensions mesurées
+----------------------------------------------------------------------------
+          périmètre : <racine du depot>/public/produits
+          périmètre : <racine du depot>/public/editorial
+[ OK   ] [produits] Chaque dossier porte un nom admis
+          15 dossier(s) conforme(s) sur 15 nom(s) admis
+[ OK   ] [produits] Chaque nom de fichier appartient au vocabulaire fermé
+          195 fichier(s) examiné(s), 25 noms admis par dossier
+[ OK   ] [produits] Le relevé et le disque disent la même chose
+          195 entrée(s) au relevé, 195 sur le disque
+[ OK   ] [produits] Chaque fichier tient sous son plafond de poids
+          195 fichier(s) pesé(s), le plus lourd à 67.2 Ko, 4.46 Mo au dépôt
+[ OK   ] [produits] Les binaires livrés sont nus
+          195 binaire(s) examiné(s) sur leurs 64 Ko de tête et de queue
+[ ÉCHEC] [produits] Chaque fichier mesure ce que son nom et le relevé annoncent
+          195 fichier(s) mesuré(s) sur leurs octets, 195 confronté(s) au relevé
+   -> public/produits/beurre-baratte-demi-sel/partage-1200x630.jpg — le nom annonce 1200 points de large, le fichier en mesure 1280
+   -> public/produits/beurre-baratte-demi-sel/partage-1200x630.jpg — le nom annonce 630 points de haut, le fichier en mesure 710
+   -> public/produits/manifeste-livre.json déclare 1200×630 pour beurre-baratte-demi-sel/partage-1200x630.jpg, qui mesure 1280×710
+   -> public/produits/coffret-composez-le-votre/partage-1200x630.jpg — le nom annonce 1200 points de large, le fichier en mesure 1280
+   -> public/produits/coffret-composez-le-votre/partage-1200x630.jpg — le nom annonce 630 points de haut, le fichier en mesure 710
+   -> public/produits/manifeste-livre.json déclare 1200×630 pour coffret-composez-le-votre/partage-1200x630.jpg, qui mesure 1280×710
+   -> public/produits/coffret-table-du-dimanche/partage-1200x630.jpg — le nom annonce 1200 points de large, le fichier en mesure 1280
+   -> public/produits/coffret-table-du-dimanche/partage-1200x630.jpg — le nom annonce 630 points de haut, le fichier en mesure 710
+   -> public/produits/manifeste-livre.json déclare 1200×630 pour coffret-table-du-dimanche/partage-1200x630.jpg, qui mesure 1280×710
+   -> public/produits/confit-oignons-vin-doux/partage-1200x630.jpg — le nom annonce 1200 points de large, le fichier en mesure 1280
+   -> public/produits/confit-oignons-vin-doux/partage-1200x630.jpg — le nom annonce 630 points de haut, le fichier en mesure 710
+   -> public/produits/manifeste-livre.json déclare 1200×630 pour confit-oignons-vin-doux/partage-1200x630.jpg, qui mesure 1280×710
+   -> public/produits/confiture-abricots-plein-vent/partage-1200x630.jpg — le nom annonce 1200 points de large, le fichier en mesure 1280
+   -> public/produits/confiture-abricots-plein-vent/partage-1200x630.jpg — le nom annonce 630 points de haut, le fichier en mesure 710
+   -> public/produits/manifeste-livre.json déclare 1200×630 pour confiture-abricots-plein-vent/partage-1200x630.jpg, qui mesure 1280×710
+   -> public/produits/fromage-fermier-brebis/partage-1200x630.jpg — le nom annonce 1200 points de large, le fichier en mesure 1280
+   -> public/produits/fromage-fermier-brebis/partage-1200x630.jpg — le nom annonce 630 points de haut, le fichier en mesure 710
+   -> public/produits/manifeste-livre.json déclare 1200×630 pour fromage-fermier-brebis/partage-1200x630.jpg, qui mesure 1280×710
+   -> public/produits/huile-noix-moulin/partage-1200x630.jpg — le nom annonce 1200 points de large, le fichier en mesure 1280
+   -> public/produits/huile-noix-moulin/partage-1200x630.jpg — le nom annonce 630 points de haut, le fichier en mesure 710
+   -> public/produits/manifeste-livre.json déclare 1200×630 pour huile-noix-moulin/partage-1200x630.jpg, qui mesure 1280×710
+   -> public/produits/huile-olive-premiere-pression/partage-1200x630.jpg — le nom annonce 1200 points de large, le fichier en mesure 1280
+   -> public/produits/huile-olive-premiere-pression/partage-1200x630.jpg — le nom annonce 630 points de haut, le fichier en mesure 710
+   -> public/produits/manifeste-livre.json déclare 1200×630 pour huile-olive-premiere-pression/partage-1200x630.jpg, qui mesure 1280×710
+   -> public/produits/infusion-du-soir-sept-plantes/partage-1200x630.jpg — le nom annonce 1200 points de large, le fichier en mesure 1280
+   -> public/produits/infusion-du-soir-sept-plantes/partage-1200x630.jpg — le nom annonce 630 points de haut, le fichier en mesure 710
+   -> public/produits/manifeste-livre.json déclare 1200×630 pour infusion-du-soir-sept-plantes/partage-1200x630.jpg, qui mesure 1280×710
+   -> public/produits/lentilles-blondes-plateau/partage-1200x630.jpg — le nom annonce 1200 points de large, le fichier en mesure 1280
+   -> public/produits/lentilles-blondes-plateau/partage-1200x630.jpg — le nom annonce 630 points de haut, le fichier en mesure 710
+   -> public/produits/manifeste-livre.json déclare 1200×630 pour lentilles-blondes-plateau/partage-1200x630.jpg, qui mesure 1280×710
+   -> public/produits/miel-bruyere-blanche/partage-1200x630.jpg — le nom annonce 1200 points de large, le fichier en mesure 1280
+   -> public/produits/miel-bruyere-blanche/partage-1200x630.jpg — le nom annonce 630 points de haut, le fichier en mesure 710
+   -> public/produits/manifeste-livre.json déclare 1200×630 pour miel-bruyere-blanche/partage-1200x630.jpg, qui mesure 1280×710
+   -> public/produits/miel-chataignier/partage-1200x630.jpg — le nom annonce 1200 points de large, le fichier en mesure 1280
+   -> public/produits/miel-chataignier/partage-1200x630.jpg — le nom annonce 630 points de haut, le fichier en mesure 710
+   -> public/produits/manifeste-livre.json déclare 1200×630 pour miel-chataignier/partage-1200x630.jpg, qui mesure 1280×710
+   -> public/produits/rillettes-canard-echalotes/partage-1200x630.jpg — le nom annonce 1200 points de large, le fichier en mesure 1280
+   -> public/produits/rillettes-canard-echalotes/partage-1200x630.jpg — le nom annonce 630 points de haut, le fichier en mesure 710
+   -> public/produits/manifeste-livre.json déclare 1200×630 pour rillettes-canard-echalotes/partage-1200x630.jpg, qui mesure 1280×710
+   -> public/produits/terrine-campagne-poivre-noir/partage-1200x630.jpg — le nom annonce 1200 points de large, le fichier en mesure 1280
+   -> public/produits/terrine-campagne-poivre-noir/partage-1200x630.jpg — le nom annonce 630 points de haut, le fichier en mesure 710
+   -> public/produits/manifeste-livre.json déclare 1200×630 pour terrine-campagne-poivre-noir/partage-1200x630.jpg, qui mesure 1280×710
+   -> public/produits/vinaigre-cidre-vieilli-fut/partage-1200x630.jpg — le nom annonce 1200 points de large, le fichier en mesure 1280
+   -> public/produits/vinaigre-cidre-vieilli-fut/partage-1200x630.jpg — le nom annonce 630 points de haut, le fichier en mesure 710
+   -> public/produits/manifeste-livre.json déclare 1200×630 pour vinaigre-cidre-vieilli-fut/partage-1200x630.jpg, qui mesure 1280×710
+[ OK   ] [editorial] Chaque dossier porte un nom admis
+          8 dossier(s) conforme(s) sur 8 nom(s) admis
+[ OK   ] [editorial] Chaque nom de fichier appartient au vocabulaire fermé
+          35 fichier(s) examiné(s), 25 noms admis par dossier
+[ OK   ] [editorial] Le relevé et le disque disent la même chose
+          35 entrée(s) au relevé, 35 sur le disque
+[ OK   ] [editorial] Chaque fichier tient sous son plafond de poids
+          35 fichier(s) pesé(s), le plus lourd à 76.8 Ko, 1.02 Mo au dépôt
+[ OK   ] [editorial] Les binaires livrés sont nus
+          35 binaire(s) examiné(s) sur leurs 64 Ko de tête et de queue
+[ ÉCHEC] [editorial] Chaque fichier mesure ce que son nom et le relevé annoncent
+          35 fichier(s) mesuré(s) sur leurs octets, 35 confronté(s) au relevé
+   -> public/editorial/accueil/partage-1200x630.jpg — le nom annonce 1200 points de large, le fichier en mesure 1280
+   -> public/editorial/accueil/partage-1200x630.jpg — le nom annonce 630 points de haut, le fichier en mesure 710
+   -> public/editorial/manifeste-livre.json déclare 1200×630 pour accueil/partage-1200x630.jpg, qui mesure 1280×710
+----------------------------------------------------------------------------
+12 contrôles, 2 en échec : [produits] Chaque fichier mesure ce que son nom et le relevé annoncent ; [editorial] Chaque fichier mesure ce que son nom et le relevé annoncent
+
+
+Code de sortie : 1
+
+
+===========================================================================
+PREUVE VERTE — après correction du pipeline (un seul resize) et
+ré-engendrement des 230 dérivés, dont les 16 images de partage.
+===========================================================================
+
+
+> maison-vaubrune@0.1.0 verifier-images
+> tsx scripts/verifier-images.mjs
+
+
+Garde des images — un dossier par nom admis, un vocabulaire fermé, des dimensions mesurées
+----------------------------------------------------------------------------
+          périmètre : <racine du depot>/public/produits
+          périmètre : <racine du depot>/public/editorial
+[ OK   ] [produits] Chaque dossier porte un nom admis
+          15 dossier(s) conforme(s) sur 15 nom(s) admis
+[ OK   ] [produits] Chaque nom de fichier appartient au vocabulaire fermé
+          195 fichier(s) examiné(s), 25 noms admis par dossier
+[ OK   ] [produits] Le relevé et le disque disent la même chose
+          195 entrée(s) au relevé, 195 sur le disque
+[ OK   ] [produits] Chaque fichier tient sous son plafond de poids
+          195 fichier(s) pesé(s), le plus lourd à 67.2 Ko, 4.39 Mo au dépôt
+[ OK   ] [produits] Les binaires livrés sont nus
+          195 binaire(s) examiné(s) sur leurs 64 Ko de tête et de queue
+[ OK   ] [produits] Chaque fichier mesure ce que son nom et le relevé annoncent
+          195 fichier(s) mesuré(s) sur leurs octets, 195 confronté(s) au relevé
+[ OK   ] [editorial] Chaque dossier porte un nom admis
+          8 dossier(s) conforme(s) sur 8 nom(s) admis
+[ OK   ] [editorial] Chaque nom de fichier appartient au vocabulaire fermé
+          35 fichier(s) examiné(s), 25 noms admis par dossier
+[ OK   ] [editorial] Le relevé et le disque disent la même chose
+          35 entrée(s) au relevé, 35 sur le disque
+[ OK   ] [editorial] Chaque fichier tient sous son plafond de poids
+          35 fichier(s) pesé(s), le plus lourd à 76.8 Ko, 1.01 Mo au dépôt
+[ OK   ] [editorial] Les binaires livrés sont nus
+          35 binaire(s) examiné(s) sur leurs 64 Ko de tête et de queue
+[ OK   ] [editorial] Chaque fichier mesure ce que son nom et le relevé annoncent
+          35 fichier(s) mesuré(s) sur leurs octets, 35 confronté(s) au relevé
+----------------------------------------------------------------------------
+12 contrôles, aucune anomalie.
+
+
+Code de sortie : 0

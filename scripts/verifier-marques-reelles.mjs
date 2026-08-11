@@ -62,6 +62,12 @@ import { join, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import process from 'node:process';
 
+import {
+  detecterMetadonnees,
+  estBinaireExaminable,
+  libelleMarqueur,
+} from './metadonnees-binaires.mjs';
+
 /* -------------------------------------------------------------------------- */
 /* Périmètre                                                                   */
 /* -------------------------------------------------------------------------- */
@@ -69,11 +75,19 @@ import process from 'node:process';
 /**
  * Les racines parcourues. `tests/` en est absent pour la même raison que dans
  * la garde d'honnêteté : les dépôts miniatures qui prouvent que cette garde
- * fonctionne contiennent, par construction, de vraies marques.
+ * fonctionne contiennent, par construction, de vraies marques — et, depuis la
+ * tranche C11, de vrais binaires piégés.
  */
 const RACINES = ['src', 'contenu', 'public'];
 
-/** Extensions lues. Le reste (images, polices, binaires) est ignoré. */
+/**
+ * Extensions lues COMME DU TEXTE, pour les contrôles 1 à 3.
+ *
+ * C'est une liste blanche : tout ce qui n'y figure pas n'est pas décodé en
+ * UTF-8. Un fichier `.avif` passé au décodeur de texte rendrait une bouillie de
+ * caractères de remplacement dans laquelle aucune expression régulière ne
+ * trouverait rien — le pire des deux mondes, puisqu'il aurait l'air contrôlé.
+ */
 const EXTENSIONS = [
   '.ts',
   '.tsx',
@@ -86,6 +100,34 @@ const EXTENSIONS = [
   '.css',
   '.svg',
   '.html',
+];
+
+/**
+ * Extensions BINAIRES, écrites en toutes lettres (tranche C11).
+ *
+ * Elles ne sont jamais lues comme du texte — c'est déjà l'effet de la liste
+ * blanche ci-dessus, et ce serait donc redondant si cette liste ne servait
+ * qu'à ça. Elle sert à deux autres choses :
+ *
+ * - dire ce que le dépôt s'autorise à porter en binaire, pour qu'un `.pdf` ou
+ *   un `.zip` apparu un jour se remarque au lieu d'être ignoré en silence ;
+ * - garantir, par le contrôle 8, qu'aucune extension n'est déclarée dans les
+ *   DEUX listes — une extension qui serait à la fois texte et binaire ferait
+ *   dire à cette garde deux choses contradictoires sur le même fichier.
+ *
+ * Les images sont en outre examinées par le contrôle 7 (métadonnées) ; les
+ * polices et les vidéos ne le sont pas, faute de format de métadonnées commun
+ * à surveiller — mais elles restent, comme tout le reste, sous le contrôle 4,
+ * qui lit leur NOM.
+ */
+const EXTENSIONS_BINAIRES = [
+  '.jpg',
+  '.jpeg',
+  '.png',
+  '.avif',
+  '.webp',
+  '.woff2',
+  '.mp4',
 ];
 
 /* -------------------------------------------------------------------------- */
@@ -591,6 +633,75 @@ controle('Chaque exemption sert encore', (exiger, noter) => {
   if (EXEMPTIONS.length === 0) {
     noter('aucune exemption déclarée');
   }
+});
+
+/* -------------------------------------------------------------------------- */
+/* Contrôle 7 — aucune métadonnée dans les binaires images (tranche C11)       */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * LA PORTE DÉROBÉE QUE LES SIX PREMIERS CONTRÔLES NE VOYAIENT PAS.
+ *
+ * Les contrôles 1 à 3 lisent du texte, le 4 lit des noms. Aucun ne regardait
+ * l'intérieur d'un binaire — et il n'y en avait aucun à regarder jusqu'à la
+ * décision D35, qui ouvre `public/produits/` aux visuels engendrés.
+ *
+ * Or les moteurs d'images écrivent le TEXTE DE LA CONSIGNE dans les
+ * métadonnées du fichier produit. Une image parfaitement propre à l'œil peut
+ * donc transporter, en clair, une phrase citant une maison réelle : la
+ * promesse des mentions légales serait tenue sur tout le dépôt SAUF sur les
+ * octets que personne ne relit.
+ *
+ * Le raisonnement complet, la liste des marqueurs et la raison des 64 Ko sont
+ * en tête de `scripts/metadonnees-binaires.mjs`, partagé avec la garde des
+ * images produit — un seul détecteur, donc un seul comportement à tenir.
+ */
+controle('Aucune métadonnée dans les binaires images', (exiger, noter) => {
+  let examines = 0;
+
+  for (const chemin of FICHIERS) {
+    if (!estBinaireExaminable(chemin)) {
+      continue;
+    }
+
+    examines += 1;
+    const cheminRelatif = relatif(chemin);
+
+    for (const { motif, trahit, position } of detecterMetadonnees(chemin)) {
+      exiger(
+        false,
+        `${cheminRelatif} — marqueur « ${libelleMarqueur(motif)} » à l’octet ` +
+          `${String(position)} : ${trahit}`,
+      );
+    }
+  }
+
+  noter(
+    examines === 0
+      ? 'aucun binaire image dans le périmètre'
+      : `${String(examines)} binaire(s) examiné(s) sur leurs 64 Ko de tête et de queue`,
+  );
+});
+
+/* -------------------------------------------------------------------------- */
+/* Contrôle 8 — les deux listes d'extensions ne se recouvrent pas              */
+/* -------------------------------------------------------------------------- */
+
+controle('Texte et binaire restent deux catégories disjointes', (exiger, noter) => {
+  const texte = new Set(EXTENSIONS.map((extension) => extension.toLowerCase()));
+
+  for (const extension of EXTENSIONS_BINAIRES) {
+    exiger(
+      !texte.has(extension.toLowerCase()),
+      `« ${extension} » est déclarée à la fois texte et binaire : cette garde ` +
+        'dirait alors deux choses contradictoires du même fichier',
+    );
+  }
+
+  noter(
+    `${String(EXTENSIONS.length)} extension(s) lue(s) comme du texte, ` +
+      `${String(EXTENSIONS_BINAIRES.length)} tenue(s) pour binaires`,
+  );
 });
 
 /* -------------------------------------------------------------------------- */

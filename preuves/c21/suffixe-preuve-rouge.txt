@@ -1,0 +1,105 @@
+PREUVE ROUGE — mesurer-transfert SANS la validation de --suffixe
+date   : 2026-08-11 14:20
+commit : bba5ae8
+geste  : les trois lignes de validation retirees de scripts/mesurer-transfert.mjs,
+         le reste de l arbre inchange.
+======================================================================
+
+
+ RUN  v4.1.10 <racine du depot>
+
+ ❯ tests/unitaires/suffixe-des-releves.spec.ts (12 tests | 4 failed | 6 skipped) 34055ms
+     × refuse « ../evasion » (un chemin relatif) et n’écrit rien 7119ms
+     × refuse « c21/b » (un séparateur de chemin) et n’écrit rien 9840ms
+     × refuse « C21B » (des capitales) et n’écrit rien 7102ms
+     × refuse « c21 b » (une espace) et n’écrit rien 9821ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/unitaires/suffixe-des-releves.spec.ts > mesurer-transfert — le suffixe de tranche > refuse « ../evasion » (un chemin relatif) et n’écrit rien
+AssertionError: expected '\n  ÉCHEC — la mesure n’a pas pu alle…' to contain '--suffixe'
+
+- Expected
++ Received
+
+- --suffixe
++
++   ÉCHEC — la mesure n’a pas pu aller au bout :
++   ENOENT: no such file or directory, open '<racine du depot>\mesures\transfert-2026-08-11-..\evasion.json'
++
++   Pistes, dans l’ordre :
++    - Chromium absent ? npx playwright install chromium ;
++    - la production ne démarre pas ? essayez « npm run build && npm run start ».
++
++
+
+ ❯ tests/unitaires/suffixe-des-releves.spec.ts:65:26
+     63|
+     64|     expect(rendu.status).not.toBe(0);
+     65|     expect(rendu.stderr).toContain('--suffixe');
+       |                          ^
+     66|   });
+     67|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯
+
+ FAIL  tests/unitaires/suffixe-des-releves.spec.ts > mesurer-transfert — le suffixe de tranche > refuse « c21/b » (un séparateur de chemin) et n’écrit rien
+AssertionError: expected '\n  ÉCHEC — la mesure n’a pas pu alle…' to contain '--suffixe'
+
+- Expected
++ Received
+
+- --suffixe
++
++   ÉCHEC — la mesure n’a pas pu aller au bout :
++   ENOENT: no such file or directory, open '<racine du depot>\mesures\transfert-2026-08-11-c21\b.json'
++
++   Pistes, dans l’ordre :
++    - Chromium absent ? npx playwright install chromium ;
++    - la production ne démarre pas ? essayez « npm run build && npm run start ».
++
++
+
+ ❯ tests/unitaires/suffixe-des-releves.spec.ts:65:26
+     63|
+     64|     expect(rendu.status).not.toBe(0);
+     65|     expect(rendu.stderr).toContain('--suffixe');
+       |                          ^
+     66|   });
+     67|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯
+
+ FAIL  tests/unitaires/suffixe-des-releves.spec.ts > mesurer-transfert — le suffixe de tranche > refuse « C21B » (des capitales) et n’écrit rien
+ FAIL  tests/unitaires/suffixe-des-releves.spec.ts > mesurer-transfert — le suffixe de tranche > refuse « c21 b » (une espace) et n’écrit rien
+AssertionError: expected +0 not to be +0 // Object.is equality
+ ❯ tests/unitaires/suffixe-des-releves.spec.ts:64:30
+     62|     const rendu = lancer(script, ['--suffixe', suffixe]);
+     63|
+     64|     expect(rendu.status).not.toBe(0);
+       |                              ^
+     65|     expect(rendu.stderr).toContain('--suffixe');
+     66|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  4 failed | 2 passed | 6 skipped (12)
+   Start at  14:20:11
+   Duration  34.42s (transform 32ms, setup 0ms, import 53ms, tests 34.06s, environment 0ms)
+
+
+======================================================================
+PREUVE VERTE — la validation remise, meme commande
+======================================================================
+
+
+ RUN  v4.1.10 <racine du depot>
+
+
+ Test Files  1 passed (1)
+      Tests  12 passed (12)
+   Start at  14:21:07
+   Duration  1.28s (transform 30ms, setup 0ms, import 52ms, tests 1.03s, environment 0ms)
+

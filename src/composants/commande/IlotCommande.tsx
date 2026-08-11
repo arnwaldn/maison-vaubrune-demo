@@ -135,6 +135,7 @@ export function IlotCommande({
     return (
       <div
         aria-hidden="true"
+        data-place-reservee=""
         className="mt-10 min-h-96 rounded-sm border border-filet bg-papier"
       />
     );
@@ -146,14 +147,15 @@ export function IlotCommande({
     return (
       /* Même hauteur minimale que la place réservée ci-dessus : c'est ce qui
          empêche le pied de page de remonter à l'hydratation (voir le
-         raisonnement chiffré dans `IlotPanier`). */
-      <div className="mt-10 min-h-96 max-w-lisible pb-4">
+         raisonnement chiffré dans `IlotPanier`). Panneau depuis C19, pour la
+         même raison qu'au panier : de la prose sur un marbre. */
+      <div className="panneau mt-10 min-h-96 max-w-lisible">
         <p className="text-chapeau text-encre-douce">
           Il n’y a rien à commander&nbsp;: votre panier est vide.
         </p>
         <Link
           href="/boutique"
-          className="mt-6 inline-block rounded-sm border border-olive bg-olive px-4 py-2.5 text-sm font-semibold text-creme no-underline hover:bg-olive-clair"
+          className="mt-6 inline-block rounded-sm border border-olive bg-olive px-4 py-2.5 text-sm font-semibold text-creme no-underline hover:border-encre hover:bg-encre"
         >
           Voir la boutique
         </Link>
@@ -271,7 +273,7 @@ export function IlotCommande({
     <div className="mt-10 grid gap-x-12 gap-y-10 pb-4 lg:grid-cols-[minmax(0,1fr)_22rem]">
       <div className="min-w-0 space-y-12">
         <section aria-labelledby="titre-articles">
-          <h2 id="titre-articles" className="text-titre font-semibold text-encre">
+          <h2 id="titre-articles" className="text-titre text-encre">
             Votre commande
           </h2>
 
@@ -432,7 +434,7 @@ function LigneFigee({
         )}
       </div>
 
-      <p className="font-semibold text-encre tabular-nums">
+      <p className="font-mono font-medium text-encre tabular-nums">
         {formaterEuros(calculee.sousTotalCentimes)}
       </p>
     </li>
@@ -446,7 +448,7 @@ function LigneFigee({
 const CLASSE_CHAMP =
   'mt-2 w-full rounded-sm border border-filet bg-creme px-3 py-2 text-sm text-encre';
 const CLASSE_ETIQUETTE =
-  'block text-xs font-semibold tracking-[0.12em] text-encre-douce uppercase';
+  'etiquette block text-encre-douce';
 
 function Coordonnees({
   nom,
@@ -477,7 +479,7 @@ function Coordonnees({
 }) {
   return (
     <section aria-labelledby="titre-coordonnees">
-      <h2 id="titre-coordonnees" className="text-titre font-semibold text-encre">
+      <h2 id="titre-coordonnees" className="text-titre text-encre">
         Vos coordonnées
       </h2>
 
@@ -552,7 +554,7 @@ function Coordonnees({
             onChange={(evenement) => {
               setCodePostal(evenement.target.value);
             }}
-            className={`${CLASSE_CHAMP} w-32 tabular-nums`}
+            className={`${CLASSE_CHAMP} w-32 font-mono tabular-nums`}
           />
           <p
             id="aide-code-postal"
@@ -666,7 +668,7 @@ function Engagement({
       aria-labelledby="titre-engagement"
       className="rounded-sm border border-filet bg-papier p-5 sm:p-6"
     >
-      <h2 id="titre-engagement" className="font-titre text-base font-semibold text-encre">
+      <h2 id="titre-engagement" className="sous-titre text-encre">
         Votre engagement
       </h2>
 
@@ -699,7 +701,7 @@ function Engagement({
         disabled={!pret || envoiEnCours}
         onClick={soumettre}
         aria-describedby="motif-bouton-final"
-        className="mt-5 w-full rounded-sm border border-olive bg-olive px-4 py-3 text-sm font-semibold text-creme hover:bg-olive-clair disabled:cursor-not-allowed disabled:border-encre-douce/40 disabled:bg-creme disabled:text-encre-douce"
+        className="mt-5 w-full rounded-sm border border-olive bg-olive px-4 py-3 text-sm font-semibold text-creme hover:border-encre hover:bg-encre disabled:cursor-not-allowed disabled:border-encre-douce/40 disabled:bg-creme disabled:text-encre-douce"
       >
         {envoiEnCours
           ? 'Ouverture du paiement…'

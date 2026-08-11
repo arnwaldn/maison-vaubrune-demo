@@ -1,0 +1,46 @@
+LES 28 CAPTURES « APRÈS » — recette finale C19
+date   : 2026-08-11 03:24
+commit : 869ebda
+base   : http://localhost:3000 (construction de production fraîche, UN seul service)
+======================================================================
+
+
+Pièces de preuve — http://localhost:3000 → preuves/c19/captures-apres/
+------------------------------------------------------------------------
+  Format 1280x800
+     accueil-1280x800.png
+     boutique-1280x800.png
+     fiche-fromage-1280x800.png
+     panier-plein-1280x800.png
+     gestion-commandes-1280x800.png
+     suivi-1280x800.png
+     retractation-1280x800.png
+  Format 768x1024
+     accueil-768x1024.png
+     boutique-768x1024.png
+     fiche-fromage-768x1024.png
+     panier-plein-768x1024.png
+     gestion-commandes-768x1024.png
+     suivi-768x1024.png
+     retractation-768x1024.png
+  Format 390x844
+     accueil-390x844.png
+     boutique-390x844.png
+     fiche-fromage-390x844.png
+     panier-plein-390x844.png
+     gestion-commandes-390x844.png
+     suivi-390x844.png
+     retractation-390x844.png
+  Format 360x740
+     accueil-360x740.png
+     boutique-360x740.png
+     fiche-fromage-360x740.png
+     panier-plein-360x740.png
+     gestion-commandes-360x740.png
+     suivi-360x740.png
+     retractation-360x740.png
+------------------------------------------------------------------------
+28 captures écrites dans preuves/c19/captures-apres/
+28 empreintes dans preuves/c19/captures-apres/EMPREINTES.txt
+Aucune réserve : hydratation, immobilité et vidéo obtenues sur les sept pages.
+

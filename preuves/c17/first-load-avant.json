@@ -1,0 +1,112 @@
+{
+ "/_not-found": {
+  "brut": 415609,
+  "gzip": 120020,
+  "morceaux": 9
+ },
+ "/a-propos-de-cette-demonstration": {
+  "brut": 415677,
+  "gzip": 120070,
+  "morceaux": 9
+ },
+ "/commande/annulee": {
+  "brut": 425837,
+  "gzip": 124246,
+  "morceaux": 10
+ },
+ "/paiement/simulation": {
+  "brut": 419030,
+  "gzip": 121415,
+  "morceaux": 9
+ },
+ "/panier": {
+  "brut": 436532,
+  "gzip": 127687,
+  "morceaux": 11
+ },
+ "/commande/confirmation": {
+  "brut": 434213,
+  "gzip": 126602,
+  "morceaux": 10
+ },
+ "/commande": {
+  "brut": 445508,
+  "gzip": 131108,
+  "morceaux": 12
+ },
+ "/conditions-generales-de-vente": {
+  "brut": 415677,
+  "gzip": 120070,
+  "morceaux": 9
+ },
+ "/livraison": {
+  "brut": 415677,
+  "gzip": 120070,
+  "morceaux": 9
+ },
+ "/mentions-legales": {
+  "brut": 415677,
+  "gzip": 120070,
+  "morceaux": 9
+ },
+ "/suivi": {
+  "brut": 428111,
+  "gzip": 124991,
+  "morceaux": 10
+ },
+ "/donnees-personnelles": {
+  "brut": 415677,
+  "gzip": 120070,
+  "morceaux": 9
+ },
+ "/": {
+  "brut": 415677,
+  "gzip": 120070,
+  "morceaux": 9
+ },
+ "/boutique": {
+  "brut": 419357,
+  "gzip": 121515,
+  "morceaux": 9
+ },
+ "/retractation": {
+  "brut": 416040,
+  "gzip": 120279,
+  "morceaux": 9
+ },
+ "/boutique/[produit]": {
+  "brut": 427486,
+  "gzip": 124679,
+  "morceaux": 10
+ },
+ "/gestion/commandes/[reference]": {
+  "brut": 431523,
+  "gzip": 125717,
+  "morceaux": 11
+ },
+ "/gestion/commandes": {
+  "brut": 425769,
+  "gzip": 124179,
+  "morceaux": 11
+ },
+ "/gestion/prise-en-main": {
+  "brut": 415892,
+  "gzip": 120255,
+  "morceaux": 10
+ },
+ "/gestion/modeles-de-courriels": {
+  "brut": 415824,
+  "gzip": 120205,
+  "morceaux": 10
+ },
+ "/gestion": {
+  "brut": 427363,
+  "gzip": 124751,
+  "morceaux": 11
+ },
+ "/gestion/catalogue": {
+  "brut": 430699,
+  "gzip": 125732,
+  "morceaux": 11
+ }
+}

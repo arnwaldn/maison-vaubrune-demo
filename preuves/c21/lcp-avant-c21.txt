@@ -1,0 +1,84 @@
+ATTRIBUTION DU PLUS GRAND AFFICHAGE — tranche C19, recette finale
+date   : 2026-08-11 12 h 37 (Paris)
+commit : 7a5068e
+bridage: réseau 1,6 Mb/s · latence 150 ms · processeur ÷ 4, APPLIQUÉ par le
+         protocole de débogage — à ne pas confondre avec le bridage SIMULÉ
+         du profil mobile de Lighthouse, qui est ce que mesure `mesurer-notes`.
+==============================================================================
+
+/commande  (/commande)
+------------------------------------------------------------------------------
+  premier affichage    : 1044 ms
+  plus grand affichage : 1876 ms  —  <span>  38306 px²
+                         texte : « Tout ce à quoi vous vous engageriez est écrit ci-dessous : l »
+
+  ce qui finit de charger dans la fenêtre du retard :
+     1882 ms    45 Ko  css        /_next/static/media/67480a5ef8cc4d5f-s.p.woff2
+     1866 ms    46 Ko  css        /_next/static/media/dae0c9f40ba3b9b7-s.p.woff2
+     1633 ms    36 Ko  css        /fond/marbre-coquille.avif
+     1492 ms    13 Ko  css        /_next/static/media/2e126097c65da2fd-s.p.woff2
+     1399 ms    53 Ko  script     /_next/static/chunks/4bd1b696-c023c6e3521b1417.js
+     1242 ms    46 Ko  script     /_next/static/chunks/255-3d881dfa8c72bc56.js
+     1023 ms     5 Ko  script     /_next/static/chunks/app/commande/page-4aae3ec50aaadd45.js
+      962 ms     3 Ko  script     /_next/static/chunks/668-efff29a2cf8abb92.js
+      869 ms     2 Ko  script     /_next/static/chunks/528-1a52b620e89202cc.js
+
+  les ressources les plus lourdes de la page :
+      53 Ko  fin à  1399 ms  script     /_next/static/chunks/4bd1b696-c023c6e3521b1417.js
+      46 Ko  fin à  1866 ms  css        /_next/static/media/dae0c9f40ba3b9b7-s.p.woff2
+      46 Ko  fin à  1242 ms  script     /_next/static/chunks/255-3d881dfa8c72bc56.js
+      45 Ko  fin à  1882 ms  css        /_next/static/media/67480a5ef8cc4d5f-s.p.woff2
+      36 Ko  fin à  1633 ms  css        /fond/marbre-coquille.avif
+
+/paiement/simulation  (/paiement/simulation)
+------------------------------------------------------------------------------
+  premier affichage    : 1008 ms
+  plus grand affichage : 1008 ms  —  <p.mt-5.max-w-lisible.rounded-sm>  54720 px²
+                         texte : « Aucun prestataire n’est appelé, aucune carte n’est demandée, »
+
+  ce qui finit de charger dans la fenêtre du retard :
+     1136 ms    46 Ko  script     /_next/static/chunks/255-3d881dfa8c72bc56.js
+
+  les ressources les plus lourdes de la page :
+      53 Ko  fin à  1283 ms  script     /_next/static/chunks/4bd1b696-c023c6e3521b1417.js
+      46 Ko  fin à  1754 ms  css        /_next/static/media/dae0c9f40ba3b9b7-s.p.woff2
+      46 Ko  fin à  1136 ms  script     /_next/static/chunks/255-3d881dfa8c72bc56.js
+      45 Ko  fin à  1761 ms  css        /_next/static/media/67480a5ef8cc4d5f-s.p.woff2
+      36 Ko  fin à  1409 ms  css        /fond/marbre-coquille.avif
+
+/commande/confirmation  (/commande/confirmation)
+------------------------------------------------------------------------------
+  premier affichage    : 868 ms
+  plus grand affichage : 2080 ms  —  <p.mt-4.text-sm.leading-relaxed>  65844 px²
+                         texte : « Les commandes de cette démonstration sont rangées dans le na »
+
+  ce qui finit de charger dans la fenêtre du retard :
+     1751 ms    46 Ko  css        /_next/static/media/dae0c9f40ba3b9b7-s.p.woff2
+     1750 ms    45 Ko  css        /_next/static/media/67480a5ef8cc4d5f-s.p.woff2
+     1516 ms    36 Ko  css        /fond/marbre-coquille.avif
+     1376 ms    53 Ko  script     /_next/static/chunks/4bd1b696-c023c6e3521b1417.js
+     1360 ms    13 Ko  css        /_next/static/media/2e126097c65da2fd-s.p.woff2
+     1180 ms    46 Ko  script     /_next/static/chunks/255-3d881dfa8c72bc56.js
+      847 ms     5 Ko  script     /_next/static/chunks/app/commande/confirmation/page-5018f530a4a6c5a5.js
+      738 ms     2 Ko  script     /_next/static/chunks/235-2a92a0f04269fc9a.js
+      674 ms     4 Ko  script     /_next/static/chunks/app/layout-2a348f6df75f2ce3.js
+
+  les ressources les plus lourdes de la page :
+      53 Ko  fin à  1376 ms  script     /_next/static/chunks/4bd1b696-c023c6e3521b1417.js
+      46 Ko  fin à  1751 ms  css        /_next/static/media/dae0c9f40ba3b9b7-s.p.woff2
+      46 Ko  fin à  1180 ms  script     /_next/static/chunks/255-3d881dfa8c72bc56.js
+      45 Ko  fin à  1750 ms  css        /_next/static/media/67480a5ef8cc4d5f-s.p.woff2
+      36 Ko  fin à  1516 ms  css        /fond/marbre-coquille.avif
+
+==============================================================================
+LA TUILE DE MARBRE EST-ELLE DEVANT LE PLUS GRAND AFFICHAGE ?
+------------------------------------------------------------------------------
+  page                    premier aff.   plus grand aff.   fin du marbre   écart
+  /commande                  1044 ms          1876 ms          1633 ms   -243 ms
+  /paiement/simulation       1008 ms          1008 ms          1409 ms   +401 ms
+  /commande/confirmation      868 ms          2080 ms          1516 ms   -564 ms
+
+  Un écart POSITIF veut dire que la tuile finit APRÈS le plus grand
+  affichage : elle n’est pas sur son chemin. Elle est découverte par la
+  feuille de style, donc après le premier rendu, et elle arrive derrière.
+==============================================================================

@@ -1,0 +1,42 @@
+L ITALIQUE DU BANDEAU — ÉCRITE, MESURÉE, PUIS DÉFAITE
+
+Le plan directeur demande le bandeau des sept familles « en italique ».
+Bodoni Moda italique est un SECOND fichier de 53,8 Ko (relevé au réseau :
+53 756 octets), declare depuis C12 et telecharge par personne tant qu aucun
+element rendu ne l emploie. Ce bandeau etait le premier a l employer, sur la
+page dont la note est publiee.
+
+LE PREMIER AFFICHAGE, QUATRE EXÉCUTIONS
+
+releve                       accueil        rayon        fiche       panier
+----------------------------------------------------------------------------
+avant l entree a froid             1.54 s (97)      1.68 s (95)      1.67 s (99)      1.52 s (96)
+apres, passe 1                     1.54 s (96)      1.67 s (96)      1.67 s (98)      1.52 s (95)
+apres, passe 2                     1.55 s (97)      1.68 s (96)      1.67 s (98)      1.52 s (96)
++ bandeau EN ITALIQUE              1.83 s (95)      1.67 s (96)      1.67 s (96)      1.52 s (97)
++ bandeau en ROMAIN                1.53 s (97)      1.68 s (96)      1.67 s (98)      1.52 s (96)
+
+LECTURE
+
+1. Le premier affichage est la mesure la plus STABLE de ce harnais. Les trois
+   pages temoins ne bougent pas d un centieme sur cinq executions — 1,67 /
+   1,67 / 1,52 s — et l accueil lui-meme variait de 10 ms sur trois passes.
+
+2. Avec l italique, l accueil passe a 1,83 s. C est +285 ms, soit dix fois la
+   variation propre de cette page. Sous le bridage a 1,6 Mb/s, 53,8 Ko valent
+   environ 270 ms de bande passante : le compte y est.
+
+3. L italique retiree, l accueil revient a 1,54 s et a sa note de 97. Le
+   bandeau reste, en didone ROMAINE — deja prechargee, deja sur le chemin
+   critique, zero octet de plus.
+
+CE QUE CELA APPREND AU-DELA DU BANDEAU : un fichier de police n entre dans
+AUCUN budget ecrit de D36, qui plafonne le JavaScript, les images et le CSS.
+L italique aurait donc passe toutes les gardes du depot. Ce qu elle ne passe
+pas, c est la ligne rouge — aucun effet conserve au prix d une note. La garde
+manquante est nommee dans le rapport de tranche.
+
+CONDITION DE REOUVERTURE : content-visibility: auto sur le cadre ferait que la
+police n est demandee qu au moment ou le bandeau entre dans la fenetre. Elle
+exige une taille intrinseque declaree, donc une verification de decalage
+cumule, et elle interagit avec la chronologie de defilement.

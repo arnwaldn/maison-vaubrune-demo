@@ -107,6 +107,72 @@ export interface Illustration {
 }
 
 /* -------------------------------------------------------------------------- */
+/* Visuels engendrés (décision D35, tranche C14)                               */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * UNE VUE PHOTOGRAPHIQUE D'UN PRODUIT.
+ *
+ * Ce qui n'est PAS ici : les chemins des fichiers. Ils se RECOMPOSENT depuis le
+ * slug, le nom de la vue et la largeur — `/produits/<slug>/<vue>-<largeur>.avif`.
+ * Les écrire au catalogue reviendrait à tenir à la main quatre chaînes par vue
+ * et par produit, soit une occasion de faute par ligne, et à laisser diverger le
+ * catalogue du dossier. C'est aussi ce que la garde des images suppose : elle
+ * refuse tout nom hors de ce vocabulaire fermé précisément parce qu'une fiche
+ * calcule ses adresses au lieu de lire un dossier.
+ *
+ * Ce qui EST ici : ce qu'aucun chemin ne dit.
+ */
+export interface VueVisuel {
+  /**
+   * L'alternative textuelle, en français, descriptive et honnête.
+   *
+   * Non vide et DISTINCTE de celle des autres produits : les deux exigences
+   * sont tenues par `scripts/regime-visuels.mjs` (écrit en C11, éprouvé sur
+   * catalogue synthétique, branché ici). La seconde est la moins évidente et la
+   * plus utile — quinze fiches portant « Photographie du produit » passent tous
+   * les audits automatiques et ne disent rien à personne.
+   */
+  readonly alt: string;
+  /**
+   * La couleur moyenne du recadrage, en `#rrggbb`.
+   *
+   * Elle sert de RÉSERVATION : le composant la pose en fond de la boîte, à la
+   * bonne taille, avant que le moindre octet d'image arrive. Le décalage cumulé
+   * est déjà tenu par les dimensions intrinsèques ; ce que la couleur évite est
+   * le rectangle blanc qui clignote sur un réseau lent.
+   */
+  readonly couleurDominante: string;
+  /** Dimensions INTRINSÈQUES du plus grand dérivé — c'est le rapport qui compte. */
+  readonly largeur: number;
+  readonly hauteur: number;
+  /**
+   * Les largeurs livrées, pour le `srcset`. Croissantes, la dernière valant
+   * `largeur` : le composant s'appuie dessus pour ne jamais proposer au
+   * navigateur un fichier qui n'existe pas.
+   */
+  readonly largeurs: readonly number[];
+}
+
+/**
+ * LE JEU DE VUES D'UN PRODUIT.
+ *
+ * `principal` est le paquet sur fond neutre, `ambiance` sa mise en situation.
+ * `ambiance` est optionnelle et le restera : la série B ne couvre pas les
+ * coffrets (leur vue « ouverte » est un zénithal, journal de génération du
+ * 06/08), et une fiche doit s'afficher entière avec la seule vue principale.
+ */
+export interface Visuel {
+  readonly principal: VueVisuel;
+  readonly ambiance?: VueVisuel;
+}
+
+/** Les vues, dans l'ordre d'apparition sur une fiche. */
+export const VUES_VISUEL = ['principal', 'ambiance'] as const;
+
+export type NomVueVisuel = (typeof VUES_VISUEL)[number];
+
+/* -------------------------------------------------------------------------- */
 /* Variantes et conservation                                                   */
 /* -------------------------------------------------------------------------- */
 
@@ -192,7 +258,30 @@ export interface Produit {
   /** Tuple non vide : un produit sans format vendable n'existe pas. */
   readonly variantes: readonly [Variante, ...Variante[]];
   readonly miseEnAvant: boolean;
+  /**
+   * La silhouette SVG. REQUISE, et elle le reste (décision D35).
+   *
+   * Elle n'est plus la vitrine, elle est la structure de REPLI : produit sans
+   * `visuel`, impression, espace de gestion, états vides. La garder requise est
+   * ce qui permet à `visuel` d'être optionnel sans qu'aucune page ne puisse se
+   * retrouver sans rien à montrer — et ce qui n'a cassé aucune fixture.
+   */
   readonly illustration: Illustration;
+  /**
+   * Les photographies engendrées (décision D35, livrées à partir de C14).
+   *
+   * OPTIONNEL, et c'est le point : le catalogue doit rester servable sans
+   * image. Un produit ajouté sans son jeu de visuels s'affiche à la silhouette,
+   * il ne casse pas. C14 ne le pose que sur la fiche pilote ; C15 le pose sur
+   * les quatorze autres.
+   *
+   * HORS DES CHAMPS MODIFIABLES PAR LA SURCOUCHE MARCHAND (décision D25) : le
+   * marchand règle un prix, un stock, une disponibilité, une mise en avant et
+   * un résumé. Une image livrée n'est pas un réglage — la changer depuis un
+   * navigateur ferait pointer la fiche vers un fichier qui n'a pas été produit
+   * par le pipeline, donc jamais relu, jamais pesé et jamais déshabillé.
+   */
+  readonly visuel?: Visuel;
   /** Coffret composé d'avance : les pièces qu'il contient. */
   readonly composition?: readonly PieceCoffret[];
   /** Coffret personnalisable : liste blanche des SKU choisissables. */

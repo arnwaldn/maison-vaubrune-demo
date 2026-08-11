@@ -1,6 +1,9 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
+import { BlocTitre } from '@/composants/mise-en-page/BlocTitre';
+import { HerosIllustre } from '@/composants/mise-en-page/HerosIllustre';
+import { HEROS_LIVRAISON } from '@/donnees/visuels-editoriaux';
 import { BAREMES, type BaremeZone } from '@/donnees/bareme-expedition';
 import { formaterEuros } from '@/lib/argent';
 import { formaterPoids } from '@/lib/expedition';
@@ -49,37 +52,58 @@ const ZONES_FRAIS = ZONES.filter((bareme) => bareme.acceptePerissable);
 export default function PageLivraison() {
   return (
     <div className="mx-auto max-w-page px-5 sm:px-8">
-      <section className="pt-12 pb-8 sm:pt-16 sm:pb-10">
-        <p className="text-xs font-semibold tracking-[0.2em] text-ocre uppercase">
-          Expédition
-        </p>
-        <h1 className="mt-4 text-affiche font-semibold text-encre">Livraison</h1>
-        <p className="mt-5 max-w-lisible text-chapeau text-encre-douce">
-          Les frais de port se calculent sur le poids du colis et sur la zone de
-          destination, et rien d’autre. Le barème complet est publié ci-dessous&nbsp;:
-          il n’y a pas de second tarif ailleurs.
-        </p>
-        <p className="mt-4 max-w-lisible text-sm leading-relaxed text-encre-douce">
-          La zone est déduite du code postal de livraison. Le poids retenu est celui
-          du colis, emballage compris&nbsp;: c’est le poids indiqué sur chaque{' '}
-          <Link
-            href="/boutique"
-            className="underline decoration-filet decoration-2 underline-offset-4 hover:text-terre hover:decoration-terre"
-          >
-            fiche produit
-          </Link>
-          , additionné sur l’ensemble du panier.
-        </p>
-      </section>
+      {/* LE HÉROS PASSE EN VIDÉO (retour client n° 19). Rien ne se lit ici de
+          ce que cela implique — l'affiche, les deux sources, l'observateur, la
+          coupure sous mouvement réduit : tout tient à l'entrée de données, et
+          c'est exactement ce qu'on lui demande. */}
+      <HerosIllustre heros={HEROS_LIVRAISON}>
+        <BlocTitre
+          surtitre="Expédition"
+          titre="Livraison"
+          chapeau={
+            <>
+              Les frais de port se calculent sur le poids du colis et sur la zone de
+              destination, et rien d’autre. Le barème complet est publié
+              ci-dessous&nbsp;: il n’y a pas de second tarif ailleurs.
+            </>
+          }
+          note={
+            <>
+              La zone est déduite du code postal de livraison. Le poids retenu est
+              celui du colis, emballage compris&nbsp;: c’est le poids indiqué sur
+              chaque{' '}
+              <Link
+                href="/boutique"
+                className="underline decoration-filet decoration-2 underline-offset-4 hover:text-terre hover:decoration-terre"
+              >
+                fiche produit
+              </Link>
+              , additionné sur l’ensemble du panier.
+            </>
+          }
+        />
+      </HerosIllustre>
 
-      <EncartDemonstration />
+      {/* LES RÉVÉLATIONS ARRIVENT SUR CETTE PAGE (retour client n° 18).
+          Elle en était dépourvue depuis C17, comme `/suivi` et les cinq écrans
+          marchands : le contrôleur existait, il n'avait rien à observer ici.
+          Les blocs sont marqués DANS L'ORDRE DE LECTURE et sans retard de
+          cascade — ce sont des blocs pleine largeur qui se suivent, pas une
+          série ; un étagement y ferait attendre une section entière derrière
+          la précédente. La cascade reste ce qu'elle est : le geste d'une grille
+          de vignettes. */}
+      <div data-revelation>
+        <EncartDemonstration />
+      </div>
 
-      <RegleGenerale />
+      <div data-revelation>
+        <RegleGenerale />
+      </div>
 
-      <nav aria-labelledby="titre-zones" className="mt-14 border-y border-filet py-5">
+      <nav aria-labelledby="titre-zones" className="panneau mt-14" data-revelation>
         <h2
           id="titre-zones"
-          className="font-titre text-sm font-semibold tracking-[0.08em] text-encre uppercase"
+          className="etiquette text-encre"
         >
           Zones
         </h2>
@@ -97,11 +121,19 @@ export default function PageLivraison() {
         </ul>
       </nav>
 
-      {ZONES.map((bareme) => (
-        <TableauZone key={bareme.zone} bareme={bareme} />
+      {/* LES TROIS ZONES FORMENT UNE SÉRIE, DONC ELLES CASCADENT (renfort
+          client du 11/08 : « les révélations doivent se remarquer »). Le
+          plafond de six rangs de D37 est loin ; le décalage reste 70 ms. */}
+      {ZONES.map((bareme, rang) => (
+        <div key={bareme.zone} data-revelation data-revelation-retard={Math.min(rang + 1, 6)}>
+          <TableauZone bareme={bareme} />
+        </div>
       ))}
 
-      <p className="mt-14 mb-4 max-w-lisible text-sm leading-relaxed text-encre-douce">
+      <p
+        className="panneau mt-14 mb-4 max-w-lisible text-sm leading-relaxed text-encre-douce"
+        data-revelation
+      >
         Au-delà de la dernière tranche d’une zone, il n’y a pas de tarif&nbsp;: il y a
         un devis. Le panier le dit alors clairement et invite à écrire, plutôt que
         d’afficher un prix que personne n’a fixé.
@@ -154,13 +186,13 @@ function EncartDemonstration() {
 function RegleGenerale() {
   return (
     <section aria-labelledby="titre-regles" className="mt-14">
-      <h2 id="titre-regles" className="text-titre font-semibold text-encre">
+      <h2 id="titre-regles" className="text-titre text-encre">
         Deux règles à connaître
       </h2>
 
       <div className="mt-6 grid gap-8 sm:grid-cols-2">
-        <div>
-          <h3 className="font-titre text-base font-semibold text-encre">
+        <div className="panneau">
+          <h3 className="sous-titre text-encre">
             Le franco de port couvre tout
           </h3>
           <p className="mt-3 max-w-lisible text-sm leading-relaxed text-encre-douce">
@@ -171,8 +203,8 @@ function RegleGenerale() {
           </p>
         </div>
 
-        <div>
-          <h3 className="font-titre text-base font-semibold text-encre">
+        <div className="panneau">
+          <h3 className="sous-titre text-encre">
             Les produits frais restent en métropole
           </h3>
           <p className="mt-3 max-w-lisible text-sm leading-relaxed text-encre-douce">
@@ -207,12 +239,12 @@ function TableauZone({ bareme }: { readonly bareme: BaremeZone }) {
       aria-labelledby={titre}
       className="scroll-mt-8 pt-12 sm:pt-16"
     >
-      <h2 id={titre} className="text-titre font-semibold text-encre">
+      <h2 id={titre} className="text-titre text-encre">
         {bareme.libelle}
       </h2>
 
       <div className="mt-6 grid gap-x-12 gap-y-8 lg:grid-cols-2">
-        <div className="overflow-x-auto">
+        <div className="panneau overflow-x-auto">
           <table className="w-full border-collapse text-sm">
             <caption className="sr-only">
               Frais de port vers {bareme.libelle}, par tranche de poids du colis,
@@ -256,7 +288,7 @@ function TableauZone({ bareme }: { readonly bareme: BaremeZone }) {
             </tbody>
           </table>
 
-          <p className="mt-3 text-xs leading-relaxed text-encre-douce">
+          <p className="mt-4 text-xs leading-relaxed text-encre-douce">
             Les bornes hautes sont incluses&nbsp;: un colis de{' '}
             {formaterPoids(bareme.tranches[0].jusquAGrammes)} pile relève encore de la
             première tranche.

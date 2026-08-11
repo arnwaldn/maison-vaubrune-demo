@@ -1,0 +1,61 @@
+LE PLUS GRAND AFFICHAGE AVANT ET APRÈS LA BASCULE EN VIDÉO — C20, 2026-08-11
+================================================================================
+
+LA QUESTION, ET POURQUOI ELLE SE POSE ICI ET PAS AILLEURS.
+
+La règle D37 amendée en C19-ter dit que l'entrée de titre ne joue QUE sur les
+pages où une IMAGE porte le plus grand affichage — une animation posée sur
+l'élément mesuré coûte sa propre durée, et /livraison comme /suivi portent cette
+entrée PARCE QUE leur image est le LCP. Remplacer cette image par une autre, et
+poser une vidéo par-dessus, rouvre donc deux questions d'un coup : le plus grand
+affichage est-il toujours une image, et n'a-t-il pas reculé ?
+
+Aucun instrument du dépôt n'y répondait. `mesurer-notes` ne garde que quatre
+nombres par page et ne couvre pas ces deux URL ; la campagne ne mesure pas sous
+bridage. L'outil d'attribution de C19 le dit, et il a reçu pour l'occasion une
+option `--pages` — un outil recopié pour changer une liste aurait dupliqué le
+bridage, l'observateur et la fenêtre du retard.
+
+MÉTHODE. Quatre tirages joués À LA SUITE dans la même session de machine, deux
+sur le sommet d'avant la tranche (f30692a, illustrations 3:2) et deux sur le
+sommet d'après (3ec4617, affiches 16:9 + vidéo). L'ordre compte : deux mesures
+prises à une heure d'intervalle ne se comparent pas — la première tentative de ce
+relevé, faite en début de matinée, donnait 1 468 ms sur /livraison là où la même
+construction en donne 1 132 une heure plus tard. La FOURCHETTE fait foi, jamais
+une valeur isolée.
+
+--------------------------------------------------------------------------------
+
+  page         état     plus grand affichage      élément mesuré
+  ---------------------------------------------------------------------------
+  /livraison   avant    1 132 · 1 168 ms          <img> illustration-1024.avif
+  /livraison   après    1 140 · 1 100 ms          <img> affiche-1024.avif
+  /suivi       avant      996 · 1 020 ms          <img> illustration-1024.avif
+  /suivi       après      956 · 1 000 ms          <img> affiche-1024.avif
+
+--------------------------------------------------------------------------------
+
+CE QUE ÇA DIT.
+
+1. LE PLUS GRAND AFFICHAGE RESTE UNE IMAGE, sur les deux pages et dans les deux
+   états. C'est la condition qui autorise l'entrée de titre à rester en place :
+   elle est vérifiée, pas supposée. La vidéo ne devient jamais l'élément mesuré —
+   elle est à l'opacité nulle jusqu'à sa première image jouée, et elle arrive
+   bien après.
+
+2. LES FOURCHETTES SE CHEVAUCHENT ou penchent du bon côté. /livraison passe de
+   1 132-1 168 à 1 100-1 140, /suivi de 996-1 020 à 956-1 000. Aucun recul.
+
+3. LA RAISON EST ARITHMÉTIQUE ET NON MYSTÉRIEUSE : l'affiche est un 16:9 de
+   70 092 et 70 446 px² là où l'illustration était un 3:2 de 73 986 px². Une
+   image plus courte à largeur égale pèse moins et se peint plus tôt. Le gain est
+   petit, il est dans le bruit, et il ne se paie nulle part ailleurs.
+
+4. LA BOUCLE ARRIVE LOIN DERRIÈRE. Sur /suivi, l'AV1 de 217 Ko finit à 3 247 ms
+   quand le plus grand affichage est peint à 956 : la quatrième condition écrite
+   en C19 — attendre l'événement `load` du document avant de lancer la lecture —
+   fait exactement ce pour quoi elle avait été écrite, et elle le fait sur des
+   pages qui n'existaient pas quand elle a été écrite.
+
+RELEVÉS BRUTS : lcp-avant-c20.txt, lcp-avant-c20-bis.txt (commit f30692a),
+lcp-apres-c20.txt, lcp-apres-c20-bis.txt (commit 3ec4617).

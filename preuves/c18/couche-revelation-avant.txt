@@ -1,0 +1,37 @@
+L'ÉTAT MASQUÉ DES RÉVÉLATIONS — style calculé, sous html.mouvement
+Un bloc SOUS LA FLOTTAISON de chaque zone : celui que le contrôleur n’a
+pas encore révélé, donc celui qui porte l’état masqué.
+
+accueil — encart de fiction
+   opacité calculée      0
+   transformation        matrix(1, 0, 0, 1, 0, 24)
+   transition-property   opacity, transform
+   transition-duration   0.62s, 0.62s
+   transition-delay      0s, 0s   (rang annoncé : —)
+   → CONFORME : masqué, et les deux propriétés de D37 transitent.
+
+accueil — ligne de famille (cascade)
+   opacité calculée      0
+   transformation        matrix(1, 0, 0, 1, 0, 24)
+   transition-property   opacity, transform
+   transition-duration   0.62s, 0.62s
+   transition-delay      0.42s   (rang annoncé : 6)
+   → CONFORME : masqué, et les deux propriétés de D37 transitent.
+
+rayon — vignette (cascade)
+   opacité calculée      0
+   transformation        matrix(1, 0, 0, 1, 0, 24)
+   transition-property   background-color, border-color
+   transition-duration   0.32s, 0.32s
+   transition-delay      0s, 0s   (rang annoncé : 1)
+   → ÉCHEC : l’état masqué est là, mais il ne TRANSITE pas — le bloc surgira.
+
+fiche — bloc de prose
+   opacité calculée      0
+   transformation        matrix(1, 0, 0, 1, 0, 24)
+   transition-property   opacity, transform
+   transition-duration   0.62s, 0.62s
+   transition-delay      0s, 0s   (rang annoncé : —)
+   → CONFORME : masqué, et les deux propriétés de D37 transitent.
+
+VERDICT : ÉCHEC — 1 bloc(s) sur 4.

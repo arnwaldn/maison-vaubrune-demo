@@ -1,0 +1,83 @@
+ÉVALUATION DE `experimental.viewTransition` — LES MESURES QUI ONT DÉCIDÉ
+
+Protocole : drapeau posé, `view-transition-name` posé par produit sur la paire
+image + titre (vignette du rayon ↔ fiche), harnais rejoué, budgets rejoués,
+comportement observé au navigateur. Puis drapeau retiré SEUL, tout le reste
+identique, et les mêmes budgets rejoués : c'est cette seconde mesure qui
+attribue le coût au drapeau et non à la tranche.
+
+────────────────────────────────────────────────────────────────────────────
+1. LE PREMIER CHARGEMENT — le critère qui tranche
+────────────────────────────────────────────────────────────────────────────
+
+Table de `npm run build`, colonne « First Load JS ». Budget D36 : 125 Ko pour
+les pages publiques, 140 pour /gestion.
+
+  route                        sans le drapeau   avec le drapeau   budget
+  ─────────────────────────────────────────────────────────────────────────
+  socle partagé                     103 kB            115 kB          —
+  /                                 106 kB            119 kB         125
+  /boutique                         109 kB            122 kB         125
+  /boutique/[produit]               113 kB            125 kB         125   limite
+  /panier                           114 kB            126 kB         125   DÉPASSÉ
+  /commande                         119 kB            132 kB         125   DÉPASSÉ
+  /commande/confirmation            113 kB            125 kB         125   limite
+
+Relevé à l'octet (`preuves/c17/first-load-precis.mjs`, gzip niveau 9, somme des
+morceaux d'entrée de chaque route, mises en page comprises) :
+
+  avec le drapeau     +12,507 Ko gzip au pire, sur LES VINGT-DEUX ROUTES
+  sans le drapeau     + 0,307 Ko gzip au pire, sur les vingt-deux routes
+
+Tout le reste de la tranche est identique entre les deux mesures — mêmes
+composants, mêmes `view-transition-name`, même feuille de style. L'écart est le
+drapeau, et rien d'autre.
+
+DEUX ROUTES PUBLIQUES PASSENT AU-DESSUS DU PLAFOND, deux autres s'y collent.
+Le critère n° 4 du brief (« First Load ≤ 125 Ko public ») est rompu.
+
+────────────────────────────────────────────────────────────────────────────
+2. CE QUE LE DRAPEAU FAIT — rien, sur cette pile
+────────────────────────────────────────────────────────────────────────────
+
+`preuves/c18/morphe-cross-page.txt`, espion posé sur `document.startViewTransition`
+AVANT le premier script de la page, navigation vignette → fiche jouée dans les
+deux régimes :
+
+  startViewTransition disponible dans le navigateur   oui
+  appels du routeur                                     0
+  groupes ::view-transition-group appariés              0
+  pseudo-éléments relevés                               0
+
+Zéro. Le routeur ne l'appelle jamais.
+
+LA CAUSE, vérifiée et non supposée : le drapeau de Next expose l'API
+`ViewTransition` de REACT, il n'enveloppe pas les navigations de lui-même. Or la
+version installée ne la porte pas —
+
+  react 19.2.8
+  React.unstable_ViewTransition : undefined
+
+Il faudrait une version canari de React pour que le composant existe. Sur cette
+pile, le drapeau est donc un coût PUR : 12,5 Ko sur vingt-deux routes, y compris
+le tunnel, les cinq documents légaux et l'espace marchand, pour un geste qui ne
+concernerait que deux pages — et qui n'a pas lieu.
+
+────────────────────────────────────────────────────────────────────────────
+3. LES AUTRES CRITÈRES, POUR MÉMOIRE
+────────────────────────────────────────────────────────────────────────────
+
+  103/103 parcours    INTACTS avec le drapeau posé, sans assouplissement du
+                      harnais. Le drapeau ne casse rien : il ne fait rien.
+
+Les critères 2, 3, 5 et 6 (axe, Lighthouse, repli sans support, neutralisation
+sous mouvement réduit) n'ont pas été joués sur l'état drapeau posé, et c'est
+délibéré : un critère écrit était déjà rompu, et mesurer plus longtemps un état
+qu'on retire n'aurait rien ajouté au dossier. Ils sont joués sur l'état LIVRÉ,
+et leurs relevés sont suffixés `c18`.
+
+────────────────────────────────────────────────────────────────────────────
+VERDICT : REJET. Retrait complet du drapeau, du module `src/lib/morphe.ts` et
+des `view-transition-name`. `TransitionPage` reste titulaire — 0,9 s,
++0,991 Ko, décalage cumulé nul. Décision 010 pour le motif et les conditions de
+ré-évaluation.

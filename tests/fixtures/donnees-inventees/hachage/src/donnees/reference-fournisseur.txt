@@ -1,0 +1,14 @@
+Piece a conviction, troisieme moitie — le defaut que la premiere redaction de la
+regle du hachage avait ouvert sans le voir.
+
+Elle ne regardait qu'UN caractere de chaque cote des neuf chiffres : des qu'une
+lettre a-f les touchait, le motif s'eteignait. Or il y a des facons parfaitement
+banales d'ecrire un vrai identifiant a cote d'une de ces six lettres : une clef
+d'objet, un nom de fichier, une abreviation de reference. Les deux lignes qui
+suivent en sont, et la garde doit les voir toutes les deux.
+
+  ref552100554
+  { "siren": "552100554e" }
+
+A cote, un vrai morceau d'empreinte, qui doit continuer a passer :
+a77420730bf9f9ea8148390f946486f7

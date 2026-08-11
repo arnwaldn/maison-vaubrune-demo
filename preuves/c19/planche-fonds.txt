@@ -1,0 +1,19 @@
+LA PLANCHE DES QUATRE FONDS — pièce du verdict (10/08)
+======================================================================
+
+  A — GRAIN 0,055 (l’actuel, jugé invisible)
+      0 Ko — 380 octets de source CSS
+  B — GRAIN 0,14 (livré par défaut dans cette tranche)
+      0 Ko — 380 octets de source CSS
+  C — GRAIN 0,18 (un cran au-dessus)
+      0 Ko — 380 octets de source CSS
+  D — MARBRE COQUILLE (proposition du client, retravaillée)
+      3.2 Ko AVIF (repli JPEG 7.5 Ko) — sur TOUTES les pages
+
+Deux planches : planche-fonds-accueil.png (fond nu) et
+planche-fonds-fiche.png (fond contre du texte et du papier photographique).
+
+Contrastes AA re-mesurés au pixel pour les quatre options :
+  grain 0,055  ocre 5,46   |  grain 0,14  ocre 5,22   |  grain 0,18  ocre 5,02
+  marbre coquille          ocre 5,09 sur la veine la plus sombre (#e8e2d6)
+Seuil AA 4,50 : les quatre options tiennent.

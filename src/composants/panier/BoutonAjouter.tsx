@@ -123,7 +123,7 @@ export function BoutonAjouter({
         <div>
           <label
             htmlFor={`${identifiant}-format`}
-            className="block text-xs font-semibold tracking-[0.12em] text-encre uppercase"
+            className="etiquette block text-encre"
           >
             Format
           </label>
@@ -178,7 +178,7 @@ export function BoutonAjouter({
         <div>
           <label
             htmlFor={`${identifiant}-quantite`}
-            className="block text-xs font-semibold tracking-[0.12em] text-encre uppercase"
+            className="etiquette block text-encre"
           >
             Quantité
           </label>
@@ -209,7 +209,7 @@ export function BoutonAjouter({
         onClick={ajouter}
         disabled={!activable}
         aria-describedby={activable ? undefined : `${identifiant}-empechement`}
-        className="mt-5 w-full rounded-sm border border-olive bg-olive px-4 py-2.5 text-sm font-semibold text-creme hover:bg-olive-clair disabled:cursor-not-allowed disabled:border-encre-douce/40 disabled:bg-creme disabled:text-encre-douce"
+        className="mt-5 w-full rounded-sm border border-olive bg-olive px-4 py-2.5 text-sm font-semibold text-creme hover:border-encre hover:bg-encre disabled:cursor-not-allowed disabled:border-encre-douce/40 disabled:bg-creme disabled:text-encre-douce"
       >
         Ajouter au panier
       </button>
@@ -296,7 +296,7 @@ function ChoixDesPieces({
 
   return (
     <fieldset className="mt-5 border-0 p-0">
-      <legend className="text-xs font-semibold tracking-[0.12em] text-encre uppercase">
+      <legend className="etiquette text-encre">
         Composition — {requises} pièces à choisir
       </legend>
 

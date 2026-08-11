@@ -33,7 +33,7 @@ export function RecapitulatifTotaux({ totaux }: { readonly totaux: Totaux }) {
     >
       <h2
         id="titre-recapitulatif"
-        className="font-titre text-base font-semibold text-encre"
+        className="sous-titre text-encre"
       >
         Récapitulatif
       </h2>
@@ -43,8 +43,14 @@ export function RecapitulatifTotaux({ totaux }: { readonly totaux: Totaux }) {
           <dt className="text-encre-douce">
             Sous-total ({totaux.nbArticles} article{totaux.nbArticles > 1 ? 's' : ''})
           </dt>
-          <dd className="font-semibold text-encre tabular-nums">
-            {formaterEuros(totaux.sousTotalCentimes)}
+          <dd className="text-right">
+            <span
+              key={totaux.sousTotalCentimes}
+              data-chiffre=""
+              className="font-mono text-encre tabular-nums"
+            >
+              {formaterEuros(totaux.sousTotalCentimes)}
+            </span>
           </dd>
         </div>
 
@@ -55,8 +61,14 @@ export function RecapitulatifTotaux({ totaux }: { readonly totaux: Totaux }) {
               className="flex items-baseline justify-between gap-4"
             >
               <dt className="max-w-lisible text-encre-douce">{ligne.libelle}</dt>
-              <dd className="font-semibold text-encre tabular-nums">
-                {formaterEuros(ligne.montantCentimes)}
+              <dd className="text-right">
+                <span
+                  key={ligne.montantCentimes}
+                  data-chiffre=""
+                  className="font-mono text-encre tabular-nums"
+                >
+                  {formaterEuros(ligne.montantCentimes)}
+                </span>
               </dd>
             </div>
           ))
@@ -75,9 +87,21 @@ export function RecapitulatifTotaux({ totaux }: { readonly totaux: Totaux }) {
           <ResteAvantFranco expedition={expedition} />
 
           <div className="mt-5 flex items-baseline justify-between gap-4 border-t border-filet pt-4">
-            <p className="font-titre text-base font-semibold text-encre">Total</p>
-            <p className="text-xl font-semibold text-encre tabular-nums">
-              {totaux.totalCentimes === null ? null : formaterEuros(totaux.totalCentimes)}
+            <p className="sous-titre text-encre">Total</p>
+            {/* LE TOTAL EST LE CHIFFRE QUI BOUGE LE PLUS, donc celui qui fond.
+                Ce qui tient sa place est `tabular-nums` et rien d'autre : dans
+                un `justify-between`, le libellé est collé à gauche et le montant
+                à droite quelle que soit sa largeur — une largeur minimale posée
+                ici n'aurait rien à retenir, et la mesure l'a confirmé avant
+                qu'elle ne soit retirée (`preuves/c16/largeur-montants.mjs`). */}
+            <p className="text-right">
+              <span
+                key={totaux.totalCentimes}
+                data-chiffre=""
+                className="font-mono text-xl text-encre tabular-nums"
+              >
+                {totaux.totalCentimes === null ? null : formaterEuros(totaux.totalCentimes)}
+              </span>
             </p>
           </div>
 
@@ -116,7 +140,9 @@ function ResteAvantFranco({
 
   return (
     <p className="mt-4 rounded-sm border border-olive/30 bg-creme px-4 py-3 text-sm leading-relaxed text-olive">
-      Encore {formaterEuros(reste)} pour que le port vous soit offert.
+      Encore{' '}
+      <span className="font-mono tabular-nums">{formaterEuros(reste)}</span> pour que
+      le port vous soit offert.
     </p>
   );
 }

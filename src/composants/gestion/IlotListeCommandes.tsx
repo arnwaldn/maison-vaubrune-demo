@@ -60,6 +60,7 @@ export function IlotListeCommandes({ amorce }: { readonly amorce: readonly Comma
     return (
       <div
         aria-hidden="true"
+        data-place-reservee=""
         className="mt-10 min-h-96 rounded-sm border border-filet bg-papier"
       />
     );
@@ -74,10 +75,11 @@ export function IlotListeCommandes({ amorce }: { readonly amorce: readonly Comma
     <div className="mt-10 min-h-96 pb-4">
       <div className="flex flex-wrap items-end justify-between gap-x-8 gap-y-4">
         <div>
-          <label
-            htmlFor="filtre-etat"
-            className="block text-xs font-semibold tracking-[0.12em] text-encre-douce uppercase"
-          >
+          {/* SUR LE MARBRE, L'ENCRE PLEINE — cette étiquette de formulaire est
+              posée sur la matière (le panneau commence au tableau, plus bas).
+              En encre douce elle valait 4,09 contre la pire veine de la tuile,
+              sous les 4,50 d'un texte de treize pixels. */}
+          <label htmlFor="filtre-etat" className="etiquette block text-encre">
             Filtrer par état
           </label>
           <select
@@ -97,7 +99,7 @@ export function IlotListeCommandes({ amorce }: { readonly amorce: readonly Comma
           </select>
         </div>
 
-        <p className="text-sm text-encre-douce tabular-nums">
+        <p className="registre text-encre" data-sur-marbre>
           {affichees.length} commande{affichees.length > 1 ? 's' : ''} affichée
           {affichees.length > 1 ? 's' : ''} sur {commandes.length}.
         </p>
@@ -108,7 +110,7 @@ export function IlotListeCommandes({ amorce }: { readonly amorce: readonly Comma
           Aucune commande dans cet état.
         </p>
       ) : (
-        <div className="mt-8 overflow-x-auto">
+        <div className="panneau mt-8 overflow-x-auto">
           <table className="w-full min-w-[44rem] border-collapse text-sm">
             <caption className="sr-only">
               Commandes du jeu d’essai et de cette démonstration, de la plus récente
@@ -139,7 +141,7 @@ export function IlotListeCommandes({ amorce }: { readonly amorce: readonly Comma
                   <td className="py-3">
                     <Link
                       href={`/gestion/commandes/${commande.reference}`}
-                      className="font-semibold text-encre tabular-nums underline decoration-filet decoration-2 underline-offset-4 hover:text-terre hover:decoration-terre"
+                      className="font-mono font-medium text-encre tabular-nums underline decoration-filet decoration-2 underline-offset-4 hover:text-terre hover:decoration-terre"
                     >
                       {commande.reference}
                     </Link>
@@ -152,7 +154,7 @@ export function IlotListeCommandes({ amorce }: { readonly amorce: readonly Comma
                   <td className="py-3 text-encre-douce">
                     {commande.coordonnees?.prenomNom ?? '—'}
                   </td>
-                  <td className="py-3 text-right font-semibold text-encre tabular-nums">
+                  <td className="py-3 text-right font-mono font-medium text-encre tabular-nums">
                     {formaterEuros(commande.totaux.total)}
                   </td>
                   <td className="py-3 text-right">

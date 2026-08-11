@@ -1,0 +1,129 @@
+PREUVE ROUGE DE LA CAMPAGNE « MOUVEMENT » (tranche C17)
+========================================================
+
+Un test vert ne prouve rien tant qu'on ne l'a pas vu rouge pour la raison qu'il
+annonce (leçon C16). Les quatre cas de `tests/e2e/mouvement.spec.ts` ont tous
+échoué au moins une fois avant de passer, et TROIS de ces échecs portaient sur
+un défaut réel du produit ou de la bibliothèque — pas sur le test.
+
+Relevés bruts, dans l'ordre où ils sont apparus.
+
+
+1er TOUR — 3 échecs sur 4
+--------------------------
+
+  1) mouvement.spec.ts › un bloc sous la flottaison est masqué…
+
+     Error: expect(locator).toHaveAttribute(expected) failed
+     Locator:  locator('.carte-produit').last()
+     Expected: ""
+     Received: "true"
+
+     → DÉFAUT DU TEST. `data-revelation` écrit sans valeur en JSX est sérialisé
+       `data-revelation="true"` par React. Aucun sélecteur CSS ne regarde la
+       valeur (`[data-revelation]` matche quelle que soit elle) : le test
+       vérifiait React et non le site. Corrigé en lisant `hasAttribute()`.
+
+  2) mouvement.spec.ts › le défilement adouci vit sur trois routes…
+
+     Error: expect(received).toBeGreaterThan(expected)
+     Expected: > 5
+     Received:   3
+
+     → DÉFAUT DU TEST. Il attendait « scrollY > 200 » puis comptait les
+       positions relevées. La courbe de Lenis franchit la moitié de la distance
+       en une centaine de millisecondes : le seuil tombait au troisième rendu.
+       Le relevé ne disait pas si la descente était douce, il disait à quelle
+       vitesse elle commence. Corrigé en attendant l'IMMOBILISATION (position
+       inchangée sur huit images) avant de compter.
+
+  3) mouvement.spec.ts › le parcours d'achat rend les mêmes montants exacts…
+
+     Error: expect(received).toBe(expected)
+     Expected: false
+     Received: true          (html.lenis présent sur /commande)
+
+     → DÉFAUT RÉEL. Voir le 2e tour.
+
+
+2e TOUR — 2 échecs sur 4
+-------------------------
+
+  1) le défilement adouci … › l'ancre atterrit sous l'en-tête
+
+     Error: expect(received).toBeLessThan(expected)
+     Expected: < 64
+     Received:   208.234375
+
+     → DÉFAUT RÉEL DU PRODUIT. Le délégué d'ancres passait
+       `offset: -(hauteur en-tête + 8)` à `scrollTo`, sur la conviction écrite
+       dans un commentaire que « Lenis ne connaît pas scroll-padding-top ».
+
+       208 = 96 (scroll-mt-24 des sections du rayon, C7)
+           + 104 (scroll-padding-top 6,5 rem, C13)
+           + 100 (le décalage ajouté)
+           −  92 (bas de l'en-tête)
+
+       La bibliothèque honore donc les DEUX propriétés. Le décalage était une
+       troisième compensation d'un manque qui n'existait pas, et il posait la
+       section cent pixels trop bas. Corrigé : `scrollTo(destination)` sans
+       décalage, et le cas compare désormais les DEUX RÉGIMES (Lenis contre
+       natif) au lieu de vérifier une borne écrite à la main.
+
+  2) le parcours d'achat … › html.lenis sur /commande, encore après 2 s
+
+     → DÉFAUT DE LA BIBLIOTHÈQUE (lenis 1.3.26), trouvé par instrumentation.
+
+       Symptôme intermittent, et c'est ce qui le rendait déroutant : avec un
+       panier VIDE, `/panier` sortait propre ; avec un panier plein, la classe
+       revenait. Un journal posé dans l'effet a d'abord innocenté le code :
+
+         effet chemin=/boutique/fromage-fermier-brebis actif=true adoucie=true
+         nettoyage chemin=/boutique/fromage-fermier-brebis instance=true
+           apres destroy : classe=… mouvement            ← la classe EST partie
+         effet chemin=/panier actif=true adoucie=false
+           100 ms plus tard : classe=… mouvement          ← toujours partie
+         AJOUT lenis :: at DOMTokenList.add
+                      | at u.updateClassName
+                      | at set isScrolling
+                      | at …/691.js:1:12480               ← une MINUTERIE
+
+       `destroy()` retire les écouteurs mais ne purge PAS le compte à rebours
+       anti-rebond qui détecte la fin d'un défilement. Quand il expire — après
+       la destruction —, il écrit `isScrolling = false`, ce qui rejoue
+       `updateClassName()` et retamponne `<html>`. L'instance est morte, sa
+       signature revient, et le tunnel garde le défilement adouci que D37
+       interdit.
+
+       Le panier vide ne déclenchait rien parce que la page est courte : aucune
+       remise à zéro du défilement, donc aucune minuterie en attente.
+
+       Parade sans pari sur un délai : neutraliser `updateClassName` SUR
+       L'INSTANCE (une propriété propre masque celle du prototype, donc toute
+       reprise tardive écrit dans le vide), puis retirer les classes avec le
+       même critère que la bibliothèque (`lenis` et tout `lenis-*`).
+
+
+3e TOUR — 4 / 4
+----------------
+
+  ✓ un bloc sous la flottaison est masqué, se révèle au défilement, et ne
+    rejoue jamais                                                      (1,6 s)
+  ✓ le fondu de route joue à la navigation, jamais au chargement, et rend la
+    page entière                                                       (2,4 s)
+  ✓ le parcours d'achat rend les mêmes montants exacts sur un site qui bouge
+                                                                       (5,0 s)
+  ✓ le défilement adouci vit sur trois routes, jamais dans le tunnel, et pas
+    du tout sous mouvement réduit                                      (6,6 s)
+
+  4 passed (9,9 s)
+
+
+CE QUE CE RELEVÉ ÉTABLIT
+------------------------
+
+Deux des quatre cas ont trouvé un défaut que RIEN d'autre dans le dépôt ne
+pouvait voir : les six campagnes existantes jouent sous mouvement réduit, où ni
+Lenis ni le délégué d'ancres n'existent. Un socle de mouvement livré sans sa
+campagne aurait donc livré, sans le savoir, un tunnel au défilement adouci et
+des ancres cent pixels trop basses.

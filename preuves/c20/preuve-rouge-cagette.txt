@@ -1,0 +1,101 @@
+PREUVE ROUGE DE LA COUVERTURE DE /panier — tranche C20 (cagette), 2026-08-11
+================================================================================
+
+commit mesuré : fcf1a99 (données de la cagette), campagne du mouvement seule
+machine  : node tué avant, construction complète refaite entre chaque rupture
+
+Un test vert ne prouve rien tant qu'on ne l'a pas vu ROUGE pour la raison qu'il
+annonce (leçon de C16, cinq fois payée depuis). La couverture de /panier n'est
+pas un cas neuf : ce sont deux cas existants qui gagnent un PAS — le cas 8
+apprend à y arriver EN CLIQUANT, le cas 9 à l'ouvrir À FROID et à la mesurer
+sous mouvement réduit. Une extension se prouve exactement comme une écriture :
+en la rompant à l'endroit qu'elle prétend défendre, et en vérifiant que c'est
+/panier qui est NOMMÉ dans l'échec.
+
+Les deux ruptures ont été ANNULÉES ensuite, et les deux diffs sont VIDES —
+src/lib/fournisseurs.tsx contre le sommet d'hier (550eef6) et
+src/donnees/visuels-editoriaux.ts contre son propre commit.
+
+--------------------------------------------------------------------------------
+ROUGE n° 1 — LA BOUCLE SERVIE À /panier EST CELLE DE /panier
+--------------------------------------------------------------------------------
+
+Rupture : dans src/donnees/visuels-editoriaux.ts, l'entrée HEROS_PANIER reçoit
+`video: 'suivi'` au lieu de `video: 'panier'`. UN MOT, dans le seul champ que la
+tranche ajoute.
+
+C'est le défaut que la forme de données rend possible et qu'aucune autre
+assertion n'attraperait : la page joue une vidéo, l'attribut bascule à « joue »,
+le temps courant avance, un seul AV1 part sur le réseau, l'affiche est dessous —
+tout est vert, et le visiteur regarde le registre de /suivi sur la page du
+panier. C'est aussi le défaut le plus PROBABLE de cette tranche, puisque la
+troisième vidéo est ajoutée par recopie de la deuxième.
+
+    npx playwright test --project=mouvement -g "trois héros de C20"
+
+    x  1 [mouvement] > mouvement.spec.ts:1553:5 > les trois héros de C20 jouent
+       à froid, et se taisent sous reduce (5.0s)
+
+    Error: /panier : la boucle servie vient d'un autre dossier
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "panier"
+    Received: "suivi"
+
+      > 1611 |     expect(etat.dossier, `${chemin} : la boucle servie vient d'un
+                    autre dossier`).toBe(
+
+    1 failed
+
+CE QUE CE ROUGE APPREND EN PLUS : il tombe sur /panier alors que la boucle des
+DEUX pages précédentes est déjà passée verte dans le même tour. L'assertion est
+donc bien portée par la page, et non par la campagne.
+
+--------------------------------------------------------------------------------
+ROUGE n° 2 — SOUS MOUVEMENT RÉDUIT, PAS UN OCTET, SUR LES TROIS PAGES
+--------------------------------------------------------------------------------
+
+Rupture : dans src/lib/fournisseurs.tsx, la condition
+`window.matchMedia('(prefers-reduced-motion: reduce)').matches` est retirée de
+la garde d'entrée de l'effet vidéo. Le reste de l'effet est intact.
+
+C'est la condition de retour n° 3 de l'interdit n° 17 de D37, et elle ne se lit
+qu'au RÉSEAU : sans elle, l'attribut et l'opacité vaudraient exactement la même
+chose pendant que le fichier partirait quand même.
+
+    Error: sous mouvement réduit, 3 fichier(s) vidéo demandés sur les trois pages
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 5
+
+      > 1682 |   ).toEqual([]);
+
+    1 failed
+
+TROIS fichiers, et c'est le chiffre qui compte : le contexte réduit visite
+/livraison, /suivi PUIS /panier dans la même session. Le compte à zéro cumulé
+sur les trois couvre donc AUSSI les deux navigations qui les relient — ce qu'un
+compte à zéro pris page par page ne couvrirait pas. La garde retirée rend le
+réseau bavard sur la page neuve exactement comme sur les deux anciennes : la
+promesse de C20 s'étend sans avoir été réécrite.
+
+--------------------------------------------------------------------------------
+CE QU'AUCUN DE CES DEUX ROUGES NE PROUVE
+--------------------------------------------------------------------------------
+
+Ni l'un ni l'autre ne dit que le plus grand affichage de contenu de /panier
+reste une IMAGE — c'est-à-dire la condition de D37 amendé qui autorise l'entrée
+de titre sur cette page. Le cas 9 vérifie que l'affiche est VISIBLE sous la
+vidéo, ce qui est nécessaire et pas suffisant : la campagne ne mesure pas sous
+bridage. Cette question-là se lit dans preuves/c20/lcp-cagette.txt, avec
+l'instrument qui NOMME l'élément mesuré.
+
+--------------------------------------------------------------------------------
+VERT, LES DEUX RUPTURES ANNULÉES
+--------------------------------------------------------------------------------
+
+    npx playwright test --project=mouvement
+    10 passed (24.4s)

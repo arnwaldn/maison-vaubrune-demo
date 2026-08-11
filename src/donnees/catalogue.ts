@@ -132,6 +132,36 @@ const REFERENCES: readonly Produit[] = [
     ],
     miseEnAvant: true,
     illustration: { forme: 'bouteille', teinte: 'olive' },
+    /* LES QUINZE FICHES SONT ILLUSTRÉES DEPUIS C15 (décision D35). C14 n'en
+       branchait qu'une — celle-ci, la seule que `mesurer-notes` mesure depuis
+       C8 —, pour que le coût des images se lise sur une page comparable à
+       elle-même. La suite s'est faite en AJOUTANT DES DONNÉES, pas du code :
+       `VueDeFiche` et `CarteProduit` posaient déjà la seule question qui
+       vaille, « ce produit a-t-il un visuel ? ».
+
+       Les nombres viennent de `public/produits/manifeste-livre.json`, écrit
+       par le pipeline : ce sont les dimensions et les largeurs RÉELLEMENT
+       produites, pas celles qu'on souhaitait. Les alternatives textuelles,
+       elles, viennent du manifeste des masters, où elles ont été écrites en
+       regardant l'image — et elles sont AUTONOMES : « La même bouteille… »,
+       que C14 écrivait ici, ne se comprend pas hors du contexte de la ligne
+       précédente, et un lecteur d'écran ne lit pas toujours les deux. */
+    visuel: {
+      principal: {
+        alt: 'Bouteille de verre vert foncé fermée par un bouchon de liège, posée debout sur un fond de papier écru ; l’étiquette porte le nom de la maison, celui de l’huile et la contenance.',
+        couleurDominante: '#dacdb7',
+        largeur: 640,
+        hauteur: 1024,
+        largeurs: [320, 480, 640],
+      },
+      ambiance: {
+        alt: 'Bouteille d’huile d’olive débouchée, son bouchon de liège posé à plat à côté ; devant elle, une cuillère de céramique blanche remplie d’huile vert doré, une goutte perlant au bord.',
+        couleurDominante: '#dacbb4',
+        largeur: 640,
+        hauteur: 1024,
+        largeurs: [320, 480, 640],
+      },
+    },
   },
 
   {
@@ -160,6 +190,22 @@ const REFERENCES: readonly Produit[] = [
     ],
     miseEnAvant: false,
     illustration: { forme: 'bouteille', teinte: 'ocre' },
+    visuel: {
+      principal: {
+        alt: 'Bouteille de verre transparent fermée par un bouchon de liège, remplie d’une huile de noix ambrée, posée debout sur un fond de papier écru.',
+        couleurDominante: '#e5d2b8',
+        largeur: 640,
+        hauteur: 1024,
+        largeurs: [320, 480, 640],
+      },
+      ambiance: {
+        alt: 'Bouteille d’huile de noix débouchée, bouchon de liège posé à droite, et devant elle une cuillère de céramique blanche emplie d’huile ambrée.',
+        couleurDominante: '#e5d2b7',
+        largeur: 640,
+        hauteur: 1024,
+        largeurs: [320, 480, 640],
+      },
+    },
   },
 
   {
@@ -189,6 +235,22 @@ const REFERENCES: readonly Produit[] = [
     ],
     miseEnAvant: false,
     illustration: { forme: 'bouteille', teinte: 'encre' },
+    visuel: {
+      principal: {
+        alt: 'Bouteille de verre élancée et transparente, bouchon de liège, remplie d’un vinaigre de cidre ambré légèrement voilé.',
+        couleurDominante: '#d9cab5',
+        largeur: 640,
+        hauteur: 1024,
+        largeurs: [320, 480, 640],
+      },
+      ambiance: {
+        alt: 'Bouteille de vinaigre de cidre débouchée, bouchon de liège posé à droite, cuillère de céramique blanche emplie de vinaigre ambré devant elle.',
+        couleurDominante: '#e7d2b5',
+        largeur: 640,
+        hauteur: 1024,
+        largeurs: [320, 480, 640],
+      },
+    },
   },
 
   {
@@ -219,6 +281,22 @@ const REFERENCES: readonly Produit[] = [
     ],
     miseEnAvant: false,
     illustration: { forme: 'bocal', teinte: 'terre-cuite' },
+    visuel: {
+      principal: {
+        alt: 'Bocal de verre à joint de caoutchouc et fermeture métallique, contenant une terrine de campagne grossière piquée de grains de poivre noir.',
+        couleurDominante: '#d4c7b6',
+        largeur: 640,
+        hauteur: 1024,
+        largeurs: [320, 480, 640],
+      },
+      ambiance: {
+        alt: 'Bocal de terrine de campagne ouvert, son couvercle de verre appuyé contre le flanc, la surface de la farce et ses grains de poivre visibles.',
+        couleurDominante: '#d2c4b1',
+        largeur: 640,
+        hauteur: 1024,
+        largeurs: [320, 480, 640],
+      },
+    },
   },
 
   {
@@ -248,6 +326,22 @@ const REFERENCES: readonly Produit[] = [
     ],
     miseEnAvant: true,
     illustration: { forme: 'bocal', teinte: 'ocre' },
+    visuel: {
+      principal: {
+        alt: 'Bocal de verre à fermeture métallique rempli de rillettes de canard effilochées, d’un blond pâle, sur un fond de papier écru.',
+        couleurDominante: '#d6cab8',
+        largeur: 640,
+        hauteur: 1024,
+        largeurs: [320, 480, 640],
+      },
+      ambiance: {
+        alt: 'Bocal de rillettes de canard ouvert, couvercle de verre appuyé contre le flanc, la chair effilochée et sa fine couche de graisse à découvert.',
+        couleurDominante: '#d9ccb9',
+        largeur: 640,
+        hauteur: 1024,
+        largeurs: [320, 480, 640],
+      },
+    },
   },
 
   {
@@ -278,6 +372,22 @@ const REFERENCES: readonly Produit[] = [
     ],
     miseEnAvant: false,
     illustration: { forme: 'bocal', teinte: 'encre' },
+    visuel: {
+      principal: {
+        alt: 'Petit bocal de verre à fermeture métallique empli d’un confit d’oignons acajou foncé, luisant, sur un fond de papier écru.',
+        couleurDominante: '#cec2b1',
+        largeur: 640,
+        hauteur: 1024,
+        largeurs: [320, 480, 640],
+      },
+      ambiance: {
+        alt: 'Bocal de confit d’oignons ouvert, couvercle de verre appuyé contre le flanc, les lamelles brunes et brillantes affleurant au bord.',
+        couleurDominante: '#cdc0b0',
+        largeur: 640,
+        hauteur: 1024,
+        largeurs: [320, 480, 640],
+      },
+    },
   },
 
   {
@@ -306,6 +416,22 @@ const REFERENCES: readonly Produit[] = [
     ],
     miseEnAvant: false,
     illustration: { forme: 'pot', teinte: 'ocre' },
+    visuel: {
+      principal: {
+        alt: 'Pot de verre à couvercle doré rempli d’un miel de châtaignier ambre foncé, presque acajou par transparence.',
+        couleurDominante: '#cebfac',
+        largeur: 640,
+        hauteur: 1024,
+        largeurs: [320, 480, 640],
+      },
+      ambiance: {
+        alt: 'Pot de miel de châtaignier ouvert, une cuillère de céramique blanche devant lui laissant filer un ruban de miel sombre.',
+        couleurDominante: '#d0bfab',
+        largeur: 640,
+        hauteur: 1024,
+        largeurs: [320, 480, 640],
+      },
+    },
   },
 
   {
@@ -333,6 +459,22 @@ const REFERENCES: readonly Produit[] = [
     ],
     miseEnAvant: true,
     illustration: { forme: 'pot', teinte: 'creme' },
+    visuel: {
+      principal: {
+        alt: 'Pot de verre à couvercle doré rempli d’un miel de bruyère cristallisé, crémeux et roux, à la surface mate.',
+        couleurDominante: '#d1c2ac',
+        largeur: 640,
+        hauteur: 1024,
+        largeurs: [320, 480, 640],
+      },
+      ambiance: {
+        alt: 'Pot de miel de bruyère ouvert, une cuillère de céramique blanche devant lui portant une motte de miel cristallisé qui ne coule pas.',
+        couleurDominante: '#d2c3ad',
+        largeur: 640,
+        hauteur: 1024,
+        largeurs: [320, 480, 640],
+      },
+    },
   },
 
   {
@@ -363,6 +505,22 @@ const REFERENCES: readonly Produit[] = [
     ],
     miseEnAvant: false,
     illustration: { forme: 'pot', teinte: 'terre-cuite' },
+    visuel: {
+      principal: {
+        alt: 'Pot de verre à couvercle doré rempli d’une confiture d’abricots orange vif où l’on distingue des morceaux de fruit entiers.',
+        couleurDominante: '#d5c2a9',
+        largeur: 640,
+        hauteur: 1024,
+        largeurs: [320, 480, 640],
+      },
+      ambiance: {
+        alt: 'Pot de confiture d’abricots ouvert, son couvercle doré posé de chant contre lui, et devant, une cuillère de céramique blanche chargée de confiture.',
+        couleurDominante: '#d6c2a6',
+        largeur: 640,
+        hauteur: 1024,
+        largeurs: [320, 480, 640],
+      },
+    },
   },
 
   {
@@ -390,6 +548,22 @@ const REFERENCES: readonly Produit[] = [
     ],
     miseEnAvant: false,
     illustration: { forme: 'sachet', teinte: 'creme' },
+    visuel: {
+      principal: {
+        alt: 'Sachet de papier kraft naturel au sommet replié, debout sur un fond de papier écru, portant une étiquette de papier écru.',
+        couleurDominante: '#ddcdb8',
+        largeur: 640,
+        hauteur: 1024,
+        largeurs: [320, 480, 640],
+      },
+      ambiance: {
+        alt: 'Sachet de kraft déroulé et ouvert, laissant voir les lentilles blondes ; devant lui, une cuillère de céramique blanche remplie de graines.',
+        couleurDominante: '#dac9b3',
+        largeur: 640,
+        hauteur: 1024,
+        largeurs: [320, 480, 640],
+      },
+    },
   },
 
   {
@@ -419,6 +593,22 @@ const REFERENCES: readonly Produit[] = [
     ],
     miseEnAvant: false,
     illustration: { forme: 'sachet', teinte: 'olive' },
+    visuel: {
+      principal: {
+        alt: 'Sachet de papier kraft au sommet replié, plus petit et plus large que celui des lentilles, debout sur un fond de papier écru.',
+        couleurDominante: '#dfd1bd',
+        largeur: 640,
+        hauteur: 1024,
+        largeurs: [320, 480, 640],
+      },
+      ambiance: {
+        alt: 'Sachet de kraft ouvert d’où débordent des feuilles et des fleurs séchées ; devant lui, une cuillère de céramique blanche et quelques brins tombés.',
+        couleurDominante: '#d9cbb6',
+        largeur: 640,
+        hauteur: 1024,
+        largeurs: [320, 480, 640],
+      },
+    },
   },
 
   {
@@ -447,6 +637,22 @@ const REFERENCES: readonly Produit[] = [
     ],
     miseEnAvant: false,
     illustration: { forme: 'pot', teinte: 'encre' },
+    visuel: {
+      principal: {
+        alt: 'Petit pot de grès émaillé brun foncé, couvercle en place, posé sur un fond de papier écru ; l’étiquette porte le nom du beurre et son poids.',
+        couleurDominante: '#cac1b5',
+        largeur: 640,
+        hauteur: 1024,
+        largeurs: [320, 480, 640],
+      },
+      ambiance: {
+        alt: 'Pot de grès ouvert laissant voir la motte de beurre striée par la spatule, le couvercle dressé sur la tranche contre le flanc du pot.',
+        couleurDominante: '#c5bcaf',
+        largeur: 640,
+        hauteur: 1024,
+        largeurs: [320, 480, 640],
+      },
+    },
   },
 
   {
@@ -479,6 +685,22 @@ const REFERENCES: readonly Produit[] = [
     ],
     miseEnAvant: true,
     illustration: { forme: 'sachet', teinte: 'terre-cuite' },
+    visuel: {
+      principal: {
+        alt: 'Petite meule de fromage de brebis à croûte grise et fleurie, à demi enveloppée dans un papier blanc qui porte l’étiquette.',
+        couleurDominante: '#e0d7c9',
+        largeur: 640,
+        hauteur: 1024,
+        largeurs: [320, 480, 640],
+      },
+      ambiance: {
+        alt: 'Meule de fromage de brebis posée sur son papier déplié, un quartier coupé posé devant elle, la pâte claire et serrée à la tranche.',
+        couleurDominante: '#e0d8cb',
+        largeur: 640,
+        hauteur: 1024,
+        largeurs: [320, 480, 640],
+      },
+    },
   },
 
   {
@@ -513,6 +735,22 @@ const REFERENCES: readonly Produit[] = [
     ],
     miseEnAvant: true,
     illustration: { forme: 'coffret', teinte: 'terre-cuite' },
+    visuel: {
+      principal: {
+        alt: 'Coffret de bois clair fermé, vu de trois quarts sur un fond de papier écru ; l’étiquette collée sur le couvercle porte le nom du coffret et le nombre de pièces.',
+        couleurDominante: '#e8ddcf',
+        largeur: 640,
+        hauteur: 480,
+        largeurs: [320, 480, 640],
+      },
+      ambiance: {
+        alt: 'Coffret de bois ouvert vu de dessus, garni de papier kraft froissé : une bouteille couchée, deux bocaux à fermeture métallique et un plus petit bocal de confit ; le couvercle repose à côté, étiquette visible.',
+        couleurDominante: '#b9a58e',
+        largeur: 640,
+        hauteur: 800,
+        largeurs: [320, 480, 640],
+      },
+    },
     composition: [
       {
         sku: 'MV-HV-OLI-25CL',
@@ -575,6 +813,22 @@ const REFERENCES: readonly Produit[] = [
     ],
     miseEnAvant: false,
     illustration: { forme: 'coffret', teinte: 'olive' },
+    visuel: {
+      principal: {
+        alt: 'Second coffret de bois clair fermé, vu de trois quarts, l’étiquette du couvercle annonçant un coffret à composer et son nombre de pièces.',
+        couleurDominante: '#e8ddce',
+        largeur: 640,
+        hauteur: 480,
+        largeurs: [320, 480, 640],
+      },
+      ambiance: {
+        alt: 'Coffret de bois ouvert vu de dessus, garni de papier kraft froissé : une bouteille couchée, un pot de miel à couvercle doré et un sachet de kraft ; le couvercle repose à côté, étiquette visible.',
+        couleurDominante: '#bfaf99',
+        largeur: 640,
+        hauteur: 800,
+        largeurs: [320, 480, 640],
+      },
+    },
     /**
      * Liste blanche verrouillée. Onze SKU, tous stables et non personnalisés,
      * tous en petit format. Ajouter une référence ici est un arbitrage

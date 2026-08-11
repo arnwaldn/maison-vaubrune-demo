@@ -47,7 +47,7 @@ export function MentionRetractation({
     >
       <h2
         id="titre-retractation-panier"
-        className="font-titre text-base font-semibold text-encre"
+        className="sous-titre text-encre"
       >
         Droit de rétractation
       </h2>

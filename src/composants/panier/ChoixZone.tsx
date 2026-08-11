@@ -47,14 +47,12 @@ export function ChoixZone({ zone }: { readonly zone: CodeZone }) {
       aria-labelledby={`${identifiant}-titre`}
       className="rounded-sm border border-filet bg-papier p-5 sm:p-6"
     >
-      <h2 id={`${identifiant}-titre`} className="font-titre text-base font-semibold text-encre">
+      <h2 id={`${identifiant}-titre`} className="sous-titre text-encre">
         Destination
       </h2>
 
       <fieldset className="mt-4 border-0 p-0">
-        <legend className="text-xs font-semibold tracking-[0.12em] text-encre-douce uppercase">
-          Zone de livraison
-        </legend>
+        <legend className="etiquette text-encre-douce">Zone de livraison</legend>
 
         <div className="mt-3 space-y-1.5">
           {CODES_ZONE.map((candidate) => (
@@ -81,7 +79,7 @@ export function ChoixZone({ zone }: { readonly zone: CodeZone }) {
       <div className="mt-5">
         <label
           htmlFor={`${identifiant}-code-postal`}
-          className="block text-xs font-semibold tracking-[0.12em] text-encre-douce uppercase"
+          className="etiquette block text-encre-douce"
         >
           Code postal (facultatif)
         </label>
@@ -103,7 +101,7 @@ export function ChoixZone({ zone }: { readonly zone: CodeZone }) {
               envoyer({ type: 'choisirZone', zone: trouvee });
             }
           }}
-          className="mt-2 w-32 rounded-sm border border-filet bg-creme px-3 py-2 text-sm text-encre tabular-nums"
+          className="mt-2 w-32 rounded-sm border border-filet bg-creme px-3 py-2 font-mono text-sm text-encre tabular-nums"
         />
 
         <p

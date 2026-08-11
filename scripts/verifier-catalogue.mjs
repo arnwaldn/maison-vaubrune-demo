@@ -52,6 +52,8 @@ import { fileURLToPath } from 'node:url';
 
 import { z } from 'zod';
 
+import { controlerVisuels } from './regime-visuels.mjs';
+
 import { CATALOGUE, PRODUITS_MIS_EN_AVANT } from '@/donnees/catalogue';
 import { COMMANDES_AMORCE } from '@/donnees/commandes-amorce';
 import { formaterEuros } from '@/lib/argent';
@@ -139,6 +141,33 @@ const conservationSchema = z.discriminatedUnion('type', [
   z.strictObject({ type: z.literal('scelle-hygiene') }),
 ]);
 
+/**
+ * UNE VUE PHOTOGRAPHIQUE (tranche C14, décision D35).
+ *
+ * `largeurs` est croissante et sa dernière valeur DOIT être `largeur` : c'est
+ * ce qui garantit que le `srcset` engendré ne propose jamais au navigateur un
+ * fichier plus large que celui qui a été produit — le pipeline refuse
+ * d'agrandir, la fiche ne doit donc pas demander d'agrandissement.
+ */
+const vueVisuelSchema = z
+  .strictObject({
+    alt: z.string().min(20),
+    couleurDominante: z.string().regex(/^#[0-9a-f]{6}$/),
+    largeur: z.number().int().positive(),
+    hauteur: z.number().int().positive(),
+    largeurs: z.array(z.number().int().positive()).min(1),
+  })
+  .refine(
+    (vue) =>
+      vue.largeurs.every((valeur, rang) => rang === 0 || valeur > vue.largeurs[rang - 1]) &&
+      vue.largeurs[vue.largeurs.length - 1] === vue.largeur,
+    {
+      message:
+        'largeurs doit être croissante et finir sur la largeur intrinsèque ' +
+        '(sinon le srcset proposerait un fichier plus large que celui qui existe)',
+    },
+  );
+
 const produitSchema = z.strictObject({
   slug: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
   nom: z.string().min(3),
@@ -157,6 +186,22 @@ const produitSchema = z.strictObject({
     forme: z.enum(FORMES_ILLUSTRATION),
     teinte: z.enum(TEINTES_ILLUSTRATION),
   }),
+  /* Ajouté en C14 (décision D35). OPTIONNEL et il le reste : le catalogue doit
+     s'afficher sans images, à la silhouette. Sans cette clef, le `strictObject`
+     ci-dessus REFUSERAIT le champ — c'est ce que disait déjà la tête de
+     `regime-visuels.mjs`, qui attendait cette tranche pour s'exercer.
+
+     `alt` est exigé NON VIDE ici, en plus du régime (b) qui le contrôle sur le
+     catalogue entier : les deux ne font pas double emploi. Le schéma refuse la
+     forme (un champ absent, une chaîne vide), le régime (b) refuse le CONTENU
+     inutile (quinze alternatives identiques). Le second ne peut pas s'exprimer
+     dans un schéma, le premier arrête la faute plus tôt et la nomme mieux. */
+  visuel: z
+    .strictObject({
+      principal: vueVisuelSchema,
+      ambiance: vueVisuelSchema.optional(),
+    })
+    .optional(),
   composition: z
     .array(z.strictObject({ sku: SKU, nom: z.string().min(5), prixCentimes: z.number().int().positive() }))
     .min(2)
@@ -510,6 +555,29 @@ controle('coffret « La table du dimanche » : composition fidèle', (exiger, no
   );
 });
 
+/*
+ * QUINZE VIGNETTES DISTINCTES — désormais à DEUX RÉGIMES (tranche C11).
+ *
+ * Régime (a), inchangé depuis C2 : les quinze combinaisons `forme · teinte`
+ * des silhouettes SVG restent toutes distinctes. La décision D35 ne les
+ * supprime pas, elle les requalifie en structure de repli — quand un produit
+ * n'a pas de visuel, à l'impression, dans l'espace de gestion, dans les états
+ * vides. Deux produits qui rendraient la même silhouette y seraient
+ * indiscernables exactement comme ils l'étaient en vitrine.
+ *
+ * Régime (b), nouveau et TOLÉRANT : le champ `visuel` n'existe pas encore au
+ * catalogue — il arrive en C14, avec son schéma. Ce contrôle s'applique donc
+ * uniquement aux produits qui le portent, et se tait sur les autres. Écrire la
+ * règle maintenant plutôt qu'en C14 a une raison : une exigence d'alternative
+ * textuelle rédigée APRÈS la livraison des images est une exigence qu'on
+ * ajuste aux alternatives déjà écrites.
+ *
+ * Deux exigences, et la seconde est la moins évidente : un texte alternatif
+ * non vide, et des textes alternatifs tous DISTINCTS. Quinze fiches dont
+ * l'image porterait « Photographie du produit » satisfont la première et ne
+ * disent rien à personne — c'est le défaut d'accessibilité le plus courant sur
+ * un catalogue, et il passe tous les audits automatiques.
+ */
 controle('quinze vignettes toutes distinctes', (exiger, noter) => {
   const combinaisons = CATALOGUE.map(
     (produit) => `${produit.illustration.forme} · ${produit.illustration.teinte}`,
@@ -527,6 +595,27 @@ controle('quinze vignettes toutes distinctes', (exiger, noter) => {
   }
 
   noter(`${String(uniques.size)} combinaisons forme × teinte sur ${String(FORMES_ILLUSTRATION.length * TEINTES_ILLUSTRATION.length)} possibles`);
+
+  /* Régime (b) — la logique vit dans `scripts/regime-visuels.mjs`, à part, pour
+     qu'elle soit ÉPROUVABLE sur un catalogue synthétique portant déjà le champ
+     `visuel`. Ici elle ne pourrait pas l'être : le schéma zod de cette garde
+     est un `strictObject`, il refuserait la clé avant même qu'on l'atteigne.
+     Le motif complet est en tête de ce fichier-là. */
+  const visuels = controlerVisuels(CATALOGUE);
+
+  if (visuels.illustres === 0) {
+    noter('aucun produit ne porte encore de champ « visuel » (il arrive en C14)');
+    return;
+  }
+
+  for (const anomalie of visuels.anomalies) {
+    exiger(false, anomalie);
+  }
+
+  noter(
+    `${String(visuels.illustres)} produit(s) illustré(s), ` +
+      `${String(visuels.alternatives)} alternative(s) textuelle(s) distincte(s)`,
+  );
 });
 
 controle('apostrophes typographiques partout', (exiger) => {

@@ -1,0 +1,26 @@
+
+Garde d’honnêteté — aucune donnée inventée
+------------------------------------------------------------------------
+[ OK   ] Les pages gabarits portent encore leurs emplacements
+          src/app/mentions-legales/page.tsx : 22 emplacements
+          src/app/conditions-generales-de-vente/page.tsx : 11 emplacements
+          src/app/donnees-personnelles/page.tsx : 41 emplacements
+          src/app/retractation/page.tsx : 7 emplacements
+          src/app/a-propos-de-cette-demonstration/page.tsx : 0 emplacement(s), dispense assumée (page descriptive du site et non gabarit du marchand — aucun jeton dans son brouillon)
+[ OK   ] Le formulaire téléchargeable est resté un gabarit
+          public/formulaire-retractation.txt : 4 emplacements en clair
+[ OK   ] Le jeu d’essai porte ses marqueurs d’irréalité
+          src/donnees/commandes-amorce.ts : marqueurs présents, exemption accordée (jeu d’essai à adresses irréelles, dont les marqueurs sont vérifiés ci-dessus)
+[ OK   ] Aucun motif de donnée réelle dans src, contenu et public
+          135 fichiers lus dans src, contenu, public
+          231 binaire(s) déclaré(s) non lu(s) comme du texte — leur nom a été analysé, leur contenu relève de la garde des métadonnées
+          1 zone(s) de texte réglementaire neutralisée(s)
+[ OK   ] Texte et binaire restent deux catégories disjointes
+          12 extension(s) lue(s) comme du texte, 7 tenue(s) pour binaires
+[ OK   ] Aucun fichier de pilotage privé n’est suivi par git
+          560 fichier(s) suivi(s) par git dans ce périmètre
+          274 suivi(s) relu(s) pour les empreintes de pilotage (51 du banc d’essai et 235 binaire(s) écartés)
+------------------------------------------------------------------------
+6 contrôles, aucune anomalie.
+
+code=0

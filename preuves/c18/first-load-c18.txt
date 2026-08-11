@@ -1,0 +1,27 @@
+FIRST LOAD JS, À L'OCTET — somme des morceaux d'entrée par route
+Source : .next/app-build-manifest.json (22 routes)
+
+route                                    brut Ko   gzip Ko   morceaux
+────────────────────────────────────────────────────────────────────────
+/                                       410.23    118.55      9
+/_not-found                             410.16    118.50      9
+/a-propos-de-cette-demonstration        410.23    118.55      9
+/boutique                               413.82    119.96      9
+/boutique/[produit]                     421.76    123.05     10
+/commande                               439.36    129.33     12
+/commande/annulee                       420.15    122.63     10
+/commande/confirmation                  428.33    124.93     10
+/conditions-generales-de-vente          410.23    118.55      9
+/donnees-personnelles                   410.23    118.55      9
+/gestion                                421.64    123.13     11
+/gestion/catalogue                      424.90    124.08     11
+/gestion/commandes                      420.09    122.57     11
+/gestion/commandes/[reference]          425.71    124.07     11
+/gestion/modeles-de-courriels           410.37    118.69     10
+/gestion/prise-en-main                  410.44    118.73     10
+/livraison                              410.23    118.55      9
+/mentions-legales                       410.23    118.55      9
+/paiement/simulation                    413.50    119.87      9
+/panier                                 430.60    125.99     11
+/retractation                           410.58    118.76      9
+/suivi                                  422.37    123.36     10

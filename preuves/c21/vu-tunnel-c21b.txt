@@ -1,0 +1,53 @@
+date   : 2026-08-11 (Paris), tranche C21b
+commit : bba5ae8 + arbre de la tranche C21b (retrait des cartouches de heros)
+
+LE TUNNEL ILLUSTRÉ — RELEVÉ C21a
+base : http://localhost:55818
+
+1. LES TROIS HÉROS — géométrie, image servie, cartouche
+──────────────────────────────────────────────────────────────────────────────
+bureau  commande                 390 × 218  rapport 1.793  commande/illustration-640.avif
+        cartouche « (aucun) »
+        alt « Registre relié ouvert à deux pages entièrement v… »
+bureau  paiement-simulation      390 × 218  rapport 1.793  paiement-simulation/illustration-640.avif
+        cartouche « (aucun) »
+        alt « Enveloppe de papier kraft fermée d’un cachet de … »
+bureau  commande-confirmation    390 × 218  rapport 1.793  commande-confirmation/illustration-640.avif
+        cartouche « (aucun) »
+        alt « Colis de papier kraft ficelé d’une cordelette éc… »
+
+mobile  commande                 332 × 185  rapport 1.793  commande/illustration-640.avif
+        cartouche « (aucun) »
+        alt « Registre relié ouvert à deux pages entièrement v… »
+mobile  paiement-simulation      332 × 185  rapport 1.793  paiement-simulation/illustration-640.avif
+        cartouche « (aucun) »
+        alt « Enveloppe de papier kraft fermée d’un cachet de … »
+mobile  commande-confirmation    332 × 185  rapport 1.793  commande-confirmation/illustration-640.avif
+        cartouche « (aucun) »
+        alt « Colis de papier kraft ficelé d’une cordelette éc… »
+
+2. `/paiement/simulation` — l’avertissement D22 devant l’image
+──────────────────────────────────────────────────────────────────────────────
+bureau  l’image suit l’avertissement dans le document : OUI
+        avertissement lu entièrement à 529 px, flottaison 800 px → VISIBLE SANS DÉFILER
+        haut de l’image à 234 px
+        organes de saisie sur la page (D22) : 0
+mobile  l’image suit l’avertissement dans le document : OUI
+        avertissement lu entièrement à 568 px, flottaison 844 px → VISIBLE SANS DÉFILER
+        haut de l’image à 609 px
+        organes de saisie sur la page (D22) : 0
+
+3. `/commande/confirmation` — la référence contre la flottaison
+──────────────────────────────────────────────────────────────────────────────
+bureau  référence MVB-20260811-ELEE — « Votre référence de commande » commence à 490 px, la référence est lue entièrement à 562 px
+        flottaison 800 px → RÉFÉRENCE VISIBLE SANS DÉFILER
+mobile  référence MVB-20260811-3AAS — « Votre référence de commande » commence à 740 px, la référence est lue entièrement à 806 px
+        flottaison 844 px → RÉFÉRENCE VISIBLE SANS DÉFILER
+
+4. L’impression du tunnel — images et cartouches sous `print`
+──────────────────────────────────────────────────────────────────────────────
+commande               écran : 1 image(s), 0 cartouche(s)  |  papier : 0 image(s), 0 cartouche(s), débordement 0 px
+paiement-simulation    écran : 1 image(s), 0 cartouche(s)  |  papier : 0 image(s), 0 cartouche(s), débordement 0 px
+commande-confirmation  écran : 1 image(s), 0 cartouche(s)  |  papier : 0 image(s), 0 cartouche(s), débordement 0 px
+
+Un cartouche resté seul sur le papier, sans son image, EST le parasite.

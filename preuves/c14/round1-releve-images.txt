@@ -1,0 +1,52 @@
+POIDS D'IMAGES DE LA FICHE PILOTE — AVANT ET APRÈS LA LARGEUR 480
+=================================================================
+
+Profil de mesure : celui de Lighthouse mobile et de diag-cls.mjs — 412 points de
+large, RAPPORT DE PIXELS 1,75. Mesure au `transferSize` réel, après défilement
+jusqu'au bas de la page pour déclencher le chargement paresseux de la vue
+d'ambiance. Outil : `node preuves/c14/releve-c14.mjs --suffixe <nom>`.
+
+CE QUE LA LIVRAISON C14 CROYAIT AVOIR CORRIGÉ. Elle avait ajouté `ambiance-320`
+en constatant qu'un téléphone téléchargeait 17,2 Ko pour une place de 240 points.
+Le diagnostic était juste, le remède ne changeait rien À LA MESURE : la place
+vaut 240 points CSS, la densité du profil vaut 1,75, le besoin réel est donc de
+420 points — et devant 320 et 640, le navigateur prend 640. Il a raison. Ce
+n'était pas le `sizes` qui mentait, ni le `srcset` qui manquait d'entrées :
+c'était l'ÉCHELLE qui était trop grossière, un facteur deux sans rien au milieu.
+
+480 est la marche qui manquait. Elle sert exactement 240 × 2 — la densité de la
+plupart des téléphones — et couvre le 1,75 du profil mesuré.
+
+
+AVANT (sommet 60e8bda, largeurs 320 et 640)
+---------------------------------------------------------------------------
+Images            : 30,9 Ko sur un plafond de 120 Ko (2 fichiers)
+   principal-640.avif — 13,3 Ko
+   ambiance-640.avif  — 17,2 Ko
+Total transféré   : 351,3 Ko
+
+
+APRÈS (largeurs 320, 480 et 640)
+---------------------------------------------------------------------------
+RELEVÉ C14 — round1
+------------------------------------------------------------------------
+Fiche pilote      : /boutique/huile-olive-premiere-pression
+Images            : 21.2 Ko sur un plafond de 120 Ko (2 fichier(s))
+   principal-480.avif — 9.7 Ko
+   ambiance-480.avif — 11.6 Ko
+Polices           : 104.6 Ko (3 fichier(s))
+   dae0c9f40ba3b9b7-s.p.woff2 — 45.9 Ko
+   2e126097c65da2fd-s.p.woff2 — 13.2 Ko
+   67480a5ef8cc4d5f-s.p.woff2 — 45.5 Ko
+Total transféré   : 342.1 Ko
+Mono, caractères  : 64 distincts sur 23 routes
+    ,-.0123456ABCDEFGHIKLMNOPQRSTUVXYZ_abcdefgimnopqrstuvz{}©ÀÈÉé—’
+------------------------------------------------------------------------
+
+ÉCART : −9,7 Ko d'images transférées (−31 %), et les DEUX vues changent de
+largeur — c'est-à-dire que le profil mesuré profite réellement de la marche
+ajoutée, ce que `ambiance-320` ne lui avait jamais donné.
+
+CE QUE 320 SERT ENCORE, dit précisément plutôt que largement : les densités
+inférieures ou égales à 1,33 (320 ÷ 240). C'est-à-dire les écrans non « retina »
+— une part qui décroît, mais qui n'a aucune raison de télécharger 480.

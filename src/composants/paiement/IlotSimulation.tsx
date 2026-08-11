@@ -52,7 +52,13 @@ export function IlotSimulation() {
   /* Même hauteur minimale que le contenu : la place réservée empêche le pied
      de page de remonter à l'hydratation (raisonnement chiffré en C4). */
   if (retour === null) {
-    return <div aria-hidden="true" className="mt-10 min-h-80 max-w-lisible pb-4" />;
+    return (
+      <div
+        aria-hidden="true"
+        data-place-reservee=""
+        className="mt-10 min-h-80 max-w-lisible pb-4"
+      />
+    );
   }
 
   return (
@@ -63,7 +69,7 @@ export function IlotSimulation() {
       >
         <h2
           id="titre-simulation-recapitulatif"
-          className="font-titre text-base font-semibold text-encre"
+          className="sous-titre text-encre"
         >
           Ce qui serait payé
         </h2>
@@ -71,13 +77,13 @@ export function IlotSimulation() {
         <dl className="mt-4 space-y-3 text-sm">
           <div className="flex items-baseline justify-between gap-4">
             <dt className="text-encre-douce">Référence de commande</dt>
-            <dd className="font-semibold text-encre tabular-nums">
+            <dd className="font-mono font-medium text-encre tabular-nums">
               {retour.reference === '' ? 'absente' : retour.reference}
             </dd>
           </div>
           <div className="flex items-baseline justify-between gap-4 border-t border-filet pt-3">
             <dt className="text-encre-douce">Montant</dt>
-            <dd className="text-xl font-semibold text-encre tabular-nums">
+            <dd className="font-mono text-xl font-medium text-encre tabular-nums">
               {retour.totalCentimes === null
                 ? 'inconnu'
                 : formaterEuros(retour.totalCentimes)}
@@ -89,7 +95,7 @@ export function IlotSimulation() {
       <div className="mt-8 flex flex-wrap gap-4">
         <Link
           href={`/commande/confirmation?reference=${encodeURIComponent(retour.reference)}`}
-          className="rounded-sm border border-olive bg-olive px-5 py-3 text-sm font-semibold text-creme no-underline hover:bg-olive-clair"
+          className="rounded-sm border border-olive bg-olive px-5 py-3 text-sm font-semibold text-creme no-underline hover:border-encre hover:bg-encre"
         >
           Payer
         </Link>

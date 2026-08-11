@@ -1,0 +1,9 @@
+
+ RUN  v4.1.10 <racine du depot>
+
+
+ Test Files  1 passed (1)
+      Tests  6 passed (6)
+   Start at  11:42:46
+   Duration  319ms (transform 45ms, setup 0ms, import 71ms, tests 40ms, environment 0ms)
+

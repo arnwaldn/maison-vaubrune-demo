@@ -1,0 +1,36 @@
+PREUVE ROUGE — cas 6 de la campagne du mouvement (C19)
+« le bloc balaie le heros a froid, sans jamais laisser le texte a demi lisible »
+
+CE QU'ON A RETIRE POUR LE FAIRE ROUGIR : le pas de la premiere image-cle de
+`signature-texte`. Une seule declaration --
+
+    animation-timing-function: steps(1, end);   ->   var(--ease-verre);
+
+-- c'est-a-dire exactement la correction que la tranche a apportee apres avoir
+vu, sur une capture, des lettres grises a cote du bloc. Sans le pas, l'opacite
+du texte est interpolee sur le premier segment et passe par toutes les valeurs
+intermediaires : le contraste du site n'est plus celui de son jeton pendant un
+quart de seconde, et aucun audit d'accessibilite au repos ne le verrait.
+
+VERDICT : 1 failed.
+
+  Error: expect(received).toEqual(expected)
+  ligne 0 : le texte est passe par 21 opacite(s) intermediaire(s)
+
+  - Expected  : []
+  + Received  : [
+  +   0.0159652,  0.0489058,  0.0956938,  0.153916,   0.221395,
+  +   0.296286,   0.377074,   0.462482,   0.551389,   0.642765,
+  +   0.735614,   0.828919,   0.87973,    0.921603,   0.94588,
+  +   0.96297,    0.972574,   0.980466,   0.986816,   0.991746,
+  +   0.995443,   0.997974,
+  + ]
+
+    at tests/e2e/mouvement.spec.ts:876:7
+
+APRES REMISE DU PAS : 1 passed.
+
+Le meme cas porte deux autres affirmations que ce retrait ne touche pas -- le
+bloc atteint sa pleine largeur puis revient a rien, et le texte n'apparait
+jamais avant que son bloc ne le couvre (comparaison IMAGE PAR IMAGE, pas entre
+deux instants releves separement).

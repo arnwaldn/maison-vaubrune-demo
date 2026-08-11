@@ -9,13 +9,13 @@ import { CATALOGUE } from '@/donnees/catalogue';
 import { marchand } from '@/donnees/marchand';
 import { URL_SITE } from '@/donnees/site';
 import { donneesOrganisation } from '@/lib/donnees-structurees';
-import { Fournisseurs } from '@/lib/fournisseurs';
+import { Fournisseurs, TransitionPage } from '@/lib/fournisseurs';
 import {
   projeterCatalogue,
   stocksDepuisCatalogue,
 } from '@/lib/panier/catalogue-panier';
 
-import { policeTexte, policeTitre } from './polices';
+import { policeMono, policeTexte, policeTitre, policeTitreItalique } from './polices';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -48,9 +48,16 @@ export const metadata: Metadata = {
   },
 };
 
+/**
+ * `themeColor` recopie la valeur de `--color-coquille` (#F2ECE1), le fond du
+ * site. C'est la seule couleur du projet écrite deux fois, et elle n'a pas le
+ * choix : les métadonnées de Next sont du TypeScript, elles ne lisent pas la
+ * feuille de style. Un écart entre les deux se voit — la barre du navigateur
+ * mobile ne serait plus de la couleur de la page qu'elle surmonte.
+ */
 export const viewport: Viewport = {
   colorScheme: 'light',
-  themeColor: '#faf6ef',
+  themeColor: '#F2ECE1',
 };
 
 /**
@@ -94,15 +101,29 @@ export default function MiseEnPageRacine({
   children,
 }: Readonly<{ children: ReactNode }>) {
   return (
-    <html lang="fr" className={`${policeTitre.variable} ${policeTexte.variable}`}>
+    <html
+      lang="fr"
+      className={`${policeTitre.variable} ${policeTitreItalique.variable} ${policeTexte.variable} ${policeMono.variable}`}
+    >
       <body className="flex min-h-dvh flex-col antialiased">
         <DonneesStructurees donnees={ORGANISATION} />
 
         <Fournisseurs stocks={STOCKS}>
           <LienSaut />
           <EnTete />
+          {/* `TransitionPage` VIENT DU MÊME MODULE que `Fournisseurs`, et ce
+              n'est pas une commodité d'écriture : deux modules `'use client'`
+              référencés depuis cette mise en page rouvriraient le second groupe
+              de morceaux que la décision D26 ferme depuis C6. Deux imports d'un
+              MÊME module client n'en ouvrent qu'un.
+
+              Il enveloppe le contenu de la page et RIEN D'AUTRE. Poser la clef
+              de route plus haut remonterait l'en-tête et le pied dans le nœud
+              rejoué : la sentinelle de C13 serait redécouverte à chaque
+              navigation, la pastille du panier repartirait de sa place réservée,
+              et la coquille clignoterait au lieu de rester la coquille. */}
           <main id="contenu" className="flex-1">
-            {children}
+            <TransitionPage>{children}</TransitionPage>
           </main>
           <PiedDePage />
         </Fournisseurs>

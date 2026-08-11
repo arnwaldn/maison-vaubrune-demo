@@ -1,0 +1,26 @@
+PREUVE ROUGE — LE MONUMENT DU HÉROS (tranche C18, retour client du 10/08)
+
+Le correctif neutralisé (`.monument-heros { font-size: var(--text-monument) }`,
+c'est-à-dire l'état exact du sommet d55c520), construction refaite, garde
+rejouée :
+
+  ✘  [bureau-1280] › vitrine.spec.ts:283 › le monument du héros ne sort ni de
+     sa colonne ni sur la carte, à aucune largeur
+
+     Error: débord du monument à 1440 px
+     expect(received).toBeLessThanOrEqual(expected)
+     Expected: <= 0
+     Received:    40
+
+Le 40 est celui que `geometrie-heros-avant.txt` relève indépendamment à la même
+largeur : la garde rougit pour la raison qu'elle annonce, et sur le nombre que
+la mesure avait trouvé.
+
+La garde tombe d'abord sur le DÉBORD (1 440 px) et non sur le recouvrement
+(1 600 px et au-delà) : c'est l'ordre voulu — elle attrape la cause avant le
+symptôme.
+
+Correctif rétabli, construction refaite, garde verte :
+
+  ✓  [bureau-1280] › vitrine.spec.ts:283 › le monument du héros ne sort ni de
+     sa colonne ni sur la carte, à aucune largeur (1.4s)

@@ -3,6 +3,35 @@ import { expect, test, type APIRequestContext, type Page } from '@playwright/tes
 import { ouvrir } from './aides';
 
 /**
+ * DEUX MINUTES PAR TEST DANS CE FICHIER, ET SEULEMENT DANS CELUI-CI (C11).
+ *
+ * Les trois tests ci-dessous ne ressemblent à aucun autre de la campagne : ils
+ * ne vérifient pas un écran, ils PARCOURENT LE SITE ENTIER — quarante et
+ * quelques adresses, chacune ouverte, hydratée et relue, plus autant de
+ * requêtes de contrôle. Leur durée ne dépend donc pas de la vitesse d'une
+ * interaction mais du NOMBRE DE PAGES du site, et elle grandit à chaque page
+ * ajoutée.
+ *
+ * Le défaut de trente secondes leur allait quand la campagne a été écrite. Il
+ * ne leur va plus : mesurés seuls sur ce poste, les trois tiennent en 15 à
+ * 28 s selon la charge — c'est-à-dire à quelques secondes du couperet. Joués
+ * en parallèle sur les deux profils, ce sont SIX explorateurs du site entier
+ * qui se disputent la même machine et le même serveur, et ils dépassent. Le
+ * constat a été fait en C11 sur le harnais d'AVANT C11 : ce n'est pas une
+ * régression, c'est une marge qui s'est refermée pendant que le site
+ * grossissait.
+ *
+ * Deux minutes, et pas une valeur ajustée au dernier relevé : ce délai n'est
+ * pas un budget de performance — la performance se mesure ailleurs, avec
+ * Lighthouse et des seuils publiés (D36). C'est un filet contre un VRAI blocage,
+ * et un filet doit être assez lâche pour ne jamais se déclencher à tort. Le
+ * poser ici plutôt que dans `playwright.config.ts` est délibéré : les 71 autres
+ * tests gardent leurs trente secondes, et un écran qui mettrait une minute à
+ * répondre doit continuer d'échouer.
+ */
+test.describe.configure({ timeout: 120_000 });
+
+/**
  * AUCUN LIEN MORT — le filet que `typedRoutes` ne fournit pas.
  *
  * ---------------------------------------------------------------------------

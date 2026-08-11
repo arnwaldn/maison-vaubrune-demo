@@ -1,0 +1,39 @@
+DÉCALAGE CUMULÉ SOUS LES DEUX RÉGIMES — tranche C17
+Bridage de C13 : 412 × 823 densité 1,75, réseau 1,6 Mb/s, processeur ÷ 4.
+Chaque page est chargée, laissée six secondes, puis PARCOURUE en entier.
+Plafond du projet : 0.002
+
+page       régime            au chargement    après parcours   sources
+────────────────────────────────────────────────────────────────────────────
+accueil    réduit                   0.0000           0.0000     0
+accueil    mouvement                0.0000           0.0000     0
+rayon      réduit                   0.0011           0.0011     1
+rayon      mouvement                0.0011           0.0011     1
+fiche      réduit                   0.0000           0.0000     0
+fiche      mouvement                0.0000           0.0000     0
+panier     réduit                   0.0001           0.0001     1
+panier     mouvement                0.0001           0.0001     1
+commande   réduit                   0.0000           0.0000     0
+commande   mouvement                0.0001           0.0001     1
+
+PIRE VALEUR : 0.0011 pour un plafond de 0.002.
+VERDICT : le socle de mouvement ne fabrique aucun décalage. Les révélations
+n'animent qu'opacity et transform, et la mesure le confirme sous les DEUX régimes.
+
+DÉTAIL DES DÉCALAGES RELEVÉS
+────────────────────────────────────────────────────────────────────────────
+rayon — réduit :
+   0.00106
+      <undefined> y 296 → 296 | 
+rayon — mouvement :
+   0.00106
+      <undefined> y 296 → 296 | 
+panier — réduit :
+   0.00006
+      <SPAN> y 120 → 120 | inline-flex h-6 w-9 shrink-0 items-center justify-center overflow-hidd
+panier — mouvement :
+   0.00006
+      <SPAN> y 120 → 120 | inline-flex h-6 w-9 shrink-0 items-center justify-center overflow-hidd
+commande — mouvement :
+   0.00006
+      <SPAN> y 120 → 120 | inline-flex h-6 w-9 shrink-0 items-center justify-center overflow-hidd

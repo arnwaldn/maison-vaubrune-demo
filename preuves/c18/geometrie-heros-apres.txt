@@ -1,0 +1,13 @@
+GÉOMÉTRIE DU HÉROS — monument contre carte image
+Retour client du 10/08 : le monument passe sous la carte en grande fenêtre.
+
+largeur  colonne   corps   mot le+long  ratio   débord   recouvre   pied   verdict
+──────────────────────────────────────────────────────────────────────────────────────
+1280         580   131.1 Vaubrune 560   4.275        0          0      0   ok
+1440         644   145.5 Vaubrune 622   4.275        0          0      0   ok
+1600         644   145.5 Vaubrune 622   4.275        0          0      0   ok
+1900         644   145.5 Vaubrune 622   4.275        0          0      0   ok
+2560         644   145.5 Vaubrune 622   4.275        0          0      0   ok
+
+VERDICT : le monument ne touche la carte à aucune des largeurs relevées.
+PIED DE PAGE : la signature du même jeton ne déborde nulle part (pleine largeur).

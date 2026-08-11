@@ -1,0 +1,13 @@
+AXE-CORE SOUS MOUVEMENT ACTIF — tranche C17
+Profil : bureau 1280 × 900, prefers-reduced-motion: no-preference.
+Deux relevés par page : au sommet (blocs encore masqués) et après
+défilement complet (tout révélé).
+
+accueil                au sommet           8 bloc(s) encore masqué(s) — 0 violation(s) serious/critical, 0 au total
+accueil                après défilement    0 bloc(s) encore masqué(s) — 0 violation(s) serious/critical, 0 au total
+rayon                  au sommet          12 bloc(s) encore masqué(s) — 0 violation(s) serious/critical, 0 au total
+rayon                  après défilement    0 bloc(s) encore masqué(s) — 0 violation(s) serious/critical, 0 au total
+fiche huile d’olive    au sommet           3 bloc(s) encore masqué(s) — 0 violation(s) serious/critical, 0 au total
+fiche huile d’olive    après défilement    0 bloc(s) encore masqué(s) — 0 violation(s) serious/critical, 0 au total
+
+VERDICT : 0 serious, 0 critical. Les révélations ne créent aucune violation.

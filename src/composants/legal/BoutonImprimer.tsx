@@ -41,7 +41,7 @@ export function BoutonImprimer() {
       onClick={() => {
         window.print();
       }}
-      className="inline-flex items-center rounded-sm border border-olive bg-olive px-4 py-2.5 text-sm font-semibold text-creme hover:bg-olive-clair print:hidden"
+      className="inline-flex items-center rounded-sm border border-olive bg-olive px-4 py-2.5 text-sm font-semibold text-creme hover:border-encre hover:bg-encre print:hidden"
     >
       Imprimer cette page
     </button>

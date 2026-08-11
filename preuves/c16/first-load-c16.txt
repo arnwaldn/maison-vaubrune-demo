@@ -1,0 +1,23 @@
+├ ○ /a-propos-de-cette-demonstration             185 B         106 kB
+├ ƒ /api/paiement/session                        135 B         103 kB
+├ ○ /commande                                  4.39 kB         119 kB
+├ ○ /commande/annulee                          2.29 kB         110 kB
+├ ○ /commande/confirmation                     4.64 kB         113 kB
+├ ○ /conditions-generales-de-vente               185 B         106 kB
+├ ○ /donnees-personnelles                        185 B         106 kB
+├ ○ /gestion                                   2.61 kB         112 kB
+├ ○ /gestion/catalogue                         3.59 kB         113 kB
+├ ○ /gestion/commandes                         2.04 kB         110 kB
+├ ● /gestion/commandes/[reference]             3.58 kB         112 kB
+├   ├ /gestion/commandes/MVB-20260718-7F2B
+├   ├ /gestion/commandes/MVB-20260722-4D48
+├   ├ /gestion/commandes/MVB-20260727-9A56
+├ ○ /gestion/modeles-de-courriels                135 B         103 kB
+├ ○ /gestion/prise-en-main                       185 B         106 kB
+├ ○ /livraison                                   185 B         106 kB
+├ ○ /mentions-legales                            185 B         106 kB
+├ ○ /paiement/simulation                       1.53 kB         107 kB
+├ ○ /panier                                    3.04 kB         114 kB
+├ ○ /retractation                                394 B         106 kB
+└ ○ /suivi                                     3.03 kB         111 kB
++ First Load JS shared by all                   103 kB

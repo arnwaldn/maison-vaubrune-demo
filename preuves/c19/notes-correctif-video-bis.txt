@@ -1,0 +1,31 @@
+
+> maison-vaubrune@0.1.0 mesurer-notes
+> node scripts/mesurer-notes.mjs --suffixe correctif-video-bis
+
+
+Mesure des notes publiées — 2026-08-11, profil mobile bridé
+------------------------------------------------------------------------
+  Navigateur : le Chromium déjà installé par Playwright sur le poste (chemin caviardé)
+  Production servie sur http://localhost:54171
+
+  Accueil (/)…
+    (Lighthouse a échoué en nettoyant le profil temporaire de Chrome —
+     incident connu sous Windows ; la mesure, elle, est complète.)
+    Rapidité 94  ·  Accessibilité 100  ·  Bonnes pratiques 100  ·  Référencement 100
+  Rayon (/boutique)…
+    (Lighthouse a échoué en nettoyant le profil temporaire de Chrome —
+     incident connu sous Windows ; la mesure, elle, est complète.)
+    Rapidité 93  ·  Accessibilité 100  ·  Bonnes pratiques 100  ·  Référencement 100
+  Fiche huile d’olive (/boutique/huile-olive-premiere-pression)…
+    (Lighthouse a échoué en nettoyant le profil temporaire de Chrome —
+     incident connu sous Windows ; la mesure, elle, est complète.)
+    Rapidité 94  ·  Accessibilité 100  ·  Bonnes pratiques 100  ·  Référencement 100
+  Panier (/panier)…
+    (Lighthouse a échoué en nettoyant le profil temporaire de Chrome —
+     incident connu sous Windows ; la mesure, elle, est complète.)
+    Rapidité 95  ·  Accessibilité 100  ·  Bonnes pratiques 100  ·  Référencement 100
+
+  Relevé écrit : mesures/lighthouse-2026-08-11-correctif-video-bis.json
+------------------------------------------------------------------------
+16 notes mesurées, toutes au-dessus de leur seuil.
+

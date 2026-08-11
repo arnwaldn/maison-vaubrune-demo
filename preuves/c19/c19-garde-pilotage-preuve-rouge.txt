@@ -1,0 +1,61 @@
+PREUVE ROUGE — sixieme controle de `verifier-donnees`, joue sur le depot reel
+AVANT tout correctif (tranche C19, 10/08/2026, base 824b9a9).
+
+LES EXTRAITS SONT MASQUES, et c'est la garde elle-meme qui l'a exige : ce
+fichier est versionne, donc suivi, donc relu par le controle qu'il documente.
+Un rapport qui CITE le motif qu'il interdit se signale lui-meme a la
+prochaine execution — le defaut classique de la garde qui mord son banc
+d'essai. Ce qui prouve quelque chose ici n'est pas la chaine trouvee (elle
+ne portait de toute facon que la tete du motif, sans nom d'utilisateur) mais
+le VERDICT, le compte, et la liste des fichiers et des lignes : ils se
+verifient un par un contre l'historique.
+
+20 occurrences, 7 fichiers suivis, code de sortie 1.
+
+========================================================================
+
+Garde d’honnêteté — aucune donnée inventée
+------------------------------------------------------------------------
+[ OK   ] Les pages gabarits portent encore leurs emplacements
+          src/app/mentions-legales/page.tsx : 22 emplacements
+          src/app/conditions-generales-de-vente/page.tsx : 11 emplacements
+          src/app/donnees-personnelles/page.tsx : 41 emplacements
+          src/app/retractation/page.tsx : 7 emplacements
+          src/app/a-propos-de-cette-demonstration/page.tsx : 0 emplacement(s), dispense assumée (page descriptive du site et non gabarit du marchand — aucun jeton dans son brouillon)
+[ OK   ] Le formulaire téléchargeable est resté un gabarit
+          public/formulaire-retractation.txt : 4 emplacements en clair
+[ OK   ] Le jeu d’essai porte ses marqueurs d’irréalité
+          src/donnees/commandes-amorce.ts : marqueurs présents, exemption accordée (jeu d’essai à adresses irréelles, dont les marqueurs sont vérifiés ci-dessus)
+[ OK   ] Aucun motif de donnée réelle dans src, contenu et public
+          135 fichiers lus dans src, contenu, public
+          231 binaire(s) déclaré(s) non lu(s) comme du texte — leur nom a été analysé, leur contenu relève de la garde des métadonnées
+          1 zone(s) de texte réglementaire neutralisée(s)
+[ OK   ] Texte et binaire restent deux catégories disjointes
+          12 extension(s) lue(s) comme du texte, 7 tenue(s) pour binaires
+[ ÉCHEC] Aucun fichier de pilotage privé n’est suivi par git
+          560 fichier(s) suivi(s) par git dans ce périmètre
+          274 suivi(s) relu(s) pour les empreintes de pilotage (51 du banc d’essai et 235 binaire(s) écartés)
+   -> preuves/c14/m9-preuve-rouge.txt:42 : chemin de poste Windows (profil utilisateur) — « <motif masque : chemin de poste> »
+   -> preuves/c15/c1-preuve-rouge.txt:16 : chemin de poste Windows (profil utilisateur) — « <motif masque : chemin de poste> »
+   -> preuves/c15/c1-preuve-rouge.txt:17 : chemin de poste Windows (profil utilisateur) — « <motif masque : chemin de poste> »
+   -> preuves/c15/c1-preuve-rouge.txt:109 : chemin de poste Windows (profil utilisateur) — « <motif masque : chemin de poste> »
+   -> preuves/c15/c1-preuve-rouge.txt:110 : chemin de poste Windows (profil utilisateur) — « <motif masque : chemin de poste> »
+   -> preuves/c15/controle-c15.txt:120 : chemin de poste Windows (profil utilisateur) — « <motif masque : chemin de poste> »
+   -> preuves/c15/controle-c15.txt:121 : chemin de poste Windows (profil utilisateur) — « <motif masque : chemin de poste> »
+   -> preuves/c15/controle-c15.txt:162 : chemin de poste Windows (profil utilisateur) — « <motif masque : chemin de poste> »
+   -> preuves/c15/controle-round1.txt:120 : chemin de poste Windows (profil utilisateur) — « <motif masque : chemin de poste> »
+   -> preuves/c15/controle-round1.txt:121 : chemin de poste Windows (profil utilisateur) — « <motif masque : chemin de poste> »
+   -> preuves/c15/controle-round1.txt:166 : chemin de poste Windows (profil utilisateur) — « <motif masque : chemin de poste> »
+   -> preuves/c15/m5-preuve-rouge.txt:2 : chemin de poste Windows (profil utilisateur) — « <motif masque : chemin de poste> »
+   -> preuves/c15/round1-preuve-rouge-vitrine.txt:42 : chemin de poste Windows (profil utilisateur) — « <motif masque : chemin de poste> »
+   -> preuves/c15/round1-preuve-rouge-vitrine.txt:59 : chemin de poste Windows (profil utilisateur) — « <motif masque : chemin de poste> »
+   -> preuves/c15/round1-preuve-rouge-vitrine.txt:77 : chemin de poste Windows (profil utilisateur) — « <motif masque : chemin de poste> »
+   -> preuves/c16/c16-preuve-rouge-tunnel.txt:25 : chemin de poste Windows (profil utilisateur) — « <motif masque : chemin de poste> »
+   -> preuves/c16/c16-preuve-rouge-tunnel.txt:47 : chemin de poste Windows (profil utilisateur) — « <motif masque : chemin de poste> »
+   -> preuves/c16/c16-preuve-rouge-tunnel.txt:65 : chemin de poste Windows (profil utilisateur) — « <motif masque : chemin de poste> »
+   -> preuves/c17/mesurer-notes-c17.txt:8 : chemin de poste Windows (profil utilisateur) — « <motif masque : chemin de poste> »
+   -> preuves/c17/mesurer-notes-c17.txt:8 : chemin de données d’application locales — « <motif masque : donnees locales> »
+------------------------------------------------------------------------
+6 contrôles, 1 en échec : Aucun fichier de pilotage privé n’est suivi par git
+
+code=1

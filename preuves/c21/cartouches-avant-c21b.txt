@@ -1,0 +1,64 @@
+date   : 2026-08-11 (Paris), tranche C21b
+commit : bba5ae8 SEUL — etat AVANT le retrait (arbre propre)
+
+LES CARTOUCHES DES HÉROS — RELEVÉ « AVANT » (retour client 22)
+base : http://localhost:60113
+
+1. LES HUIT PAGES À HÉROS — un cartouche, ou aucun
+──────────────────────────────────────────────────────────────────────────────
+bureau  accueil                cartouche : « Huile d’olive de première pression — matière » — 24 px
+        alt (109 car.) « Filet d’huile vert doré tombant dans un bain d’huile, en très gr… »
+bureau  boutique               cartouche : « Miel de châtaignier — matière » — 24 px
+        alt (108 car.) « Filet de miel ambré tombant en ruban lent dans un pot de verre, … »
+bureau  livraison              cartouche : « Colis kraft et cachet de cire — départ » — 24 px
+        alt (157 car.) « Colis de papier kraft ficelé de cordelette écrue, fermé d’un cac… »
+bureau  suivi                  cartouche : « Registre et tampon — le journal d’une commande » — 39 px
+        alt (184 car.) « Registre ouvert aux pages vierges, un tampon de bois et sa boîte… »
+bureau  panier                 cartouche : « Cagette garnie — ce qu’un panier devient » — 24 px
+        alt (188 car.) « Cagette de bois clair garnie de frisure de papier, une bouteille… »
+bureau  commande               cartouche : « Registre et crayon — ce qui s’engage » — 24 px
+        alt (196 car.) « Registre relié ouvert à deux pages entièrement vierges, un crayo… »
+bureau  paiement-simulation    cartouche : « Sceau et cire — ce qui scelle » — 24 px
+        alt (192 car.) « Enveloppe de papier kraft fermée d’un cachet de cire bordeaux sa… »
+bureau  commande-confirmation  cartouche : « Colis ficelé — ce qui part » — 24 px
+        alt (189 car.) « Colis de papier kraft ficelé d’une cordelette écrue nouée en bou… »
+
+mobile  accueil                cartouche : « Huile d’olive de première pression — matière » — 35 px
+        alt (109 car.) « Filet d’huile vert doré tombant dans un bain d’huile, en très gr… »
+mobile  boutique               cartouche : « Miel de châtaignier — matière » — 22 px
+        alt (108 car.) « Filet de miel ambré tombant en ruban lent dans un pot de verre, … »
+mobile  livraison              cartouche : « Colis kraft et cachet de cire — départ » — 22 px
+        alt (157 car.) « Colis de papier kraft ficelé de cordelette écrue, fermé d’un cac… »
+mobile  suivi                  cartouche : « Registre et tampon — le journal d’une commande » — 35 px
+        alt (184 car.) « Registre ouvert aux pages vierges, un tampon de bois et sa boîte… »
+mobile  panier                 cartouche : « Cagette garnie — ce qu’un panier devient » — 22 px
+        alt (188 car.) « Cagette de bois clair garnie de frisure de papier, une bouteille… »
+mobile  commande               cartouche : « Registre et crayon — ce qui s’engage » — 22 px
+        alt (196 car.) « Registre relié ouvert à deux pages entièrement vierges, un crayo… »
+mobile  paiement-simulation    cartouche : « Sceau et cire — ce qui scelle » — 22 px
+        alt (192 car.) « Enveloppe de papier kraft fermée d’un cachet de cire bordeaux sa… »
+mobile  commande-confirmation  cartouche : « Colis ficelé — ce qui part » — 22 px
+        alt (189 car.) « Colis de papier kraft ficelé d’une cordelette écrue nouée en bou… »
+
+TOTAL des cartouches de héros rendus : 16 (16 relevés = 8 × 2)
+
+2. LA FICHE TÉMOIN — les cartouches de registre des figures produits
+──────────────────────────────────────────────────────────────────────────────
+bureau  2 figure(s) de galerie
+        cartouche : « n° 01 / 15·MV-HV-OLI-25CL »
+        cartouche : « 520 g·garde 18 mois »
+mobile  2 figure(s) de galerie
+        cartouche : « n° 01 / 15·MV-HV-OLI-25CL »
+        cartouche : « 520 g·garde 18 mois »
+
+3. SOUS `print` — ce que la règle `:has()` retire encore
+──────────────────────────────────────────────────────────────────────────────
+commande         AVEC la règle  : 0 figure(s), 0 image(s), 0 cartouche(s), 0 vidéo(s), 0 px de haut
+                SANS la règle  (1 retirée) : 1 figure(s), 0 image(s), 1 cartouche(s), 0 vidéo(s), 32 px de haut
+livraison        AVEC la règle  : 0 figure(s), 0 image(s), 0 cartouche(s), 0 vidéo(s), 0 px de haut
+                SANS la règle  (1 retirée) : 1 figure(s), 0 image(s), 1 cartouche(s), 0 vidéo(s), 32 px de haut
+fiche produit    AVEC la règle  : 1 figure(s), 0 image(s), 1 cartouche(s), 0 vidéo(s), 248 px de haut
+                SANS la règle  (1 retirée) : 1 figure(s), 0 image(s), 1 cartouche(s), 0 vidéo(s), 248 px de haut
+
+Ce que la troisième section dit se lit dans l’ÉCART entre les deux passes,
+jamais dans la relecture de la règle.

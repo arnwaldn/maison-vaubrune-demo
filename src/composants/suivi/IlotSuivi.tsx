@@ -102,7 +102,7 @@ export function IlotSuivi({
   return (
     <div className="mt-10 min-h-96 pb-4">
       <form
-        className="max-w-lisible"
+        className="panneau max-w-lisible"
         onSubmit={(evenement) => {
           evenement.preventDefault();
           chercher(saisie);
@@ -110,7 +110,7 @@ export function IlotSuivi({
       >
         <label
           htmlFor="champ-reference"
-          className="block text-xs font-semibold tracking-[0.12em] text-encre-douce uppercase"
+          className="block etiquette text-encre-douce"
         >
           Référence de commande
         </label>
@@ -128,11 +128,11 @@ export function IlotSuivi({
               setSaisie(evenement.target.value);
               chercher(evenement.target.value);
             }}
-            className="min-w-56 flex-1 rounded-sm border border-filet bg-creme px-3 py-2 text-sm text-encre tabular-nums"
+            className="min-w-56 flex-1 rounded-sm border border-filet bg-creme px-3 py-2 font-mono text-sm text-encre tabular-nums"
           />
           <button
             type="submit"
-            className="rounded-sm border border-olive bg-olive px-4 py-2 text-sm font-semibold text-creme hover:bg-olive-clair"
+            className="rounded-sm border border-olive bg-olive px-4 py-2 text-sm font-semibold text-creme hover:border-encre hover:bg-encre"
           >
             Suivre
           </button>
@@ -149,10 +149,10 @@ export function IlotSuivi({
         </p>
       </form>
 
-      <section aria-labelledby="titre-exemples" className="mt-8 max-w-lisible">
+      <section aria-labelledby="titre-exemples" className="panneau mt-8 max-w-lisible">
         <h2
           id="titre-exemples"
-          className="text-xs font-semibold tracking-[0.12em] text-encre-douce uppercase"
+          className="etiquette text-encre-douce"
         >
           Références à essayer
         </h2>
@@ -169,7 +169,7 @@ export function IlotSuivi({
                   setSaisie(exemple);
                   chercher(exemple);
                 }}
-                className="rounded-sm border border-filet bg-papier px-2.5 py-1 text-xs font-semibold text-encre tabular-nums hover:border-olive"
+                className="rounded-sm border border-filet bg-papier px-2.5 py-1 text-xs font-mono font-medium text-encre tabular-nums hover:border-olive"
               >
                 {exemple}
               </button>
@@ -198,13 +198,13 @@ function Resultat({ commande }: { readonly commande: Commande }) {
   const annulee = commande.etat === 'annulee';
 
   return (
-    <section aria-labelledby="titre-resultat" className="mt-12">
-      <h2 id="titre-resultat" className="text-titre font-semibold text-encre">
+    <section aria-labelledby="titre-resultat" className="panneau mt-12">
+      <h2 id="titre-resultat" className="text-titre text-encre">
         Commande{' '}
-        <span className="tabular-nums">{commande.reference}</span>
+        <span className="font-mono tabular-nums">{commande.reference}</span>
       </h2>
 
-      <p className="mt-3 max-w-lisible text-sm leading-relaxed text-encre-douce tabular-nums">
+      <p className="mt-3 max-w-lisible text-sm leading-relaxed text-encre-douce">
         {formaterEuros(commande.totaux.total)} toutes taxes comprises, frais de port
         inclus — destination&nbsp;: {LIBELLE_ZONE[commande.zone]}.
       </p>
@@ -285,12 +285,12 @@ function Resultat({ commande }: { readonly commande: Commande }) {
 function Introuvable({ reference }: { readonly reference: string }) {
   return (
     <section aria-labelledby="titre-introuvable" className="mt-12 max-w-lisible">
-      <h2 id="titre-introuvable" className="text-titre font-semibold text-encre">
+      <h2 id="titre-introuvable" className="text-titre text-encre">
         Aucune commande à cette référence
       </h2>
 
       <p className="mt-4 text-sm leading-relaxed text-encre-douce">
-        La référence <span className="font-semibold tabular-nums">{reference}</span> est
+        La référence <span className="font-mono font-medium tabular-nums">{reference}</span> est
         bien formée, mais aucune commande ne la porte dans ce navigateur.
       </p>
 

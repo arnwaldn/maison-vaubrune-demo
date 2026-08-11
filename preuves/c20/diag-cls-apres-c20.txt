@@ -1,0 +1,79 @@
+DÉCALAGE CUMULÉ SOUS LES DEUX RÉGIMES — tranche C17
+Bridage de C13 : 412 × 823 densité 1,75, réseau 1,6 Mb/s, processeur ÷ 4.
+Chaque page est chargée, laissée six secondes, puis PARCOURUE en entier.
+Plafond du projet : 0.002
+
+page       régime            au chargement    après parcours   sources
+────────────────────────────────────────────────────────────────────────────
+accueil    réduit                   0.0001           0.0001     1
+accueil    mouvement                0.0001           0.0001     1
+rayon      réduit                   0.0018           0.0018     2
+rayon      mouvement                0.0018           0.0018     2
+fiche      réduit                   0.0004           0.0004     1
+fiche      mouvement                0.0001           0.0001     1
+livraison  réduit                   0.0001           0.0001     1
+livraison  mouvement                0.0001           0.0001     1
+suivi      réduit                   0.0007           0.0007     2
+suivi      mouvement                0.0006           0.0006     2
+panier     réduit                   0.0000           0.0000     0
+panier     mouvement                0.0000           0.0000     0
+commande   réduit                   0.0020           0.0020     2
+commande   mouvement                0.0001           0.0001     1
+
+PIRE VALEUR : 0.0020 pour un plafond de 0.002.
+VERDICT : ÉCHEC — un décalage dépasse le plafond.
+
+
+DÉTAIL DES DÉCALAGES RELEVÉS
+────────────────────────────────────────────────────────────────────────────
+accueil — réduit :
+   0.00006
+      <SPAN> y 120 → 120 | inline-flex h-6 w-9 shrink-0 items-center justify-center overflow-hidd
+accueil — mouvement :
+   0.00006
+      <SPAN> y 120 → 120 | inline-flex h-6 w-9 shrink-0 items-center justify-center overflow-hidd
+rayon — réduit :
+   0.00077
+      <DIV> y 582 → 582 | flex rounded-sm border border-filet-fort
+      <SPAN> y 120 → 120 | inline-flex h-6 w-9 shrink-0 items-center justify-center overflow-hidd
+   0.00106
+      <undefined> y 296 → 296 | 
+rayon — mouvement :
+   0.00077
+      <DIV> y 582 → 582 | flex rounded-sm border border-filet-fort
+      <SPAN> y 120 → 120 | inline-flex h-6 w-9 shrink-0 items-center justify-center overflow-hidd
+   0.00106
+      <undefined> y 296 → 296 | 
+fiche — réduit :
+   0.00042
+      <SPAN> y 244 → 244 | text-encre tabular-nums
+      <SPAN> y 120 → 120 | inline-flex h-6 w-9 shrink-0 items-center justify-center overflow-hidd
+      <undefined> y 243 → 243 | 
+fiche — mouvement :
+   0.00006
+      <SPAN> y 120 → 120 | inline-flex h-6 w-9 shrink-0 items-center justify-center overflow-hidd
+livraison — réduit :
+   0.00008
+      <undefined> y 523 → 523 | 
+livraison — mouvement :
+   0.00007
+      <undefined> y 524 → 524 | 
+suivi — réduit :
+   0.00006
+      <SPAN> y 120 → 120 | inline-flex h-6 w-9 shrink-0 items-center justify-center overflow-hidd
+   0.00064
+      <undefined> y 490 → 490 | 
+suivi — mouvement :
+   0.00006
+      <SPAN> y 120 → 120 | inline-flex h-6 w-9 shrink-0 items-center justify-center overflow-hidd
+   0.00058
+      <undefined> y 490 → 490 | 
+commande — réduit :
+   0.00006
+      <SPAN> y 120 → 120 | inline-flex h-6 w-9 shrink-0 items-center justify-center overflow-hidd
+   0.00198
+      <P> y 597 → 613 | text-chapeau text-encre-douce
+      <A> y 677 → 693 | mt-6 inline-block rounded-sm border border-olive bg-olive px-4 py-2.5 
+commande — mouvement :
+   0.00006
+      <SPAN> y 120 → 120 | inline-flex h-6 w-9 shrink-0 items-center justify-center overflow-hidd

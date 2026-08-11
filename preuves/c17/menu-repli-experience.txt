@@ -1,0 +1,23 @@
+MENU REPLIABLE SOUS `md` — expérience sur le site livré (tranche C17)
+Profil : mobile 390 × 844, mouvement réduit — celui de la campagne gelée.
+
+0. Hauteur de l'en-tête tel qu'il est livré : 160.9 px
+   soit 19.1 % d'une fenêtre de 844 px.
+
+1. Hauteur une fois la navigation repliée : 122.2 px
+   Le repli rend 38.6 px, soit 24 % de l'en-tête.
+
+2. Les gestes que la campagne gelée exécute sur ce profil :
+   parcours.spec.ts:115  lienNavigation('Boutique').click()
+   → ÉCHEC — locator.click: Timeout 3000ms exceeded.
+   aides.ts:235          pastillePanier() visible ?
+   → ÉCHEC — la pastille du panier n’a plus de boîte : elle vit dans la même liste que les trois liens.
+
+3. CONTRE-ÉPREUVE, le même lien une fois le repli OUVERT :
+   → CLIQUÉ
+   La cause est donc bien le repli, et non le déplacement du nœud dans le DOM.
+
+CONCLUSION — un repliable FERMÉ PAR DÉFAUT sous `md` retire leur boîte aux
+trois liens ET à la pastille du panier. Playwright exige une boîte non vide
+pour agir : la campagne gelée tombe, et la seule façon de la rendre verte
+serait de la modifier. Le critère de sortie n° 1 de la tranche l’interdit.

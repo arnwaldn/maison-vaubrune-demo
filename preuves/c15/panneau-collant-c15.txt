@@ -1,0 +1,11 @@
+
+Le panneau d’achat colle — fiche de bureau, 1440 × 900
+----------------------------------------------------------------------------
+  défilement    0 px : panneau visible oui, bouton d’ajout entièrement visible NON (haut du panneau à y=500)
+  défilement  600 px : panneau visible oui, bouton d’ajout entièrement visible oui (haut du panneau à y=112)
+  défilement 1200 px : panneau visible oui, bouton d’ajout entièrement visible oui (haut du panneau à y=112)
+  défilement 1800 px : panneau visible oui, bouton d’ajout entièrement visible oui (haut du panneau à y=-178)
+  rayon défilé : en-tête 0–92, barre des familles 96–222
+----------------------------------------------------------------------------
+Conforme.
+

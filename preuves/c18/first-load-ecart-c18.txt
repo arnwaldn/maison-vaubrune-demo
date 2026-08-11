@@ -1,0 +1,30 @@
+FIRST LOAD JS, À L'OCTET — somme des morceaux d'entrée par route
+Source : .next/app-build-manifest.json (22 routes)
+
+route                                   gzip Ko    écart Ko   verdict
+────────────────────────────────────────────────────────────────────────────
+/                                       118.55      +0.307   dans le budget
+/_not-found                             118.50      +0.307   dans le budget
+/a-propos-de-cette-demonstration        118.55      +0.307   dans le budget
+/boutique                               119.96      +0.307   dans le budget
+/boutique/[produit]                     123.05      +0.307   dans le budget
+/commande                               129.33      +0.307   dans le budget
+/commande/annulee                       122.63      +0.307   dans le budget
+/commande/confirmation                  124.93      +0.307   dans le budget
+/conditions-generales-de-vente          118.55      +0.307   dans le budget
+/donnees-personnelles                   118.55      +0.307   dans le budget
+/gestion                                123.13      +0.307   dans le budget
+/gestion/catalogue                      124.08      +0.307   dans le budget
+/gestion/commandes                      122.57      +0.307   dans le budget
+/gestion/commandes/[reference]          124.07      +0.307   dans le budget
+/gestion/modeles-de-courriels           118.69      +0.307   dans le budget
+/gestion/prise-en-main                  118.73      +0.307   dans le budget
+/livraison                              118.55      +0.307   dans le budget
+/mentions-legales                       118.55      +0.307   dans le budget
+/paiement/simulation                    119.87      +0.307   dans le budget
+/panier                                 125.99      +0.307   dans le budget
+/retractation                           118.76      +0.307   dans le budget
+/suivi                                  123.36      +0.307   dans le budget
+
+PIRE ÉCART : / — +0.307 Ko gzip (budget C17 : +2,50 Ko, soit 2560 octets)
+VERDICT : budget TENU.

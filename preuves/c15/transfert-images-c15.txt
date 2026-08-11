@@ -1,0 +1,30 @@
+
+Octets d’image transférés — profil mobile bridé, plafonds D36
+------------------------------------------------------------------------------
+/
+          au chargement :   11.4 Ko (2 image(s))
+          après défilement :   11.4 Ko (2 image(s))
+            /editorial/accueil/hero-1024.avif                            10.9 Ko
+            /icon.svg                                                     0.4 Ko
+/boutique
+          au chargement :   11.3 Ko (3 image(s))
+          après défilement :  129.1 Ko (16 image(s)) — plafond 180 Ko
+            /produits/terrine-campagne-poivre-noir/principal-320.avif    12.6 Ko
+            /produits/fromage-fermier-brebis/principal-320.avif          12.0 Ko
+            /produits/lentilles-blondes-plateau/principal-320.avif       11.6 Ko
+            /produits/rillettes-canard-echalotes/principal-320.avif      11.3 Ko
+/boutique/huile-olive-premiere-pression
+          au chargement :   30.6 Ko (3 image(s))
+          après défilement :   30.6 Ko (3 image(s)) — plafond 120 Ko
+            /produits/huile-olive-premiere-pression/ambiance-640.avif    16.8 Ko
+            /produits/huile-olive-premiere-pression/principal-640.avif   13.4 Ko
+            /icon.svg                                                     0.4 Ko
+/boutique/coffret-table-du-dimanche
+          au chargement :   55.1 Ko (3 image(s))
+          après défilement :   55.1 Ko (3 image(s))
+            /produits/coffret-table-du-dimanche/ambiance-640.avif        42.1 Ko
+            /produits/coffret-table-du-dimanche/principal-640.avif       12.6 Ko
+            /icon.svg                                                     0.4 Ko
+------------------------------------------------------------------------------
+Tous les plafonds sont tenus.
+

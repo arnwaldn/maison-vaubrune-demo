@@ -1,0 +1,22 @@
+
+Couture des images de partage — écart maximal de part et d’autre de la jonction
+--------------------------------------------------------------------------------
+fromage-fermier-brebis           panneau à x=428  dehors 234,226,215  dedans 241,239,235  écart  19.8
+coffret-table-du-dimanche        panneau à x=234  dehors 233,225,212  dedans 242,234,224  écart  11.5
+coffret-composez-le-votre        panneau à x=234  dehors 234,224,212  dedans 242,234,223  écart  10.9
+huile-noix-moulin                panneau à x=428  dehors 236,221,202  dedans 240,227,209  écart   7.2
+vinaigre-cidre-vieilli-fut       panneau à x=428  dehors 223,214,197  dedans 229,220,203  écart   6.5
+huile-olive-premiere-pression    panneau à x=428  dehors 234,221,202  dedans 239,226,208  écart   5.8
+confit-oignons-vin-doux          panneau à x=428  dehors 227,218,203  dedans 230,221,209  écart   5.6
+beurre-baratte-demi-sel          panneau à x=428  dehors 236,228,217  dedans 241,233,222  écart   5.0
+rillettes-canard-echalotes       panneau à x=428  dehors 227,220,204  dedans 230,222,209  écart   4.9
+terrine-campagne-poivre-noir     panneau à x=428  dehors 227,220,204  dedans 230,222,209  écart   4.6
+lentilles-blondes-plateau        panneau à x=428  dehors 236,227,212  dedans 239,231,216  écart   4.4
+infusion-du-soir-sept-plantes    panneau à x=428  dehors 235,227,214  dedans 239,231,218  écart   4.0
+miel-bruyere-blanche             panneau à x=428  dehors 234,225,208  dedans 237,228,211  écart   3.0
+confiture-abricots-plein-vent    panneau à x=428  dehors 233,224,207  dedans 235,227,209  écart   2.5
+miel-chataignier                 panneau à x=428  dehors 235,226,209  dedans 237,228,211  écart   2.3
+accueil                          AUCUNE JONCTION — recadrée en plein cadre (C16), aucun fond n’est posé
+--------------------------------------------------------------------------------
+15 image(s) composée(s), écart maximal 19.8 point(s) sur 255 ; 1 recadrée(s) en plein cadre, sans jonction.
+

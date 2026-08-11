@@ -1,0 +1,24 @@
+IMPRESSION — la coquille sort, le contenu reste
+date   : 2026-08-11 03:23
+commit : 869ebda
+======================================================================
+
+
+Impression — la coquille sort, le contenu reste (D35 / feuille de C12)
+----------------------------------------------------------------------------
+  FICHE PILOTE
+    écran      : 2 photo(s), 0 silhouette(s), en-tête 1, pied 1, titre « Huile d’olive de première pression »
+    impression : 0 photo(s), 1 silhouette(s), en-tête 0, pied 0, sentinelle 0
+    bloc d’achat : écran 1 (3 organes), impression 0 (0 organes) ; tableau des formats à l’impression 1
+    impression : titre « Huile d’olive de première pression » VISIBLE, prix « à partir de 12,90 € » VISIBLE
+    mentions de rétractation dans l’article : écran 0, impression 0 (attendu 0 / 0)
+  RÉTRACTATION
+    impression : en-tête 0, pied 0, sentinelle 0, titre 1, emplacements <mark> 7
+    cadres à défilement : 1 — débordement écran 0 pt, impression 0 pt
+  CGV
+    impression : en-tête 0, pied 0, sentinelle 0, titre 1, emplacements <mark> 11
+    cadres à défilement : 0 — débordement écran 0 pt, impression 0 pt
+----------------------------------------------------------------------------
+  PDF : impression-fiche-huile-olive.pdf, impression-retractation.pdf, impression-cgv.pdf
+Conforme.
+

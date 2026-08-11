@@ -112,6 +112,15 @@ export default defineConfig({
         'src/lib/commandes/depot-local.ts',
         'src/lib/commandes/horodatage.ts',
         'src/lib/paiement/validation.ts',
+        /* AJOUTÉ EN C15 (dix-septième fichier). `vitrine.ts` calcule ce que la
+           vitrine AFFICHE en registre : un rang d'inventaire, une ligne de
+           garde, une couleur de famille. Il entre au périmètre pour la même
+           raison que `donnees-structurees.ts` en C8 — il produit des NOMBRES
+           destinés à l'œil du visiteur, et la garde d'honnêteté (décision D30)
+           veut qu'aucun ne soit inventé. Un rang faux ou une DDM lue sur le
+           mauvais bras de l'union discriminée ne se verrait nulle part
+           ailleurs. */
+        'src/lib/vitrine.ts',
       ],
       /* `skipFull` masquerait les fichiers à 100 % — c'est-à-dire, ici, les
          deux seuls qu'on regarde. Le rapport doit AFFICHER le plein, pas le

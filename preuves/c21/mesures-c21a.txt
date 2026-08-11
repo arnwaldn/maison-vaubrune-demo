@@ -1,0 +1,186 @@
+TRANCHE C21a — LES TROIS PAGES DU TUNNEL GAGNENT LEUR HÉROS ILLUSTRÉ
+Retour client n° 21. Relevé de synthèse.
+
+date    : 2026-08-11, 12 h 30 → 13 h 30 (Paris)
+base    : 7a5068e
+sommet  : f47281a (5 commits)
+branche : refonte-awwwards — `main` intouché
+
+Chaque nombre de ce fichier vient d'un relevé versionné à côté, et chaque
+relevé porte le commit qu'il a mesuré. Les couples avant/après ont été pris
+DANS LA MÊME SESSION, à quelques minutes d'écart, sur deux constructions du
+même arbre : `src/` ramené au commit de base, mesuré, puis rendu à `HEAD`.
+C'est la leçon de C20 — deux mesures prises à une heure d'écart ne se
+comparent pas, et le premier tirage « avant » de 12 h 37 est conservé
+(`lcp-avant-c21.txt`, `diag-cls-avant-c21.txt`) uniquement pour montrer
+l'écart qu'un décalage d'une heure produit.
+
+
+═══════════════════════════════════════════════════════════════════════════
+ 1. LE PLUS GRAND AFFICHAGE — IL DEVIENT L'IMAGE, ET IL AVANCE
+═══════════════════════════════════════════════════════════════════════════
+`preuves/c19/lcp-attribution.mjs --pages …`, bridage 1,6 Mb/s · 150 ms ·
+processeur ÷ 4. Relevés : `lcp-avant-c21-bis.txt` et `lcp-apres-c21.txt`.
+
+page                     avant                        après
+──────────────────────── ──────────────────────────── ────────────────────────
+/commande                1 736 ms  <span> 38 306 px²  1 068 ms  <img> 69 738 px²
+/paiement/simulation       968 ms  <p>    54 720 px²  1 092 ms  <img> 69 970 px²
+/commande/confirmation   2 112 ms  <p>    65 844 px²  1 020 ms  <img> 69 738 px²
+
+premier affichage        1 136 / 968 / 956 ms         1 040 / 1 064 / 996 ms
+
+L'IMAGE DEVIENT LE PLUS GRAND AFFICHAGE SUR LES TROIS PAGES, et sur deux des
+trois elle ARRIVE PLUS TÔT que le texte qu'elle remplace : −668 ms sur
+`/commande`, −1 092 ms sur `/commande/confirmation`. Ce n'est pas un paradoxe.
+Ce qui était mesuré avant était un bloc de PROSE, donc un élément qui attend
+la police d'affichage ; l'image, elle, est un fichier de 6 à 8 Ko demandé en
+priorité haute dès le premier balayage du HTML. `/paiement/simulation` paie
++124 ms, et c'est la seule des trois dont l'ancien plus grand affichage était
+déjà rendu au premier affichage (968 = 968) : il n'y avait rien à gagner.
+
+CONSÉQUENCE SUR D37 (amendement C19-ter) : l'image porte désormais la mesure,
+donc la règle AUTORISERAIT l'entrée du titre sur ces trois pages. Elle n'est
+PAS posée — doctrine C16 et interdit n° 19 de D37, « un document juridique et
+un formulaire de paiement se lisent ; ils ne se mettent pas en scène ». C'est
+un écart DÉLIBÉRÉ entre ce que la mesure permet et ce que la doctrine décide,
+et un cas de campagne le tient dans les deux sens.
+
+
+═══════════════════════════════════════════════════════════════════════════
+ 2. LE DÉCALAGE CUMULÉ — LE PIRE DÉFAUT DU TUNNEL SORT DU CHAMP
+═══════════════════════════════════════════════════════════════════════════
+`preuves/c17/diag-cls-deux-regimes.mjs --pages …`, bridage de C13,
+412 × 823 densité 1,75. Relevés : `diag-cls-avant-c21-bis.txt` et
+`diag-cls-apres-c21.txt`. Plafond du projet : 0,002.
+
+page                      régime      avant     après
+───────────────────────── ─────────── ───────── ─────────
+/commande                 réduit      0,0020    0,0001
+/commande                 mouvement   0,0001    0,0001
+/paiement/simulation      réduit      0,0012    0,0012
+/paiement/simulation      mouvement   0,0012    0,0012
+/commande/confirmation    réduit      0,0000    0,0001
+/commande/confirmation    mouvement   0,0001    0,0001
+
+pire valeur                           0,0020    0,0012
+code de sortie de l'outil                  1         0
+
+LE 0,0020 DE `/commande` SOUS MOUVEMENT RÉDUIT A DISPARU, et il faut dire
+exactement ce qui s'est passé, parce que « corrigé » serait faux. Le décalage
+hérité de C19 était celui-ci :
+
+   0,00198  <P  class="text-chapeau text-encre-douce">  y 597 → 613
+            <A  class="mt-6 … bg-olive …">              y 677 → 693
+
+soit les « deux lignes qui descendent de seize pixels » du panneau « il n'y a
+rien à commander », jamais expliquées. Elles descendent TOUJOURS de seize
+pixels. Ce qui a changé, c'est qu'elles le font désormais SOUS LA LIGNE DE
+FLOTTAISON : le héros ajoute environ 230 points au-dessus d'elles, et le
+décalage cumulé pondère par la fraction de fenêtre RÉELLEMENT touchée. La
+métrique mesure ce que le visiteur voit bouger ; il ne voit plus rien bouger.
+Le défaut n'est donc pas réparé — il est hors du champ, et la cause reste
+ouverte pour qui voudra la chercher. Je n'y ai pas travaillé : ce n'était pas
+mon périmètre.
+
+Le seul reste après C21a est `/paiement/simulation` à 0,0012 sous les deux
+régimes, INCHANGÉ au dix-millième — pastille du panier (0,00006) plus un
+décalage anonyme de 0,00111 à y 408 qui existait déjà, quarante pour cent
+sous le plafond.
+
+PIÈGE DE MESURE PAYÉ, ET IL VAUT D'ÊTRE ÉCRIT. Le premier tirage « avant » de
+12 h 37 donnait `/paiement/simulation` à 0,0000 sous mouvement ; le second, à
+13 h 15 sur le MÊME arbre, donne 0,0012. Sans ce second tirage, C21a aurait
+publié une régression de 0 à 0,0012 qui n'existe pas.
+
+
+═══════════════════════════════════════════════════════════════════════════
+ 3. LE PREMIER CHARGEMENT — LE JAVASCRIPT NE BOUGE PAS D'UN OCTET
+═══════════════════════════════════════════════════════════════════════════
+Tableau de `next build` (identique avant et après) :
+
+   socle partagé                103 kB
+   /commande                    119 kB   sur un plafond de 125 (D36)
+   /commande/confirmation       113 kB
+   /paiement/simulation         107 kB
+
+`preuves/c17/first-load-precis.mjs`, à l'octet, sur les 22 routes
+(`first-load-avant.txt` / `first-load-apres.txt`, écart calculé par
+`--contre`) : **+0,037 Ko gzip, exactement le même sur les 22 routes.**
+
+CE N'EST PAS DU JAVASCRIPT, et c'est démontrable de deux manières. (1) Les
+empreintes de contenu des morceaux d'entrée sont IDENTIQUES entre les deux
+constructions — `webpack-9fcc354202f7a667`, `4bd1b696-c023c6e3521b1417`,
+`255-3d881dfa8c72bc56`, `main-app-4a027cee4134c017`, `app/layout-2a348f6df75f2ce3`.
+(2) L'entrée `/layout` du manifeste de construction porte AUSSI la feuille de
+style, et celle-ci passe de 49,49 à 49,70 Ko brut, 10,13 à 10,16 Ko gzip —
++0,03 Ko, soit le rang de la correction d'impression. L'écart uniforme de
++0,037 est donc la FEUILLE, pas le paquet.
+
+Autrement dit : les images coûtent zéro octet de JavaScript, comme annoncé, et
+le seul octet ajouté au premier chargement vient d'une règle CSS de six lignes
+qui répare un défaut d'impression antérieur à cette tranche.
+
+
+═══════════════════════════════════════════════════════════════════════════
+ 4. LES CONTRAINTES PROPRES AU TUNNEL — MESURÉES UNE PAR UNE
+═══════════════════════════════════════════════════════════════════════════
+`preuves/c21/vu-tunnel.mjs` (relevé `vu-tunnel.txt`, captures à côté).
+
+D22 — L'AVERTISSEMENT RESTE PREMIER ET SE VOIT.
+   L'image suit l'avertissement dans l'ordre du DOCUMENT : OUI aux deux
+   largeurs. « Aucun prestataire n'est appelé, aucune carte n'est demandée »
+   est lu entièrement à 529 px sur un bureau (fenêtre 800) et à 568 px sur un
+   téléphone (fenêtre 844) : VISIBLE SANS DÉFILER dans les deux cas.
+   Organes de saisie sur la page : 0, comme hier.
+
+D21 — `robots: noindex` et absence du plan du site : INCHANGÉS. La page
+   n'entre toujours pas dans les notes publiées.
+
+LA RÉFÉRENCE DE COMMANDE RESTE AU-DESSUS DE LA FLOTTAISON.
+   Premier jet (remplissage des deux autres pages) : lue entièrement à 897 px
+   pour une fenêtre de 844 — il fallait défiler de 53 px.
+   Après quatre retraits mesurés : 836 px sur un téléphone de 390 × 844,
+   588 px sur un bureau de 1280 × 800. Huit points de marge, et une assertion
+   de `parcours.spec.ts` les garde désormais aux deux profils.
+
+L'IMPRESSION — UN DÉFAUT ANTÉRIEUR TROUVÉ AU PASSAGE.
+   Avant : sous `print`, 0 image et 1 CARTOUCHE sur chacune des trois pages —
+   une étiquette orpheline au-dessus du récapitulatif d'une commande
+   imprimée. Le défaut date de C19-ter et vivait déjà sur l'accueil,
+   `/boutique`, `/livraison`, `/suivi` et `/panier` ; aucune de ces pages
+   n'est un document qu'on imprime, `/commande` en est un.
+   Après : 0 image, 0 cartouche sur les trois. Débordement des cadres
+   défilants toujours nul (contrôle de C16 intact).
+
+
+═══════════════════════════════════════════════════════════════════════════
+ 5. LES BUDGETS D36
+═══════════════════════════════════════════════════════════════════════════
+Premier chargement       /commande 119 sur 125, /gestion 110-113 sur 140  ✓
+JavaScript transféré     128,4 – 137,5 Ko à froid sur 145                 ✓
+                         137,5 Ko cumulés après parcours sur 190          ✓
+Feuille de style         10,16 Ko gzip sur 12 (85 % du budget)            ✓
+Images du rayon          128,6 Ko sur 180 — INCHANGÉ                      ✓
+Images de la fiche       30,2 Ko sur 120 — INCHANGÉ                       ✓
+Dérivés du tunnel        commande 6,7 / 12,4 Ko · paiement 5,9 / 12,1 ·
+                         confirmation 7,4 / 16,1 (AVIF 640 / 1024)
+                         plafonds `illustration-640` 60 et `-1024` 130    ✓
+                         le plus lourd des douze : 24,8 Ko (JPEG 1024)
+Notes publiées           93 · 90 · 94 · 93 en rapidité, 100 partout
+                         ailleurs — 16 notes sur 16 au-dessus du seuil,
+                         UN SEUL TIRAGE (`notes-c21a.txt`)                ✓
+
+
+═══════════════════════════════════════════════════════════════════════════
+ 6. LE CONTRÔLE INTÉGRAL
+═══════════════════════════════════════════════════════════════════════════
+`npm run controle` sur construction fraîche, port 3000 contrôlé avant
+lancement (aucun `node` tué : les quatre du poste sont les serveurs de langage
+de l'éditeur), CODE DE SORTIE 0 LU. Relevé : `controle-c21.txt`.
+
+   47 contrôles de garde   18 + 6 + 8 + 12 + 1 + 2, aucune anomalie
+   588 cas unitaires       26 fichiers — inchangés, aucune logique pure touchée
+   112 parcours            108 la veille (+2 cas × 2 profils)
+   feuille de style        10,16 Ko gzip sur 12
+   socle partagé           103 kB, inchangé

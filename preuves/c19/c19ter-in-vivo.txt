@@ -1,0 +1,70 @@
+
+(13) LA MACRO DES SEPT FAMILLES — visible EN BAS de la liste
+--------------------------------------------------------------------------
+   position calculée ............ sticky
+   cadre dans la fenêtre ....... haut 193, bas 463 (fenêtre 720, en-tête jusqu’à 92)
+   dernière famille survolée ... y = 645
+   couches d’aperçu visibles ... 2
+   OK   le cadre est ENTIER sous l’en-tête pendant le survol du dernier nom
+
+(15) LE BANDEAU DES FAMILLES — hauteur et chevauchement
+--------------------------------------------------------------------------
+   ── fenêtre 1440
+      hauteur du bandeau ....... 45.6 px (était 140,5 avant C19-ter)
+      rangs de liens ........... 1
+      liens repliés sur 2 lignes 0
+      après clic d’ancre ....... bandeau jusqu’à 142, titre à 264, carte à 353
+      OK   chevauchement : 0 px sur le titre, 0 px sur la première carte
+   ── fenêtre 1280
+      hauteur du bandeau ....... 45.3 px (était 140,5 avant C19-ter)
+      rangs de liens ........... 1
+      liens repliés sur 2 lignes 0
+      après clic d’ancre ....... bandeau jusqu’à 141, titre à 264, carte à 351
+      OK   chevauchement : 0 px sur le titre, 0 px sur la première carte
+
+(16) LE COFFRET — le fondu croisé, ARRÊTÉ à 450 ms
+--------------------------------------------------------------------------
+   vue d’ambiance décodée ...... oui
+   opacité à 450 ms ............ 0.872893
+   échelle de la matière ....... matrix(1.00141, 0, 0, 1.00141, 0, 0)
+   échelle du packshot ......... matrix(1.02915, 0, 0, 1.02915, 0, 0)
+   ancrage du recadrage ........ 50% 100%
+   OK   le coffret est bien À MI-FONDU
+
+(18) LE PLUS GRAND AFFICHAGE DE CONTENU — avant/après, MÊME construction
+--------------------------------------------------------------------------
+   ── /livraison
+      sans entrée (3 passes) ... 168 / 192 / 152 ms → médiane 168
+      avec entrée (3 passes) ... 192 / 156 / 196 ms → médiane 192
+      écart des médianes ....... 24 ms
+   ── /conditions-generales-de-vente
+      sans entrée (3 passes) ... 208 / 208 / 144 ms → médiane 208
+      avec entrée (3 passes) ... 204 / 208 / 144 ms → médiane 204
+      écart des médianes ....... -4 ms
+
+(14/17) LES QUATRE PAGES — le vide à droite du titre est comblé
+--------------------------------------------------------------------------
+   ── /boutique
+      figure ................... 416 × 283 points, bord gauche à 976
+      source servie ............ boutique/affiche-1024.avif
+      alternative .............. Filet de miel ambré tombant en ruban lent dans un pot de verre, …
+      vidéo .................... joue
+   ── /livraison
+      figure ................... 416 × 325 points, bord gauche à 976
+      source servie ............ livraison/illustration-1024.avif
+      alternative .............. Colis de papier kraft ficelé, fermé d’un cachet de cire rouge so…
+      vidéo .................... aucune
+   ── /suivi
+      figure ................... 416 × 340 points, bord gauche à 976
+      source servie ............ suivi/illustration-1024.avif
+      alternative .............. Registre ouvert aux pages vierges, un tampon de bois et son encr…
+      vidéo .................... aucune
+   ── /panier
+      figure ................... 416 × 325 points, bord gauche à 976
+      source servie ............ panier/illustration-1024.avif
+      alternative .............. Cagette de bois clair garnie de frisure de papier, une bouteille…
+      vidéo .................... aucune
+
+--------------------------------------------------------------------------
+Relevé terminé — les captures sont dans preuves/c19
+

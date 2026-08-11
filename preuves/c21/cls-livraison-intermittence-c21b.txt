@@ -1,0 +1,49 @@
+date   : 2026-08-11 (Paris), tranche C21b
+objet  : /livraison sous mouvement — une SECONDE SOURCE de décalage, intermittente
+
+POURQUOI CE RELEVÉ EXISTE
+==============================================================================
+Le relevé « après » du retrait des cartouches (diag-cls-apres-c21b.txt) donne
+/livraison sous mouvement à 0,0004 APRÈS PARCOURS, contre 0,0001 au relevé
+« avant » pris une heure plus tôt sur le même commit propre. Une valeur qui
+quadruple entre deux tirages ne se laisse pas passer sans être nommée : soit la
+tranche l'a fabriquée, soit elle était déjà là et le premier tirage l'a manquée.
+
+CE QUI A ÉTÉ FAIT
+==============================================================================
+L'arbre a été ramené au commit de base bba5ae8 (`git checkout bba5ae8`, build
+complet), et la page a été mesurée QUATRE fois de plus, dans la même session et
+sur la même machine — la règle de C20 : deux mesures prises à une heure d'écart
+ne se comparent pas.
+
+RÉSULTATS
+==============================================================================
+  arbre                         tirage   au chargement  après parcours  sources
+  ---------------------------------------------------------------------------
+  bba5ae8 (AVANT le retrait)      1         0,0001         0,0001         1
+  bba5ae8 (AVANT le retrait)      2         0,0001         0,0001         1
+  bba5ae8 (AVANT le retrait)      3         0,0001         0,0001         1
+  bba5ae8 (AVANT le retrait)      4         0,0001         0,0002         2   <—
+  bba5ae8 (AVANT le retrait)      5         0,0001         0,0001         1
+  C21b    (APRÈS le retrait)      1         0,0001         0,0004         2
+  C21b    (APRÈS le retrait)      2         0,0001         0,0004         2
+
+Le tirage 4 de la BASE porte deux sources : la seconde source existe donc AVANT
+le retrait. Elle est intermittente (1 tirage sur 5 à la base, 2 sur 2 après),
+elle n'apparaît qu'APRÈS PARCOURS et seulement sous le régime « mouvement »,
+elle se place près du haut de page (y 10, 14 puis 18 selon le tirage) et
+l'observateur ne parvient pas à nommer son élément (`<undefined>`).
+
+VERDICT, ÉCRIT COMME IL SE MESURE
+==============================================================================
+NON IMPUTABLE À LA TRANCHE SUR PIÈCES : le phénomène se produit sur l'arbre
+d'avant. NON PROUVÉ COMME DU BRUIT NON PLUS : deux tirages sur deux après contre
+un sur cinq avant, et une amplitude différente (0,00037 contre 0,0001). Ce qui
+est acquis : la valeur reste CINQ FOIS sous le plafond maison de 0,002, sur une
+page qui n'est dans aucune des quatre URL publiées, et les sept pages suivies
+tiennent toutes leur plafond (diag-cls-sept-pages-c21b.txt).
+
+À reprendre le jour où quelqu'un voudra nommer cette source : le point de départ
+est un observateur qui garde les `sources` de l'entrée `layout-shift` ET leur
+nœud, ce que la version actuelle de l'outil perd quand l'élément a déjà été
+retiré de l'arbre.

@@ -1,0 +1,165 @@
+ENTREE DE LEDGER — TRANCHE C17, SOCLE DE MOUVEMENT
+==================================================
+
+Copie VERSIONNEE de l'entree portee au ledger de tranche
+(.superpowers/sdd/il-va-falloir-effectuer-binary-cake/progress.md, hors depot).
+Elle entre ici parce qu'un ledger ecarte par un .gitignore ne se relit pas
+depuis le depot : les chiffres d'une tranche doivent survivre a la machine qui
+les a produits.
+
+C17: LIVREE le 10/08 (base c9a0ee9, sommet 95895f8, 8 commits, NON pousses ;
+CLAUDE.md et le ledger de tranche ne sont dans aucun commit -- .claude/ est
+ecarte par le gitignore GLOBAL du poste, .superpowers/ par celui du depot).
+Rapport : task-C17-report.md. Controle VERT INTEGRAL — 6 gardes (18+5+8+12+1+2 =
+46 controles), 576 cas, build, CSS 9,24/12 Ko gz, 98/98 e2e en 42,1 s (94 reduits
+INTOUCHES + 4 mouvement) ; axe 0/0 sur les deux profils reduits ET 0/0 SOUS
+MOUVEMENT (accueil, rayon, fiche ; au sommet et apres parcours) ; First Load
++0,991 Ko gzip sur les 22 routes pour un budget de 2,50 ; Lenis absent des 37
+morceaux d'entree, 5,4 Ko gzip dans un morceau a la demande, NON telecharge sous
+reduce (avec contre-epreuve) ; mesurer-transfert 133,5-137,1 a froid sur 145 et
+137,1 cumules sur 190, Lenis compris ; TBT 61 ms au pire sur 200 ; CLS
+0 / 0,0011 / 0 / 0 / 0,0001 IDENTIQUE sous les deux regimes ; notes -c17
+97 / 96 / 97 / 97 en rapidite, 100 partout ailleurs (le rayon GAGNE un point,
+95 -> 96) ; 11 captures.
+
+C17/§1 : 21e ANTI-PATRON GRAVE DANS D37 — le piege des couches, avec sa regle
+operationnelle (« toute propriete qu'une regle d'etat veut changer se pose dans
+la MEME COUCHE que l'utilitaire concurrent, et un test lit le STYLE CALCULE »).
+Il ne vient pas d'une refonte etrangere mais de CE depot : trois regles y ont ete
+livrees sans jamais s'appliquer (C15 x2, C16). Toutes les regles de mouvement de
+C17 sont donc HORS COUCHE.
+
+C17 L'ORDRE EST LE CORRECTIF, PAS LE DELAI — le fournisseur marque data-revele
+sur tout ce qui est DEJA dans la fenetre, PUIS pose html.mouvement. Les deux
+ecritures ont lieu dans la meme tache, donc le meme recalcul de style. Sans cet
+ordre, poser la classe bascule a l'invisible ce que le visiteur LIT, pour le
+re-reveler une image plus tard. Consequence mesurable qui a decide : la zone
+visible au chargement NE BOUGE PAS, le LCP n'est pas repousse, l'indice de
+rapidite visuelle ne recule pas. C'est la raison pour laquelle les notes ne
+paient pas le socle.
+
+C17 LE FONDU DE ROUTE ET LA SIGNATURE DU HEROS NE JOUENT PAS A FROID, VOULU DEUX
+FOIS. La regle vit sous html.mouvement, posee apres hydratation : au premier
+rendu aucun @starting-style ne concerne l'element, et ajouter la classe ensuite
+ne rejoue rien (@starting-style ne concerne que la PREMIERE mise en style, pas
+une modification d'ancetre). (1) Un fondu au chargement serait un PRECHARGEUR
+(interdit n. 7) ; (2) il couterait l'indice de rapidite visuelle. LES TROIS
+MANIERES D'ANIMER UN PREMIER ECRAN A FROID SONT FERMEES ICI : prechargeur,
+script bloquant posant la classe avant le premier rendu (il masquerait le contenu
+meme si le paquet echouait — la panne la plus grave que D37 decrive), etat masque
+en dur (meme panne). La signature joue quand on revient a l'accueil DEPUIS le
+site. Ecart avec la lettre du plan, assume et ecrit a l'endroit de la regle.
+
+C17/§2 arbitrage 900 ms CONTRE LES 260 DU PLAN, et cette fois sans
+interpretation : le tableau de D37 NOMME l'emploi de --ms-signature, « revelation
+d'un bloc de tete, TRANSITION DE PAGE ». Le nombre trompe sans sa courbe —
+--ease-coule depasse 80 % de progression au tiers du temps, donc 900 ms se voient
+comme un fondu de 300. Zero octet de logique : la cle React du div est le chemin,
+React monte un noeud neuf, @starting-style s'applique (patron de C13/C16).
+DECISION DE REVUE : juge CORRECTION du plan, pas derive.
+
+C17 DEUX DEFAUTS REELS QUE SEULE LA CAMPAGNE DU MOUVEMENT POUVAIT VOIR (les six
+autres jouent sous reduce, ou ni Lenis ni le delegue n'existent) :
+(1) UN MORT QUI SIGNAIT ENCORE — html.lenis revenait DANS LE TUNNEL, par
+INTERMITTENCE : panier vide, /panier sortait propre ; panier plein, la classe
+revenait. Un journal pose dans l'effet a d'abord INNOCENTE le code (nettoyage
+appele, instance presente, classe partie a +100 ms) ; un espion sur
+DOMTokenList.add a nomme le coupable par sa trace : updateClassName <- set
+isScrolling <- UNE MINUTERIE. destroy() de lenis 1.3.26 retire les ecouteurs mais
+NE PURGE PAS le compte a rebours anti-rebond de fin de defilement ; quand il
+expire, apres la destruction, il retamponne <html>. Le panier vide ne declenchait
+rien parce que la page est COURTE (aucune remise a zero du defilement, aucune
+minuterie en attente). Parade sans pari sur un delai : neutraliser
+updateClassName SUR L'INSTANCE (propriete propre masquant celle du prototype),
+puis retirer les classes avec le critere de la bibliotheque (lenis et tout
+lenis-*). Attendre « un peu plus longtemps » aurait echoue au premier changement
+d'anti-rebond.
+(2) L'ANCRE ATTERRISSAIT CENT PIXELS TROP BAS — le delegue passait
+offset: -(hauteur en-tete + 8), sur une conviction ECRITE dans un commentaire
+(« Lenis ne connait pas scroll-padding-top »). Mesure : 208 px sous l'en-tete
+contre 108 en natif = 96 (scroll-mt-24 des sections, C7) + 104
+(scroll-padding-top, C13) + 100 (le decalage ajoute). LA BIBLIOTHEQUE HONORE LES
+DEUX PROPRIETES. Le cas compare desormais LES DEUX REGIMES au lieu d'une borne
+ecrite a la main : le delegue change la maniere d'arriver, jamais l'endroit.
+DECISION DE REVUE : methode saluee — « l'espion sur DOMTokenList.add est la bonne
+methode, pas la methode confortable ».
+
+C17 TROIS PIEGES D'OUTILLAGE, A RETENIR POUR C18/C19 :
+(a) first-load-precis.mjs a d'abord annonce +20 OCTETS sur les 22 routes,
+c'est-a-dire EXACTEMENT le chiffre qu'on esperait lire — la meilleure raison de
+s'en mefier. Il ne sommait que les entrees .../page du manifeste ; tout le code
+client de C17 vit dans la MISE EN PAGE racine (D26), rangee sous /layout.
+(b) lenis-hors-entree.mjs a rougi POUR LA MAUVAISE RAISON : il accusait la
+feuille de style, qui porte legitimement deux selecteurs html.lenis. Une regle
+CSS n'est pas du code charge.
+(c) axe-sous-mouvement.mjs trouvait des violations de contraste QUI CHANGEAIENT
+DE PAGE A CHAQUE TOUR, aux couleurs #d1cdc3 et #76766e — qui ne sont dans AUCUN
+jeton : c'est l'encre MELANGEE AU FOND, donc des blocs saisis EN PLEIN FONDU. Un
+fondu n'est pas un etat du site, c'est le chemin entre deux etats. TOUTE MESURE
+SUR UN SITE ANIME (axe, contraste, capture) DOIT D'ABORD ATTENDRE L'IMMOBILITE,
+sans quoi elle mesure le hasard de l'ordonnanceur. Les trois outils de
+preuves/c17 le font ; ceux des tranches precedentes ne le savent pas.
+
+C17 ARBITRAGE — EN-TETE MOBILE : ECART C13 N.2 CLOS, POINT PRODUIT NEUF OUVERT.
+--------------------------------------------------------------------------------
+DECISION DE REVUE : l'ecart C13 n.2 est CLOS. Ses trois premisses ont ete
+verifiees et tiennent : le collage est borne a md, scroll-padding-top est juste
+(borne a md lui aussi, --hauteur-entete a zero en dessous, ce qui est la verite a
+cette largeur), et le gain d'un repli de la seule navigation vaut 38,6 px sur
+160,9.
+
+REQUALIFICATION DU MOTIF, et c'est le point important. Le bon motif est
+« 24 % ne justifiaient pas d'ouvrir le chantier », PAS « le harnais ne se plie
+pas au test ». La clause de repli du brief (« si l'approche CSS pur echoue »)
+N'AVAIT PAS ECHOUE : <details> replie en CSS pur, sans un octet de JavaScript.
+L'implementation a donc ETIRE le contrat en s'abritant derriere une clause dont
+la condition n'etait pas remplie. Divulgue, classe Minor par la revue.
+
+Ce que l'experience (preuves/c17/menu-repli-experience.mjs) a reellement etabli,
+et qui reste vrai : (1) <details> replie en CSS PUR — le commentaire de C13
+(« il demanderait du JavaScript ») etait FAUX ; (2) replier la seule navigation
+rend 38,6 px sur 160,9, soit 24 %, parce que ce qui pese est le bloc de marque et
+les remplissages ; (3) ferme par defaut, il retire leur boite aux trois liens ET
+a la pastille du panier, que la campagne gelee clique et lit sur ce profil
+(contre-epreuve dans le meme releve : repli ouvert, ca clique). Le point (3)
+reste un COUT a payer, pas la raison de renoncer.
+
+POINT PRODUIT NEUF, OUVERT POUR C19 : l'ATTEIGNABILITE de l'en-tete mobile. Il ne
+porte plus sur le collage mais sur les 122,2 px qui RESTENT une fois la
+navigation repliee — portes par le bloc de marque (nom sur deux lignes + baseline
++ remplissages). Ordre de traitement impose : DECISION D'ARNAUD d'abord (replier
+le menu mobile est un arbitrage produit, pas une correction technique), DEUX
+LIGNES DE CAMPAGNE ensuite (ouvrir le repli avant de cliquer, dans
+parcours.spec.ts et aides.ts), COMPOSANT en dernier. Commencer par le composant
+est l'ordre qui coute une demi-journee.
+
+C17 ZONES REVELEES : accueil sous le heros (encart, en-tete de la rangee, sept
+lignes en cascade plafonnee a SIX — les deux dernieres partagent le sixieme
+rang), rayon (15 vignettes, cascade REPARTANT A ZERO A CHAQUE FAMILLE : un rang
+continu de 1 a 15 aurait contourne le plafond par l'endroit d'ou l'on compte),
+fiche (5 blocs de prose SOUS la galerie). NE SE REVELENT PAS : le bloc d'achat
+(on ne fait pas attendre un achat derriere un fondu, et le panneau COLLE donc la
+revelation n'aurait aucun moment pour se declencher), la galerie (plus grand
+affichage de contenu), le tunnel, le legal, /gestion. Le cas 4 compte ZERO
+data-revelation sur /commande.
+
+C17 ECARTS ASSUMES — (1) signature du heros non jouee a froid ; (2) fondu de
+route non plus ; (3) menu mobile repliable non livre (motif requalifie ci-dessus) ;
+(4) CLS /boutique inchange depuis C16 (0,0011 bride, 0,007 Lighthouse) ;
+(5) Lenis pese 5,4 Ko gzip et non les « ~4 » du plan — hors First Load, mais dans
+le transfert du parcours (130,5 -> 137,1 cumules sur 190) ; (6) une methode de la
+bibliotheque neutralisee sur l'instance, contournement date qui tombera quand
+destroy() purgera sa minuterie ; (7) cascade plafonnee a six pour sept familles ;
+(8) history.pushState dans le delegue d'ancres, pour que les deux regimes offrent
+la meme capacite de copier l'adresse d'une section.
+
+RAPPELS C18-C19 : C18 = la View Transition same-document est en place et
+eprouvee, la cross-page reste entiere ; TransitionPage EST le titulaire que le
+plan prevoyait en repli, il existe et il est mesure, donc son remplacement se
+compare a des chiffres publies ; --ms-hero, --ms-signature et --decalage-cascade
+servent enfin ; first-load-precis.mjs rend le budget mesurable a l'octet et son
+releve JSON permet --contre en une commande. C19 = 3 chapeaux de BoutonAjouter,
+transparence IA (emplacement PRESERVE sur /a-propos), texte « a venir » de la
+404, et le point produit NEUF d'atteignabilite de l'en-tete mobile ci-dessus.
+ATTENTION TRANSVERSE : attendre l'immobilite avant toute mesure sur un site
+anime.

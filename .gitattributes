@@ -1,5 +1,25 @@
 * text=auto eol=lf
 
+# Les binaires, déclarés (tranche C11, décision D35).
+# La liste est celle d'`EXTENSIONS_BINAIRES` dans les deux gardes de texte —
+# les trois endroits disent la même chose, et doivent continuer de le dire.
+#
+# `text=auto` fait deviner à Git s'il a affaire à du texte. La devinette est
+# bonne dans l'immense majorité des cas, et catastrophique quand elle se
+# trompe : un fichier pris pour du texte se voit NORMALISER ses fins de ligne,
+# c'est-à-dire réécrire ses octets — un binaire d'image ainsi « corrigé » est
+# un binaire corrompu, et la corruption survient au commit, sans un mot.
+#
+# Les déclarer coupe court à la devinette. Effet secondaire utile : `git diff`
+# cesse de tenter d'afficher leur contenu et écrit « Binary files differ ».
+*.avif binary
+*.jpg binary
+*.jpeg binary
+*.png binary
+*.webp binary
+*.woff2 binary
+*.mp4 binary
+
 # Exception unique (tranche C7) : le formulaire de rétractation téléchargeable.
 # Ce fichier n'est pas du code, c'est un document que le CLIENT télécharge et
 # ouvre dans l'éditeur de texte qu'il a sous la main — souvent le Bloc-notes de

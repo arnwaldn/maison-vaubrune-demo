@@ -1,0 +1,20 @@
+LE MARBRE DU CLIENT, RETRAVAILLÉ POUR LA COQUILLE
+==============================================================================
+
+  source : 126 → 252 en niveaux de gris
+  affine : a = 0.1508, b = 217.00 (plancher visé 236)
+
+  tuile  : 1408 × 768, AVIF 3.2 Ko, repli JPEG 7.5 Ko
+  (ce poids serait payé sur TOUTES les pages du site : c'est un fond de `body`)
+
+  pixel le plus sombre du marbre livré : #e8e2d6
+  pixel le plus clair                  : #f3ede1
+
+  LES RATIOS CONTRE LA VEINE LA PLUS SOMBRE (seuil AA 4,50)
+    encre                     12.70   marge +8.20
+    encre douce                6.12   marge +1.62
+    ocre (étiquettes)          5.09   marge +0.59
+    bleu (chaîne du froid)     6.00   marge +1.50
+
+  Les 4 encres tiennent AA sur la veine la plus sombre du marbre.
+

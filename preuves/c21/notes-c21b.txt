@@ -1,0 +1,247 @@
+TRANCHE C21b — LES QUATRE NOTES PUBLIÉES, MESURÉES SUR L'ARBRE POUSSÉ
+================================================================================
+
+Date de la mesure  : 2026-08-11 (après-midi, heure de Paris)
+Commit mesuré      : 4d7df70ad4a9a88b46c3cea2863d89642f989cb1
+                     « chore(preuves): le controle rejoue sur l arbre pousse,
+                       apres l entree des preuves »
+Branche            : refonte-awwwards (main intouché)
+Arbre              : PROPRE au moment de la mesure (git status vide)
+Lighthouse         : 13.4.1, profil mobile bridé par défaut
+Origine            : construction de production servie en local (next start)
+
+POURQUOI CE RELEVÉ EXISTE
+--------------------------------------------------------------------------------
+Le tirage de C21a (`notes-c21a.txt`, relevé `lighthouse-2026-08-11-c21a.json`)
+a été pris AVANT le retrait des cartouches de héros. Le sommet poussé n'avait
+donc aucune note mesurée, et une tranche qui publie « quatre notes ≥ 90
+mesurées et datées » ne peut pas laisser son dernier commit hors mesure.
+
+ÉTAT DE LA MACHINE, CONSIGNÉ PLUTÔT QUE SUPPOSÉ
+--------------------------------------------------------------------------------
+Le piège de C19-ter — deux `next start` simultanés, dont l'ancien sert une
+construction périmée — se contrôle avant chaque tirage, jamais après.
+
+  - port 3000                : LIBRE (contrôle par port, aucun arrêt global)
+  - processus `next` en cours : AUCUN, avant chacun des trois tirages
+  - charge processeur         : 15 % à l'ouverture, puis 18 % / 10 % / 20 %
+                                relevées juste avant les tirages 1, 2 et 3
+  - construction             : FRAÎCHE (`npm run build` rejoué avant le premier
+                                tirage ; socle partagé 103 kB, inchangé)
+
+Les seuls processus `node` de la machine étaient trois serveurs de langage
+TypeScript de l'éditeur : aucun ne sert de page, aucun n'a été arrêté.
+
+TROIS TIRAGES, ET POURQUOI TROIS
+--------------------------------------------------------------------------------
+Deux tirages étaient demandés, le second confirmant le premier. Ils ont divergé
+de DEUX POINTS sur la fiche (94 puis 92), c'est-à-dire exactement à la limite
+qui déclenche l'arbitrage. Un troisième a été joué plutôt que de publier une
+fourchette qu'on ne saurait pas lire — il donne 91, et la fourchette de la
+fiche est donc de trois points sur des octets qui n'ont pas bougé.
+
+Chaque tirage écrit son PROPRE relevé : `-c21b`, `-c21b-bis`, `-c21b-ter`.
+Aucun n'écrase l'autre, et l'empreinte des quarante et un relevés antérieurs
+a été comparée avant et après la campagne — aucune n'a changé, celle de
+`lighthouse-2026-08-11-c21a.json` comprise.
+
+================================================================================
+
+--------------------------------------------------------------------------------
+PREMIER TIRAGE  --suffixe c21b
+--------------------------------------------------------------------------------
+
+> maison-vaubrune@0.1.0 mesurer-notes
+> node scripts/mesurer-notes.mjs --suffixe c21b
+
+
+Mesure des notes publiées — 2026-08-11, profil mobile bridé
+------------------------------------------------------------------------
+  Navigateur : le Chromium déjà installé par Playwright sur le poste (chemin caviardé)
+  Production servie sur http://localhost:62185
+
+  Accueil (/)…
+    (Lighthouse a échoué en nettoyant le profil temporaire de Chrome —
+     incident connu sous Windows ; la mesure, elle, est complète.)
+    Rapidité 93  ·  Accessibilité 100  ·  Bonnes pratiques 100  ·  Référencement 100
+  Rayon (/boutique)…
+    (Lighthouse a échoué en nettoyant le profil temporaire de Chrome —
+     incident connu sous Windows ; la mesure, elle, est complète.)
+    Rapidité 90  ·  Accessibilité 100  ·  Bonnes pratiques 100  ·  Référencement 100
+  Fiche huile d’olive (/boutique/huile-olive-premiere-pression)…
+    (Lighthouse a échoué en nettoyant le profil temporaire de Chrome —
+     incident connu sous Windows ; la mesure, elle, est complète.)
+    Rapidité 94  ·  Accessibilité 100  ·  Bonnes pratiques 100  ·  Référencement 100
+  Panier (/panier)…
+    (Lighthouse a échoué en nettoyant le profil temporaire de Chrome —
+     incident connu sous Windows ; la mesure, elle, est complète.)
+    Rapidité 93  ·  Accessibilité 100  ·  Bonnes pratiques 100  ·  Référencement 100
+
+  Relevé écrit : mesures/lighthouse-2026-08-11-c21b.json
+------------------------------------------------------------------------
+16 notes mesurées, toutes au-dessus de leur seuil.
+
+
+--------------------------------------------------------------------------------
+SECOND TIRAGE   --suffixe c21b-bis
+--------------------------------------------------------------------------------
+
+> maison-vaubrune@0.1.0 mesurer-notes
+> node scripts/mesurer-notes.mjs --suffixe c21b-bis
+
+
+Mesure des notes publiées — 2026-08-11, profil mobile bridé
+------------------------------------------------------------------------
+  Navigateur : le Chromium déjà installé par Playwright sur le poste (chemin caviardé)
+  Production servie sur http://localhost:49677
+
+  Accueil (/)…
+    (Lighthouse a échoué en nettoyant le profil temporaire de Chrome —
+     incident connu sous Windows ; la mesure, elle, est complète.)
+    Rapidité 93  ·  Accessibilité 100  ·  Bonnes pratiques 100  ·  Référencement 100
+  Rayon (/boutique)…
+    (Lighthouse a échoué en nettoyant le profil temporaire de Chrome —
+     incident connu sous Windows ; la mesure, elle, est complète.)
+    Rapidité 90  ·  Accessibilité 100  ·  Bonnes pratiques 100  ·  Référencement 100
+  Fiche huile d’olive (/boutique/huile-olive-premiere-pression)…
+    (Lighthouse a échoué en nettoyant le profil temporaire de Chrome —
+     incident connu sous Windows ; la mesure, elle, est complète.)
+    Rapidité 92  ·  Accessibilité 100  ·  Bonnes pratiques 100  ·  Référencement 100
+  Panier (/panier)…
+    (Lighthouse a échoué en nettoyant le profil temporaire de Chrome —
+     incident connu sous Windows ; la mesure, elle, est complète.)
+    Rapidité 93  ·  Accessibilité 100  ·  Bonnes pratiques 100  ·  Référencement 100
+
+  Relevé écrit : mesures/lighthouse-2026-08-11-c21b-bis.json
+------------------------------------------------------------------------
+16 notes mesurées, toutes au-dessus de leur seuil.
+
+
+--------------------------------------------------------------------------------
+TROISIEME TIRAGE  --suffixe c21b-ter
+--------------------------------------------------------------------------------
+
+> maison-vaubrune@0.1.0 mesurer-notes
+> node scripts/mesurer-notes.mjs --suffixe c21b-ter
+
+
+Mesure des notes publiées — 2026-08-11, profil mobile bridé
+------------------------------------------------------------------------
+  Navigateur : le Chromium déjà installé par Playwright sur le poste (chemin caviardé)
+  Production servie sur http://localhost:65031
+
+  Accueil (/)…
+    (Lighthouse a échoué en nettoyant le profil temporaire de Chrome —
+     incident connu sous Windows ; la mesure, elle, est complète.)
+    Rapidité 93  ·  Accessibilité 100  ·  Bonnes pratiques 100  ·  Référencement 100
+  Rayon (/boutique)…
+    (Lighthouse a échoué en nettoyant le profil temporaire de Chrome —
+     incident connu sous Windows ; la mesure, elle, est complète.)
+    Rapidité 91  ·  Accessibilité 100  ·  Bonnes pratiques 100  ·  Référencement 100
+  Fiche huile d’olive (/boutique/huile-olive-premiere-pression)…
+    (Lighthouse a échoué en nettoyant le profil temporaire de Chrome —
+     incident connu sous Windows ; la mesure, elle, est complète.)
+    Rapidité 91  ·  Accessibilité 100  ·  Bonnes pratiques 100  ·  Référencement 100
+  Panier (/panier)…
+    (Lighthouse a échoué en nettoyant le profil temporaire de Chrome —
+     incident connu sous Windows ; la mesure, elle, est complète.)
+    Rapidité 93  ·  Accessibilité 100  ·  Bonnes pratiques 100  ·  Référencement 100
+
+  Relevé écrit : mesures/lighthouse-2026-08-11-c21b-ter.json
+------------------------------------------------------------------------
+16 notes mesurées, toutes au-dessus de leur seuil.
+
+================================================================================
+SYNTHÈSE — 48 NOTES SUR 48 AU-DESSUS DE LEUR SEUIL
+================================================================================
+
+Seuils : rapidité 90, accessibilité 100, bonnes pratiques 100, référencement 96.
+Les trois notes STRUCTURELLES rendent 100 sur les quatre pages et sur les trois
+tirages, sans exception. Seule la rapidité varie ; c'est elle qui suit.
+
+RAPIDITÉ — trois tirages, puis la fourchette
+--------------------------------------------------------------------------------
+  Accueil  (/)                                     93 · 93 · 93   =>  93-93
+  Rayon    (/boutique)                             90 · 90 · 91   =>  90-91
+  Fiche    (/boutique/huile-olive-premiere-...)    94 · 92 · 91   =>  91-94
+  Panier   (/panier)                               93 · 93 · 93   =>  93-93
+
+Code de sortie du script : 0 aux trois tirages (16 notes chacun, aucune sous
+son seuil). La plus basse note du lot est 90, au seuil, sur le rayon — sa
+valeur connue depuis C19.
+
+DÉCALAGE CUMULÉ (CLS) MESURÉ PAR LIGHTHOUSE
+--------------------------------------------------------------------------------
+Valeurs brutes du champ `decalageCumule`, aux trois tirages :
+
+  Accueil   0,00006 · 0,00006 · 0,00000
+  Rayon     0,00062 · 0,00062 · 0,00062
+  Fiche     0,00000 · 0,00000 · 0,00000
+  Panier    0,00006 · 0,00006 · 0,00006
+
+LES CHIFFRES DE LA CONSOLIDATION SONT CONFIRMÉS, sans correction à apporter :
+accueil 0,00006 · rayon 0,00062 · fiche 0,00000 · panier 0,00006. Le seul
+écart du lot est un accueil qui rend 0,00000 au troisième tirage au lieu de
+0,00006 — le décalage de l'accueil est donc INTERMITTENT et non permanent,
+ce qui va dans le bon sens et ne change pas la valeur publiée, qui est le pire
+cas. Le plafond MAISON est de 0,002 : la page la plus décalée du lot en est à
+un peu plus du trentième.
+
+PLUS GRAND AFFICHAGE DE CONTENU (LCP), EN MILLISECONDES
+--------------------------------------------------------------------------------
+  Accueil   3091 · 3085 · 3088      (dispersion 6 ms)
+  Rayon     3504 · 3495 · 3357      (dispersion 147 ms)
+  Fiche     2979 · 3262 · 3344      (dispersion 365 ms)
+  Panier    3062 · 3061 · 3061      (dispersion 1 ms)
+
+C'EST LE LCP QUI EXPLIQUE LA FOURCHETTE DE LA FICHE, et il faut le dire parce
+que la note seule laisserait croire à un défaut. Les trois notes de la fiche
+(94, 92, 91) suivent ses trois LCP (2979, 3262, 3344) dans l'ordre exact :
+la page ne change pas, c'est le temps d'affichage de son image de tête qui
+respire de 365 ms d'un tirage à l'autre. L'accueil et le panier, dont le LCP
+tient à quelques millisecondes près, rendent une note rigoureusement stable.
+
+================================================================================
+COMPARAISON AUX TIRAGES C21a (93-94 / 90-90 / 92-94 / 93-93)
+================================================================================
+
+  Page      C21a        C21b (3 tirages)   Écart
+  --------  ----------  -----------------  ----------------------------------
+  Accueil   93-94       93-93              haut de fourchette −1
+  Rayon     90-90       90-91              haut de fourchette +1
+  Fiche     92-94       91-94              bas de fourchette −1
+  Panier    93-93       93-93              identique
+
+DEUX ÉCARTS NÉGATIFS D'UN POINT, DITS EN CLAIR PLUTÔT QUE LISSÉS :
+
+  (1) L'ACCUEIL NE REND PLUS 94. Trois tirages sur trois donnent 93, là où
+      C21a avait touché 94. La valeur basse est identique (93) et la valeur
+      haute perd un point. Son LCP est le plus stable du lot (6 ms de
+      dispersion) : ce 93 est sa valeur, pas un tirage malheureux.
+
+  (2) LA FICHE DESCEND À 91 UNE FOIS SUR TROIS, un point sous le bas de la
+      fourchette de C21a. Elle touche aussi 94, le haut de cette même
+      fourchette, dans le même lot et sur la même construction.
+
+CE QUE CES DEUX ÉCARTS NE PEUVENT PAS ÊTRE
+--------------------------------------------------------------------------------
+Le retrait des cartouches N'ENLÈVE QUE DU TEXTE : moins de nœuds, moins
+d'octets de HTML, rien de plus à peindre. Aucun mécanisme connu ne fait
+descendre une note de rapidité en retirant du contenu, et le premier
+chargement JavaScript est resté à l'octet (socle 103 kB).
+
+Ces deux points sont donc de la DISPERSION DE MESURE, et le lot le montre par
+sa propre incohérence : sur les quatre pages, une seule descend et une autre
+MONTE d'autant (le rayon rend 91, ce qu'il n'avait jamais rendu). Un coût réel
+ne se répartit pas ainsi. Le mot « bruit » n'est pas employé pour clore le
+sujet : il est employé parce que le troisième tirage, joué pour trancher,
+donne à la fiche une amplitude de trois points À LUI SEUL — l'écart d'un point
+avec C21a est plus petit que l'amplitude d'une seule campagne.
+
+CE QUE CE RELEVÉ N'ÉTABLIT PAS
+--------------------------------------------------------------------------------
+Il ne dit rien de la note EN LIGNE : la mesure porte sur une construction de
+production servie en local. Le déploiement réel se mesure avec `--base`, et il
+s'écrit dans un fichier distinct.
+
+================================================================================

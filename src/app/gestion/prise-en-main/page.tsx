@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
+import { BlocTitre } from '@/composants/mise-en-page/BlocTitre';
 import { LIBELLE_JEU_ESSAI } from '@/donnees/commandes-amorce';
 
 /**
@@ -27,8 +28,8 @@ export const metadata: Metadata = {
     'tenir le catalogue, suivre une commande, retrouver les documents, exporter.',
 };
 
-const CLASSE_TITRE = 'text-titre font-semibold text-encre';
-const CLASSE_SOUS_TITRE = 'mt-8 font-titre text-lg font-semibold text-encre';
+const CLASSE_TITRE = 'text-titre text-encre';
+const CLASSE_SOUS_TITRE = 'mt-8 sous-titre text-encre';
 const CLASSE_TEXTE = 'mt-4 max-w-lisible leading-relaxed text-encre';
 const CLASSE_LIEN =
   'underline decoration-filet decoration-2 underline-offset-4 hover:text-terre hover:decoration-terre';
@@ -37,19 +38,21 @@ export default function PagePriseEnMain() {
   return (
     <>
       <section className="pt-12 sm:pt-14">
-        <p className="text-xs font-semibold tracking-[0.2em] text-ocre uppercase">
-          Espace marchand
-        </p>
-        <h1 className="mt-4 text-affiche font-semibold text-encre">Prise en main</h1>
-        <p className="mt-5 max-w-lisible text-chapeau text-encre-douce">
-          Comment tenir cette boutique au quotidien&nbsp;: le catalogue, les
-          commandes, les documents, les sauvegardes. Écrit pour être relu, pas
-          seulement écouté une fois.
-        </p>
+        <BlocTitre
+          surtitre="Espace marchand"
+          titre="Prise en main"
+          chapeau={
+            <>
+              Comment tenir cette boutique au quotidien&nbsp;: le catalogue, les
+              commandes, les documents, les sauvegardes. Écrit pour être relu, pas
+              seulement écouté une fois.
+            </>
+          }
+        />
       </section>
 
       <div className="mt-12 space-y-14 pb-4">
-        <section aria-labelledby="titre-catalogue">
+        <section aria-labelledby="titre-catalogue" className="panneau" data-revelation data-revelation-retard={1}>
           <h2 id="titre-catalogue" className={CLASSE_TITRE}>
             1. Tenir le catalogue
           </h2>
@@ -124,7 +127,7 @@ export default function PagePriseEnMain() {
           </p>
         </section>
 
-        <section aria-labelledby="titre-commandes">
+        <section aria-labelledby="titre-commandes" className="panneau" data-revelation data-revelation-retard={2}>
           <h2 id="titre-commandes" className={CLASSE_TITRE}>
             2. Suivre une commande
           </h2>
@@ -179,7 +182,7 @@ export default function PagePriseEnMain() {
           </p>
         </section>
 
-        <section aria-labelledby="titre-documents">
+        <section aria-labelledby="titre-documents" className="panneau" data-revelation data-revelation-retard={3}>
           <h2 id="titre-documents" className={CLASSE_TITRE}>
             3. Où sont les documents
           </h2>
@@ -253,7 +256,7 @@ export default function PagePriseEnMain() {
           </p>
         </section>
 
-        <section aria-labelledby="titre-exporter">
+        <section aria-labelledby="titre-exporter" className="panneau" data-revelation data-revelation-retard={4}>
           <h2 id="titre-exporter" className={CLASSE_TITRE}>
             4. Exporter, et réinitialiser
           </h2>
@@ -287,6 +290,8 @@ export default function PagePriseEnMain() {
         <section
           aria-labelledby="titre-heure"
           className="rounded-sm border border-ocre-clair bg-papier p-5 sm:p-6"
+          data-revelation
+          data-revelation-retard={5}
         >
           <h2 id="titre-heure" className={CLASSE_TITRE}>
             5. L’heure de prise en main
@@ -310,7 +315,7 @@ export default function PagePriseEnMain() {
           </p>
 
           <div className="mt-6 rounded-sm border border-dashed border-encre-douce/50 bg-creme px-5 py-8 text-center">
-            <p className="font-titre text-base font-semibold text-encre">
+            <p className="sous-titre text-encre">
               Emplacement réservé à l’enregistrement de la séance
             </p>
             <p className="mt-2 text-sm leading-relaxed text-encre-douce">

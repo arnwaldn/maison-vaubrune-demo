@@ -2,7 +2,26 @@ import { execFileSync } from 'node:child_process';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
+
+/**
+ * TRENTE SECONDES, ET NON LES CINQ PAR DÉFAUT.
+ *
+ * Les cas de ce fichier ne sont pas des tests unitaires : chacun LANCE UN
+ * PROCESSUS — démarrer Node, parfois compiler le catalogue TypeScript par
+ * `tsx`, parcourir le dépôt, écrire un rapport. Le budget de cinq secondes de
+ * Vitest est calibré pour une fonction pure ; il a tenu ici par chance tant que
+ * les gardes étaient deux, et il a lâché quand C11 en a ajouté une troisième
+ * avec ses treize cas — les processus se disputent alors les mêmes cœurs.
+ *
+ * Ce délai n'est pas un budget de performance : c'est un filet contre un
+ * BLOCAGE (une garde qui attendrait une entrée, un processus qui ne rendrait
+ * jamais la main). Il doit donc être assez lâche pour ne jamais se déclencher
+ * à tort — un test rouge un jour sur trois, sur un code identique, est pire
+ * qu'un test absent.
+ */
+vi.setConfig({ testTimeout: 30_000 });
+
 
 /**
  * LA GARDE DES MARQUES RÉELLES, ÉPROUVÉE SUR PIÈCES.

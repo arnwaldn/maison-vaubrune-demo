@@ -167,6 +167,7 @@ export function IlotCatalogueMarchand({
     return (
       <div
         aria-hidden="true"
+        data-place-reservee=""
         className="mt-10 min-h-96 rounded-sm border border-filet bg-papier"
       />
     );
@@ -179,7 +180,7 @@ export function IlotCatalogueMarchand({
   return (
     <div className="mt-10 min-h-96 pb-4">
       <div className="flex flex-wrap items-center justify-between gap-x-8 gap-y-4">
-        <p className="text-sm text-encre-douce tabular-nums">
+        <p className="registre text-encre" data-sur-marbre>
           {nombreModifies === 0
             ? 'Aucune référence modifiée.'
             : `${String(nombreModifies)} référence${nombreModifies > 1 ? 's' : ''} modifiée${nombreModifies > 1 ? 's' : ''} sur ${String(produits.length)}.`}
@@ -189,7 +190,7 @@ export function IlotCatalogueMarchand({
           <button
             type="button"
             onClick={exporter}
-            className="rounded-sm border border-olive bg-olive px-4 py-2.5 text-sm font-semibold text-creme hover:bg-olive-clair"
+            className="rounded-sm border border-olive bg-olive px-4 py-2.5 text-sm font-semibold text-creme hover:border-encre hover:bg-encre"
           >
             Exporter en JSON
           </button>
@@ -256,7 +257,7 @@ function FicheMarchand({
   return (
     <li className="rounded-sm border border-filet bg-papier p-5 sm:p-6">
       <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2">
-        <h3 className="font-titre text-lg font-semibold text-encre">
+        <h3 className="sous-titre text-encre">
           <Link
             href={`/boutique/${produit.slug}`}
             className="underline decoration-filet decoration-2 underline-offset-4 hover:text-terre hover:decoration-terre"
@@ -267,7 +268,7 @@ function FicheMarchand({
         <p className="flex items-baseline gap-3 text-xs text-encre-douce">
           <span>{produit.famille}</span>
           {modifie ? (
-            <span className="rounded-sm border border-ocre px-2 py-0.5 font-semibold tracking-[0.12em] text-ocre uppercase">
+            <span className="etiquette rounded-sm border border-ocre px-2 py-0.5 text-ocre">
               Modifié
             </span>
           ) : null}
@@ -278,7 +279,7 @@ function FicheMarchand({
         <div className="min-w-0">
           <label
             htmlFor={`resume-${produit.slug}`}
-            className="block text-xs font-semibold tracking-[0.12em] text-encre-douce uppercase"
+            className="etiquette block text-encre-douce"
           >
             Résumé du rayon
           </label>
@@ -309,7 +310,7 @@ function FicheMarchand({
         </div>
 
         <fieldset className="border-0 p-0">
-          <legend className="text-xs font-semibold tracking-[0.12em] text-encre-douce uppercase">
+          <legend className="etiquette text-encre-douce">
             État en rayon
           </legend>
 
@@ -350,7 +351,7 @@ function FicheMarchand({
         </fieldset>
       </div>
 
-      <div className="mt-6 overflow-x-auto">
+      <div className="panneau mt-6 overflow-x-auto">
         <table className="w-full min-w-[34rem] border-collapse text-sm">
           <caption className="sr-only">
             {typographier(`Formats de ${produit.nom} : prix et stock modifiables`)}
@@ -453,7 +454,7 @@ function LigneVariante({
               variantes: [{ sku: variante.sku, prixCentimes: centimes }],
             });
           }}
-          className={`${CLASSE_CHAMP} w-28 tabular-nums`}
+          className={`${CLASSE_CHAMP} w-28 font-mono tabular-nums`}
         />
         {prixIllisible ? (
           <p
@@ -492,7 +493,7 @@ function LigneVariante({
             noterBrouillon(cleStock, null);
             enregistrer(slug, { variantes: [{ sku: variante.sku, stock: valeur }] });
           }}
-          className={`${CLASSE_CHAMP} w-24 tabular-nums`}
+          className={`${CLASSE_CHAMP} w-24 font-mono tabular-nums`}
         />
         <IndicateurModifie
           modifie={stockModifie}
@@ -500,7 +501,7 @@ function LigneVariante({
         />
       </td>
 
-      <td className="py-3 text-right text-encre-douce tabular-nums">
+      <td className="py-3 text-right font-mono text-encre-douce tabular-nums">
         {variante.poidsGrammes}&nbsp;g
         <span className="mt-1 block text-xs">non modifiable</span>
       </td>

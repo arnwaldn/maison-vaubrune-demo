@@ -1,0 +1,223 @@
+LE MARBRE, VU DE L’ÉCRAN — captures et contraste AU PIXEL
+==============================================================================
+  base : http://127.0.0.1:3000   fenêtre 1440 × 900, densité 1, mouvement réduit
+  voile lu dans la page : --marbre-opacite 0.45 — veine la plus sombre que la tuile puisse poser : #bfbab0
+
+  ── ACCUEIL (/)
+     33 blocs de texte recensés, page de 2561 px
+
+     PIRE COUPLE « GRAND TEXTE OU ÉTIQUETTE » SUR VEINE
+       « Épicerie fine régionale »
+       <span> 12.7 px / graisse 500   encre #5b3e0c   étiquette, seuil strict 4,50
+       fond le plus sombre sous ce bloc : #d7d1c6
+       RATIO 6.46   marge +1.96
+
+     PROSE, TABLEAUX OU FORMULAIRES DIRECTEMENT SUR LE MARBRE : aucun.
+
+  ── FICHE (/boutique/huile-olive-premiere-pression)
+     56 blocs de texte recensés, page de 3138 px
+
+     PIRE COUPLE « GRAND TEXTE OU ÉTIQUETTE » SUR VEINE
+       « Huiles et vinaigres »
+       <span> 12.7 px / graisse 500   encre #5b3e0c   étiquette, seuil strict 4,50
+       fond le plus sombre sous ce bloc : #ccc7bd
+       RATIO 5.83   marge +1.33
+
+     PROSE, TABLEAUX OU FORMULAIRES DIRECTEMENT SUR LE MARBRE : aucun.
+
+  ── RAYON (/boutique)
+     145 blocs de texte recensés, page de 9121 px
+
+     PIRE COUPLE « GRAND TEXTE OU ÉTIQUETTE » SUR VEINE
+       « Le rayon »
+       <p> 12.7 px / graisse 500   encre #5b3e0c   étiquette, seuil strict 4,50
+       fond le plus sombre sous ce bloc : #c2bdb3
+       RATIO 5.25   marge +0.75
+
+     PROSE, TABLEAUX OU FORMULAIRES DIRECTEMENT SUR LE MARBRE : aucun.
+
+  ── PANIER (/panier)
+     16 blocs de texte recensés, page de 1829 px
+
+     PIRE COUPLE « GRAND TEXTE OU ÉTIQUETTE » SUR VEINE
+       « Commande »
+       <p> 12.7 px / graisse 500   encre #5b3e0c   étiquette, seuil strict 4,50
+       fond le plus sombre sous ce bloc : #c2bdb3
+       RATIO 5.25   marge +0.75
+
+     PROSE, TABLEAUX OU FORMULAIRES DIRECTEMENT SUR LE MARBRE : aucun.
+
+  ── COMMANDE (/commande)
+     15 blocs de texte recensés, page de 1851 px
+
+     PIRE COUPLE « GRAND TEXTE OU ÉTIQUETTE » SUR VEINE
+       « Commande »
+       <p> 12.7 px / graisse 500   encre #5b3e0c   étiquette, seuil strict 4,50
+       fond le plus sombre sous ce bloc : #c2bdb3
+       RATIO 5.25   marge +0.75
+
+     PROSE, TABLEAUX OU FORMULAIRES DIRECTEMENT SUR LE MARBRE : aucun.
+
+  ── RETRACTATION (/retractation)
+     161 blocs de texte recensés, page de 8494 px
+
+     PIRE COUPLE « GRAND TEXTE OU ÉTIQUETTE » SUR VEINE
+       « Document légal »
+       <p> 12.7 px / graisse 500   encre #5b3e0c   étiquette, seuil strict 4,50
+       fond le plus sombre sous ce bloc : #c2bdb3
+       RATIO 5.25   marge +0.75
+
+     PROSE, TABLEAUX OU FORMULAIRES DIRECTEMENT SUR LE MARBRE : aucun.
+
+  ── CGV (/conditions-generales-de-vente)
+     153 blocs de texte recensés, page de 10767 px
+
+     PIRE COUPLE « GRAND TEXTE OU ÉTIQUETTE » SUR VEINE
+       « Document légal »
+       <p> 12.7 px / graisse 500   encre #5b3e0c   étiquette, seuil strict 4,50
+       fond le plus sombre sous ce bloc : #c2bdb3
+       RATIO 5.25   marge +0.75
+
+     PROSE, TABLEAUX OU FORMULAIRES DIRECTEMENT SUR LE MARBRE : aucun.
+
+  ── DONNEES (/donnees-personnelles)
+     154 blocs de texte recensés, page de 6447 px
+
+     PIRE COUPLE « GRAND TEXTE OU ÉTIQUETTE » SUR VEINE
+       « Document légal »
+       <p> 12.7 px / graisse 500   encre #5b3e0c   étiquette, seuil strict 4,50
+       fond le plus sombre sous ce bloc : #c2bdb3
+       RATIO 5.25   marge +0.75
+
+     PROSE, TABLEAUX OU FORMULAIRES DIRECTEMENT SUR LE MARBRE : aucun.
+
+  ── MENTIONS (/mentions-legales)
+     82 blocs de texte recensés, page de 4457 px
+
+     PIRE COUPLE « GRAND TEXTE OU ÉTIQUETTE » SUR VEINE
+       « Document légal »
+       <p> 12.7 px / graisse 500   encre #5b3e0c   étiquette, seuil strict 4,50
+       fond le plus sombre sous ce bloc : #c2bdb3
+       RATIO 5.25   marge +0.75
+
+     PROSE, TABLEAUX OU FORMULAIRES DIRECTEMENT SUR LE MARBRE : aucun.
+
+  ── A-PROPOS (/a-propos-de-cette-demonstration)
+     62 blocs de texte recensés, page de 3441 px
+
+     PIRE COUPLE « GRAND TEXTE OU ÉTIQUETTE » SUR VEINE
+       « Démonstration »
+       <p> 12.7 px / graisse 500   encre #5b3e0c   étiquette, seuil strict 4,50
+       fond le plus sombre sous ce bloc : #c2bdb3
+       RATIO 5.25   marge +0.75
+
+     PROSE, TABLEAUX OU FORMULAIRES DIRECTEMENT SUR LE MARBRE : aucun.
+
+  ── LIVRAISON (/livraison)
+     84 blocs de texte recensés, page de 3583 px
+
+     PIRE COUPLE « GRAND TEXTE OU ÉTIQUETTE » SUR VEINE
+       « Expédition »
+       <p> 12.7 px / graisse 500   encre #5b3e0c   étiquette, seuil strict 4,50
+       fond le plus sombre sous ce bloc : #c2bdb3
+       RATIO 5.25   marge +0.75
+
+     PROSE, TABLEAUX OU FORMULAIRES DIRECTEMENT SUR LE MARBRE : aucun.
+
+  ── SUIVI (/suivi)
+     24 blocs de texte recensés, page de 1842 px
+
+     PIRE COUPLE « GRAND TEXTE OU ÉTIQUETTE » SUR VEINE
+       « Votre commande »
+       <p> 12.7 px / graisse 500   encre #5b3e0c   étiquette, seuil strict 4,50
+       fond le plus sombre sous ce bloc : #c2bdb3
+       RATIO 5.25   marge +0.75
+
+     PROSE, TABLEAUX OU FORMULAIRES DIRECTEMENT SUR LE MARBRE : aucun.
+
+  ── GESTION (/gestion)
+     51 blocs de texte recensés, page de 3211 px
+
+     PIRE COUPLE « GRAND TEXTE OU ÉTIQUETTE » SUR VEINE
+       « Espace marchand »
+       <p> 12.7 px / graisse 500   encre #5b3e0c   étiquette, seuil strict 4,50
+       fond le plus sombre sous ce bloc : #c5c0b6
+       RATIO 5.42   marge +0.92
+
+     PROSE, TABLEAUX OU FORMULAIRES DIRECTEMENT SUR LE MARBRE : aucun.
+
+  ── GESTION-CATALOGUE (/gestion/catalogue)
+     332 blocs de texte recensés, page de 9765 px
+
+     PIRE COUPLE « GRAND TEXTE OU ÉTIQUETTE » SUR VEINE
+       « Espace marchand »
+       <p> 12.7 px / graisse 500   encre #5b3e0c   étiquette, seuil strict 4,50
+       fond le plus sombre sous ce bloc : #c5c0b6
+       RATIO 5.42   marge +0.92
+
+     PROSE, TABLEAUX OU FORMULAIRES DIRECTEMENT SUR LE MARBRE : aucun.
+
+  ── GESTION-COMMANDES (/gestion/commandes)
+     62 blocs de texte recensés, page de 2385 px
+
+     PIRE COUPLE « GRAND TEXTE OU ÉTIQUETTE » SUR VEINE
+       « Espace marchand »
+       <p> 12.7 px / graisse 500   encre #5b3e0c   étiquette, seuil strict 4,50
+       fond le plus sombre sous ce bloc : #c5c0b6
+       RATIO 5.42   marge +0.92
+
+     PROSE, TABLEAUX OU FORMULAIRES DIRECTEMENT SUR LE MARBRE : aucun.
+
+  ── GESTION-COURRIELS (/gestion/modeles-de-courriels)
+     412 blocs de texte recensés, page de 13681 px
+
+     PIRE COUPLE « GRAND TEXTE OU ÉTIQUETTE » SUR VEINE
+       « Espace marchand »
+       <p> 12.7 px / graisse 500   encre #5b3e0c   étiquette, seuil strict 4,50
+       fond le plus sombre sous ce bloc : #c5c0b6
+       RATIO 5.42   marge +0.92
+
+     PROSE, TABLEAUX OU FORMULAIRES DIRECTEMENT SUR LE MARBRE : aucun.
+
+  ── GESTION-PRISE-EN-MAIN (/gestion/prise-en-main)
+     84 blocs de texte recensés, page de 6319 px
+
+     PIRE COUPLE « GRAND TEXTE OU ÉTIQUETTE » SUR VEINE
+       « Espace marchand »
+       <p> 12.7 px / graisse 500   encre #5b3e0c   étiquette, seuil strict 4,50
+       fond le plus sombre sous ce bloc : #c5c0b6
+       RATIO 5.42   marge +0.92
+
+     PROSE, TABLEAUX OU FORMULAIRES DIRECTEMENT SUR LE MARBRE : aucun.
+
+  ── INTROUVABLE (/cette-page-nexiste-pas)
+     15 blocs de texte recensés, page de 1659 px
+
+     PIRE COUPLE « GRAND TEXTE OU ÉTIQUETTE » SUR VEINE
+       « Erreur 404 »
+       <p> 12.7 px / graisse 500   encre #5b3e0c   étiquette, seuil strict 4,50
+       fond le plus sombre sous ce bloc : #c1bdb4
+       RATIO 5.24   marge +0.74
+
+     PROSE, TABLEAUX OU FORMULAIRES DIRECTEMENT SUR LE MARBRE : aucun.
+
+==============================================================================
+  VERDICT
+    PIRE COUPLE SUR VEINE (grands textes et étiquettes), toutes pages : 5.24 pour un seuil de 4,50
+      sur introuvable — « Erreur 404 », 13 px, encre #5b3e0c, fond #c1bdb4
+    prose / tableaux / formulaires posés directement sur le marbre : 0
+
+    LES ENCRES QUI PORTENT DU PETIT TEXTE SUR LA MATIÈRE
+      (contraste contre la PIRE veine que la tuile puisse poser, seuil 4,50 —
+       c’est cette colonne, et non la mesure locale, qui libère le curseur du fond)
+      #5b3e0c   5.08   23 bloc(s) sur 18 page(s)  LIBRE « Erreur 404 »
+      #1c211a   8.48   57 bloc(s) sur 18 page(s)  LIBRE « 15références rangées en7familles.  »
+
+    PIRE GRAND TEXTE (≥ 24 px, seuil 3,00) : 8.58 — « Huile d’olive de première pression » (fiche), 87 px, encre #1c211a, fond #c0bbb2
+
+    PIRE PETIT TEXTE CONTRE LA PIRE VEINE : 5.08 — « Erreur 404 » (introuvable), encre #5b3e0c
+
+    Aucun texte courant sur le marbre ; tous les couples tiennent WCAG 1.4.3 ;
+    et tout le petit texte de la matière tient 4,50 contre la PIRE veine de la
+    tuile — le curseur `--marbre-opacite` peut donc bouger sans rien casser.
+

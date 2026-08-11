@@ -1,0 +1,49 @@
++ Received
+
+- 1
++ 0
+
+ ❯ tests/unitaires/garde-images.spec.ts:647:26
+    645|     );
+    646|
+    647|     expect(verdict.code).toBe(1);
+       |                          ^
+    648|     expect(verdict.sortie).toContain('infe');
+    649|     expect(verdict.sortie).toContain('1 en échec');
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  tests/unitaires/garde-images.spec.ts > contrôle des métadonnées, dans la garde des marques > attrape le même `infe` en version 3, où l’identifiant fait quatre octets
+AssertionError: expected +0 to be 1 // Object.is equality
+
+- Expected
++ Received
+
+- 1
++ 0
+
+ ❯ tests/unitaires/garde-images.spec.ts:660:26
+    658|     );
+    659|
+    660|     expect(verdict.code).toBe(1);
+       |                          ^
+    661|     expect(verdict.sortie).toContain('infe');
+    662|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  2 failed | 1 passed | 17 skipped (20)
+   Start at  04:08:13
+   Duration  644ms (transform 52ms, setup 0ms, import 74ms, tests 365ms, environment 0ms)
+
+
+ RUN  v4.1.10 <racine du depot>
+
+
+ Test Files  1 passed (1)
+      Tests  20 passed (20)
+   Start at  04:09:22
+   Duration  4.03s (transform 52ms, setup 0ms, import 72ms, tests 3.76s, environment 0ms)
+

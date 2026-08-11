@@ -1,5 +1,8 @@
 import type { Metadata } from 'next';
 
+import { BlocTitre } from '@/composants/mise-en-page/BlocTitre';
+import { HerosIllustre } from '@/composants/mise-en-page/HerosIllustre';
+import { HEROS_PANIER } from '@/donnees/visuels-editoriaux';
 import { IlotPanier } from '@/composants/panier/IlotPanier';
 import { CATALOGUE } from '@/donnees/catalogue';
 import { projeterCatalogue } from '@/lib/panier/catalogue-panier';
@@ -56,21 +59,39 @@ const CATALOGUE_PANIER = projeterCatalogue(CATALOGUE);
 export default function PagePanier() {
   return (
     <div className="mx-auto max-w-page px-5 sm:px-8">
-      <section className="pt-12 sm:pt-16">
-        <p className="text-xs font-semibold tracking-[0.2em] text-ocre uppercase">
-          Commande
-        </p>
-        <h1 className="mt-4 text-affiche font-semibold text-encre">Panier</h1>
-        <p className="mt-5 max-w-lisible text-chapeau text-encre-douce">
-          Les frais de port se calculent ici, avant tout paiement, à partir du poids
-          du colis et de la destination. Aucun supplément n’apparaît plus loin.
-        </p>
-        <p className="mt-4 max-w-lisible text-sm leading-relaxed text-encre-douce">
-          Ce panier reste dans votre navigateur&nbsp;: il survit à la fermeture de
-          l’onglet, il ne part sur aucun serveur, et il disparaît si vous effacez les
-          données du site.
-        </p>
-      </section>
+      {/* L’IMAGE VIT À DROITE DU TITRE, PANIER VIDE COMME PANIER PLEIN
+          (retour client n° 17). Elle appartient au bloc d’ouverture, qui est
+          servi par le SERVEUR et ne dépend d’aucun état : le contenu du panier
+          vit dans l’îlot en dessous, et la composition ne change donc pas selon
+          qu’on a un article ou dix. C’est aussi ce qui garantit qu’elle est là
+          au premier rendu, avant hydratation, sur la page dont le décalage
+          cumulé est publié. */}
+      <HerosIllustre heros={HEROS_PANIER} className="pt-12 pb-4 sm:pt-16">
+        {/* Règle du fond de C19 : le chapeau appartient à la composition
+            d'ouverture et le déclare ; la prose qui suit se lit, donc elle
+            repose sur un panneau de verre. Le `text-chapeau` est CONSERVÉ —
+            un cas du tunnel lit cette classe pour vérifier que le chapeau
+            parle bien la police de texte et non la didone, et `BlocTitre` le
+            pose exactement comme cette page le posait. */}
+        <BlocTitre
+          surtitre="Commande"
+          titre="Panier"
+          chapeau={
+            <>
+              Les frais de port se calculent ici, avant tout paiement, à partir du
+              poids du colis et de la destination. Aucun supplément n’apparaît plus
+              loin.
+            </>
+          }
+          note={
+            <>
+              Ce panier reste dans votre navigateur&nbsp;: il survit à la fermeture
+              de l’onglet, il ne part sur aucun serveur, et il disparaît si vous
+              effacez les données du site.
+            </>
+          }
+        />
+      </HerosIllustre>
 
       <IlotPanier catalogue={CATALOGUE_PANIER} />
     </div>

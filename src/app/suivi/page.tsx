@@ -1,5 +1,8 @@
 import type { Metadata } from 'next';
 
+import { BlocTitre } from '@/composants/mise-en-page/BlocTitre';
+import { HerosIllustre } from '@/composants/mise-en-page/HerosIllustre';
+import { HEROS_SUIVI } from '@/donnees/visuels-editoriaux';
 import { IlotSuivi } from '@/composants/suivi/IlotSuivi';
 import {
   COMMANDES_AMORCE,
@@ -51,24 +54,37 @@ export const metadata: Metadata = {
 export default function PageSuivi() {
   return (
     <div className="mx-auto max-w-page px-5 sm:px-8">
-      <section className="pt-12 sm:pt-16">
-        <p className="text-xs font-semibold tracking-[0.2em] text-ocre uppercase">
-          Votre commande
-        </p>
-        <h1 className="mt-4 text-affiche font-semibold text-encre">Suivi de commande</h1>
-        <p className="mt-5 max-w-lisible text-chapeau text-encre-douce">
-          Saisissez la référence reçue à la commande&nbsp;: vous verrez où elle en
-          est, et quand chaque étape a eu lieu.
-        </p>
-        <p className="mt-4 max-w-lisible text-sm leading-relaxed text-encre-douce">
-          Rappel&nbsp;: Maison Vaubrune est une épicerie fine fictive et cette page
-          est une démonstration. Les commandes affichées sont celles passées dans ce
-          navigateur, plus le {LIBELLE_JEU_ESSAI}. Rien n’est envoyé nulle part quand
-          vous saisissez une référence.
-        </p>
-      </section>
+      {/* LE HÉROS PASSE EN VIDÉO (retour client n° 19), par le seul champ
+          `video` de son entrée de données. */}
+      <HerosIllustre heros={HEROS_SUIVI} className="pt-12 pb-4 sm:pt-16">
+        <BlocTitre
+          surtitre="Votre commande"
+          titre="Suivi de commande"
+          chapeau={
+            <>
+              Saisissez la référence reçue à la commande&nbsp;: vous verrez où elle
+              en est, et quand chaque étape a eu lieu.
+            </>
+          }
+          note={
+            <>
+              Rappel&nbsp;: Maison Vaubrune est une épicerie fine fictive et cette
+              page est une démonstration. Les commandes affichées sont celles passées
+              dans ce navigateur, plus le {LIBELLE_JEU_ESSAI}. Rien n’est envoyé
+              nulle part quand vous saisissez une référence.
+            </>
+          }
+        />
+      </HerosIllustre>
 
-      <IlotSuivi amorce={COMMANDES_AMORCE} exemples={REFERENCES_AMORCE} />
+      {/* L'enveloppe est un `div` nu : elle ne pose ni bordure, ni
+          remplissage, si bien que les marges de l'îlot la traversent et que
+          rien ne bouge d'un pixel. Poser l'attribut sur l'îlot lui-même
+          demanderait de rendre un composant client conscient du mouvement —
+          patron de l'encart de fiction sur l'accueil, C17. */}
+      <div data-revelation>
+        <IlotSuivi amorce={COMMANDES_AMORCE} exemples={REFERENCES_AMORCE} />
+      </div>
     </div>
   );
 }

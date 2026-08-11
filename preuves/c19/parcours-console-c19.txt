@@ -1,0 +1,48 @@
+PARCOURS SOUS SURVEILLANCE DE LA CONSOLE — ronde finale C19
+date   : 2026-08-11 04:46
+commit : 1ebef48 (correctif vidéo)
+base   : http://localhost:3000 — production LOCALE sur CONSTRUCTION FRAÎCHE
+         (npm run build joué dans la même session, aucun `next start`
+         résiduel sur le poste), UN seul service.
+         La PRÉVISUALISATION Vercel serait fautive pour une raison qui ne
+         nous appartient pas : elle injecte le widget vercel.live, que notre
+         CSP bloque à juste titre et qui n'existe pas en production.
+motif  : le relevé précédent (03:35, commit 869ebda) portait la RÉSERVE
+         « LA VIDÉO DU RAYON NE DÉMARRE PAS quand on arrive en cliquant ».
+         Le défaut est réparé par 1ebef48 : ce relevé le rejoue et la réserve
+         tombe. La vidéo du rayon qui JOUE prouve au passage `media-src 'self'`
+         par le seul chemin qui l'ouvre réellement — une ressource jamais
+         demandée ne peut violer aucune directive, et c'est le pire des verts.
+======================================================================
+
+
+Parcours d'achat entier sur http://localhost:3000
+------------------------------------------------------------------------
+  → accueil, encart de fiction, pastille à zéro
+  → vidéo du héros — attente de la lecture réelle
+     temps courant 0.60 s → 1.50 s sur boucle-1280.av1.mp4
+  → rayon puis fiche de l’huile d’olive
+  → vidéo du rayon — attente de la lecture réelle
+     temps courant 0.38 s → 1.29 s
+  → deux huiles de 50 cl au panier
+  → un fromage de brebis les rejoint
+  → panier — vérification du total 69,80 €
+     total lu à l'écran : 69,80 € ✓
+  → récapitulatif de commande et coordonnées
+  → écran de paiement simulé (aucun champ de carte)
+     champs de saisie sur l'écran de paiement : 0 (attendu 0)
+  → « Payer » — référence et panier vidé
+     référence rendue par le serveur : MVB-20260811-HLEA
+  → suivi — frise arrêtée à « Payée »
+  → espace marchand — « Marquer préparée »
+  → retour au suivi — frise à deux états
+
+  Parcours complet : OK
+------------------------------------------------------------------------
+Messages de console relevés : 0
+Exceptions non rattrapées : 0
+Violations de politique de sécurité du contenu : 0
+------------------------------------------------------------------------
+CONSOLE PROPRE — aucun message, aucune exception, AUCUNE violation CSP. D34 validée.
+Réserves de parcours : 0
+

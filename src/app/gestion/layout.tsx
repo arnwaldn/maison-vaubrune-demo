@@ -64,7 +64,7 @@ export default function MiseEnPageGestion({
       />
 
       <div className="mx-auto max-w-page px-5 sm:px-8">
-        <nav aria-label="Fil d’Ariane" className="pt-8 text-sm text-encre-douce">
+        <nav aria-label="Fil d’Ariane" className="pt-8 text-sm text-encre" data-sur-marbre>
           <Link
             href="/"
             className="underline decoration-filet decoration-2 underline-offset-4 hover:text-terre hover:decoration-terre"
@@ -82,7 +82,7 @@ export default function MiseEnPageGestion({
 
         <nav
           aria-label="Sections de l’espace marchand"
-          className="mt-6 border-y border-filet py-4"
+          className="panneau mt-6"
         >
           <ul className="flex flex-wrap gap-x-6 gap-y-2">
             {ONGLETS.map((onglet) => (
@@ -104,7 +104,7 @@ export default function MiseEnPageGestion({
         >
           <h2
             id="titre-acces-libre"
-            className="font-titre text-base font-semibold text-encre"
+            className="sous-titre text-encre"
           >
             Pourquoi cet espace n’a pas de mot de passe
           </h2>

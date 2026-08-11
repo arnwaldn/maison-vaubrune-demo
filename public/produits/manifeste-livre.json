@@ -1,0 +1,3523 @@
+{
+  "$commentaire": "Relevé de livraison — écrit par scripts/preparer-images.mjs, jamais à la main. La liste « fichiers » est celle que verifier-images.mjs confronte au disque dans les deux sens ; « derives » porte le détail et rattache chaque fichier au hachage du master relu dont il descend ; « masters » porte la position MESURÉE de la signature du moteur d’images (l’étincelle) et la marge qui la sépare de la boîte de recadrage — une signature qui entre dans la boîte arrête la livraison. Les masters sont listés dans les DEUX relevés : ils sont examinés en une seule passe.",
+  "genere": "npm run preparer-images",
+  "espace": "produits",
+  "qualites": {
+    "avif": {
+      "quality": 66,
+      "effort": 9,
+      "chromaSubsampling": "4:4:4"
+    },
+    "jpeg": {
+      "quality": 80,
+      "progressive": true,
+      "mozjpeg": true
+    }
+  },
+  "fichiers": [
+    "beurre-baratte-demi-sel/ambiance-320.avif",
+    "beurre-baratte-demi-sel/ambiance-320.jpg",
+    "beurre-baratte-demi-sel/ambiance-480.avif",
+    "beurre-baratte-demi-sel/ambiance-480.jpg",
+    "beurre-baratte-demi-sel/ambiance-640.avif",
+    "beurre-baratte-demi-sel/ambiance-640.jpg",
+    "beurre-baratte-demi-sel/partage-1200x630.jpg",
+    "beurre-baratte-demi-sel/principal-320.avif",
+    "beurre-baratte-demi-sel/principal-320.jpg",
+    "beurre-baratte-demi-sel/principal-480.avif",
+    "beurre-baratte-demi-sel/principal-480.jpg",
+    "beurre-baratte-demi-sel/principal-640.avif",
+    "beurre-baratte-demi-sel/principal-640.jpg",
+    "coffret-composez-le-votre/ambiance-320.avif",
+    "coffret-composez-le-votre/ambiance-320.jpg",
+    "coffret-composez-le-votre/ambiance-480.avif",
+    "coffret-composez-le-votre/ambiance-480.jpg",
+    "coffret-composez-le-votre/ambiance-640.avif",
+    "coffret-composez-le-votre/ambiance-640.jpg",
+    "coffret-composez-le-votre/partage-1200x630.jpg",
+    "coffret-composez-le-votre/principal-320.avif",
+    "coffret-composez-le-votre/principal-320.jpg",
+    "coffret-composez-le-votre/principal-480.avif",
+    "coffret-composez-le-votre/principal-480.jpg",
+    "coffret-composez-le-votre/principal-640.avif",
+    "coffret-composez-le-votre/principal-640.jpg",
+    "coffret-table-du-dimanche/ambiance-320.avif",
+    "coffret-table-du-dimanche/ambiance-320.jpg",
+    "coffret-table-du-dimanche/ambiance-480.avif",
+    "coffret-table-du-dimanche/ambiance-480.jpg",
+    "coffret-table-du-dimanche/ambiance-640.avif",
+    "coffret-table-du-dimanche/ambiance-640.jpg",
+    "coffret-table-du-dimanche/partage-1200x630.jpg",
+    "coffret-table-du-dimanche/principal-320.avif",
+    "coffret-table-du-dimanche/principal-320.jpg",
+    "coffret-table-du-dimanche/principal-480.avif",
+    "coffret-table-du-dimanche/principal-480.jpg",
+    "coffret-table-du-dimanche/principal-640.avif",
+    "coffret-table-du-dimanche/principal-640.jpg",
+    "confit-oignons-vin-doux/ambiance-320.avif",
+    "confit-oignons-vin-doux/ambiance-320.jpg",
+    "confit-oignons-vin-doux/ambiance-480.avif",
+    "confit-oignons-vin-doux/ambiance-480.jpg",
+    "confit-oignons-vin-doux/ambiance-640.avif",
+    "confit-oignons-vin-doux/ambiance-640.jpg",
+    "confit-oignons-vin-doux/partage-1200x630.jpg",
+    "confit-oignons-vin-doux/principal-320.avif",
+    "confit-oignons-vin-doux/principal-320.jpg",
+    "confit-oignons-vin-doux/principal-480.avif",
+    "confit-oignons-vin-doux/principal-480.jpg",
+    "confit-oignons-vin-doux/principal-640.avif",
+    "confit-oignons-vin-doux/principal-640.jpg",
+    "confiture-abricots-plein-vent/ambiance-320.avif",
+    "confiture-abricots-plein-vent/ambiance-320.jpg",
+    "confiture-abricots-plein-vent/ambiance-480.avif",
+    "confiture-abricots-plein-vent/ambiance-480.jpg",
+    "confiture-abricots-plein-vent/ambiance-640.avif",
+    "confiture-abricots-plein-vent/ambiance-640.jpg",
+    "confiture-abricots-plein-vent/partage-1200x630.jpg",
+    "confiture-abricots-plein-vent/principal-320.avif",
+    "confiture-abricots-plein-vent/principal-320.jpg",
+    "confiture-abricots-plein-vent/principal-480.avif",
+    "confiture-abricots-plein-vent/principal-480.jpg",
+    "confiture-abricots-plein-vent/principal-640.avif",
+    "confiture-abricots-plein-vent/principal-640.jpg",
+    "fromage-fermier-brebis/ambiance-320.avif",
+    "fromage-fermier-brebis/ambiance-320.jpg",
+    "fromage-fermier-brebis/ambiance-480.avif",
+    "fromage-fermier-brebis/ambiance-480.jpg",
+    "fromage-fermier-brebis/ambiance-640.avif",
+    "fromage-fermier-brebis/ambiance-640.jpg",
+    "fromage-fermier-brebis/partage-1200x630.jpg",
+    "fromage-fermier-brebis/principal-320.avif",
+    "fromage-fermier-brebis/principal-320.jpg",
+    "fromage-fermier-brebis/principal-480.avif",
+    "fromage-fermier-brebis/principal-480.jpg",
+    "fromage-fermier-brebis/principal-640.avif",
+    "fromage-fermier-brebis/principal-640.jpg",
+    "huile-noix-moulin/ambiance-320.avif",
+    "huile-noix-moulin/ambiance-320.jpg",
+    "huile-noix-moulin/ambiance-480.avif",
+    "huile-noix-moulin/ambiance-480.jpg",
+    "huile-noix-moulin/ambiance-640.avif",
+    "huile-noix-moulin/ambiance-640.jpg",
+    "huile-noix-moulin/partage-1200x630.jpg",
+    "huile-noix-moulin/principal-320.avif",
+    "huile-noix-moulin/principal-320.jpg",
+    "huile-noix-moulin/principal-480.avif",
+    "huile-noix-moulin/principal-480.jpg",
+    "huile-noix-moulin/principal-640.avif",
+    "huile-noix-moulin/principal-640.jpg",
+    "huile-olive-premiere-pression/ambiance-320.avif",
+    "huile-olive-premiere-pression/ambiance-320.jpg",
+    "huile-olive-premiere-pression/ambiance-480.avif",
+    "huile-olive-premiere-pression/ambiance-480.jpg",
+    "huile-olive-premiere-pression/ambiance-640.avif",
+    "huile-olive-premiere-pression/ambiance-640.jpg",
+    "huile-olive-premiere-pression/partage-1200x630.jpg",
+    "huile-olive-premiere-pression/principal-320.avif",
+    "huile-olive-premiere-pression/principal-320.jpg",
+    "huile-olive-premiere-pression/principal-480.avif",
+    "huile-olive-premiere-pression/principal-480.jpg",
+    "huile-olive-premiere-pression/principal-640.avif",
+    "huile-olive-premiere-pression/principal-640.jpg",
+    "infusion-du-soir-sept-plantes/ambiance-320.avif",
+    "infusion-du-soir-sept-plantes/ambiance-320.jpg",
+    "infusion-du-soir-sept-plantes/ambiance-480.avif",
+    "infusion-du-soir-sept-plantes/ambiance-480.jpg",
+    "infusion-du-soir-sept-plantes/ambiance-640.avif",
+    "infusion-du-soir-sept-plantes/ambiance-640.jpg",
+    "infusion-du-soir-sept-plantes/partage-1200x630.jpg",
+    "infusion-du-soir-sept-plantes/principal-320.avif",
+    "infusion-du-soir-sept-plantes/principal-320.jpg",
+    "infusion-du-soir-sept-plantes/principal-480.avif",
+    "infusion-du-soir-sept-plantes/principal-480.jpg",
+    "infusion-du-soir-sept-plantes/principal-640.avif",
+    "infusion-du-soir-sept-plantes/principal-640.jpg",
+    "lentilles-blondes-plateau/ambiance-320.avif",
+    "lentilles-blondes-plateau/ambiance-320.jpg",
+    "lentilles-blondes-plateau/ambiance-480.avif",
+    "lentilles-blondes-plateau/ambiance-480.jpg",
+    "lentilles-blondes-plateau/ambiance-640.avif",
+    "lentilles-blondes-plateau/ambiance-640.jpg",
+    "lentilles-blondes-plateau/partage-1200x630.jpg",
+    "lentilles-blondes-plateau/principal-320.avif",
+    "lentilles-blondes-plateau/principal-320.jpg",
+    "lentilles-blondes-plateau/principal-480.avif",
+    "lentilles-blondes-plateau/principal-480.jpg",
+    "lentilles-blondes-plateau/principal-640.avif",
+    "lentilles-blondes-plateau/principal-640.jpg",
+    "miel-bruyere-blanche/ambiance-320.avif",
+    "miel-bruyere-blanche/ambiance-320.jpg",
+    "miel-bruyere-blanche/ambiance-480.avif",
+    "miel-bruyere-blanche/ambiance-480.jpg",
+    "miel-bruyere-blanche/ambiance-640.avif",
+    "miel-bruyere-blanche/ambiance-640.jpg",
+    "miel-bruyere-blanche/partage-1200x630.jpg",
+    "miel-bruyere-blanche/principal-320.avif",
+    "miel-bruyere-blanche/principal-320.jpg",
+    "miel-bruyere-blanche/principal-480.avif",
+    "miel-bruyere-blanche/principal-480.jpg",
+    "miel-bruyere-blanche/principal-640.avif",
+    "miel-bruyere-blanche/principal-640.jpg",
+    "miel-chataignier/ambiance-320.avif",
+    "miel-chataignier/ambiance-320.jpg",
+    "miel-chataignier/ambiance-480.avif",
+    "miel-chataignier/ambiance-480.jpg",
+    "miel-chataignier/ambiance-640.avif",
+    "miel-chataignier/ambiance-640.jpg",
+    "miel-chataignier/partage-1200x630.jpg",
+    "miel-chataignier/principal-320.avif",
+    "miel-chataignier/principal-320.jpg",
+    "miel-chataignier/principal-480.avif",
+    "miel-chataignier/principal-480.jpg",
+    "miel-chataignier/principal-640.avif",
+    "miel-chataignier/principal-640.jpg",
+    "rillettes-canard-echalotes/ambiance-320.avif",
+    "rillettes-canard-echalotes/ambiance-320.jpg",
+    "rillettes-canard-echalotes/ambiance-480.avif",
+    "rillettes-canard-echalotes/ambiance-480.jpg",
+    "rillettes-canard-echalotes/ambiance-640.avif",
+    "rillettes-canard-echalotes/ambiance-640.jpg",
+    "rillettes-canard-echalotes/partage-1200x630.jpg",
+    "rillettes-canard-echalotes/principal-320.avif",
+    "rillettes-canard-echalotes/principal-320.jpg",
+    "rillettes-canard-echalotes/principal-480.avif",
+    "rillettes-canard-echalotes/principal-480.jpg",
+    "rillettes-canard-echalotes/principal-640.avif",
+    "rillettes-canard-echalotes/principal-640.jpg",
+    "terrine-campagne-poivre-noir/ambiance-320.avif",
+    "terrine-campagne-poivre-noir/ambiance-320.jpg",
+    "terrine-campagne-poivre-noir/ambiance-480.avif",
+    "terrine-campagne-poivre-noir/ambiance-480.jpg",
+    "terrine-campagne-poivre-noir/ambiance-640.avif",
+    "terrine-campagne-poivre-noir/ambiance-640.jpg",
+    "terrine-campagne-poivre-noir/partage-1200x630.jpg",
+    "terrine-campagne-poivre-noir/principal-320.avif",
+    "terrine-campagne-poivre-noir/principal-320.jpg",
+    "terrine-campagne-poivre-noir/principal-480.avif",
+    "terrine-campagne-poivre-noir/principal-480.jpg",
+    "terrine-campagne-poivre-noir/principal-640.avif",
+    "terrine-campagne-poivre-noir/principal-640.jpg",
+    "vinaigre-cidre-vieilli-fut/ambiance-320.avif",
+    "vinaigre-cidre-vieilli-fut/ambiance-320.jpg",
+    "vinaigre-cidre-vieilli-fut/ambiance-480.avif",
+    "vinaigre-cidre-vieilli-fut/ambiance-480.jpg",
+    "vinaigre-cidre-vieilli-fut/ambiance-640.avif",
+    "vinaigre-cidre-vieilli-fut/ambiance-640.jpg",
+    "vinaigre-cidre-vieilli-fut/partage-1200x630.jpg",
+    "vinaigre-cidre-vieilli-fut/principal-320.avif",
+    "vinaigre-cidre-vieilli-fut/principal-320.jpg",
+    "vinaigre-cidre-vieilli-fut/principal-480.avif",
+    "vinaigre-cidre-vieilli-fut/principal-480.jpg",
+    "vinaigre-cidre-vieilli-fut/principal-640.avif",
+    "vinaigre-cidre-vieilli-fut/principal-640.jpg"
+  ],
+  "derives": [
+    {
+      "espace": "produits",
+      "fichier": "beurre-baratte-demi-sel/ambiance-320.avif",
+      "vue": "ambiance",
+      "largeur": 320,
+      "hauteur": 512,
+      "format": "avif",
+      "octets": 10092,
+      "sha256": "ad8ca66d20da1507516a818345ee1ef8878da24c3ecb5a0b03e12130e7f71b4b",
+      "master": "04d6be66ee248d296f4dfa608db2c0abfca9398ad7e62e0947ba61eb027a9e3e"
+    },
+    {
+      "espace": "produits",
+      "fichier": "beurre-baratte-demi-sel/ambiance-320.jpg",
+      "vue": "ambiance",
+      "largeur": 320,
+      "hauteur": 512,
+      "format": "jpg",
+      "octets": 14239,
+      "sha256": "2ed052a1451cc1c2f9b883b0d320e04eb35c5bcc98e07b13ce0c15e61e09c14d",
+      "master": "04d6be66ee248d296f4dfa608db2c0abfca9398ad7e62e0947ba61eb027a9e3e"
+    },
+    {
+      "espace": "produits",
+      "fichier": "beurre-baratte-demi-sel/ambiance-480.avif",
+      "vue": "ambiance",
+      "largeur": 480,
+      "hauteur": 768,
+      "format": "avif",
+      "octets": 20005,
+      "sha256": "58e57ae41983710fbf8c335107603693c0149eecc8982f7a4dcbaf4ad1840905",
+      "master": "04d6be66ee248d296f4dfa608db2c0abfca9398ad7e62e0947ba61eb027a9e3e"
+    },
+    {
+      "espace": "produits",
+      "fichier": "beurre-baratte-demi-sel/ambiance-480.jpg",
+      "vue": "ambiance",
+      "largeur": 480,
+      "hauteur": 768,
+      "format": "jpg",
+      "octets": 27653,
+      "sha256": "08292df242376e0ca4e786822e6c3654ea4d136367c7aa52b8c0a045f85dd837",
+      "master": "04d6be66ee248d296f4dfa608db2c0abfca9398ad7e62e0947ba61eb027a9e3e"
+    },
+    {
+      "espace": "produits",
+      "fichier": "beurre-baratte-demi-sel/ambiance-640.avif",
+      "vue": "ambiance",
+      "largeur": 640,
+      "hauteur": 1024,
+      "format": "avif",
+      "octets": 31955,
+      "sha256": "064348614fd7bf1d9dff6af82a91e672bcde01d9090c5d740d5d1b2169c524c1",
+      "master": "04d6be66ee248d296f4dfa608db2c0abfca9398ad7e62e0947ba61eb027a9e3e"
+    },
+    {
+      "espace": "produits",
+      "fichier": "beurre-baratte-demi-sel/ambiance-640.jpg",
+      "vue": "ambiance",
+      "largeur": 640,
+      "hauteur": 1024,
+      "format": "jpg",
+      "octets": 44528,
+      "sha256": "725a2132ec10fcd802ab89542b390747cff2d05bc6d0d0a70934a91f68a5b929",
+      "master": "04d6be66ee248d296f4dfa608db2c0abfca9398ad7e62e0947ba61eb027a9e3e"
+    },
+    {
+      "espace": "produits",
+      "fichier": "beurre-baratte-demi-sel/partage-1200x630.jpg",
+      "vue": "partage",
+      "largeur": 1200,
+      "hauteur": 630,
+      "format": "jpg",
+      "octets": 17318,
+      "sha256": "32fecc8ef9f58fbd977a54e60eaa41e5a6b1290479e60447d07393d6d0985f8a",
+      "master": "c5104e69f83ddeeba0f168732072f7a91a32593d7468539fabbe6840ed901399"
+    },
+    {
+      "espace": "produits",
+      "fichier": "beurre-baratte-demi-sel/principal-320.avif",
+      "vue": "principal",
+      "largeur": 320,
+      "hauteur": 512,
+      "format": "avif",
+      "octets": 9145,
+      "sha256": "81b9bef93f75cd772ec6f78a24e1a18683c741322b6a8ac8fc7069217b907e83",
+      "master": "c5104e69f83ddeeba0f168732072f7a91a32593d7468539fabbe6840ed901399"
+    },
+    {
+      "espace": "produits",
+      "fichier": "beurre-baratte-demi-sel/principal-320.jpg",
+      "vue": "principal",
+      "largeur": 320,
+      "hauteur": 512,
+      "format": "jpg",
+      "octets": 13162,
+      "sha256": "c932e82e1288e24a4148e7f3006f854c4bb141dfb740dded46d5c0a43b342040",
+      "master": "c5104e69f83ddeeba0f168732072f7a91a32593d7468539fabbe6840ed901399"
+    },
+    {
+      "espace": "produits",
+      "fichier": "beurre-baratte-demi-sel/principal-480.avif",
+      "vue": "principal",
+      "largeur": 480,
+      "hauteur": 768,
+      "format": "avif",
+      "octets": 17907,
+      "sha256": "ae9cfdb8216c3b32910a38e2450d6bbedd1d96dcd83d55971df35792c18f2c2c",
+      "master": "c5104e69f83ddeeba0f168732072f7a91a32593d7468539fabbe6840ed901399"
+    },
+    {
+      "espace": "produits",
+      "fichier": "beurre-baratte-demi-sel/principal-480.jpg",
+      "vue": "principal",
+      "largeur": 480,
+      "hauteur": 768,
+      "format": "jpg",
+      "octets": 25432,
+      "sha256": "3e8a1478789a6c80321d90de5cb07c238726379bf77b13d73e86f46a4105186f",
+      "master": "c5104e69f83ddeeba0f168732072f7a91a32593d7468539fabbe6840ed901399"
+    },
+    {
+      "espace": "produits",
+      "fichier": "beurre-baratte-demi-sel/principal-640.avif",
+      "vue": "principal",
+      "largeur": 640,
+      "hauteur": 1024,
+      "format": "avif",
+      "octets": 28915,
+      "sha256": "221b29f79f81eb44c2f30c52a26538d3090ffd8c2884652a87599b9941c5b40d",
+      "master": "c5104e69f83ddeeba0f168732072f7a91a32593d7468539fabbe6840ed901399"
+    },
+    {
+      "espace": "produits",
+      "fichier": "beurre-baratte-demi-sel/principal-640.jpg",
+      "vue": "principal",
+      "largeur": 640,
+      "hauteur": 1024,
+      "format": "jpg",
+      "octets": 40894,
+      "sha256": "5d7630b3a452e5a08e465309f2031b31ed74978b9cc6ca70ea43232cd81bd625",
+      "master": "c5104e69f83ddeeba0f168732072f7a91a32593d7468539fabbe6840ed901399"
+    },
+    {
+      "espace": "produits",
+      "fichier": "coffret-composez-le-votre/ambiance-320.avif",
+      "vue": "ambiance",
+      "largeur": 320,
+      "hauteur": 400,
+      "format": "avif",
+      "octets": 10466,
+      "sha256": "3d7cf510106c44d1a6e6ddd1a86d451da19dd5312085ddfb037434a4d922eba1",
+      "master": "1ed01a06b95f4642d06dc27dde72ee6d898d6e7bfad69632d5c780f67f001327"
+    },
+    {
+      "espace": "produits",
+      "fichier": "coffret-composez-le-votre/ambiance-320.jpg",
+      "vue": "ambiance",
+      "largeur": 320,
+      "hauteur": 400,
+      "format": "jpg",
+      "octets": 15236,
+      "sha256": "e7bc8d11304f6ef752d9dad37b6e8bce6e0d574d3063f2ccc6f2d9342fc24dff",
+      "master": "1ed01a06b95f4642d06dc27dde72ee6d898d6e7bfad69632d5c780f67f001327"
+    },
+    {
+      "espace": "produits",
+      "fichier": "coffret-composez-le-votre/ambiance-480.avif",
+      "vue": "ambiance",
+      "largeur": 480,
+      "hauteur": 600,
+      "format": "avif",
+      "octets": 19164,
+      "sha256": "1e1256c4d1cd0d0587e43362300a6d5406a2a2c1e83aac7dc68a36703be28a58",
+      "master": "1ed01a06b95f4642d06dc27dde72ee6d898d6e7bfad69632d5c780f67f001327"
+    },
+    {
+      "espace": "produits",
+      "fichier": "coffret-composez-le-votre/ambiance-480.jpg",
+      "vue": "ambiance",
+      "largeur": 480,
+      "hauteur": 600,
+      "format": "jpg",
+      "octets": 28793,
+      "sha256": "c8fb32fc3b00f5467d1207c1a33413880ee192134e1ec5be04dead0e41363240",
+      "master": "1ed01a06b95f4642d06dc27dde72ee6d898d6e7bfad69632d5c780f67f001327"
+    },
+    {
+      "espace": "produits",
+      "fichier": "coffret-composez-le-votre/ambiance-640.avif",
+      "vue": "ambiance",
+      "largeur": 640,
+      "hauteur": 800,
+      "format": "avif",
+      "octets": 30302,
+      "sha256": "00048196e4c3f1dfd462e5be9a9f72cb978ec1e98e323903317de7561cf58016",
+      "master": "1ed01a06b95f4642d06dc27dde72ee6d898d6e7bfad69632d5c780f67f001327"
+    },
+    {
+      "espace": "produits",
+      "fichier": "coffret-composez-le-votre/ambiance-640.jpg",
+      "vue": "ambiance",
+      "largeur": 640,
+      "hauteur": 800,
+      "format": "jpg",
+      "octets": 46097,
+      "sha256": "26391c7a1073d315f8d11bb28654d32fbfb8ea819cb51cff7b6d6c3abe3c9d6f",
+      "master": "1ed01a06b95f4642d06dc27dde72ee6d898d6e7bfad69632d5c780f67f001327"
+    },
+    {
+      "espace": "produits",
+      "fichier": "coffret-composez-le-votre/partage-1200x630.jpg",
+      "vue": "partage",
+      "largeur": 1200,
+      "hauteur": 630,
+      "format": "jpg",
+      "octets": 25057,
+      "sha256": "d7afafa75cba136b00964e6f25cec87674ab56b03f9f973a7b3b366d1ad88c40",
+      "master": "f6698de13cc1b8e22605ff1105c9984d3c70e385765791556f13552d03c918ed"
+    },
+    {
+      "espace": "produits",
+      "fichier": "coffret-composez-le-votre/principal-320.avif",
+      "vue": "principal",
+      "largeur": 320,
+      "hauteur": 240,
+      "format": "avif",
+      "octets": 4266,
+      "sha256": "5841604dc9e66ebb1017c999bff709081893e9fa42be2ec45fef4fb8ace92d90",
+      "master": "f6698de13cc1b8e22605ff1105c9984d3c70e385765791556f13552d03c918ed"
+    },
+    {
+      "espace": "produits",
+      "fichier": "coffret-composez-le-votre/principal-320.jpg",
+      "vue": "principal",
+      "largeur": 320,
+      "hauteur": 240,
+      "format": "jpg",
+      "octets": 5593,
+      "sha256": "1787076e9cbd0aef48d09453ca943115ddb9ae4c569bf9887410558772a8d457",
+      "master": "f6698de13cc1b8e22605ff1105c9984d3c70e385765791556f13552d03c918ed"
+    },
+    {
+      "espace": "produits",
+      "fichier": "coffret-composez-le-votre/principal-480.avif",
+      "vue": "principal",
+      "largeur": 480,
+      "hauteur": 360,
+      "format": "avif",
+      "octets": 8293,
+      "sha256": "24418423ef5c4e094dea6a8c5bf3a936aad09d709d58069b1ed3983c24d62508",
+      "master": "f6698de13cc1b8e22605ff1105c9984d3c70e385765791556f13552d03c918ed"
+    },
+    {
+      "espace": "produits",
+      "fichier": "coffret-composez-le-votre/principal-480.jpg",
+      "vue": "principal",
+      "largeur": 480,
+      "hauteur": 360,
+      "format": "jpg",
+      "octets": 10857,
+      "sha256": "c48f2d8617a80ef3543b9969752e756e768f9b2f02155142e05e18b3cb02b2ec",
+      "master": "f6698de13cc1b8e22605ff1105c9984d3c70e385765791556f13552d03c918ed"
+    },
+    {
+      "espace": "produits",
+      "fichier": "coffret-composez-le-votre/principal-640.avif",
+      "vue": "principal",
+      "largeur": 640,
+      "hauteur": 480,
+      "format": "avif",
+      "octets": 13512,
+      "sha256": "10045cfdbb4311bdf69ebcd81e33acf98eed8ea0d24c7c6f53fc52ad6ee0f55c",
+      "master": "f6698de13cc1b8e22605ff1105c9984d3c70e385765791556f13552d03c918ed"
+    },
+    {
+      "espace": "produits",
+      "fichier": "coffret-composez-le-votre/principal-640.jpg",
+      "vue": "principal",
+      "largeur": 640,
+      "hauteur": 480,
+      "format": "jpg",
+      "octets": 17842,
+      "sha256": "081b9e275ad17879b1de673b0b777202d52a8baeed049f556bccba4fd03ecf8b",
+      "master": "f6698de13cc1b8e22605ff1105c9984d3c70e385765791556f13552d03c918ed"
+    },
+    {
+      "espace": "produits",
+      "fichier": "coffret-table-du-dimanche/ambiance-320.avif",
+      "vue": "ambiance",
+      "largeur": 320,
+      "hauteur": 400,
+      "format": "avif",
+      "octets": 14084,
+      "sha256": "702edf3ead89b686d137eeb2240c91d7c556409ff666f403bc8afd82a12ceb82",
+      "master": "4b99ee0b57c267e7d1cd3c4dacccba695e06db02566a408001a61088118dad38"
+    },
+    {
+      "espace": "produits",
+      "fichier": "coffret-table-du-dimanche/ambiance-320.jpg",
+      "vue": "ambiance",
+      "largeur": 320,
+      "hauteur": 400,
+      "format": "jpg",
+      "octets": 18893,
+      "sha256": "4bb64db3398ab63618c047a0a13cb218debe450d6f3447461af5bfe9b45892d0",
+      "master": "4b99ee0b57c267e7d1cd3c4dacccba695e06db02566a408001a61088118dad38"
+    },
+    {
+      "espace": "produits",
+      "fichier": "coffret-table-du-dimanche/ambiance-480.avif",
+      "vue": "ambiance",
+      "largeur": 480,
+      "hauteur": 600,
+      "format": "avif",
+      "octets": 27428,
+      "sha256": "f9372376d6f0cc36366a44e2d1edd1ae9fca41bcbd24a3cb2f162776f0eb8271",
+      "master": "4b99ee0b57c267e7d1cd3c4dacccba695e06db02566a408001a61088118dad38"
+    },
+    {
+      "espace": "produits",
+      "fichier": "coffret-table-du-dimanche/ambiance-480.jpg",
+      "vue": "ambiance",
+      "largeur": 480,
+      "hauteur": 600,
+      "format": "jpg",
+      "octets": 37215,
+      "sha256": "7ec3f3d2805c04d6fc73b53632864d59d30612fabe528beab0ff5502084b2503",
+      "master": "4b99ee0b57c267e7d1cd3c4dacccba695e06db02566a408001a61088118dad38"
+    },
+    {
+      "espace": "produits",
+      "fichier": "coffret-table-du-dimanche/ambiance-640.avif",
+      "vue": "ambiance",
+      "largeur": 640,
+      "hauteur": 800,
+      "format": "avif",
+      "octets": 43070,
+      "sha256": "d3a8c0b69a2188339e89b4b94bb316a252559179aee795a8944c91e9646fd08b",
+      "master": "4b99ee0b57c267e7d1cd3c4dacccba695e06db02566a408001a61088118dad38"
+    },
+    {
+      "espace": "produits",
+      "fichier": "coffret-table-du-dimanche/ambiance-640.jpg",
+      "vue": "ambiance",
+      "largeur": 640,
+      "hauteur": 800,
+      "format": "jpg",
+      "octets": 60232,
+      "sha256": "33110d486ca2423a2c98664a66177519f335a7c8a6dbd9320a0538528f380308",
+      "master": "4b99ee0b57c267e7d1cd3c4dacccba695e06db02566a408001a61088118dad38"
+    },
+    {
+      "espace": "produits",
+      "fichier": "coffret-table-du-dimanche/partage-1200x630.jpg",
+      "vue": "partage",
+      "largeur": 1200,
+      "hauteur": 630,
+      "format": "jpg",
+      "octets": 24427,
+      "sha256": "5dc9a7b83032755e2f7cdb5f37cb652deead73f17056332b5a39b77dcf4c89ad",
+      "master": "428ae16e11c99fcfa3f0292a4485e984a77420730bf9f9ea8148390f946486f7"
+    },
+    {
+      "espace": "produits",
+      "fichier": "coffret-table-du-dimanche/principal-320.avif",
+      "vue": "principal",
+      "largeur": 320,
+      "hauteur": 240,
+      "format": "avif",
+      "octets": 4184,
+      "sha256": "8fcf2b62c19138fa316014eca19a215b025fbaac129e117a1e3fc6b4599a8d82",
+      "master": "428ae16e11c99fcfa3f0292a4485e984a77420730bf9f9ea8148390f946486f7"
+    },
+    {
+      "espace": "produits",
+      "fichier": "coffret-table-du-dimanche/principal-320.jpg",
+      "vue": "principal",
+      "largeur": 320,
+      "hauteur": 240,
+      "format": "jpg",
+      "octets": 5466,
+      "sha256": "6a98c0843ab00f14dadd5c4b68d981dfc0ac4a33b844e76276fc1abb7b8f88ce",
+      "master": "428ae16e11c99fcfa3f0292a4485e984a77420730bf9f9ea8148390f946486f7"
+    },
+    {
+      "espace": "produits",
+      "fichier": "coffret-table-du-dimanche/principal-480.avif",
+      "vue": "principal",
+      "largeur": 480,
+      "hauteur": 360,
+      "format": "avif",
+      "octets": 7902,
+      "sha256": "1dd81a9389bfc22a52219f33cb5b3a145a571fa7bb9e477326e09c62d9ebc9c8",
+      "master": "428ae16e11c99fcfa3f0292a4485e984a77420730bf9f9ea8148390f946486f7"
+    },
+    {
+      "espace": "produits",
+      "fichier": "coffret-table-du-dimanche/principal-480.jpg",
+      "vue": "principal",
+      "largeur": 480,
+      "hauteur": 360,
+      "format": "jpg",
+      "octets": 10618,
+      "sha256": "e68df5269049a6dc50d0c667210533889f88fb34522e5ed69579dbbe302008d1",
+      "master": "428ae16e11c99fcfa3f0292a4485e984a77420730bf9f9ea8148390f946486f7"
+    },
+    {
+      "espace": "produits",
+      "fichier": "coffret-table-du-dimanche/principal-640.avif",
+      "vue": "principal",
+      "largeur": 640,
+      "hauteur": 480,
+      "format": "avif",
+      "octets": 12913,
+      "sha256": "fcb8dbdb6bf66127167db6d420a046770ea69be6f35e22cf89e03ab6a131faca",
+      "master": "428ae16e11c99fcfa3f0292a4485e984a77420730bf9f9ea8148390f946486f7"
+    },
+    {
+      "espace": "produits",
+      "fichier": "coffret-table-du-dimanche/principal-640.jpg",
+      "vue": "principal",
+      "largeur": 640,
+      "hauteur": 480,
+      "format": "jpg",
+      "octets": 17296,
+      "sha256": "fd41f296fad2924e02896292500aaad9a6ad94d0f3e1aa6cf243fdc3113e4999",
+      "master": "428ae16e11c99fcfa3f0292a4485e984a77420730bf9f9ea8148390f946486f7"
+    },
+    {
+      "espace": "produits",
+      "fichier": "confit-oignons-vin-doux/ambiance-320.avif",
+      "vue": "ambiance",
+      "largeur": 320,
+      "hauteur": 512,
+      "format": "avif",
+      "octets": 13577,
+      "sha256": "b12d915a8240fbe56d2c568cd51923db296f49a2de9a9357a97c1077efc162cd",
+      "master": "c2b14d2bbf6f62a05a1a87244c7b8a1f74c83057c1aabe093255eb6b9c8a50d4"
+    },
+    {
+      "espace": "produits",
+      "fichier": "confit-oignons-vin-doux/ambiance-320.jpg",
+      "vue": "ambiance",
+      "largeur": 320,
+      "hauteur": 512,
+      "format": "jpg",
+      "octets": 18713,
+      "sha256": "e6afec2699f382a7be82ae95d3bc4e1416e87644d72f0f22f3a03e4fb9441560",
+      "master": "c2b14d2bbf6f62a05a1a87244c7b8a1f74c83057c1aabe093255eb6b9c8a50d4"
+    },
+    {
+      "espace": "produits",
+      "fichier": "confit-oignons-vin-doux/ambiance-480.avif",
+      "vue": "ambiance",
+      "largeur": 480,
+      "hauteur": 768,
+      "format": "avif",
+      "octets": 26247,
+      "sha256": "1d132ba4b16946c542f3a938cabcbceb50a906d626baddf27a98a93972bffbb9",
+      "master": "c2b14d2bbf6f62a05a1a87244c7b8a1f74c83057c1aabe093255eb6b9c8a50d4"
+    },
+    {
+      "espace": "produits",
+      "fichier": "confit-oignons-vin-doux/ambiance-480.jpg",
+      "vue": "ambiance",
+      "largeur": 480,
+      "hauteur": 768,
+      "format": "jpg",
+      "octets": 36466,
+      "sha256": "6539fe2b261a211dd50065f8dc4aedc72ccd687396667d702a18f8e3bde44052",
+      "master": "c2b14d2bbf6f62a05a1a87244c7b8a1f74c83057c1aabe093255eb6b9c8a50d4"
+    },
+    {
+      "espace": "produits",
+      "fichier": "confit-oignons-vin-doux/ambiance-640.avif",
+      "vue": "ambiance",
+      "largeur": 640,
+      "hauteur": 1024,
+      "format": "avif",
+      "octets": 41038,
+      "sha256": "62d8acc207958bfda330117f26407d7635ff92f63a8715e7fca22cd1f429ed05",
+      "master": "c2b14d2bbf6f62a05a1a87244c7b8a1f74c83057c1aabe093255eb6b9c8a50d4"
+    },
+    {
+      "espace": "produits",
+      "fichier": "confit-oignons-vin-doux/ambiance-640.jpg",
+      "vue": "ambiance",
+      "largeur": 640,
+      "hauteur": 1024,
+      "format": "jpg",
+      "octets": 58154,
+      "sha256": "c43354eb801fef068182a9c6b82e03c9c098a03b19ca7ca5d473e5533300aa83",
+      "master": "c2b14d2bbf6f62a05a1a87244c7b8a1f74c83057c1aabe093255eb6b9c8a50d4"
+    },
+    {
+      "espace": "produits",
+      "fichier": "confit-oignons-vin-doux/partage-1200x630.jpg",
+      "vue": "partage",
+      "largeur": 1200,
+      "hauteur": 630,
+      "format": "jpg",
+      "octets": 20075,
+      "sha256": "0af4e38725f3f25605dbccfb083e2f90d2ed3f96442d4162d116dadbf2e92b78",
+      "master": "38b698d3b732b6e9e2eb7096dd1b13fdc7ea0295dfde3fdcced7ac0167290359"
+    },
+    {
+      "espace": "produits",
+      "fichier": "confit-oignons-vin-doux/principal-320.avif",
+      "vue": "principal",
+      "largeur": 320,
+      "hauteur": 512,
+      "format": "avif",
+      "octets": 10825,
+      "sha256": "cadd5354bd98c93566e09ef2bf37f0cf5776255710826f4f929c95cacbb34762",
+      "master": "38b698d3b732b6e9e2eb7096dd1b13fdc7ea0295dfde3fdcced7ac0167290359"
+    },
+    {
+      "espace": "produits",
+      "fichier": "confit-oignons-vin-doux/principal-320.jpg",
+      "vue": "principal",
+      "largeur": 320,
+      "hauteur": 512,
+      "format": "jpg",
+      "octets": 15767,
+      "sha256": "bf2c663d564368b49761a6fccaf61b834a241c467f51e9c8980de0d1d9c647cc",
+      "master": "38b698d3b732b6e9e2eb7096dd1b13fdc7ea0295dfde3fdcced7ac0167290359"
+    },
+    {
+      "espace": "produits",
+      "fichier": "confit-oignons-vin-doux/principal-480.avif",
+      "vue": "principal",
+      "largeur": 480,
+      "hauteur": 768,
+      "format": "avif",
+      "octets": 21249,
+      "sha256": "1d36ba04d239de41f6b17dd73661bc6419d42a3db02caa562e1da987aa72f5c2",
+      "master": "38b698d3b732b6e9e2eb7096dd1b13fdc7ea0295dfde3fdcced7ac0167290359"
+    },
+    {
+      "espace": "produits",
+      "fichier": "confit-oignons-vin-doux/principal-480.jpg",
+      "vue": "principal",
+      "largeur": 480,
+      "hauteur": 768,
+      "format": "jpg",
+      "octets": 30074,
+      "sha256": "543fa17f4dd9635804d013b6437fc541eeff1f6782b60c0bb2e02241d4ccb0b2",
+      "master": "38b698d3b732b6e9e2eb7096dd1b13fdc7ea0295dfde3fdcced7ac0167290359"
+    },
+    {
+      "espace": "produits",
+      "fichier": "confit-oignons-vin-doux/principal-640.avif",
+      "vue": "principal",
+      "largeur": 640,
+      "hauteur": 1024,
+      "format": "avif",
+      "octets": 33577,
+      "sha256": "6e3e5f8bd9d4584fd9f2a8138b715ba43815ec789f1653fe8c5d9273dd4cf75e",
+      "master": "38b698d3b732b6e9e2eb7096dd1b13fdc7ea0295dfde3fdcced7ac0167290359"
+    },
+    {
+      "espace": "produits",
+      "fichier": "confit-oignons-vin-doux/principal-640.jpg",
+      "vue": "principal",
+      "largeur": 640,
+      "hauteur": 1024,
+      "format": "jpg",
+      "octets": 48573,
+      "sha256": "e4535a2255b2e8d7ef45c6089086d4d10819d84c27f7d1d1f9fdbd7ccd5331f4",
+      "master": "38b698d3b732b6e9e2eb7096dd1b13fdc7ea0295dfde3fdcced7ac0167290359"
+    },
+    {
+      "espace": "produits",
+      "fichier": "confiture-abricots-plein-vent/ambiance-320.avif",
+      "vue": "ambiance",
+      "largeur": 320,
+      "hauteur": 512,
+      "format": "avif",
+      "octets": 13173,
+      "sha256": "3913c9f0e2c0bc05f6975bc75cc05f1dd98e474769e677540530efc94062bfe2",
+      "master": "38d22915ae63992a7a9b691d07abd3930bd75028824c62fd1e14f7df5e44e227"
+    },
+    {
+      "espace": "produits",
+      "fichier": "confiture-abricots-plein-vent/ambiance-320.jpg",
+      "vue": "ambiance",
+      "largeur": 320,
+      "hauteur": 512,
+      "format": "jpg",
+      "octets": 18146,
+      "sha256": "1182c18abc72676dff65b8cf7c39502fc5b66f82faf451b787ba77d1c5effbe0",
+      "master": "38d22915ae63992a7a9b691d07abd3930bd75028824c62fd1e14f7df5e44e227"
+    },
+    {
+      "espace": "produits",
+      "fichier": "confiture-abricots-plein-vent/ambiance-480.avif",
+      "vue": "ambiance",
+      "largeur": 480,
+      "hauteur": 768,
+      "format": "avif",
+      "octets": 24567,
+      "sha256": "d46be06d85fc01f4a9bde2910f79182cd67d46c32c49afa93970604ef4120439",
+      "master": "38d22915ae63992a7a9b691d07abd3930bd75028824c62fd1e14f7df5e44e227"
+    },
+    {
+      "espace": "produits",
+      "fichier": "confiture-abricots-plein-vent/ambiance-480.jpg",
+      "vue": "ambiance",
+      "largeur": 480,
+      "hauteur": 768,
+      "format": "jpg",
+      "octets": 34476,
+      "sha256": "ceec956e88fc2d152050e1e3a005d2c5bc6f6573244c727b6c5583cf68c379ca",
+      "master": "38d22915ae63992a7a9b691d07abd3930bd75028824c62fd1e14f7df5e44e227"
+    },
+    {
+      "espace": "produits",
+      "fichier": "confiture-abricots-plein-vent/ambiance-640.avif",
+      "vue": "ambiance",
+      "largeur": 640,
+      "hauteur": 1024,
+      "format": "avif",
+      "octets": 37467,
+      "sha256": "568df5dd60881db57691964075cd3344b4535cb29696288538f4e3fe5f373da7",
+      "master": "38d22915ae63992a7a9b691d07abd3930bd75028824c62fd1e14f7df5e44e227"
+    },
+    {
+      "espace": "produits",
+      "fichier": "confiture-abricots-plein-vent/ambiance-640.jpg",
+      "vue": "ambiance",
+      "largeur": 640,
+      "hauteur": 1024,
+      "format": "jpg",
+      "octets": 54279,
+      "sha256": "6d8d322391bb7968d8e0ebdae543bd5a9e6d02060c8658ca33208889b16f9346",
+      "master": "38d22915ae63992a7a9b691d07abd3930bd75028824c62fd1e14f7df5e44e227"
+    },
+    {
+      "espace": "produits",
+      "fichier": "confiture-abricots-plein-vent/partage-1200x630.jpg",
+      "vue": "partage",
+      "largeur": 1200,
+      "hauteur": 630,
+      "format": "jpg",
+      "octets": 19101,
+      "sha256": "07bdca75fa7f5338123b517adf81380be54a4d0d4c0c93aa8b360939ca6d78f1",
+      "master": "878ff3a5d1b6954cba9c67f03f40332cd94305043b45f2e7ac8a6869331f0d09"
+    },
+    {
+      "espace": "produits",
+      "fichier": "confiture-abricots-plein-vent/principal-320.avif",
+      "vue": "principal",
+      "largeur": 320,
+      "hauteur": 512,
+      "format": "avif",
+      "octets": 10592,
+      "sha256": "7f520328541d0c58a373d152ca07bfdcf8285fa8307a3acbfe09b34e0d9e3957",
+      "master": "878ff3a5d1b6954cba9c67f03f40332cd94305043b45f2e7ac8a6869331f0d09"
+    },
+    {
+      "espace": "produits",
+      "fichier": "confiture-abricots-plein-vent/principal-320.jpg",
+      "vue": "principal",
+      "largeur": 320,
+      "hauteur": 512,
+      "format": "jpg",
+      "octets": 15241,
+      "sha256": "bdc6250c941385e54c80df86b2534867c3d53fbeecff132a96b0efb9a1b96ae0",
+      "master": "878ff3a5d1b6954cba9c67f03f40332cd94305043b45f2e7ac8a6869331f0d09"
+    },
+    {
+      "espace": "produits",
+      "fichier": "confiture-abricots-plein-vent/principal-480.avif",
+      "vue": "principal",
+      "largeur": 480,
+      "hauteur": 768,
+      "format": "avif",
+      "octets": 19267,
+      "sha256": "44e9b2ee346e8bace6498cfe774cbead0461f1027a77c111c6a6dc5e07459f52",
+      "master": "878ff3a5d1b6954cba9c67f03f40332cd94305043b45f2e7ac8a6869331f0d09"
+    },
+    {
+      "espace": "produits",
+      "fichier": "confiture-abricots-plein-vent/principal-480.jpg",
+      "vue": "principal",
+      "largeur": 480,
+      "hauteur": 768,
+      "format": "jpg",
+      "octets": 28402,
+      "sha256": "6b8d5dea172d0bb2bb9db3fc86a9b826a9c826c122cab022cb057a955677610f",
+      "master": "878ff3a5d1b6954cba9c67f03f40332cd94305043b45f2e7ac8a6869331f0d09"
+    },
+    {
+      "espace": "produits",
+      "fichier": "confiture-abricots-plein-vent/principal-640.avif",
+      "vue": "principal",
+      "largeur": 640,
+      "hauteur": 1024,
+      "format": "avif",
+      "octets": 29234,
+      "sha256": "c7f9450b13880b6736412be5e63bb7381009be410708508bef00392ad650a80e",
+      "master": "878ff3a5d1b6954cba9c67f03f40332cd94305043b45f2e7ac8a6869331f0d09"
+    },
+    {
+      "espace": "produits",
+      "fichier": "confiture-abricots-plein-vent/principal-640.jpg",
+      "vue": "principal",
+      "largeur": 640,
+      "hauteur": 1024,
+      "format": "jpg",
+      "octets": 44223,
+      "sha256": "07fdc8e8a119d25e9a67897c9151b0c67bc7ce9c7bf89a299df927ddfa515896",
+      "master": "878ff3a5d1b6954cba9c67f03f40332cd94305043b45f2e7ac8a6869331f0d09"
+    },
+    {
+      "espace": "produits",
+      "fichier": "fromage-fermier-brebis/ambiance-320.avif",
+      "vue": "ambiance",
+      "largeur": 320,
+      "hauteur": 512,
+      "format": "avif",
+      "octets": 12873,
+      "sha256": "216442a7e065f9bd4edb99177419966361b23df09990d0586b8401c5429e2d59",
+      "master": "da8cbc8b7253499a9daaf27b858940c4cf2f5d2831a50700c7a9d1d8af059ea7"
+    },
+    {
+      "espace": "produits",
+      "fichier": "fromage-fermier-brebis/ambiance-320.jpg",
+      "vue": "ambiance",
+      "largeur": 320,
+      "hauteur": 512,
+      "format": "jpg",
+      "octets": 14958,
+      "sha256": "549612efb0d563154cf79e5480e4861e0e2de27457c8beadd1a4c66d0a7e5735",
+      "master": "da8cbc8b7253499a9daaf27b858940c4cf2f5d2831a50700c7a9d1d8af059ea7"
+    },
+    {
+      "espace": "produits",
+      "fichier": "fromage-fermier-brebis/ambiance-480.avif",
+      "vue": "ambiance",
+      "largeur": 480,
+      "hauteur": 768,
+      "format": "avif",
+      "octets": 24659,
+      "sha256": "43c8f0f8e4990363a096d6969961c4a1b18813952352f9ea86f7f6e92ae066a3",
+      "master": "da8cbc8b7253499a9daaf27b858940c4cf2f5d2831a50700c7a9d1d8af059ea7"
+    },
+    {
+      "espace": "produits",
+      "fichier": "fromage-fermier-brebis/ambiance-480.jpg",
+      "vue": "ambiance",
+      "largeur": 480,
+      "hauteur": 768,
+      "format": "jpg",
+      "octets": 29689,
+      "sha256": "9d27491718c8b35aa1d8187158d33f77794b99b979dc82802fad56c83170cd13",
+      "master": "da8cbc8b7253499a9daaf27b858940c4cf2f5d2831a50700c7a9d1d8af059ea7"
+    },
+    {
+      "espace": "produits",
+      "fichier": "fromage-fermier-brebis/ambiance-640.avif",
+      "vue": "ambiance",
+      "largeur": 640,
+      "hauteur": 1024,
+      "format": "avif",
+      "octets": 37631,
+      "sha256": "860344a9d99197c6e11105891438045908cd4154ce02859b090626668975b734",
+      "master": "da8cbc8b7253499a9daaf27b858940c4cf2f5d2831a50700c7a9d1d8af059ea7"
+    },
+    {
+      "espace": "produits",
+      "fichier": "fromage-fermier-brebis/ambiance-640.jpg",
+      "vue": "ambiance",
+      "largeur": 640,
+      "hauteur": 1024,
+      "format": "jpg",
+      "octets": 47628,
+      "sha256": "892889a57136e8114b48408e14158b70eb713b7fe551a5f6265a960e723b381c",
+      "master": "da8cbc8b7253499a9daaf27b858940c4cf2f5d2831a50700c7a9d1d8af059ea7"
+    },
+    {
+      "espace": "produits",
+      "fichier": "fromage-fermier-brebis/partage-1200x630.jpg",
+      "vue": "partage",
+      "largeur": 1200,
+      "hauteur": 630,
+      "format": "jpg",
+      "octets": 19303,
+      "sha256": "ecff060cd0f4ee6b7df2e2b2b6650cb3b1d537f5704f049dfd7220242699a514",
+      "master": "7705b31208a810bfd963c35587e5c371b942dc722ebb4a246cdc9b06859a9e0e"
+    },
+    {
+      "espace": "produits",
+      "fichier": "fromage-fermier-brebis/principal-320.avif",
+      "vue": "principal",
+      "largeur": 320,
+      "hauteur": 512,
+      "format": "avif",
+      "octets": 12301,
+      "sha256": "140ae975c40e480a1a1175f93385cefccc797467feed4a059e89ebb1be1fc439",
+      "master": "7705b31208a810bfd963c35587e5c371b942dc722ebb4a246cdc9b06859a9e0e"
+    },
+    {
+      "espace": "produits",
+      "fichier": "fromage-fermier-brebis/principal-320.jpg",
+      "vue": "principal",
+      "largeur": 320,
+      "hauteur": 512,
+      "format": "jpg",
+      "octets": 14819,
+      "sha256": "cdda2e54e352d014bf791d90c5beb12028953f7a537283b46e80d582125a46de",
+      "master": "7705b31208a810bfd963c35587e5c371b942dc722ebb4a246cdc9b06859a9e0e"
+    },
+    {
+      "espace": "produits",
+      "fichier": "fromage-fermier-brebis/principal-480.avif",
+      "vue": "principal",
+      "largeur": 480,
+      "hauteur": 768,
+      "format": "avif",
+      "octets": 23601,
+      "sha256": "0b0b63ed758bd2d7dc25adaeb42071ba051aa03f25094f3559e33418af28f439",
+      "master": "7705b31208a810bfd963c35587e5c371b942dc722ebb4a246cdc9b06859a9e0e"
+    },
+    {
+      "espace": "produits",
+      "fichier": "fromage-fermier-brebis/principal-480.jpg",
+      "vue": "principal",
+      "largeur": 480,
+      "hauteur": 768,
+      "format": "jpg",
+      "octets": 29064,
+      "sha256": "2b9d3a3a0827c7bd0442c35386c240fd66f7adf955725ac4415fe114211f849e",
+      "master": "7705b31208a810bfd963c35587e5c371b942dc722ebb4a246cdc9b06859a9e0e"
+    },
+    {
+      "espace": "produits",
+      "fichier": "fromage-fermier-brebis/principal-640.avif",
+      "vue": "principal",
+      "largeur": 640,
+      "hauteur": 1024,
+      "format": "avif",
+      "octets": 36236,
+      "sha256": "84bbfac6cfcea5749fe96ab696a8e972c9089534c85dbb21a42822ffdcd1766b",
+      "master": "7705b31208a810bfd963c35587e5c371b942dc722ebb4a246cdc9b06859a9e0e"
+    },
+    {
+      "espace": "produits",
+      "fichier": "fromage-fermier-brebis/principal-640.jpg",
+      "vue": "principal",
+      "largeur": 640,
+      "hauteur": 1024,
+      "format": "jpg",
+      "octets": 47285,
+      "sha256": "8cdb3811e24088b27d812175e85d26d98459a04e4e39d63e4bb1f26d281335a5",
+      "master": "7705b31208a810bfd963c35587e5c371b942dc722ebb4a246cdc9b06859a9e0e"
+    },
+    {
+      "espace": "produits",
+      "fichier": "huile-noix-moulin/ambiance-320.avif",
+      "vue": "ambiance",
+      "largeur": 320,
+      "hauteur": 512,
+      "format": "avif",
+      "octets": 5962,
+      "sha256": "0309ab8fdcff8804167bf110184f04a733b444764ffb6ebdbdbcdf8d52aecfac",
+      "master": "f971176713f099f0eaf1cb24c85ad09d25b1bbe88da20b531ed8334ebc44047f"
+    },
+    {
+      "espace": "produits",
+      "fichier": "huile-noix-moulin/ambiance-320.jpg",
+      "vue": "ambiance",
+      "largeur": 320,
+      "hauteur": 512,
+      "format": "jpg",
+      "octets": 9059,
+      "sha256": "e5d9f8e353940a89e045f1e83ca4ef85287d9d5d1f01cdafe1a228cf9611e480",
+      "master": "f971176713f099f0eaf1cb24c85ad09d25b1bbe88da20b531ed8334ebc44047f"
+    },
+    {
+      "espace": "produits",
+      "fichier": "huile-noix-moulin/ambiance-480.avif",
+      "vue": "ambiance",
+      "largeur": 480,
+      "hauteur": 768,
+      "format": "avif",
+      "octets": 10547,
+      "sha256": "3ab5edda974e2e145fb26a07b309fd528b1e2809068924ad180e842d9249f1ad",
+      "master": "f971176713f099f0eaf1cb24c85ad09d25b1bbe88da20b531ed8334ebc44047f"
+    },
+    {
+      "espace": "produits",
+      "fichier": "huile-noix-moulin/ambiance-480.jpg",
+      "vue": "ambiance",
+      "largeur": 480,
+      "hauteur": 768,
+      "format": "jpg",
+      "octets": 16345,
+      "sha256": "303000b4cc1314371aa4b0552c8a3092bae29e2a1a2ca228862fdadb67c65798",
+      "master": "f971176713f099f0eaf1cb24c85ad09d25b1bbe88da20b531ed8334ebc44047f"
+    },
+    {
+      "espace": "produits",
+      "fichier": "huile-noix-moulin/ambiance-640.avif",
+      "vue": "ambiance",
+      "largeur": 640,
+      "hauteur": 1024,
+      "format": "avif",
+      "octets": 14842,
+      "sha256": "f8ff74ffc517aa412bba926969af28a6714d1522972e909d5844e08e7a2be116",
+      "master": "f971176713f099f0eaf1cb24c85ad09d25b1bbe88da20b531ed8334ebc44047f"
+    },
+    {
+      "espace": "produits",
+      "fichier": "huile-noix-moulin/ambiance-640.jpg",
+      "vue": "ambiance",
+      "largeur": 640,
+      "hauteur": 1024,
+      "format": "jpg",
+      "octets": 25010,
+      "sha256": "5fb97fad363e0c27340b1fad3576291224fdfdac473c98edb7ea02a84f4eb7c5",
+      "master": "f971176713f099f0eaf1cb24c85ad09d25b1bbe88da20b531ed8334ebc44047f"
+    },
+    {
+      "espace": "produits",
+      "fichier": "huile-noix-moulin/partage-1200x630.jpg",
+      "vue": "partage",
+      "largeur": 1200,
+      "hauteur": 630,
+      "format": "jpg",
+      "octets": 12569,
+      "sha256": "204e2c9bac9b15a1e66a9ef240543e03356febaa3a2425c14203cad8ccda71b6",
+      "master": "f5ff403eafdcf67b11f81ea18b53d1d658121879fcf580abffa850d9c43322fa"
+    },
+    {
+      "espace": "produits",
+      "fichier": "huile-noix-moulin/principal-320.avif",
+      "vue": "principal",
+      "largeur": 320,
+      "hauteur": 512,
+      "format": "avif",
+      "octets": 5827,
+      "sha256": "d72821af095133aca3f443f6801b038996ca2342702b779d377402403acefab8",
+      "master": "f5ff403eafdcf67b11f81ea18b53d1d658121879fcf580abffa850d9c43322fa"
+    },
+    {
+      "espace": "produits",
+      "fichier": "huile-noix-moulin/principal-320.jpg",
+      "vue": "principal",
+      "largeur": 320,
+      "hauteur": 512,
+      "format": "jpg",
+      "octets": 8844,
+      "sha256": "ca21ad010339c0d58ed0b4136e360bce4d36a4ab2264d72e638dec7b08204905",
+      "master": "f5ff403eafdcf67b11f81ea18b53d1d658121879fcf580abffa850d9c43322fa"
+    },
+    {
+      "espace": "produits",
+      "fichier": "huile-noix-moulin/principal-480.avif",
+      "vue": "principal",
+      "largeur": 480,
+      "hauteur": 768,
+      "format": "avif",
+      "octets": 10328,
+      "sha256": "b8c6e4cf7f50487d389463c00cb7b9be77902202c685d07b8864b5afdf014578",
+      "master": "f5ff403eafdcf67b11f81ea18b53d1d658121879fcf580abffa850d9c43322fa"
+    },
+    {
+      "espace": "produits",
+      "fichier": "huile-noix-moulin/principal-480.jpg",
+      "vue": "principal",
+      "largeur": 480,
+      "hauteur": 768,
+      "format": "jpg",
+      "octets": 16420,
+      "sha256": "325e92e05a39371229e2435d6c1128749cf25d97f4008b4c72ddafc914cc98d4",
+      "master": "f5ff403eafdcf67b11f81ea18b53d1d658121879fcf580abffa850d9c43322fa"
+    },
+    {
+      "espace": "produits",
+      "fichier": "huile-noix-moulin/principal-640.avif",
+      "vue": "principal",
+      "largeur": 640,
+      "hauteur": 1024,
+      "format": "avif",
+      "octets": 14826,
+      "sha256": "3a6415a2cc7e17970f3784d6dfb171d11d63d01ea949ab604d0c67b49900edb5",
+      "master": "f5ff403eafdcf67b11f81ea18b53d1d658121879fcf580abffa850d9c43322fa"
+    },
+    {
+      "espace": "produits",
+      "fichier": "huile-noix-moulin/principal-640.jpg",
+      "vue": "principal",
+      "largeur": 640,
+      "hauteur": 1024,
+      "format": "jpg",
+      "octets": 25415,
+      "sha256": "7d181d45e295eacc51c2a404a34f3bbfddb75808a52a08ff1ef96c5a2f8bf087",
+      "master": "f5ff403eafdcf67b11f81ea18b53d1d658121879fcf580abffa850d9c43322fa"
+    },
+    {
+      "espace": "produits",
+      "fichier": "huile-olive-premiere-pression/ambiance-320.avif",
+      "vue": "ambiance",
+      "largeur": 320,
+      "hauteur": 512,
+      "format": "avif",
+      "octets": 6207,
+      "sha256": "554e8e4cfbfd628c5c56bcc92e03b2790921ce742b9aade4fad9745a1102e5f8",
+      "master": "30d90280fac269993095d9b3672a7029e3a5d9a15c661cad1c57150e7d3183db"
+    },
+    {
+      "espace": "produits",
+      "fichier": "huile-olive-premiere-pression/ambiance-320.jpg",
+      "vue": "ambiance",
+      "largeur": 320,
+      "hauteur": 512,
+      "format": "jpg",
+      "octets": 9658,
+      "sha256": "30724d6234c00e958adc86e2a5019f9fcd82684cf6e8555f959c3c0e7f9e2635",
+      "master": "30d90280fac269993095d9b3672a7029e3a5d9a15c661cad1c57150e7d3183db"
+    },
+    {
+      "espace": "produits",
+      "fichier": "huile-olive-premiere-pression/ambiance-480.avif",
+      "vue": "ambiance",
+      "largeur": 480,
+      "hauteur": 768,
+      "format": "avif",
+      "octets": 11542,
+      "sha256": "67ab64db353da97c1be6a9c3f2aa6bb3194eb952793d8fbdf1e55493462e10a3",
+      "master": "30d90280fac269993095d9b3672a7029e3a5d9a15c661cad1c57150e7d3183db"
+    },
+    {
+      "espace": "produits",
+      "fichier": "huile-olive-premiere-pression/ambiance-480.jpg",
+      "vue": "ambiance",
+      "largeur": 480,
+      "hauteur": 768,
+      "format": "jpg",
+      "octets": 18410,
+      "sha256": "c3d4d74d5b90ba3c5a03a9796f271e1f73ea481a05080c4317cafdf3d09803c6",
+      "master": "30d90280fac269993095d9b3672a7029e3a5d9a15c661cad1c57150e7d3183db"
+    },
+    {
+      "espace": "produits",
+      "fichier": "huile-olive-premiere-pression/ambiance-640.avif",
+      "vue": "ambiance",
+      "largeur": 640,
+      "hauteur": 1024,
+      "format": "avif",
+      "octets": 17223,
+      "sha256": "971a3b1b7c8c29a51a1e529ef8ce275f0a017c2d49a542e74ab8d439ea6a143c",
+      "master": "30d90280fac269993095d9b3672a7029e3a5d9a15c661cad1c57150e7d3183db"
+    },
+    {
+      "espace": "produits",
+      "fichier": "huile-olive-premiere-pression/ambiance-640.jpg",
+      "vue": "ambiance",
+      "largeur": 640,
+      "hauteur": 1024,
+      "format": "jpg",
+      "octets": 28956,
+      "sha256": "a71fc4051202b2ec42b1c1076f52e3fc5b2c6446556d32528cb66fc4fe18c2bb",
+      "master": "30d90280fac269993095d9b3672a7029e3a5d9a15c661cad1c57150e7d3183db"
+    },
+    {
+      "espace": "produits",
+      "fichier": "huile-olive-premiere-pression/partage-1200x630.jpg",
+      "vue": "partage",
+      "largeur": 1200,
+      "hauteur": 630,
+      "format": "jpg",
+      "octets": 12070,
+      "sha256": "920cfaf964e74545848ba1728922e7af28f8179e90a90d4a785dde78dfecea06",
+      "master": "883631f1b94a668582ac9afa1a2f3bfea997574c97e458f2cb760de979120184"
+    },
+    {
+      "espace": "produits",
+      "fichier": "huile-olive-premiere-pression/principal-320.avif",
+      "vue": "principal",
+      "largeur": 320,
+      "hauteur": 512,
+      "format": "avif",
+      "octets": 5301,
+      "sha256": "454874231a2801bb288f314d56815aa95326524654826a41445727ca3dcf78a9",
+      "master": "883631f1b94a668582ac9afa1a2f3bfea997574c97e458f2cb760de979120184"
+    },
+    {
+      "espace": "produits",
+      "fichier": "huile-olive-premiere-pression/principal-320.jpg",
+      "vue": "principal",
+      "largeur": 320,
+      "hauteur": 512,
+      "format": "jpg",
+      "octets": 8380,
+      "sha256": "58110dacc398f15990eca69976fb2f135eff31733b729d04825f5ba87f6f9595",
+      "master": "883631f1b94a668582ac9afa1a2f3bfea997574c97e458f2cb760de979120184"
+    },
+    {
+      "espace": "produits",
+      "fichier": "huile-olive-premiere-pression/principal-480.avif",
+      "vue": "principal",
+      "largeur": 480,
+      "hauteur": 768,
+      "format": "avif",
+      "octets": 9609,
+      "sha256": "c848f93821377e2d470eab22ed8e260ac06c4798fab28b0ace094a2431b180fb",
+      "master": "883631f1b94a668582ac9afa1a2f3bfea997574c97e458f2cb760de979120184"
+    },
+    {
+      "espace": "produits",
+      "fichier": "huile-olive-premiere-pression/principal-480.jpg",
+      "vue": "principal",
+      "largeur": 480,
+      "hauteur": 768,
+      "format": "jpg",
+      "octets": 15763,
+      "sha256": "5ad75916e2d8747af1ad411c605f68027a9c15a543a1524f86b02590ca68beb0",
+      "master": "883631f1b94a668582ac9afa1a2f3bfea997574c97e458f2cb760de979120184"
+    },
+    {
+      "espace": "produits",
+      "fichier": "huile-olive-premiere-pression/principal-640.avif",
+      "vue": "principal",
+      "largeur": 640,
+      "hauteur": 1024,
+      "format": "avif",
+      "octets": 13700,
+      "sha256": "2daadec326240f32c93c03bd604ce179555cfab1be52238a7d2fa5b95484bd8c",
+      "master": "883631f1b94a668582ac9afa1a2f3bfea997574c97e458f2cb760de979120184"
+    },
+    {
+      "espace": "produits",
+      "fichier": "huile-olive-premiere-pression/principal-640.jpg",
+      "vue": "principal",
+      "largeur": 640,
+      "hauteur": 1024,
+      "format": "jpg",
+      "octets": 24363,
+      "sha256": "28085a36133078192e8a05b9bd8294b5c3e3517336f0e7c7bd0e4e60701b9f8b",
+      "master": "883631f1b94a668582ac9afa1a2f3bfea997574c97e458f2cb760de979120184"
+    },
+    {
+      "espace": "produits",
+      "fichier": "infusion-du-soir-sept-plantes/ambiance-320.avif",
+      "vue": "ambiance",
+      "largeur": 320,
+      "hauteur": 512,
+      "format": "avif",
+      "octets": 14302,
+      "sha256": "7bf3c2d6dc7191ce1d414c61e617f8e9adbeb91006b269fdc061b91bc8b7d94a",
+      "master": "d3287a23744bba6a864300e93c9edd7a61a2d08ab6baf70d2b986711eb9d634e"
+    },
+    {
+      "espace": "produits",
+      "fichier": "infusion-du-soir-sept-plantes/ambiance-320.jpg",
+      "vue": "ambiance",
+      "largeur": 320,
+      "hauteur": 512,
+      "format": "jpg",
+      "octets": 18094,
+      "sha256": "6f983fbe81c8d18214967c3258ff576713f237e420eac03d634cbd3bca98bc19",
+      "master": "d3287a23744bba6a864300e93c9edd7a61a2d08ab6baf70d2b986711eb9d634e"
+    },
+    {
+      "espace": "produits",
+      "fichier": "infusion-du-soir-sept-plantes/ambiance-480.avif",
+      "vue": "ambiance",
+      "largeur": 480,
+      "hauteur": 768,
+      "format": "avif",
+      "octets": 28524,
+      "sha256": "c6f907085690706d2afa7a7bcb3fd1f2c7e27cf0744f81633059f739b4980f75",
+      "master": "d3287a23744bba6a864300e93c9edd7a61a2d08ab6baf70d2b986711eb9d634e"
+    },
+    {
+      "espace": "produits",
+      "fichier": "infusion-du-soir-sept-plantes/ambiance-480.jpg",
+      "vue": "ambiance",
+      "largeur": 480,
+      "hauteur": 768,
+      "format": "jpg",
+      "octets": 35730,
+      "sha256": "fce0b531101ef26c4da60373c4751715d0ff62351c79289c364a1a5f41bdf79a",
+      "master": "d3287a23744bba6a864300e93c9edd7a61a2d08ab6baf70d2b986711eb9d634e"
+    },
+    {
+      "espace": "produits",
+      "fichier": "infusion-du-soir-sept-plantes/ambiance-640.avif",
+      "vue": "ambiance",
+      "largeur": 640,
+      "hauteur": 1024,
+      "format": "avif",
+      "octets": 45073,
+      "sha256": "d1ba15474070543160d20c05595af8d773b6d85fa6de18e401909944f85450a6",
+      "master": "d3287a23744bba6a864300e93c9edd7a61a2d08ab6baf70d2b986711eb9d634e"
+    },
+    {
+      "espace": "produits",
+      "fichier": "infusion-du-soir-sept-plantes/ambiance-640.jpg",
+      "vue": "ambiance",
+      "largeur": 640,
+      "hauteur": 1024,
+      "format": "jpg",
+      "octets": 57881,
+      "sha256": "3d222ee19a41934e5562bf140044f8748030ceb129472f1c922bf9e4248edbd2",
+      "master": "d3287a23744bba6a864300e93c9edd7a61a2d08ab6baf70d2b986711eb9d634e"
+    },
+    {
+      "espace": "produits",
+      "fichier": "infusion-du-soir-sept-plantes/partage-1200x630.jpg",
+      "vue": "partage",
+      "largeur": 1200,
+      "hauteur": 630,
+      "format": "jpg",
+      "octets": 16365,
+      "sha256": "aaead966df5780b7be613d226d2ac6d426b9a386d26eb5fe928b60e6294f86d6",
+      "master": "2369ce8556801a90124d2f6b6ee8ee85a3142aae2004218af12b9ae9350cbb51"
+    },
+    {
+      "espace": "produits",
+      "fichier": "infusion-du-soir-sept-plantes/principal-320.avif",
+      "vue": "principal",
+      "largeur": 320,
+      "hauteur": 512,
+      "format": "avif",
+      "octets": 9661,
+      "sha256": "15a9361496cae2f049945c5b7791832f58b7955e7528a843bc1f5391de44bd06",
+      "master": "2369ce8556801a90124d2f6b6ee8ee85a3142aae2004218af12b9ae9350cbb51"
+    },
+    {
+      "espace": "produits",
+      "fichier": "infusion-du-soir-sept-plantes/principal-320.jpg",
+      "vue": "principal",
+      "largeur": 320,
+      "hauteur": 512,
+      "format": "jpg",
+      "octets": 12446,
+      "sha256": "ec31c5f08fa801aaf9f08cdfb9451987d12fee85751a98bb6a39547e40c02d75",
+      "master": "2369ce8556801a90124d2f6b6ee8ee85a3142aae2004218af12b9ae9350cbb51"
+    },
+    {
+      "espace": "produits",
+      "fichier": "infusion-du-soir-sept-plantes/principal-480.avif",
+      "vue": "principal",
+      "largeur": 480,
+      "hauteur": 768,
+      "format": "avif",
+      "octets": 21189,
+      "sha256": "f6ae1a7d91418fcd0c5afd0aea51702902ef94c690473c30d4c9af118ece04fc",
+      "master": "2369ce8556801a90124d2f6b6ee8ee85a3142aae2004218af12b9ae9350cbb51"
+    },
+    {
+      "espace": "produits",
+      "fichier": "infusion-du-soir-sept-plantes/principal-480.jpg",
+      "vue": "principal",
+      "largeur": 480,
+      "hauteur": 768,
+      "format": "jpg",
+      "octets": 25434,
+      "sha256": "465fecf06394785ef13598f2dab9fed1fa7f86b4b8c2defaa3ba946aaa3e37d2",
+      "master": "2369ce8556801a90124d2f6b6ee8ee85a3142aae2004218af12b9ae9350cbb51"
+    },
+    {
+      "espace": "produits",
+      "fichier": "infusion-du-soir-sept-plantes/principal-640.avif",
+      "vue": "principal",
+      "largeur": 640,
+      "hauteur": 1024,
+      "format": "avif",
+      "octets": 34934,
+      "sha256": "f067457f2c59717db82b337f8420e780a258d10b5dc0d63e996e13359be627df",
+      "master": "2369ce8556801a90124d2f6b6ee8ee85a3142aae2004218af12b9ae9350cbb51"
+    },
+    {
+      "espace": "produits",
+      "fichier": "infusion-du-soir-sept-plantes/principal-640.jpg",
+      "vue": "principal",
+      "largeur": 640,
+      "hauteur": 1024,
+      "format": "jpg",
+      "octets": 42979,
+      "sha256": "e376cde111fc981882d4254414718d56892646094b12bba4ed1e92c967244b60",
+      "master": "2369ce8556801a90124d2f6b6ee8ee85a3142aae2004218af12b9ae9350cbb51"
+    },
+    {
+      "espace": "produits",
+      "fichier": "lentilles-blondes-plateau/ambiance-320.avif",
+      "vue": "ambiance",
+      "largeur": 320,
+      "hauteur": 512,
+      "format": "avif",
+      "octets": 14935,
+      "sha256": "eca6ed003eeb4d70532f165dfd7754c2c75b2eaa27590c839408610cbd84449d",
+      "master": "b3306c6f97793a26a6ef2270f4920f2ac45479e41249f1845c3c1899c0713728"
+    },
+    {
+      "espace": "produits",
+      "fichier": "lentilles-blondes-plateau/ambiance-320.jpg",
+      "vue": "ambiance",
+      "largeur": 320,
+      "hauteur": 512,
+      "format": "jpg",
+      "octets": 18682,
+      "sha256": "800d6833cddc8171cc37b93b7f668782e04dbf978a17d920f80a57c3cbb2e14f",
+      "master": "b3306c6f97793a26a6ef2270f4920f2ac45479e41249f1845c3c1899c0713728"
+    },
+    {
+      "espace": "produits",
+      "fichier": "lentilles-blondes-plateau/ambiance-480.avif",
+      "vue": "ambiance",
+      "largeur": 480,
+      "hauteur": 768,
+      "format": "avif",
+      "octets": 29196,
+      "sha256": "08b932eecde1711fda65ff8472c015431d1d3348fd4534ea6472f4eeffdca5e1",
+      "master": "b3306c6f97793a26a6ef2270f4920f2ac45479e41249f1845c3c1899c0713728"
+    },
+    {
+      "espace": "produits",
+      "fichier": "lentilles-blondes-plateau/ambiance-480.jpg",
+      "vue": "ambiance",
+      "largeur": 480,
+      "hauteur": 768,
+      "format": "jpg",
+      "octets": 36554,
+      "sha256": "5b8e3e53c3165995052a51ac5ffa7a268719a82f86b1a770c937f0f1a70fb216",
+      "master": "b3306c6f97793a26a6ef2270f4920f2ac45479e41249f1845c3c1899c0713728"
+    },
+    {
+      "espace": "produits",
+      "fichier": "lentilles-blondes-plateau/ambiance-640.avif",
+      "vue": "ambiance",
+      "largeur": 640,
+      "hauteur": 1024,
+      "format": "avif",
+      "octets": 45608,
+      "sha256": "ac5d2f975e4b22cd396c943d1de7fcbaf32c06e73eb6de2df7aa5d20c9521cd4",
+      "master": "b3306c6f97793a26a6ef2270f4920f2ac45479e41249f1845c3c1899c0713728"
+    },
+    {
+      "espace": "produits",
+      "fichier": "lentilles-blondes-plateau/ambiance-640.jpg",
+      "vue": "ambiance",
+      "largeur": 640,
+      "hauteur": 1024,
+      "format": "jpg",
+      "octets": 58849,
+      "sha256": "4f6157a8802f285ee19773f30bb24bb51877a86f0a0028d8d66b40d8154c25eb",
+      "master": "b3306c6f97793a26a6ef2270f4920f2ac45479e41249f1845c3c1899c0713728"
+    },
+    {
+      "espace": "produits",
+      "fichier": "lentilles-blondes-plateau/partage-1200x630.jpg",
+      "vue": "partage",
+      "largeur": 1200,
+      "hauteur": 630,
+      "format": "jpg",
+      "octets": 18865,
+      "sha256": "d7660678245a8baab18bff78aab8805ac9a58f509805977d209897c83e19bdcb",
+      "master": "f4a823afe162a5f2b8fb8f5a7d8fca14b255c29a69b8b8ffdeaefcb2e9fa8971"
+    },
+    {
+      "espace": "produits",
+      "fichier": "lentilles-blondes-plateau/principal-320.avif",
+      "vue": "principal",
+      "largeur": 320,
+      "hauteur": 512,
+      "format": "avif",
+      "octets": 11849,
+      "sha256": "7069e23f19db9f90a9f6f38abdf2c14b0ebefe33f5d65733acab7e7fc3bd84c9",
+      "master": "f4a823afe162a5f2b8fb8f5a7d8fca14b255c29a69b8b8ffdeaefcb2e9fa8971"
+    },
+    {
+      "espace": "produits",
+      "fichier": "lentilles-blondes-plateau/principal-320.jpg",
+      "vue": "principal",
+      "largeur": 320,
+      "hauteur": 512,
+      "format": "jpg",
+      "octets": 14494,
+      "sha256": "fb75acd796fdecdf50ccdd191932ad44d3ea853a03462afeae7b0f68ebc41a86",
+      "master": "f4a823afe162a5f2b8fb8f5a7d8fca14b255c29a69b8b8ffdeaefcb2e9fa8971"
+    },
+    {
+      "espace": "produits",
+      "fichier": "lentilles-blondes-plateau/principal-480.avif",
+      "vue": "principal",
+      "largeur": 480,
+      "hauteur": 768,
+      "format": "avif",
+      "octets": 24778,
+      "sha256": "338897191c12e341ef14269920751f700c46fbaf833cbe2f0fe9e81e6465a84c",
+      "master": "f4a823afe162a5f2b8fb8f5a7d8fca14b255c29a69b8b8ffdeaefcb2e9fa8971"
+    },
+    {
+      "espace": "produits",
+      "fichier": "lentilles-blondes-plateau/principal-480.jpg",
+      "vue": "principal",
+      "largeur": 480,
+      "hauteur": 768,
+      "format": "jpg",
+      "octets": 29287,
+      "sha256": "8dfc29c9625e6f6391643ef6c7599aadcb1eba5dd3f1557651346940725f4b4e",
+      "master": "f4a823afe162a5f2b8fb8f5a7d8fca14b255c29a69b8b8ffdeaefcb2e9fa8971"
+    },
+    {
+      "espace": "produits",
+      "fichier": "lentilles-blondes-plateau/principal-640.avif",
+      "vue": "principal",
+      "largeur": 640,
+      "hauteur": 1024,
+      "format": "avif",
+      "octets": 40951,
+      "sha256": "7e81be6dcfc208d6caafee715e0d81a3052a21aeb71db62c659dfba0c3d30e19",
+      "master": "f4a823afe162a5f2b8fb8f5a7d8fca14b255c29a69b8b8ffdeaefcb2e9fa8971"
+    },
+    {
+      "espace": "produits",
+      "fichier": "lentilles-blondes-plateau/principal-640.jpg",
+      "vue": "principal",
+      "largeur": 640,
+      "hauteur": 1024,
+      "format": "jpg",
+      "octets": 49360,
+      "sha256": "f91e2dc244b6ee378a6d544dea6922a218342516fa1617904f29c24d6dea8bed",
+      "master": "f4a823afe162a5f2b8fb8f5a7d8fca14b255c29a69b8b8ffdeaefcb2e9fa8971"
+    },
+    {
+      "espace": "produits",
+      "fichier": "miel-bruyere-blanche/ambiance-320.avif",
+      "vue": "ambiance",
+      "largeur": 320,
+      "hauteur": 512,
+      "format": "avif",
+      "octets": 12118,
+      "sha256": "229131893d5dbf01087bfc47e4f8b23346fdae2ca6e02a81cf43fc15fc946a3c",
+      "master": "0976682d5146b93e685d76e59f9cdb7669867dd7649e17a4406dcb99a7b169f5"
+    },
+    {
+      "espace": "produits",
+      "fichier": "miel-bruyere-blanche/ambiance-320.jpg",
+      "vue": "ambiance",
+      "largeur": 320,
+      "hauteur": 512,
+      "format": "jpg",
+      "octets": 16382,
+      "sha256": "b23de7df39582a5b8c203eb859cddcff02c9e82db42050170e01f916c0a3dc84",
+      "master": "0976682d5146b93e685d76e59f9cdb7669867dd7649e17a4406dcb99a7b169f5"
+    },
+    {
+      "espace": "produits",
+      "fichier": "miel-bruyere-blanche/ambiance-480.avif",
+      "vue": "ambiance",
+      "largeur": 480,
+      "hauteur": 768,
+      "format": "avif",
+      "octets": 22319,
+      "sha256": "0628985de02e09904bb979d46d37d7999ac8f113cb0108b66b0b920c559dbbf1",
+      "master": "0976682d5146b93e685d76e59f9cdb7669867dd7649e17a4406dcb99a7b169f5"
+    },
+    {
+      "espace": "produits",
+      "fichier": "miel-bruyere-blanche/ambiance-480.jpg",
+      "vue": "ambiance",
+      "largeur": 480,
+      "hauteur": 768,
+      "format": "jpg",
+      "octets": 31741,
+      "sha256": "792b2245883805dd2c3634e93bd72e8704bfcf97a25c131a45cb8d080a7e798d",
+      "master": "0976682d5146b93e685d76e59f9cdb7669867dd7649e17a4406dcb99a7b169f5"
+    },
+    {
+      "espace": "produits",
+      "fichier": "miel-bruyere-blanche/ambiance-640.avif",
+      "vue": "ambiance",
+      "largeur": 640,
+      "hauteur": 1024,
+      "format": "avif",
+      "octets": 35747,
+      "sha256": "49c2ea3f5d7929ba0ef3bddb327f28b02e4881263ed1ce8f20d71335cad364cb",
+      "master": "0976682d5146b93e685d76e59f9cdb7669867dd7649e17a4406dcb99a7b169f5"
+    },
+    {
+      "espace": "produits",
+      "fichier": "miel-bruyere-blanche/ambiance-640.jpg",
+      "vue": "ambiance",
+      "largeur": 640,
+      "hauteur": 1024,
+      "format": "jpg",
+      "octets": 50375,
+      "sha256": "c4ee3b8196c2dc6330f26cea3b2113fb43d676bf390f560f2eb48bec421a2089",
+      "master": "0976682d5146b93e685d76e59f9cdb7669867dd7649e17a4406dcb99a7b169f5"
+    },
+    {
+      "espace": "produits",
+      "fichier": "miel-bruyere-blanche/partage-1200x630.jpg",
+      "vue": "partage",
+      "largeur": 1200,
+      "hauteur": 630,
+      "format": "jpg",
+      "octets": 18330,
+      "sha256": "27c43d4988508bc41d997c9545455a4e0550f820d0064eb41e3dd0396077cf2e",
+      "master": "317522446f7053e5e7cdfc1aa30ebf25c4319f8e5f84a455a3793f972307658c"
+    },
+    {
+      "espace": "produits",
+      "fichier": "miel-bruyere-blanche/principal-320.avif",
+      "vue": "principal",
+      "largeur": 320,
+      "hauteur": 512,
+      "format": "avif",
+      "octets": 10024,
+      "sha256": "b381785872d1c7d1efeb02a70437d205dfffb66d242358ed7cc90b3f1334a377",
+      "master": "317522446f7053e5e7cdfc1aa30ebf25c4319f8e5f84a455a3793f972307658c"
+    },
+    {
+      "espace": "produits",
+      "fichier": "miel-bruyere-blanche/principal-320.jpg",
+      "vue": "principal",
+      "largeur": 320,
+      "hauteur": 512,
+      "format": "jpg",
+      "octets": 14555,
+      "sha256": "62cec4bdaadf2f6e1c95c96bb0a2ba9fbd83f8d365ff1764b8caab4aa54ce4aa",
+      "master": "317522446f7053e5e7cdfc1aa30ebf25c4319f8e5f84a455a3793f972307658c"
+    },
+    {
+      "espace": "produits",
+      "fichier": "miel-bruyere-blanche/principal-480.avif",
+      "vue": "principal",
+      "largeur": 480,
+      "hauteur": 768,
+      "format": "avif",
+      "octets": 18955,
+      "sha256": "56d23fe1f510fa6008629d3c3f22964f3b5b53b7d7a3e6554bcb403a8f8e955c",
+      "master": "317522446f7053e5e7cdfc1aa30ebf25c4319f8e5f84a455a3793f972307658c"
+    },
+    {
+      "espace": "produits",
+      "fichier": "miel-bruyere-blanche/principal-480.jpg",
+      "vue": "principal",
+      "largeur": 480,
+      "hauteur": 768,
+      "format": "jpg",
+      "octets": 28048,
+      "sha256": "bf76e79d1acca8acf6147cbf1a6616bd4b43a7be229e6bc2ce30500cb26ad353",
+      "master": "317522446f7053e5e7cdfc1aa30ebf25c4319f8e5f84a455a3793f972307658c"
+    },
+    {
+      "espace": "produits",
+      "fichier": "miel-bruyere-blanche/principal-640.avif",
+      "vue": "principal",
+      "largeur": 640,
+      "hauteur": 1024,
+      "format": "avif",
+      "octets": 29761,
+      "sha256": "81ad201b48922d3bd803bc6a53baf7b274c2ec34257ae28bd6edd5c610b2a637",
+      "master": "317522446f7053e5e7cdfc1aa30ebf25c4319f8e5f84a455a3793f972307658c"
+    },
+    {
+      "espace": "produits",
+      "fichier": "miel-bruyere-blanche/principal-640.jpg",
+      "vue": "principal",
+      "largeur": 640,
+      "hauteur": 1024,
+      "format": "jpg",
+      "octets": 44167,
+      "sha256": "1c70b549ae175ad91af675651ff61582432a1ea110f46de09eca643c454eed96",
+      "master": "317522446f7053e5e7cdfc1aa30ebf25c4319f8e5f84a455a3793f972307658c"
+    },
+    {
+      "espace": "produits",
+      "fichier": "miel-chataignier/ambiance-320.avif",
+      "vue": "ambiance",
+      "largeur": 320,
+      "hauteur": 512,
+      "format": "avif",
+      "octets": 10390,
+      "sha256": "ba4c018527af638a0e97b077659282458f0bb929f809bc007df6719b5579502e",
+      "master": "c96c99b16424c5c8604e4ad2150950373b2ee46b5147f297d493241d1066878a"
+    },
+    {
+      "espace": "produits",
+      "fichier": "miel-chataignier/ambiance-320.jpg",
+      "vue": "ambiance",
+      "largeur": 320,
+      "hauteur": 512,
+      "format": "jpg",
+      "octets": 16031,
+      "sha256": "2585bf650de7a136ab3e3e4660adbb49c020b12cc8909be3fbea144915344687",
+      "master": "c96c99b16424c5c8604e4ad2150950373b2ee46b5147f297d493241d1066878a"
+    },
+    {
+      "espace": "produits",
+      "fichier": "miel-chataignier/ambiance-480.avif",
+      "vue": "ambiance",
+      "largeur": 480,
+      "hauteur": 768,
+      "format": "avif",
+      "octets": 19210,
+      "sha256": "d1106dbed5859527ddbf23fd1288a8dae97cbff53d47c38ca2082f959940674c",
+      "master": "c96c99b16424c5c8604e4ad2150950373b2ee46b5147f297d493241d1066878a"
+    },
+    {
+      "espace": "produits",
+      "fichier": "miel-chataignier/ambiance-480.jpg",
+      "vue": "ambiance",
+      "largeur": 480,
+      "hauteur": 768,
+      "format": "jpg",
+      "octets": 30045,
+      "sha256": "028b3a54f009e2cc59d84fea903b7a0d8e733f462cd1114fd414fa2bd45eae9c",
+      "master": "c96c99b16424c5c8604e4ad2150950373b2ee46b5147f297d493241d1066878a"
+    },
+    {
+      "espace": "produits",
+      "fichier": "miel-chataignier/ambiance-640.avif",
+      "vue": "ambiance",
+      "largeur": 640,
+      "hauteur": 1024,
+      "format": "avif",
+      "octets": 29539,
+      "sha256": "b72d6bad7eb8b075d19c08689aec7c5f8795b4022ca7c0fa1c87366206a60278",
+      "master": "c96c99b16424c5c8604e4ad2150950373b2ee46b5147f297d493241d1066878a"
+    },
+    {
+      "espace": "produits",
+      "fichier": "miel-chataignier/ambiance-640.jpg",
+      "vue": "ambiance",
+      "largeur": 640,
+      "hauteur": 1024,
+      "format": "jpg",
+      "octets": 46494,
+      "sha256": "4128a06ac0247e423216569d48f0058772646dd1218a6b975f9009997caa8a67",
+      "master": "c96c99b16424c5c8604e4ad2150950373b2ee46b5147f297d493241d1066878a"
+    },
+    {
+      "espace": "produits",
+      "fichier": "miel-chataignier/partage-1200x630.jpg",
+      "vue": "partage",
+      "largeur": 1200,
+      "hauteur": 630,
+      "format": "jpg",
+      "octets": 16778,
+      "sha256": "4ff04853125de3872599a9e77ed86d1075dd816d60c64220619f5befc2bf707e",
+      "master": "222296bed4edc6c268035c0da5ae9a5e4f4442728e117856ba098a2953953626"
+    },
+    {
+      "espace": "produits",
+      "fichier": "miel-chataignier/principal-320.avif",
+      "vue": "principal",
+      "largeur": 320,
+      "hauteur": 512,
+      "format": "avif",
+      "octets": 8243,
+      "sha256": "79f3a384cbc2b10c36396fb82bf8641cf06d0904ae24c89935ce3dbc0ae7f68b",
+      "master": "222296bed4edc6c268035c0da5ae9a5e4f4442728e117856ba098a2953953626"
+    },
+    {
+      "espace": "produits",
+      "fichier": "miel-chataignier/principal-320.jpg",
+      "vue": "principal",
+      "largeur": 320,
+      "hauteur": 512,
+      "format": "jpg",
+      "octets": 13239,
+      "sha256": "b66ea43f756d54ad92510689a47338bdc1846cbea1697ed1b4e3527a8924d2b9",
+      "master": "222296bed4edc6c268035c0da5ae9a5e4f4442728e117856ba098a2953953626"
+    },
+    {
+      "espace": "produits",
+      "fichier": "miel-chataignier/principal-480.avif",
+      "vue": "principal",
+      "largeur": 480,
+      "hauteur": 768,
+      "format": "avif",
+      "octets": 14674,
+      "sha256": "a2f7c9a442dfce634e59a1c844d6f497988e6adfd626257544b3ecfd579057af",
+      "master": "222296bed4edc6c268035c0da5ae9a5e4f4442728e117856ba098a2953953626"
+    },
+    {
+      "espace": "produits",
+      "fichier": "miel-chataignier/principal-480.jpg",
+      "vue": "principal",
+      "largeur": 480,
+      "hauteur": 768,
+      "format": "jpg",
+      "octets": 24635,
+      "sha256": "37a4e116f9dbd9ae3bb902680f7c2c6cb297459a466310676a06587916542751",
+      "master": "222296bed4edc6c268035c0da5ae9a5e4f4442728e117856ba098a2953953626"
+    },
+    {
+      "espace": "produits",
+      "fichier": "miel-chataignier/principal-640.avif",
+      "vue": "principal",
+      "largeur": 640,
+      "hauteur": 1024,
+      "format": "avif",
+      "octets": 22594,
+      "sha256": "d8dfea453482e5475569659be11997be2a4266a3452c588d1434a43fe2a325cc",
+      "master": "222296bed4edc6c268035c0da5ae9a5e4f4442728e117856ba098a2953953626"
+    },
+    {
+      "espace": "produits",
+      "fichier": "miel-chataignier/principal-640.jpg",
+      "vue": "principal",
+      "largeur": 640,
+      "hauteur": 1024,
+      "format": "jpg",
+      "octets": 38013,
+      "sha256": "b10063a7321a1c014dced5cf7ad56613b00c909127ad8050ddc4558700722d47",
+      "master": "222296bed4edc6c268035c0da5ae9a5e4f4442728e117856ba098a2953953626"
+    },
+    {
+      "espace": "produits",
+      "fichier": "rillettes-canard-echalotes/ambiance-320.avif",
+      "vue": "ambiance",
+      "largeur": 320,
+      "hauteur": 512,
+      "format": "avif",
+      "octets": 13094,
+      "sha256": "11d6f6d3b179049006ed6f7d5102410573c524341e65ee6e310254bfc9bf250b",
+      "master": "465172fe2877191377e9044ae6e8be73bfc08476abdda4bb0d7d385f60f20995"
+    },
+    {
+      "espace": "produits",
+      "fichier": "rillettes-canard-echalotes/ambiance-320.jpg",
+      "vue": "ambiance",
+      "largeur": 320,
+      "hauteur": 512,
+      "format": "jpg",
+      "octets": 17230,
+      "sha256": "ba249f197cc8187e59187d97007a06c63a331dd25b7fdcc8f17f765e8dd87b97",
+      "master": "465172fe2877191377e9044ae6e8be73bfc08476abdda4bb0d7d385f60f20995"
+    },
+    {
+      "espace": "produits",
+      "fichier": "rillettes-canard-echalotes/ambiance-480.avif",
+      "vue": "ambiance",
+      "largeur": 480,
+      "hauteur": 768,
+      "format": "avif",
+      "octets": 24901,
+      "sha256": "331fe76de3c21e1533714e223f14c600b21f2e5a3557868911becea62a7bc9fb",
+      "master": "465172fe2877191377e9044ae6e8be73bfc08476abdda4bb0d7d385f60f20995"
+    },
+    {
+      "espace": "produits",
+      "fichier": "rillettes-canard-echalotes/ambiance-480.jpg",
+      "vue": "ambiance",
+      "largeur": 480,
+      "hauteur": 768,
+      "format": "jpg",
+      "octets": 33401,
+      "sha256": "471db9245e7aaf6cc618cd99dd38a1998ade7db09150631ce000f8e7f18372b1",
+      "master": "465172fe2877191377e9044ae6e8be73bfc08476abdda4bb0d7d385f60f20995"
+    },
+    {
+      "espace": "produits",
+      "fichier": "rillettes-canard-echalotes/ambiance-640.avif",
+      "vue": "ambiance",
+      "largeur": 640,
+      "hauteur": 1024,
+      "format": "avif",
+      "octets": 38108,
+      "sha256": "c394212e3fcd36fe5b83bfc02df9427fd7cef9918d6c1f08e0b2a5e8107e89c8",
+      "master": "465172fe2877191377e9044ae6e8be73bfc08476abdda4bb0d7d385f60f20995"
+    },
+    {
+      "espace": "produits",
+      "fichier": "rillettes-canard-echalotes/ambiance-640.jpg",
+      "vue": "ambiance",
+      "largeur": 640,
+      "hauteur": 1024,
+      "format": "jpg",
+      "octets": 53006,
+      "sha256": "229bdf34ff55c0e54f28ac6733ddd82e7689acda7e94ee52bc10912e3046bd65",
+      "master": "465172fe2877191377e9044ae6e8be73bfc08476abdda4bb0d7d385f60f20995"
+    },
+    {
+      "espace": "produits",
+      "fichier": "rillettes-canard-echalotes/partage-1200x630.jpg",
+      "vue": "partage",
+      "largeur": 1200,
+      "hauteur": 630,
+      "format": "jpg",
+      "octets": 20303,
+      "sha256": "10559a05e749a381bf4bd5fda3894453868df805209755fa7669c98c6f8d64d4",
+      "master": "35dc98124005c25e82a009f5424fe009af10ed645acfefbae75ad1f65918d303"
+    },
+    {
+      "espace": "produits",
+      "fichier": "rillettes-canard-echalotes/principal-320.avif",
+      "vue": "principal",
+      "largeur": 320,
+      "hauteur": 512,
+      "format": "avif",
+      "octets": 11571,
+      "sha256": "51f850ef201f455ce3113e5961334c14a44b41003218c3429aeeb10f4c9e24f5",
+      "master": "35dc98124005c25e82a009f5424fe009af10ed645acfefbae75ad1f65918d303"
+    },
+    {
+      "espace": "produits",
+      "fichier": "rillettes-canard-echalotes/principal-320.jpg",
+      "vue": "principal",
+      "largeur": 320,
+      "hauteur": 512,
+      "format": "jpg",
+      "octets": 15908,
+      "sha256": "70d16dbcb7dac559206e0e196c87167390faa6a414292b73d3d060e3ea404ca0",
+      "master": "35dc98124005c25e82a009f5424fe009af10ed645acfefbae75ad1f65918d303"
+    },
+    {
+      "espace": "produits",
+      "fichier": "rillettes-canard-echalotes/principal-480.avif",
+      "vue": "principal",
+      "largeur": 480,
+      "hauteur": 768,
+      "format": "avif",
+      "octets": 22484,
+      "sha256": "7cdc7ec6689f86165beed9b20352e45c646a623bff9861d099cbb927f888d342",
+      "master": "35dc98124005c25e82a009f5424fe009af10ed645acfefbae75ad1f65918d303"
+    },
+    {
+      "espace": "produits",
+      "fichier": "rillettes-canard-echalotes/principal-480.jpg",
+      "vue": "principal",
+      "largeur": 480,
+      "hauteur": 768,
+      "format": "jpg",
+      "octets": 31025,
+      "sha256": "db519012c55947e9455a7d34d1e99b5ea24c06ecabf211820b749e0866a3da5a",
+      "master": "35dc98124005c25e82a009f5424fe009af10ed645acfefbae75ad1f65918d303"
+    },
+    {
+      "espace": "produits",
+      "fichier": "rillettes-canard-echalotes/principal-640.avif",
+      "vue": "principal",
+      "largeur": 640,
+      "hauteur": 1024,
+      "format": "avif",
+      "octets": 34556,
+      "sha256": "6d9f247f342bb5c7a7af9f4058ddfd9339739b69541e93b706250d2746e01c71",
+      "master": "35dc98124005c25e82a009f5424fe009af10ed645acfefbae75ad1f65918d303"
+    },
+    {
+      "espace": "produits",
+      "fichier": "rillettes-canard-echalotes/principal-640.jpg",
+      "vue": "principal",
+      "largeur": 640,
+      "hauteur": 1024,
+      "format": "jpg",
+      "octets": 49211,
+      "sha256": "4fa2c160467ddaa5c8ffedae9090e1fd6b9f5a6b48115bba2ab7566a3276e11d",
+      "master": "35dc98124005c25e82a009f5424fe009af10ed645acfefbae75ad1f65918d303"
+    },
+    {
+      "espace": "produits",
+      "fichier": "terrine-campagne-poivre-noir/ambiance-320.avif",
+      "vue": "ambiance",
+      "largeur": 320,
+      "hauteur": 512,
+      "format": "avif",
+      "octets": 18277,
+      "sha256": "2583bb413452a7a3e7e706e0d1046c884e697eef09f6ee3f16c963a0091539bc",
+      "master": "314bc8a50361587e029a40e3a4a998c4180642c7115b71ce2c02d7b822c68d26"
+    },
+    {
+      "espace": "produits",
+      "fichier": "terrine-campagne-poivre-noir/ambiance-320.jpg",
+      "vue": "ambiance",
+      "largeur": 320,
+      "hauteur": 512,
+      "format": "jpg",
+      "octets": 22713,
+      "sha256": "590d8a010a0faf66769c1f6d735caab18f77d8ef43f3d6e7eef297736e837e75",
+      "master": "314bc8a50361587e029a40e3a4a998c4180642c7115b71ce2c02d7b822c68d26"
+    },
+    {
+      "espace": "produits",
+      "fichier": "terrine-campagne-poivre-noir/ambiance-480.avif",
+      "vue": "ambiance",
+      "largeur": 480,
+      "hauteur": 768,
+      "format": "avif",
+      "octets": 33734,
+      "sha256": "95fbec36833e32d8f573f894c17f28915417b999e8147f073b3cb5a7f3fac4dc",
+      "master": "314bc8a50361587e029a40e3a4a998c4180642c7115b71ce2c02d7b822c68d26"
+    },
+    {
+      "espace": "produits",
+      "fichier": "terrine-campagne-poivre-noir/ambiance-480.jpg",
+      "vue": "ambiance",
+      "largeur": 480,
+      "hauteur": 768,
+      "format": "jpg",
+      "octets": 43920,
+      "sha256": "ee3cc22c66acd97cf2852def55d85eff4d5c77eb692cb3ba3b8571d64e639be5",
+      "master": "314bc8a50361587e029a40e3a4a998c4180642c7115b71ce2c02d7b822c68d26"
+    },
+    {
+      "espace": "produits",
+      "fichier": "terrine-campagne-poivre-noir/ambiance-640.avif",
+      "vue": "ambiance",
+      "largeur": 640,
+      "hauteur": 1024,
+      "format": "avif",
+      "octets": 50057,
+      "sha256": "2d7c21e8eb218193f982492db987508c5aabc32406c5bce4a2dc26abd5a0cb57",
+      "master": "314bc8a50361587e029a40e3a4a998c4180642c7115b71ce2c02d7b822c68d26"
+    },
+    {
+      "espace": "produits",
+      "fichier": "terrine-campagne-poivre-noir/ambiance-640.jpg",
+      "vue": "ambiance",
+      "largeur": 640,
+      "hauteur": 1024,
+      "format": "jpg",
+      "octets": 68846,
+      "sha256": "084428623c038e92eae3f24ec417b52a202b74d3b9276c380fabad626481ea34",
+      "master": "314bc8a50361587e029a40e3a4a998c4180642c7115b71ce2c02d7b822c68d26"
+    },
+    {
+      "espace": "produits",
+      "fichier": "terrine-campagne-poivre-noir/partage-1200x630.jpg",
+      "vue": "partage",
+      "largeur": 1200,
+      "hauteur": 630,
+      "format": "jpg",
+      "octets": 21872,
+      "sha256": "57eace56862fa6a4208a4b8caf138e2ae9dfd7cd2f1e337e3f8a709031d919ed",
+      "master": "7c99efe50488ff0f2a3b2cde91c01f12a375aa4783d4104bd053360816cda9b4"
+    },
+    {
+      "espace": "produits",
+      "fichier": "terrine-campagne-poivre-noir/principal-320.avif",
+      "vue": "principal",
+      "largeur": 320,
+      "hauteur": 512,
+      "format": "avif",
+      "octets": 12882,
+      "sha256": "f2fc64e21dd8a217224e351def465781b8a2029f51f050b0e00fce63ef8e5649",
+      "master": "7c99efe50488ff0f2a3b2cde91c01f12a375aa4783d4104bd053360816cda9b4"
+    },
+    {
+      "espace": "produits",
+      "fichier": "terrine-campagne-poivre-noir/principal-320.jpg",
+      "vue": "principal",
+      "largeur": 320,
+      "hauteur": 512,
+      "format": "jpg",
+      "octets": 17142,
+      "sha256": "990bbee9de43bb11a35d1650ec092734e34a26801507ada27ea47ea3354d4e90",
+      "master": "7c99efe50488ff0f2a3b2cde91c01f12a375aa4783d4104bd053360816cda9b4"
+    },
+    {
+      "espace": "produits",
+      "fichier": "terrine-campagne-poivre-noir/principal-480.avif",
+      "vue": "principal",
+      "largeur": 480,
+      "hauteur": 768,
+      "format": "avif",
+      "octets": 24395,
+      "sha256": "cc2fb2c1fb23886678bb6d90d35395a99798933542b4ea2bd5cdad67f619568a",
+      "master": "7c99efe50488ff0f2a3b2cde91c01f12a375aa4783d4104bd053360816cda9b4"
+    },
+    {
+      "espace": "produits",
+      "fichier": "terrine-campagne-poivre-noir/principal-480.jpg",
+      "vue": "principal",
+      "largeur": 480,
+      "hauteur": 768,
+      "format": "jpg",
+      "octets": 33218,
+      "sha256": "630e4ae2f9e83cc21e4c3efb9d7307f4392b3bee73d7500b97d57a82804a8291",
+      "master": "7c99efe50488ff0f2a3b2cde91c01f12a375aa4783d4104bd053360816cda9b4"
+    },
+    {
+      "espace": "produits",
+      "fichier": "terrine-campagne-poivre-noir/principal-640.avif",
+      "vue": "principal",
+      "largeur": 640,
+      "hauteur": 1024,
+      "format": "avif",
+      "octets": 37584,
+      "sha256": "cf86f1b514033c4d914376223578cd6487c5419224cd192bc8a14ed599586843",
+      "master": "7c99efe50488ff0f2a3b2cde91c01f12a375aa4783d4104bd053360816cda9b4"
+    },
+    {
+      "espace": "produits",
+      "fichier": "terrine-campagne-poivre-noir/principal-640.jpg",
+      "vue": "principal",
+      "largeur": 640,
+      "hauteur": 1024,
+      "format": "jpg",
+      "octets": 53102,
+      "sha256": "65598e399a12e351ca7b41550e74a4ce5924fd3afbcc0bb48354fa2d3b8bf487",
+      "master": "7c99efe50488ff0f2a3b2cde91c01f12a375aa4783d4104bd053360816cda9b4"
+    },
+    {
+      "espace": "produits",
+      "fichier": "vinaigre-cidre-vieilli-fut/ambiance-320.avif",
+      "vue": "ambiance",
+      "largeur": 320,
+      "hauteur": 512,
+      "format": "avif",
+      "octets": 6062,
+      "sha256": "40e1be61de0c7267a928ffd0ffb6da608aa1730abfc15bb553f2618aabcdcdbc",
+      "master": "924c1024b891d82a16c65d425fb6b50ce20fea743528362e48a3f5ab6d97dc77"
+    },
+    {
+      "espace": "produits",
+      "fichier": "vinaigre-cidre-vieilli-fut/ambiance-320.jpg",
+      "vue": "ambiance",
+      "largeur": 320,
+      "hauteur": 512,
+      "format": "jpg",
+      "octets": 9006,
+      "sha256": "3de732f09da424a08af185595059e7ca57ff1009a17638b45085aeb700b71b46",
+      "master": "924c1024b891d82a16c65d425fb6b50ce20fea743528362e48a3f5ab6d97dc77"
+    },
+    {
+      "espace": "produits",
+      "fichier": "vinaigre-cidre-vieilli-fut/ambiance-480.avif",
+      "vue": "ambiance",
+      "largeur": 480,
+      "hauteur": 768,
+      "format": "avif",
+      "octets": 10763,
+      "sha256": "7e4e5cb6a661b3a30a0dbc885525c02d40d92d5e2f98329992ef6e65d71b0dec",
+      "master": "924c1024b891d82a16c65d425fb6b50ce20fea743528362e48a3f5ab6d97dc77"
+    },
+    {
+      "espace": "produits",
+      "fichier": "vinaigre-cidre-vieilli-fut/ambiance-480.jpg",
+      "vue": "ambiance",
+      "largeur": 480,
+      "hauteur": 768,
+      "format": "jpg",
+      "octets": 16554,
+      "sha256": "70f63010fb5116489528cb3bc52ff395fca721328cd4f8c37f4565ec47c6d3a5",
+      "master": "924c1024b891d82a16c65d425fb6b50ce20fea743528362e48a3f5ab6d97dc77"
+    },
+    {
+      "espace": "produits",
+      "fichier": "vinaigre-cidre-vieilli-fut/ambiance-640.avif",
+      "vue": "ambiance",
+      "largeur": 640,
+      "hauteur": 1024,
+      "format": "avif",
+      "octets": 15538,
+      "sha256": "3afabc3dbdccdcca24a25d113c081e9c9d0897bec43722930e912ca46ce09aed",
+      "master": "924c1024b891d82a16c65d425fb6b50ce20fea743528362e48a3f5ab6d97dc77"
+    },
+    {
+      "espace": "produits",
+      "fichier": "vinaigre-cidre-vieilli-fut/ambiance-640.jpg",
+      "vue": "ambiance",
+      "largeur": 640,
+      "hauteur": 1024,
+      "format": "jpg",
+      "octets": 25545,
+      "sha256": "6beaed4a9058e21055aaff8d0304f7d5dbefe70c8c5d233212c844d5d1b74ca0",
+      "master": "924c1024b891d82a16c65d425fb6b50ce20fea743528362e48a3f5ab6d97dc77"
+    },
+    {
+      "espace": "produits",
+      "fichier": "vinaigre-cidre-vieilli-fut/partage-1200x630.jpg",
+      "vue": "partage",
+      "largeur": 1200,
+      "hauteur": 630,
+      "format": "jpg",
+      "octets": 11547,
+      "sha256": "8ebc8809acca1179876f8ace06b9de87fdf1ac572210c4b2cd60f8cce8c8c0bb",
+      "master": "af851009583edad584954504a19d6f56483b9a519fbd6dee917e54ad3a645017"
+    },
+    {
+      "espace": "produits",
+      "fichier": "vinaigre-cidre-vieilli-fut/principal-320.avif",
+      "vue": "principal",
+      "largeur": 320,
+      "hauteur": 512,
+      "format": "avif",
+      "octets": 5043,
+      "sha256": "5f266d9797154f8c5bc0ef65d2bdb5337e95965ccfb2031f861bebc05adaf51f",
+      "master": "af851009583edad584954504a19d6f56483b9a519fbd6dee917e54ad3a645017"
+    },
+    {
+      "espace": "produits",
+      "fichier": "vinaigre-cidre-vieilli-fut/principal-320.jpg",
+      "vue": "principal",
+      "largeur": 320,
+      "hauteur": 512,
+      "format": "jpg",
+      "octets": 8159,
+      "sha256": "ea6efe75ff2f9b5355281f9279b1d4dec06c2515973e376869312c29fd69bf6b",
+      "master": "af851009583edad584954504a19d6f56483b9a519fbd6dee917e54ad3a645017"
+    },
+    {
+      "espace": "produits",
+      "fichier": "vinaigre-cidre-vieilli-fut/principal-480.avif",
+      "vue": "principal",
+      "largeur": 480,
+      "hauteur": 768,
+      "format": "avif",
+      "octets": 8983,
+      "sha256": "e66b0689b6e5ac5e2d87d2cb4aaa2873033d01e7919ddb0d87ac9fd052c096f3",
+      "master": "af851009583edad584954504a19d6f56483b9a519fbd6dee917e54ad3a645017"
+    },
+    {
+      "espace": "produits",
+      "fichier": "vinaigre-cidre-vieilli-fut/principal-480.jpg",
+      "vue": "principal",
+      "largeur": 480,
+      "hauteur": 768,
+      "format": "jpg",
+      "octets": 14586,
+      "sha256": "5569ffa7eb9f4c691bb5f63faf2dc76a2de80b2eee820cc445b15ab25584fecb",
+      "master": "af851009583edad584954504a19d6f56483b9a519fbd6dee917e54ad3a645017"
+    },
+    {
+      "espace": "produits",
+      "fichier": "vinaigre-cidre-vieilli-fut/principal-640.avif",
+      "vue": "principal",
+      "largeur": 640,
+      "hauteur": 1024,
+      "format": "avif",
+      "octets": 12946,
+      "sha256": "b034f0b519fa1c834e131200b8ed299b6a98b2187d23ded72ea0158b43ea935b",
+      "master": "af851009583edad584954504a19d6f56483b9a519fbd6dee917e54ad3a645017"
+    },
+    {
+      "espace": "produits",
+      "fichier": "vinaigre-cidre-vieilli-fut/principal-640.jpg",
+      "vue": "principal",
+      "largeur": 640,
+      "hauteur": 1024,
+      "format": "jpg",
+      "octets": 22453,
+      "sha256": "ae249548461a9eeb7a065d563a790fbda7d4b3ebb447e0f5b9b4c802ef1699b0",
+      "master": "af851009583edad584954504a19d6f56483b9a519fbd6dee917e54ad3a645017"
+    }
+  ],
+  "masters": [
+    {
+      "master": "A01-huile-olive-premiere-pression-v3.png",
+      "sha256": "883631f1b94a668582ac9afa1a2f3bfea997574c97e458f2cb760de979120184",
+      "dimensions": {
+        "largeur": 928,
+        "hauteur": 1152
+      },
+      "boite": {
+        "x": 132,
+        "y": 66,
+        "largeur": 640,
+        "hauteur": 1024
+      },
+      "signature": {
+        "localisee": true,
+        "score": 0.552,
+        "amplitude": 10.93,
+        "precision": 2,
+        "boite": {
+          "x": 781,
+          "y": 1006,
+          "largeur": 54,
+          "hauteur": 54
+        }
+      },
+      "dansLaBoite": false,
+      "marge": 9
+    },
+    {
+      "master": "A02-huile-noix-moulin.png",
+      "sha256": "f5ff403eafdcf67b11f81ea18b53d1d658121879fcf580abffa850d9c43322fa",
+      "dimensions": {
+        "largeur": 928,
+        "hauteur": 1152
+      },
+      "boite": {
+        "x": 132,
+        "y": 66,
+        "largeur": 640,
+        "hauteur": 1024
+      },
+      "signature": {
+        "localisee": true,
+        "score": 0.563,
+        "amplitude": 10.18,
+        "precision": 2,
+        "boite": {
+          "x": 781,
+          "y": 1006,
+          "largeur": 54,
+          "hauteur": 54
+        }
+      },
+      "dansLaBoite": false,
+      "marge": 9
+    },
+    {
+      "master": "A03-vinaigre-cidre-vieilli-fut.png",
+      "sha256": "af851009583edad584954504a19d6f56483b9a519fbd6dee917e54ad3a645017",
+      "dimensions": {
+        "largeur": 928,
+        "hauteur": 1152
+      },
+      "boite": {
+        "x": 132,
+        "y": 66,
+        "largeur": 640,
+        "hauteur": 1024
+      },
+      "signature": {
+        "localisee": true,
+        "score": 0.742,
+        "amplitude": 9.1,
+        "precision": 2,
+        "boite": {
+          "x": 781,
+          "y": 1005,
+          "largeur": 54,
+          "hauteur": 54
+        }
+      },
+      "dansLaBoite": false,
+      "marge": 9
+    },
+    {
+      "master": "A04-terrine-campagne-poivre-noir.png",
+      "sha256": "7c99efe50488ff0f2a3b2cde91c01f12a375aa4783d4104bd053360816cda9b4",
+      "dimensions": {
+        "largeur": 928,
+        "hauteur": 1152
+      },
+      "boite": {
+        "x": 132,
+        "y": 66,
+        "largeur": 640,
+        "hauteur": 1024
+      },
+      "signature": {
+        "localisee": true,
+        "score": 0.908,
+        "amplitude": 5.11,
+        "precision": 2,
+        "boite": {
+          "x": 781,
+          "y": 1005,
+          "largeur": 54,
+          "hauteur": 54
+        }
+      },
+      "dansLaBoite": false,
+      "marge": 9
+    },
+    {
+      "master": "A05-rillettes-canard-echalotes.png",
+      "sha256": "35dc98124005c25e82a009f5424fe009af10ed645acfefbae75ad1f65918d303",
+      "dimensions": {
+        "largeur": 928,
+        "hauteur": 1152
+      },
+      "boite": {
+        "x": 132,
+        "y": 66,
+        "largeur": 640,
+        "hauteur": 1024
+      },
+      "signature": {
+        "localisee": true,
+        "score": 0.906,
+        "amplitude": 5.08,
+        "precision": 2,
+        "boite": {
+          "x": 781,
+          "y": 1005,
+          "largeur": 54,
+          "hauteur": 54
+        }
+      },
+      "dansLaBoite": false,
+      "marge": 9
+    },
+    {
+      "master": "A06-confit-oignons-vin-doux.png",
+      "sha256": "38b698d3b732b6e9e2eb7096dd1b13fdc7ea0295dfde3fdcced7ac0167290359",
+      "dimensions": {
+        "largeur": 928,
+        "hauteur": 1152
+      },
+      "boite": {
+        "x": 132,
+        "y": 66,
+        "largeur": 640,
+        "hauteur": 1024
+      },
+      "signature": {
+        "localisee": true,
+        "score": 0.904,
+        "amplitude": 5.32,
+        "precision": 2,
+        "boite": {
+          "x": 781,
+          "y": 1005,
+          "largeur": 54,
+          "hauteur": 54
+        }
+      },
+      "dansLaBoite": false,
+      "marge": 9
+    },
+    {
+      "master": "A07-miel-chataignier.png",
+      "sha256": "222296bed4edc6c268035c0da5ae9a5e4f4442728e117856ba098a2953953626",
+      "dimensions": {
+        "largeur": 928,
+        "hauteur": 1152
+      },
+      "boite": {
+        "x": 132,
+        "y": 66,
+        "largeur": 640,
+        "hauteur": 1024
+      },
+      "signature": {
+        "localisee": true,
+        "score": 0.596,
+        "amplitude": 5.4,
+        "precision": 2,
+        "boite": {
+          "x": 781,
+          "y": 1005,
+          "largeur": 54,
+          "hauteur": 54
+        }
+      },
+      "dansLaBoite": false,
+      "marge": 9
+    },
+    {
+      "master": "A08-miel-bruyere-blanche.png",
+      "sha256": "317522446f7053e5e7cdfc1aa30ebf25c4319f8e5f84a455a3793f972307658c",
+      "dimensions": {
+        "largeur": 928,
+        "hauteur": 1152
+      },
+      "boite": {
+        "x": 132,
+        "y": 66,
+        "largeur": 640,
+        "hauteur": 1024
+      },
+      "signature": {
+        "localisee": true,
+        "score": 0.597,
+        "amplitude": 5.66,
+        "precision": 2,
+        "boite": {
+          "x": 781,
+          "y": 1005,
+          "largeur": 54,
+          "hauteur": 54
+        }
+      },
+      "dansLaBoite": false,
+      "marge": 9
+    },
+    {
+      "master": "A09-confiture-abricots-plein-vent.png",
+      "sha256": "878ff3a5d1b6954cba9c67f03f40332cd94305043b45f2e7ac8a6869331f0d09",
+      "dimensions": {
+        "largeur": 928,
+        "hauteur": 1152
+      },
+      "boite": {
+        "x": 132,
+        "y": 66,
+        "largeur": 640,
+        "hauteur": 1024
+      },
+      "signature": {
+        "localisee": true,
+        "score": 0.617,
+        "amplitude": 5.92,
+        "precision": 2,
+        "boite": {
+          "x": 781,
+          "y": 1005,
+          "largeur": 54,
+          "hauteur": 54
+        }
+      },
+      "dansLaBoite": false,
+      "marge": 9
+    },
+    {
+      "master": "A10-lentilles-blondes-plateau.png",
+      "sha256": "f4a823afe162a5f2b8fb8f5a7d8fca14b255c29a69b8b8ffdeaefcb2e9fa8971",
+      "dimensions": {
+        "largeur": 928,
+        "hauteur": 1152
+      },
+      "boite": {
+        "x": 132,
+        "y": 66,
+        "largeur": 640,
+        "hauteur": 1024
+      },
+      "signature": {
+        "localisee": true,
+        "score": 0.601,
+        "amplitude": 5.76,
+        "precision": 2,
+        "boite": {
+          "x": 781,
+          "y": 1005,
+          "largeur": 54,
+          "hauteur": 54
+        }
+      },
+      "dansLaBoite": false,
+      "marge": 9
+    },
+    {
+      "master": "A11-infusion-du-soir-sept-plantes.png",
+      "sha256": "2369ce8556801a90124d2f6b6ee8ee85a3142aae2004218af12b9ae9350cbb51",
+      "dimensions": {
+        "largeur": 928,
+        "hauteur": 1152
+      },
+      "boite": {
+        "x": 132,
+        "y": 66,
+        "largeur": 640,
+        "hauteur": 1024
+      },
+      "signature": {
+        "localisee": true,
+        "score": 0.629,
+        "amplitude": 5.32,
+        "precision": 2,
+        "boite": {
+          "x": 781,
+          "y": 1005,
+          "largeur": 54,
+          "hauteur": 54
+        }
+      },
+      "dansLaBoite": false,
+      "marge": 9
+    },
+    {
+      "master": "A12-beurre-baratte-demi-sel.png",
+      "sha256": "c5104e69f83ddeeba0f168732072f7a91a32593d7468539fabbe6840ed901399",
+      "dimensions": {
+        "largeur": 928,
+        "hauteur": 1152
+      },
+      "boite": {
+        "x": 132,
+        "y": 66,
+        "largeur": 640,
+        "hauteur": 1024
+      },
+      "signature": {
+        "localisee": true,
+        "score": 0.623,
+        "amplitude": 4.8,
+        "precision": 2,
+        "boite": {
+          "x": 781,
+          "y": 1005,
+          "largeur": 54,
+          "hauteur": 54
+        }
+      },
+      "dansLaBoite": false,
+      "marge": 9
+    },
+    {
+      "master": "A13-fromage-fermier-brebis.png",
+      "sha256": "7705b31208a810bfd963c35587e5c371b942dc722ebb4a246cdc9b06859a9e0e",
+      "dimensions": {
+        "largeur": 928,
+        "hauteur": 1152
+      },
+      "boite": {
+        "x": 132,
+        "y": 66,
+        "largeur": 640,
+        "hauteur": 1024
+      },
+      "signature": {
+        "localisee": true,
+        "score": 0.873,
+        "amplitude": 4.17,
+        "precision": 2,
+        "boite": {
+          "x": 781,
+          "y": 1005,
+          "largeur": 54,
+          "hauteur": 54
+        }
+      },
+      "dansLaBoite": false,
+      "marge": 9
+    },
+    {
+      "master": "A14-coffret-table-du-dimanche.png",
+      "sha256": "428ae16e11c99fcfa3f0292a4485e984a77420730bf9f9ea8148390f946486f7",
+      "dimensions": {
+        "largeur": 928,
+        "hauteur": 1152
+      },
+      "boite": {
+        "x": 40,
+        "y": 330,
+        "largeur": 860,
+        "hauteur": 645
+      },
+      "signature": {
+        "localisee": true,
+        "score": 0.869,
+        "amplitude": 4.15,
+        "precision": 2,
+        "boite": {
+          "x": 781,
+          "y": 1005,
+          "largeur": 54,
+          "hauteur": 54
+        }
+      },
+      "dansLaBoite": false,
+      "marge": 30
+    },
+    {
+      "master": "A15-coffret-composez-le-votre.png",
+      "sha256": "f6698de13cc1b8e22605ff1105c9984d3c70e385765791556f13552d03c918ed",
+      "dimensions": {
+        "largeur": 928,
+        "hauteur": 1152
+      },
+      "boite": {
+        "x": 40,
+        "y": 330,
+        "largeur": 860,
+        "hauteur": 645
+      },
+      "signature": {
+        "localisee": true,
+        "score": 0.864,
+        "amplitude": 4.19,
+        "precision": 2,
+        "boite": {
+          "x": 781,
+          "y": 1005,
+          "largeur": 54,
+          "hauteur": 54
+        }
+      },
+      "dansLaBoite": false,
+      "marge": 30
+    },
+    {
+      "master": "B01-huile-olive-premiere-pression-ouvert-v3.png",
+      "sha256": "30d90280fac269993095d9b3672a7029e3a5d9a15c661cad1c57150e7d3183db",
+      "dimensions": {
+        "largeur": 928,
+        "hauteur": 1152
+      },
+      "boite": {
+        "x": 132,
+        "y": 66,
+        "largeur": 640,
+        "hauteur": 1024
+      },
+      "signature": {
+        "localisee": false,
+        "score": 0.483,
+        "amplitude": 2.01,
+        "precision": 2,
+        "boite": null
+      },
+      "dansLaBoite": false,
+      "marge": null
+    },
+    {
+      "master": "B02-huile-noix-moulin-ouvert.png",
+      "sha256": "f971176713f099f0eaf1cb24c85ad09d25b1bbe88da20b531ed8334ebc44047f",
+      "dimensions": {
+        "largeur": 928,
+        "hauteur": 1152
+      },
+      "boite": {
+        "x": 132,
+        "y": 66,
+        "largeur": 640,
+        "hauteur": 1024
+      },
+      "signature": {
+        "localisee": true,
+        "score": 0.766,
+        "amplitude": 8.28,
+        "precision": 2,
+        "boite": {
+          "x": 781,
+          "y": 1006,
+          "largeur": 54,
+          "hauteur": 54
+        }
+      },
+      "dansLaBoite": false,
+      "marge": 9
+    },
+    {
+      "master": "B03-vinaigre-cidre-vieilli-fut-ouvert-v2.png",
+      "sha256": "924c1024b891d82a16c65d425fb6b50ce20fea743528362e48a3f5ab6d97dc77",
+      "dimensions": {
+        "largeur": 928,
+        "hauteur": 1152
+      },
+      "boite": {
+        "x": 132,
+        "y": 66,
+        "largeur": 640,
+        "hauteur": 1024
+      },
+      "signature": {
+        "localisee": true,
+        "score": 0.763,
+        "amplitude": 8.91,
+        "precision": 2,
+        "boite": {
+          "x": 781,
+          "y": 1006,
+          "largeur": 54,
+          "hauteur": 54
+        }
+      },
+      "dansLaBoite": false,
+      "marge": 9
+    },
+    {
+      "master": "B04-terrine-campagne-poivre-noir-ouvert.png",
+      "sha256": "314bc8a50361587e029a40e3a4a998c4180642c7115b71ce2c02d7b822c68d26",
+      "dimensions": {
+        "largeur": 928,
+        "hauteur": 1152
+      },
+      "boite": {
+        "x": 132,
+        "y": 66,
+        "largeur": 640,
+        "hauteur": 1024
+      },
+      "signature": {
+        "localisee": true,
+        "score": 0.864,
+        "amplitude": 5.3,
+        "precision": 2,
+        "boite": {
+          "x": 781,
+          "y": 1005,
+          "largeur": 54,
+          "hauteur": 54
+        }
+      },
+      "dansLaBoite": false,
+      "marge": 9
+    },
+    {
+      "master": "B05-rillettes-canard-echalotes-ouvert.jpg",
+      "sha256": "465172fe2877191377e9044ae6e8be73bfc08476abdda4bb0d7d385f60f20995",
+      "dimensions": {
+        "largeur": 928,
+        "hauteur": 1152
+      },
+      "boite": {
+        "x": 132,
+        "y": 66,
+        "largeur": 640,
+        "hauteur": 1024
+      },
+      "signature": {
+        "localisee": true,
+        "score": 0.867,
+        "amplitude": 4.23,
+        "precision": 2,
+        "boite": {
+          "x": 781,
+          "y": 1005,
+          "largeur": 54,
+          "hauteur": 54
+        }
+      },
+      "dansLaBoite": false,
+      "marge": 9
+    },
+    {
+      "master": "B06-confit-oignons-vin-doux-ouvert.jpg",
+      "sha256": "c2b14d2bbf6f62a05a1a87244c7b8a1f74c83057c1aabe093255eb6b9c8a50d4",
+      "dimensions": {
+        "largeur": 928,
+        "hauteur": 1152
+      },
+      "boite": {
+        "x": 132,
+        "y": 66,
+        "largeur": 640,
+        "hauteur": 1024
+      },
+      "signature": {
+        "localisee": true,
+        "score": 0.857,
+        "amplitude": 3.78,
+        "precision": 2,
+        "boite": {
+          "x": 781,
+          "y": 1005,
+          "largeur": 54,
+          "hauteur": 54
+        }
+      },
+      "dansLaBoite": false,
+      "marge": 9
+    },
+    {
+      "master": "B07-miel-chataignier-ouvert.jpg",
+      "sha256": "c96c99b16424c5c8604e4ad2150950373b2ee46b5147f297d493241d1066878a",
+      "dimensions": {
+        "largeur": 928,
+        "hauteur": 1152
+      },
+      "boite": {
+        "x": 132,
+        "y": 66,
+        "largeur": 640,
+        "hauteur": 1024
+      },
+      "signature": {
+        "localisee": false,
+        "score": 0.485,
+        "amplitude": 20.34,
+        "precision": 2,
+        "boite": null
+      },
+      "dansLaBoite": false,
+      "marge": null
+    },
+    {
+      "master": "B08-miel-bruyere-blanche-ouvert.jpg",
+      "sha256": "0976682d5146b93e685d76e59f9cdb7669867dd7649e17a4406dcb99a7b169f5",
+      "dimensions": {
+        "largeur": 928,
+        "hauteur": 1152
+      },
+      "boite": {
+        "x": 132,
+        "y": 66,
+        "largeur": 640,
+        "hauteur": 1024
+      },
+      "signature": {
+        "localisee": true,
+        "score": 0.744,
+        "amplitude": 4.56,
+        "precision": 2,
+        "boite": {
+          "x": 781,
+          "y": 1005,
+          "largeur": 54,
+          "hauteur": 54
+        }
+      },
+      "dansLaBoite": false,
+      "marge": 9
+    },
+    {
+      "master": "B09-confiture-abricots-plein-vent-ouvert-v2.jpg",
+      "sha256": "38d22915ae63992a7a9b691d07abd3930bd75028824c62fd1e14f7df5e44e227",
+      "dimensions": {
+        "largeur": 928,
+        "hauteur": 1152
+      },
+      "boite": {
+        "x": 132,
+        "y": 66,
+        "largeur": 640,
+        "hauteur": 1024
+      },
+      "signature": {
+        "localisee": false,
+        "score": 0.458,
+        "amplitude": 12.86,
+        "precision": 2,
+        "boite": null
+      },
+      "dansLaBoite": false,
+      "marge": null
+    },
+    {
+      "master": "B10-lentilles-blondes-plateau-ouvert.jpg",
+      "sha256": "b3306c6f97793a26a6ef2270f4920f2ac45479e41249f1845c3c1899c0713728",
+      "dimensions": {
+        "largeur": 928,
+        "hauteur": 1152
+      },
+      "boite": {
+        "x": 132,
+        "y": 66,
+        "largeur": 640,
+        "hauteur": 1024
+      },
+      "signature": {
+        "localisee": false,
+        "score": 0.493,
+        "amplitude": 7.94,
+        "precision": 2,
+        "boite": null
+      },
+      "dansLaBoite": false,
+      "marge": null
+    },
+    {
+      "master": "B11-infusion-du-soir-sept-plantes-ouvert.jpg",
+      "sha256": "d3287a23744bba6a864300e93c9edd7a61a2d08ab6baf70d2b986711eb9d634e",
+      "dimensions": {
+        "largeur": 928,
+        "hauteur": 1152
+      },
+      "boite": {
+        "x": 132,
+        "y": 66,
+        "largeur": 640,
+        "hauteur": 1024
+      },
+      "signature": {
+        "localisee": true,
+        "score": 0.65,
+        "amplitude": 8.21,
+        "precision": 2,
+        "boite": {
+          "x": 781,
+          "y": 1005,
+          "largeur": 54,
+          "hauteur": 54
+        }
+      },
+      "dansLaBoite": false,
+      "marge": 9
+    },
+    {
+      "master": "B12-beurre-baratte-demi-sel-ouvert-v3.jpg",
+      "sha256": "04d6be66ee248d296f4dfa608db2c0abfca9398ad7e62e0947ba61eb027a9e3e",
+      "dimensions": {
+        "largeur": 928,
+        "hauteur": 1152
+      },
+      "boite": {
+        "x": 132,
+        "y": 66,
+        "largeur": 640,
+        "hauteur": 1024
+      },
+      "signature": {
+        "localisee": true,
+        "score": 0.76,
+        "amplitude": 5.31,
+        "precision": 2,
+        "boite": {
+          "x": 781,
+          "y": 1005,
+          "largeur": 54,
+          "hauteur": 54
+        }
+      },
+      "dansLaBoite": false,
+      "marge": 9
+    },
+    {
+      "master": "B13-fromage-fermier-brebis-ouvert.jpg",
+      "sha256": "da8cbc8b7253499a9daaf27b858940c4cf2f5d2831a50700c7a9d1d8af059ea7",
+      "dimensions": {
+        "largeur": 928,
+        "hauteur": 1152
+      },
+      "boite": {
+        "x": 132,
+        "y": 66,
+        "largeur": 640,
+        "hauteur": 1024
+      },
+      "signature": {
+        "localisee": true,
+        "score": 0.88,
+        "amplitude": 4.31,
+        "precision": 2,
+        "boite": {
+          "x": 781,
+          "y": 1005,
+          "largeur": 54,
+          "hauteur": 54
+        }
+      },
+      "dansLaBoite": false,
+      "marge": 9
+    },
+    {
+      "master": "C01-huiles-v2.jpg",
+      "sha256": "eb8ff075ae9c27ecc90f51f5e6822c25ac3aa7101d545d882aba9c0f91fa1223",
+      "dimensions": {
+        "largeur": 5056,
+        "hauteur": 3392
+      },
+      "boite": {
+        "x": 0,
+        "y": 0,
+        "largeur": 5056,
+        "hauteur": 2844
+      },
+      "signature": {
+        "localisee": false,
+        "score": 0.439,
+        "amplitude": 1.78,
+        "precision": 7,
+        "boite": null
+      },
+      "dansLaBoite": false,
+      "marge": null
+    },
+    {
+      "master": "C02-conserves.jpg",
+      "sha256": "980417ee914b0aa3d7616020d4530ba84803cf24d68446c9e06defa8ef9a6c8c",
+      "dimensions": {
+        "largeur": 5056,
+        "hauteur": 3392
+      },
+      "boite": {
+        "x": 0,
+        "y": 0,
+        "largeur": 5056,
+        "hauteur": 2844
+      },
+      "signature": {
+        "localisee": false,
+        "score": 0.277,
+        "amplitude": 1.63,
+        "precision": 7,
+        "boite": null
+      },
+      "dansLaBoite": false,
+      "marge": null
+    },
+    {
+      "master": "C03-miels.jpg",
+      "sha256": "59e402409c69b7d0176b1a2e994a6b0c1bb7a865a0c046ea0f7874486d4572c1",
+      "dimensions": {
+        "largeur": 5056,
+        "hauteur": 3392
+      },
+      "boite": {
+        "x": 0,
+        "y": 0,
+        "largeur": 5056,
+        "hauteur": 2844
+      },
+      "signature": {
+        "localisee": false,
+        "score": 0.422,
+        "amplitude": 2.7,
+        "precision": 7,
+        "boite": null
+      },
+      "dansLaBoite": false,
+      "marge": null
+    },
+    {
+      "master": "C04-epicerie.jpg",
+      "sha256": "4674c8b9976362ef24cc75d7ab98634c57340c496a0b95ca7f006e6193e308ba",
+      "dimensions": {
+        "largeur": 5056,
+        "hauteur": 3392
+      },
+      "boite": {
+        "x": 0,
+        "y": 0,
+        "largeur": 5056,
+        "hauteur": 2844
+      },
+      "signature": {
+        "localisee": false,
+        "score": 0.474,
+        "amplitude": 1.74,
+        "precision": 7,
+        "boite": null
+      },
+      "dansLaBoite": false,
+      "marge": null
+    },
+    {
+      "master": "C05-infusions.jpg",
+      "sha256": "df5d4238965ab46c4a9b461e9ef7afdb24f5ef2b21a20233095b08959b3f1863",
+      "dimensions": {
+        "largeur": 5056,
+        "hauteur": 3392
+      },
+      "boite": {
+        "x": 0,
+        "y": 0,
+        "largeur": 5056,
+        "hauteur": 2844
+      },
+      "signature": {
+        "localisee": false,
+        "score": 0.255,
+        "amplitude": 1.89,
+        "precision": 7,
+        "boite": null
+      },
+      "dansLaBoite": false,
+      "marge": null
+    },
+    {
+      "master": "C06-frais.jpg",
+      "sha256": "aa03405754de1247698eaa83ec16a0a7269f3caef4128a562a8bdf1fc3cb44da",
+      "dimensions": {
+        "largeur": 5056,
+        "hauteur": 3392
+      },
+      "boite": {
+        "x": 0,
+        "y": 0,
+        "largeur": 5056,
+        "hauteur": 2844
+      },
+      "signature": {
+        "localisee": false,
+        "score": 0.609,
+        "amplitude": 1.6,
+        "precision": 7,
+        "boite": null
+      },
+      "dansLaBoite": false,
+      "marge": null
+    },
+    {
+      "master": "C07-coffrets.jpg",
+      "sha256": "9f5c44420be1f4ebbc48489763e82a09babbca035728a9631404d86ab247f9fd",
+      "dimensions": {
+        "largeur": 5056,
+        "hauteur": 3392
+      },
+      "boite": {
+        "x": 0,
+        "y": 0,
+        "largeur": 5056,
+        "hauteur": 2844
+      },
+      "signature": {
+        "localisee": true,
+        "score": 0.559,
+        "amplitude": 4.8,
+        "precision": 7,
+        "boite": {
+          "x": 4661,
+          "y": 3011,
+          "largeur": 284,
+          "hauteur": 284
+        }
+      },
+      "dansLaBoite": false,
+      "marge": 167
+    },
+    {
+      "master": "D01-hero-filet-huile.jpg",
+      "sha256": "2c1fcf13faa82bbb97eaa15f6a77b410a4c28ba946026e382a7941627de539a6",
+      "dimensions": {
+        "largeur": 5056,
+        "hauteur": 3392
+      },
+      "boite": {
+        "x": 0,
+        "y": 0,
+        "largeur": 5056,
+        "hauteur": 2844
+      },
+      "signature": {
+        "localisee": false,
+        "score": 0.341,
+        "amplitude": 2.73,
+        "precision": 7,
+        "boite": null
+      },
+      "dansLaBoite": false,
+      "marge": null
+    },
+    {
+      "master": "E01-coffret-table-du-dimanche-ouvert-v3.jpg",
+      "sha256": "4b99ee0b57c267e7d1cd3c4dacccba695e06db02566a408001a61088118dad38",
+      "dimensions": {
+        "largeur": 928,
+        "hauteur": 1152
+      },
+      "boite": {
+        "x": 40,
+        "y": 0,
+        "largeur": 848,
+        "hauteur": 1060
+      },
+      "signature": {
+        "localisee": false,
+        "score": 0.345,
+        "amplitude": 45.14,
+        "precision": 2,
+        "boite": null
+      },
+      "dansLaBoite": false,
+      "marge": null
+    },
+    {
+      "master": "E02-coffret-composez-le-votre-ouvert-v2.jpg",
+      "sha256": "1ed01a06b95f4642d06dc27dde72ee6d898d6e7bfad69632d5c780f67f001327",
+      "dimensions": {
+        "largeur": 928,
+        "hauteur": 1152
+      },
+      "boite": {
+        "x": 40,
+        "y": 0,
+        "largeur": 848,
+        "hauteur": 1060
+      },
+      "signature": {
+        "localisee": false,
+        "score": 0.392,
+        "amplitude": 47.23,
+        "precision": 2,
+        "boite": null
+      },
+      "dansLaBoite": false,
+      "marge": null
+    },
+    {
+      "master": "F04-boutique-miel-affiche.png",
+      "sha256": "4eb05da17c39db61e015bb1b436890fc8d880059df004421c258d7d6576a1613",
+      "dimensions": {
+        "largeur": 1280,
+        "hauteur": 720
+      },
+      "boite": {
+        "x": 0,
+        "y": 0,
+        "largeur": 1280,
+        "hauteur": 720
+      },
+      "signature": {
+        "localisee": false,
+        "score": 0.304,
+        "amplitude": 3.06,
+        "precision": 2,
+        "boite": null
+      },
+      "dansLaBoite": false,
+      "marge": null
+    },
+    {
+      "master": "F05-livraison-colis-affiche.png",
+      "sha256": "035f1c2e287bf981691151a1996e539039671cab16760914c912fb132ea314f4",
+      "dimensions": {
+        "largeur": 1280,
+        "hauteur": 720
+      },
+      "boite": {
+        "x": 0,
+        "y": 0,
+        "largeur": 1280,
+        "hauteur": 720
+      },
+      "signature": {
+        "localisee": false,
+        "score": 0.244,
+        "amplitude": 1.3,
+        "precision": 2,
+        "boite": null
+      },
+      "dansLaBoite": false,
+      "marge": null
+    },
+    {
+      "master": "F06-suivi-registre-affiche.png",
+      "sha256": "a4ae25abd5e59fba57c849ff9fdcafc97b77639f8a89aec85e0f88e14dc1449a",
+      "dimensions": {
+        "largeur": 1280,
+        "hauteur": 720
+      },
+      "boite": {
+        "x": 0,
+        "y": 0,
+        "largeur": 1280,
+        "hauteur": 720
+      },
+      "signature": {
+        "localisee": false,
+        "score": 0.239,
+        "amplitude": 1.3,
+        "precision": 2,
+        "boite": null
+      },
+      "dansLaBoite": false,
+      "marge": null
+    },
+    {
+      "master": "F07-panier-cagette-affiche.png",
+      "sha256": "339d77239bd6d85ec276b08304386da5b992a415974bfa8d77c7040ff0fb20b7",
+      "dimensions": {
+        "largeur": 1280,
+        "hauteur": 720
+      },
+      "boite": {
+        "x": 0,
+        "y": 0,
+        "largeur": 1280,
+        "hauteur": 720
+      },
+      "signature": {
+        "localisee": false,
+        "score": 0.285,
+        "amplitude": 0.71,
+        "precision": 2,
+        "boite": null
+      },
+      "dansLaBoite": false,
+      "marge": null
+    },
+    {
+      "master": "G01-commande-registre-vierge-v2.jpg",
+      "sha256": "54f296318becf5e2fe99a6a322154f7781e1c4c4b159d511bcac14a501ca7dff",
+      "dimensions": {
+        "largeur": 5504,
+        "hauteur": 3072
+      },
+      "boite": {
+        "x": 0,
+        "y": 0,
+        "largeur": 5504,
+        "hauteur": 3072
+      },
+      "signature": {
+        "localisee": false,
+        "score": 0.296,
+        "amplitude": 1.42,
+        "precision": 8,
+        "boite": null
+      },
+      "dansLaBoite": false,
+      "marge": null
+    },
+    {
+      "master": "G02-paiement-cachet-cire-v2.jpg",
+      "sha256": "fc3b053f6174ae7b1334f95121f589a4f6bb9ced075bc596031b7ee74a7c74d8",
+      "dimensions": {
+        "largeur": 5504,
+        "hauteur": 3072
+      },
+      "boite": {
+        "x": 0,
+        "y": 0,
+        "largeur": 5504,
+        "hauteur": 3072
+      },
+      "signature": {
+        "localisee": false,
+        "score": 0.304,
+        "amplitude": 0.65,
+        "precision": 8,
+        "boite": null
+      },
+      "dansLaBoite": false,
+      "marge": null
+    },
+    {
+      "master": "G03-confirmation-colis-ficele.jpg",
+      "sha256": "85021d5bd4191851f12ef89c3ea893cddc195d79fc5f80a708b4cd1d83de8956",
+      "dimensions": {
+        "largeur": 5504,
+        "hauteur": 3072
+      },
+      "boite": {
+        "x": 0,
+        "y": 0,
+        "largeur": 5504,
+        "hauteur": 3072
+      },
+      "signature": {
+        "localisee": false,
+        "score": 0.23,
+        "amplitude": 1.46,
+        "precision": 8,
+        "boite": null
+      },
+      "dansLaBoite": false,
+      "marge": null
+    }
+  ]
+}

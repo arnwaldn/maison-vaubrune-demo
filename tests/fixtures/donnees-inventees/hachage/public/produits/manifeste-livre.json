@@ -1,0 +1,18 @@
+{
+  "_pourquoi": "Piece a conviction : des empreintes SHA-256 REELLES, prises du releve de la tranche C14. Chacune porte, quelque part dans ses soixante-quatre caracteres, une suite de neuf chiffres bornee par des lettres hexadecimales. La garde y voyait des SIREN. Elle ne doit plus.",
+  "fichiers": ["beurre-baratte-demi-sel/principal-320.avif"],
+  "derives": [
+    {
+      "fichier": "beurre-baratte-demi-sel/principal-320.avif",
+      "sha256": "c5104e69f83ddeeba0f168732072f7a91a32593d7468539fabbe6840ed901399"
+    },
+    {
+      "fichier": "huile-olive-premiere-pression/principal-640.avif",
+      "sha256": "883631f1b94a668582ac9afa1a2f3bfea997574c97e458f2cb760de979120184"
+    },
+    {
+      "fichier": "huile-olive-premiere-pression/ambiance-640.avif",
+      "sha256": "30d90280fac269993095d9b3672a7029e3a5d9a15c661cad1c57150e7d3183db"
+    }
+  ]
+}

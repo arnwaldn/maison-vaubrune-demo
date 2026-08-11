@@ -116,6 +116,7 @@ export function IlotDetailCommande({
     return (
       <div
         aria-hidden="true"
+        data-place-reservee=""
         className="mt-10 min-h-96 rounded-sm border border-filet bg-papier"
       />
     );
@@ -129,7 +130,7 @@ export function IlotDetailCommande({
     <div className="mt-10 grid min-h-96 gap-x-12 gap-y-10 pb-4 lg:grid-cols-[minmax(0,1fr)_22rem]">
       <div className="min-w-0 space-y-12">
         <section aria-labelledby="titre-lignes">
-          <h2 id="titre-lignes" className="text-titre font-semibold text-encre">
+          <h2 id="titre-lignes" className="text-titre text-encre">
             Articles
           </h2>
 
@@ -144,7 +145,7 @@ export function IlotDetailCommande({
                     <span className="font-semibold">{calculee.article.nomProduit}</span>
                     <span className="text-encre-douce">, {calculee.article.format}</span>
                   </p>
-                  <p className="mt-1 text-sm text-encre-douce tabular-nums">
+                  <p className="mt-1 registre text-encre-douce">
                     {calculee.ligne.quantite} ×{' '}
                     {formaterEuros(calculee.article.prixCentimes)} —{' '}
                     {calculee.article.sku}
@@ -157,7 +158,7 @@ export function IlotDetailCommande({
                     </ul>
                   )}
                 </div>
-                <p className="font-semibold text-encre tabular-nums">
+                <p className="font-mono font-medium text-encre tabular-nums">
                   {formaterEuros(calculee.sousTotalCentimes)}
                 </p>
               </li>
@@ -174,7 +175,7 @@ export function IlotDetailCommande({
         </section>
 
         <section aria-labelledby="titre-destinataire">
-          <h2 id="titre-destinataire" className="text-titre font-semibold text-encre">
+          <h2 id="titre-destinataire" className="text-titre text-encre">
             Destinataire
           </h2>
 
@@ -196,7 +197,7 @@ export function IlotDetailCommande({
         </section>
 
         <section aria-labelledby="titre-journal">
-          <h2 id="titre-journal" className="text-titre font-semibold text-encre">
+          <h2 id="titre-journal" className="text-titre text-encre">
             Journal
           </h2>
 
@@ -235,7 +236,7 @@ export function IlotDetailCommande({
         >
           <h2
             id="titre-montants-gestion"
-            className="font-titre text-base font-semibold text-encre"
+            className="sous-titre text-encre"
           >
             Montants
           </h2>
@@ -243,21 +244,21 @@ export function IlotDetailCommande({
           <dl className="mt-4 space-y-3 text-sm">
             <div className="flex items-baseline justify-between gap-4">
               <dt className="text-encre-douce">Sous-total</dt>
-              <dd className="font-semibold text-encre tabular-nums">
+              <dd className="font-mono font-medium text-encre tabular-nums">
                 {formaterEuros(commande.totaux.sousTotal)}
               </dd>
             </div>
             <div className="flex items-baseline justify-between gap-4">
               <dt className="text-encre-douce">Frais de port</dt>
-              <dd className="font-semibold text-encre tabular-nums">
+              <dd className="font-mono font-medium text-encre tabular-nums">
                 {formaterEuros(commande.totaux.port)}
               </dd>
             </div>
           </dl>
 
           <div className="mt-5 flex items-baseline justify-between gap-4 border-t border-filet pt-4">
-            <p className="font-titre text-base font-semibold text-encre">Total</p>
-            <p className="text-xl font-semibold text-encre tabular-nums">
+            <p className="sous-titre text-encre">Total</p>
+            <p className="font-mono text-xl font-medium text-encre tabular-nums">
               {formaterEuros(commande.totaux.total)}
             </p>
           </div>
@@ -269,7 +270,7 @@ export function IlotDetailCommande({
         >
           <h2
             id="titre-etat-gestion"
-            className="font-titre text-base font-semibold text-encre"
+            className="sous-titre text-encre"
           >
             État
           </h2>
@@ -300,7 +301,7 @@ export function IlotDetailCommande({
           aria-labelledby="titre-copie"
           className="rounded-sm border border-ocre-clair bg-papier p-5 sm:p-6"
         >
-          <h2 id="titre-copie" className="font-titre text-base font-semibold text-encre">
+          <h2 id="titre-copie" className="sous-titre text-encre">
             Ce que vous modifiez ici
           </h2>
           <p className="mt-3 text-sm leading-relaxed text-encre-douce">
@@ -367,7 +368,7 @@ function BoutonsTransition({
           className={
             cible === 'annulee'
               ? 'w-full rounded-sm border border-terre bg-creme px-4 py-2.5 text-sm font-semibold text-terre hover:bg-papier'
-              : 'w-full rounded-sm border border-olive bg-olive px-4 py-2.5 text-sm font-semibold text-creme hover:bg-olive-clair'
+              : 'w-full rounded-sm border border-olive bg-olive px-4 py-2.5 text-sm font-semibold text-creme hover:border-encre hover:bg-encre'
           }
         >
           {LIBELLE_BOUTON[cible]}
@@ -384,11 +385,11 @@ function BoutonsTransition({
 function CommandeIntrouvable({ reference }: { readonly reference: string }) {
   return (
     <div className="mt-10 min-h-96 max-w-lisible pb-4">
-      <h2 className="text-titre font-semibold text-encre">Commande introuvable</h2>
+      <h2 className="text-titre text-encre">Commande introuvable</h2>
 
       <p className="mt-4 text-sm leading-relaxed text-encre-douce">
         Aucune commande portant la référence{' '}
-        <span className="font-semibold text-encre tabular-nums">{reference}</span> n’est
+        <span className="font-mono font-medium text-encre tabular-nums">{reference}</span> n’est
         enregistrée dans ce navigateur, et elle ne fait pas partie du jeu d’essai.
       </p>
 
@@ -401,7 +402,7 @@ function CommandeIntrouvable({ reference }: { readonly reference: string }) {
 
       <Link
         href="/gestion/commandes"
-        className="mt-6 inline-block rounded-sm border border-olive bg-olive px-4 py-2.5 text-sm font-semibold text-creme no-underline hover:bg-olive-clair"
+        className="mt-6 inline-block rounded-sm border border-olive bg-olive px-4 py-2.5 text-sm font-semibold text-creme no-underline hover:border-encre hover:bg-encre"
       >
         Retour à la liste
       </Link>

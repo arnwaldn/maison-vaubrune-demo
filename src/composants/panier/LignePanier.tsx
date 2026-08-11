@@ -50,7 +50,9 @@ export function LignePanier({
           <span className="text-encre-douce">, {article.format}</span>
         </p>
 
-        <p className="mt-1 text-sm text-encre-douce">
+        {/* Un prix unitaire est une DONNÉE : il part au registre, comme tout
+            chiffre du tunnel. */}
+        <p className="registre mt-1.5 text-encre-douce">
           {formaterEuros(article.prixCentimes)} l’unité
         </p>
 
@@ -61,10 +63,7 @@ export function LignePanier({
 
       <div className="flex flex-wrap items-center justify-between gap-4 sm:flex-col sm:items-end sm:justify-start">
         <div className="flex items-center gap-2">
-          <label
-            htmlFor={`${identifiant}-quantite`}
-            className="text-xs font-semibold tracking-[0.12em] text-encre-douce uppercase"
-          >
+          <label htmlFor={`${identifiant}-quantite`} className="etiquette text-encre-douce">
             Qté
           </label>
           <input
@@ -90,12 +89,28 @@ export function LignePanier({
             onBlur={() => {
               envoyer({ type: 'changerQuantite', cle, quantite: ligne.quantite });
             }}
-            className="w-20 rounded-sm border border-filet bg-creme px-3 py-2 text-sm text-encre tabular-nums"
+            className="w-20 rounded-sm border border-filet bg-creme px-3 py-2 font-mono text-sm text-encre tabular-nums"
           />
         </div>
 
-        <p className="text-base font-semibold text-encre tabular-nums">
-          {formaterEuros(calculee.sousTotalCentimes)}
+        {/* LE SOUS-TOTAL D'UNE LIGNE — mono, chiffres tabulaires.
+            La « largeur figée » que demande la tranche est celle des CHIFFRES,
+            et `tabular-nums` la donne : tous les chiffres de cette police ont la
+            même chasse, donc 111,11 € et 999,99 € occupent exactement la même
+            place. Une largeur minimale sur ce parent a été essayée puis RETIRÉE
+            — elle ne changeait rien de mesurable, relevé à l'appui
+            (`preuves/c16/largeur-montants.mjs`).
+            La clé React est le montant lui-même : quand il change, React
+            échange le nœud, et `@starting-style` fait fondre le NOMBRE SEUL —
+            zéro état, zéro minuterie, c'est le patron de la pastille de C13. */}
+        <p className="text-right">
+          <span
+            key={calculee.sousTotalCentimes}
+            data-chiffre=""
+            className="font-mono text-base text-encre tabular-nums"
+          >
+            {formaterEuros(calculee.sousTotalCentimes)}
+          </span>
         </p>
 
         <button
@@ -135,9 +150,7 @@ function Composition({
 
   return (
     <div className="mt-3 border-l-2 border-filet pl-4">
-      <p className="text-xs font-semibold tracking-[0.12em] text-encre-douce uppercase">
-        Composition
-      </p>
+      <p className="etiquette text-encre-douce">Composition</p>
       <ul className="mt-1.5 space-y-0.5 text-sm text-encre-douce">
         {composition.map((sku) => {
           const piece = trouverArticle(catalogue, sku);

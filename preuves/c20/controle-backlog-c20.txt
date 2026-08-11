@@ -1,0 +1,378 @@
+
+> maison-vaubrune@0.1.0 controle
+> npm run typecheck && npm run verifier-catalogue && npm run verifier-donnees && npm run verifier-marques && npm run verifier-images && npm run verifier-typographie && npm run test:unitaires && npm run build && npm run verifier-poids-css && npm run test:parcours
+
+
+> maison-vaubrune@0.1.0 typecheck
+> tsc --noEmit
+
+
+> maison-vaubrune@0.1.0 verifier-catalogue
+> tsx scripts/verifier-catalogue.mjs
+
+
+Garde du catalogue — Maison Vaubrune
+------------------------------------------------------------------------
+[ OK   ] forme des quinze produits (schéma zod)
+[ OK   ] quinze références, slugs uniques
+          15 slugs distincts
+[ OK   ] vingt-trois formats, SKU uniques
+          23 SKU distincts
+[ OK   ] les sept familles sont servies
+          familles : huiles-et-vinaigres, conserves-salees, miels-et-confitures, epicerie-seche, infusions, frais, coffrets
+[ OK   ] résumés de 140 signes au plus
+          le plus long fait 125 signes
+[ OK   ] chaque produit a au moins un format vendable
+[ OK   ] les prix sont dégressifs à mesure que le format grandit
+          7 produits multi-formats contrôlés
+[ OK   ] coffret « Composez le vôtre » : le forfait tient
+          3 pièces : pire panier 35,50 € contre forfait 34,00 € (écart 1,50 €, plafond 1,50 €)
+          5 pièces : pire panier 56,20 € contre forfait 54,00 € (écart 2,20 €, plafond 2,20 €)
+[ OK   ] coffrets personnalisables : le format annonce son nombre de pièces
+          MV-CO-LIB-3P : 3 pièces à choisir
+          MV-CO-LIB-5P : 5 pièces à choisir
+[ OK   ] coffret « La table du dimanche » : composition fidèle
+          pièces 40,10 €, coffret 46,00 €, écart 5,90 €
+[ OK   ] quinze vignettes toutes distinctes
+          15 combinaisons forme × teinte sur 25 possibles
+          15 produit(s) illustré(s), 15 alternative(s) textuelle(s) distincte(s)
+[ OK   ] apostrophes typographiques partout
+[ OK   ] espaces insécables posées
+          178 textes contrôlés
+[ OK   ] aucun emoji
+[ OK   ] cinq mises en avant, celles de la revue
+          huile-olive-premiere-pression, rillettes-canard-echalotes, miel-bruyere-blanche, fromage-fermier-brebis, coffret-table-du-dimanche
+[ OK   ] rétractation : le bon fondement sur le bon produit
+          droit ouvert : 11 | L221-28-5 : 1 | L221-28-4 : 2 | L221-28-3 : 1
+[ OK   ] jeu d’essai : les six totaux se recalculent au centime
+          MVB-20260718-7F2B (expediee, metropole) : 59,10 €
+          MVB-20260722-4D48 (annulee, corse) : 55,90 €
+          MVB-20260727-9A56 (expediee, metropole) : 71,90 €
+          MVB-20260803-3E77 (preparee, metropole) : 37,80 €
+          MVB-20260804-K2P9 (preparee, outre-mer) : 56,10 €
+          MVB-20260805-B62T (payee, metropole) : 41,70 €
+[ OK   ] les règles typographiques rejouent les quinze fiches
+          548 lignes de fiches rejouées à l'identique
+------------------------------------------------------------------------
+18 contrôles, aucune anomalie.
+
+
+> maison-vaubrune@0.1.0 verifier-donnees
+> node scripts/verifier-aucune-donnee-inventee.mjs
+
+
+Garde d’honnêteté — aucune donnée inventée
+------------------------------------------------------------------------
+[ OK   ] Les pages gabarits portent encore leurs emplacements
+          src/app/mentions-legales/page.tsx : 22 emplacements
+          src/app/conditions-generales-de-vente/page.tsx : 11 emplacements
+          src/app/donnees-personnelles/page.tsx : 41 emplacements
+          src/app/retractation/page.tsx : 7 emplacements
+          src/app/a-propos-de-cette-demonstration/page.tsx : 0 emplacement(s), dispense assumée (page descriptive du site et non gabarit du marchand — aucun jeton dans son brouillon)
+[ OK   ] Le formulaire téléchargeable est resté un gabarit
+          public/formulaire-retractation.txt : 4 emplacements en clair
+[ OK   ] Le jeu d’essai porte ses marqueurs d’irréalité
+          src/donnees/commandes-amorce.ts : marqueurs présents, exemption accordée (jeu d’essai à adresses irréelles, dont les marqueurs sont vérifiés ci-dessus)
+[ OK   ] Aucun motif de donnée réelle dans src, contenu et public
+          140 fichiers lus dans src, contenu, public
+          259 binaire(s) déclaré(s) non lu(s) comme du texte — leur nom a été analysé, leur contenu relève de la garde des métadonnées
+          1 zone(s) de texte réglementaire neutralisée(s)
+[ OK   ] Texte et binaire restent deux catégories disjointes
+          12 extension(s) lue(s) comme du texte, 7 tenue(s) pour binaires
+[ OK   ] Aucun fichier de pilotage privé n’est suivi par git
+          690 fichier(s) suivi(s) par git dans ce périmètre
+          371 suivi(s) relu(s) pour les empreintes de pilotage (51 du banc d’essai et 268 binaire(s) écartés)
+------------------------------------------------------------------------
+6 contrôles, aucune anomalie.
+
+
+> maison-vaubrune@0.1.0 verifier-marques
+> node scripts/verifier-marques-reelles.mjs
+
+
+Garde des marques réelles — aucune maison, aucune appellation empruntée
+------------------------------------------------------------------------
+[ OK   ] Aucune marque réelle dans le texte du dépôt
+          58 terme(s) cherché(s) dans 140 fichier(s)
+          1 citation(s) exemptée(s), voir le contrôle des exemptions
+[ OK   ] Aucune appellation protégée dans le texte du dépôt
+          20 terme(s) cherché(s) dans 140 fichier(s)
+[ OK   ] Aucun signe officiel de qualité dans le texte du dépôt
+          9 terme(s) cherché(s) dans 140 fichier(s)
+[ OK   ] Aucun nom de fichier ne porte de marque ni d’appellation
+          399 chemin(s) examiné(s)
+[ OK   ] La liste surveillée est cohérente
+          58 marques, 20 appellations, 9 signes officiels
+          12 entrée(s) écartée(s), motif consigné dans le script
+[ OK   ] Chaque exemption sert encore
+          Fauchon (contenu/decisions/000-choix-du-nom.md) — la décision du nom compte les marques déposées homonymes de chaque candidat ; « Fauchon » y est cité comme MESURE de densité de marques, et non comme une maison à laquelle la démonstration se compare
+[ OK   ] Aucune métadonnée dans les binaires images
+          258 binaire(s) examiné(s) sur leurs 64 Ko de tête et de queue
+[ OK   ] Texte et binaire restent deux catégories disjointes
+          11 extension(s) lue(s) comme du texte, 7 tenue(s) pour binaires
+------------------------------------------------------------------------
+8 contrôles, aucune anomalie.
+
+
+> maison-vaubrune@0.1.0 verifier-images
+> tsx scripts/verifier-images.mjs
+
+
+Garde des images — un dossier par nom admis, un vocabulaire fermé, des dimensions mesurées
+----------------------------------------------------------------------------
+          périmètre : <racine du depot>/public/produits
+          périmètre : <racine du depot>/public/editorial
+[ OK   ] [produits] Chaque dossier porte un nom admis
+          15 dossier(s) conforme(s) sur 15 nom(s) admis
+[ OK   ] [produits] Chaque nom de fichier appartient au vocabulaire fermé
+          195 fichier(s) examiné(s), 25 noms admis par dossier
+[ OK   ] [produits] Le relevé et le disque disent la même chose
+          195 entrée(s) aux relevés, 195 sur le disque
+[ OK   ] [produits] Chaque fichier tient sous son plafond de poids
+          195 fichier(s) pesé(s), le plus lourd à 67.2 Ko, 4.39 Mo au dépôt
+[ OK   ] [produits] Les binaires livrés sont nus
+          195 binaire(s) examiné(s) sur leurs 64 Ko de tête et de queue
+[ OK   ] [produits] Chaque fichier mesure ce que son nom et le relevé annoncent
+          195 fichier(s) mesuré(s) sur leurs octets, 195 confronté(s) au relevé
+[ OK   ] [editorial] Chaque dossier porte un nom admis
+          12 dossier(s) conforme(s) sur 12 nom(s) admis
+[ OK   ] [editorial] Chaque nom de fichier appartient au vocabulaire fermé
+          61 fichier(s) examiné(s), 49 noms admis par dossier
+[ OK   ] [editorial] Le relevé et le disque disent la même chose
+          61 entrée(s) aux relevés, 61 sur le disque
+[ OK   ] [editorial] Chaque fichier tient sous son plafond de poids
+          61 fichier(s) pesé(s), le plus lourd à 1095.3 Ko, 7.69 Mo au dépôt
+[ OK   ] [editorial] Les binaires livrés sont nus
+          61 binaire(s) examiné(s) sur leurs 64 Ko de tête et de queue
+[ OK   ] [editorial] Chaque fichier mesure ce que son nom et le relevé annoncent
+          61 fichier(s) mesuré(s) sur leurs octets, 61 confronté(s) au relevé
+----------------------------------------------------------------------------
+12 contrôles, aucune anomalie.
+
+
+> maison-vaubrune@0.1.0 verifier-typographie
+> node scripts/verifier-typographie.mjs
+
+
+Plancher typographique — interdit n° 10 de D37 (Bodoni ≥ 20 px)
+------------------------------------------------------------------------
+  122 titre(s) h1..h4 parcouru(s) — 70 élément(s) rendu(s) en didone examiné(s), 2 exempté(s) (sr-only)
+  OK   aucune didone sous 20 px
+------------------------------------------------------------------------
+1 contrôle, aucune anomalie.
+
+
+> maison-vaubrune@0.1.0 test:unitaires
+> vitest run
+
+
+ RUN  v4.1.10 <racine du depot>
+
+
+ Test Files  26 passed (26)
+      Tests  588 passed (588)
+   Start at  11:51:49
+   Duration  10.33s (transform 4.95s, setup 0ms, import 8.59s, tests 22.36s, environment 7ms)
+
+
+> maison-vaubrune@0.1.0 build
+> next build
+
+   ▲ Next.js 15.5.22
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully in 6.2s
+   Linting and checking validity of types ...
+   Collecting page data ...
+   Generating static pages (0/46) ...
+   Generating static pages (11/46) 
+   Generating static pages (22/46) 
+   Generating static pages (34/46) 
+ ✓ Generating static pages (46/46)
+   Finalizing page optimization ...
+   Collecting build traces ...
+
+Route (app)                                       Size  First Load JS
+┌ ○ /                                            185 B         106 kB
+├ ○ /_not-found                                  135 B         103 kB
+├ ○ /a-propos-de-cette-demonstration             185 B         106 kB
+├ ƒ /api/paiement/session                        135 B         103 kB
+├ ○ /boutique                                  1.63 kB         109 kB
+├ ● /boutique/[produit]                        2.78 kB         113 kB
+├   ├ /boutique/huile-olive-premiere-pression
+├   ├ /boutique/huile-noix-moulin
+├   ├ /boutique/vinaigre-cidre-vieilli-fut
+├   └ [+12 more paths]
+├ ○ /commande                                  4.39 kB         119 kB
+├ ○ /commande/annulee                          2.29 kB         110 kB
+├ ○ /commande/confirmation                     4.64 kB         113 kB
+├ ○ /conditions-generales-de-vente               185 B         106 kB
+├ ○ /donnees-personnelles                        185 B         106 kB
+├ ○ /gestion                                   2.62 kB         112 kB
+├ ○ /gestion/catalogue                         3.61 kB         113 kB
+├ ○ /gestion/commandes                         2.06 kB         110 kB
+├ ● /gestion/commandes/[reference]             3.58 kB         112 kB
+├   ├ /gestion/commandes/MVB-20260718-7F2B
+├   ├ /gestion/commandes/MVB-20260722-4D48
+├   ├ /gestion/commandes/MVB-20260727-9A56
+├   └ [+3 more paths]
+├ ○ /gestion/modeles-de-courriels                135 B         103 kB
+├ ○ /gestion/prise-en-main                       185 B         106 kB
+├ ○ /icon.svg                                      0 B            0 B
+├ ○ /livraison                                   185 B         106 kB
+├ ○ /mentions-legales                            185 B         106 kB
+├ ○ /paiement/simulation                       1.53 kB         107 kB
+├ ○ /panier                                    3.04 kB         114 kB
+├ ○ /retractation                                394 B         106 kB
+├ ○ /robots.txt                                  135 B         103 kB
+├ ○ /sitemap.xml                                 135 B         103 kB
+└ ○ /suivi                                     3.04 kB         111 kB
++ First Load JS shared by all                   103 kB
+  ├ chunks/255-3d881dfa8c72bc56.js             46.3 kB
+  ├ chunks/4bd1b696-c023c6e3521b1417.js        54.2 kB
+  └ other shared chunks (total)                2.01 kB
+
+
+○  (Static)   prerendered as static content
+●  (SSG)      prerendered as static HTML (uses generateStaticParams)
+ƒ  (Dynamic)  server-rendered on demand
+
+
+> maison-vaubrune@0.1.0 verifier-poids-css
+> node scripts/verifier-poids-css.mjs
+
+
+Poids de la feuille de style — plafond D36
+------------------------------------------------------------------------
+  OK   au moins une feuille produite (1 trouvée(s))
+       .next/static/css/fc1ec440f0890c32.css — 49.49 Ko brut, 10.13 Ko gzip
+  OK   total gzip 10.13 Ko pour un plafond de 12 Ko (84 % du budget)
+------------------------------------------------------------------------
+2 contrôles, tous verts.
+
+
+> maison-vaubrune@0.1.0 test:parcours
+> playwright test
+
+[WebServer]   Construction existante réutilisée (.next/BUILD_ID présent).
+[WebServer]   Service de la production sur http://localhost:3000
+[WebServer]    ▲ Next.js 15.5.22
+[WebServer]    - Local:        http://localhost:3000
+[WebServer]    - Network:      http://192.168.0.50:3000
+[WebServer] 
+[WebServer]  ✓ Starting...
+[WebServer]  ✓ Ready in 911ms
+
+Running 108 tests using 8 workers
+
+  ✓    6 [bureau-1280] › tests\e2e\accessibilite.spec.ts:74:7 › accueil (/) — aucune violation grave d’accessibilité (4.0s)
+  ✓    3 [bureau-1280] › tests\e2e\accessibilite.spec.ts:74:7 › panier (/panier) — aucune violation grave d’accessibilité (4.1s)
+  ✓    2 [bureau-1280] › tests\e2e\accessibilite.spec.ts:74:7 › fiche produit (/boutique/huile-olive-premiere-pression) — aucune violation grave d’accessibilité (4.4s)
+  ✓    7 [bureau-1280] › tests\e2e\accessibilite.spec.ts:74:7 › espace marchand — commandes (/gestion/commandes) — aucune violation grave d’accessibilité (4.7s)
+  ✓    4 [bureau-1280] › tests\e2e\accessibilite.spec.ts:74:7 › droit de rétractation (/retractation) — aucune violation grave d’accessibilité (5.6s)
+  ✓    5 [bureau-1280] › tests\e2e\accessibilite.spec.ts:74:7 › données personnelles (/donnees-personnelles) — aucune violation grave d’accessibilité (5.8s)
+  ✓    8 [bureau-1280] › tests\e2e\accessibilite.spec.ts:74:7 › rayon (/boutique) — aucune violation grave d’accessibilité (6.0s)
+  ✓   14 [bureau-1280] › tests\e2e\tunnel.spec.ts:80:5 › les chiffres du panier parlent la voix du registre, et pas celle de la prose (3.8s)
+  ✓   15 [bureau-1280] › tests\e2e\tunnel.spec.ts:116:5 › la largeur d’un montant ne dépend pas des chiffres qu’il contient (3.8s)
+  ✓   13 [bureau-1280] › tests\e2e\parcours.spec.ts:413:5 › le coffret composé exige trois pièces et fait deux lignes (4.9s)
+  ✓   12 [bureau-1280] › tests\e2e\parcours.spec.ts:371:5 › l’annulation du paiement laisse le panier intact (7.8s)
+  ✓   16 [bureau-1280] › tests\e2e\tunnel.spec.ts:194:5 › le fondu du nombre suit la préférence de mouvement, dans les deux sens (3.6s)
+  ✓   18 [bureau-1280] › tests\e2e\tunnel.spec.ts:254:5 › les libellés sériels du tunnel sortent en capitales, à la voix du registre (3.0s)
+  ✓   17 [bureau-1280] › tests\e2e\tunnel.spec.ts:239:5 › l’écran de paiement simulé ne porte aucun organe de saisie (D22) (3.7s)
+  ✓   19 [bureau-1280] › tests\e2e\typographie.spec.ts:168:7 › accueil (/) — insécables et apostrophes du texte rendu (1.6s)
+  ✓   20 [bureau-1280] › tests\e2e\typographie.spec.ts:197:7 › accueil (/) — aucune apostrophe droite (1.8s)
+  ✓   22 [bureau-1280] › tests\e2e\typographie.spec.ts:197:7 › rayon (/boutique) — aucune apostrophe droite (1.9s)
+  ✓   21 [bureau-1280] › tests\e2e\typographie.spec.ts:168:7 › rayon (/boutique) — insécables et apostrophes du texte rendu (2.0s)
+  ✓   23 [bureau-1280] › tests\e2e\typographie.spec.ts:168:7 › fiche produit (/boutique/huile-olive-premiere-pression) — insécables et apostrophes du texte rendu (2.1s)
+  ✓   25 [bureau-1280] › tests\e2e\typographie.spec.ts:168:7 › panier (/panier) — insécables et apostrophes du texte rendu (1.3s)
+  ✓   24 [bureau-1280] › tests\e2e\typographie.spec.ts:197:7 › fiche produit (/boutique/huile-olive-premiere-pression) — aucune apostrophe droite (1.7s)
+  ✓   26 [bureau-1280] › tests\e2e\typographie.spec.ts:197:7 › panier (/panier) — aucune apostrophe droite (1.4s)
+  ✓   11 [bureau-1280] › tests\e2e\parcours.spec.ts:171:5 › de l’accueil au suivi : commander, payer, préparer, suivre (12.9s)
+  ✓   27 [bureau-1280] › tests\e2e\typographie.spec.ts:168:7 › espace marchand — commandes (/gestion/commandes) — insécables et apostrophes du texte rendu (1.6s)
+  ✓   29 [bureau-1280] › tests\e2e\typographie.spec.ts:168:7 › droit de rétractation (/retractation) — insécables et apostrophes du texte rendu (1.2s)
+  ✓   28 [bureau-1280] › tests\e2e\typographie.spec.ts:197:7 › espace marchand — commandes (/gestion/commandes) — aucune apostrophe droite (1.3s)
+  ✓   30 [bureau-1280] › tests\e2e\typographie.spec.ts:197:7 › droit de rétractation (/retractation) — aucune apostrophe droite (1.5s)
+  ✓   31 [bureau-1280] › tests\e2e\typographie.spec.ts:168:7 › livraison (/livraison) — insécables et apostrophes du texte rendu (1.4s)
+  ✓   32 [bureau-1280] › tests\e2e\typographie.spec.ts:197:7 › livraison (/livraison) — aucune apostrophe droite (1.1s)
+  ✓   33 [bureau-1280] › tests\e2e\typographie.spec.ts:168:7 › conditions générales (/conditions-generales-de-vente) — insécables et apostrophes du texte rendu (992ms)
+  ✓   34 [bureau-1280] › tests\e2e\typographie.spec.ts:197:7 › conditions générales (/conditions-generales-de-vente) — aucune apostrophe droite (1.3s)
+  ✓   35 [bureau-1280] › tests\e2e\typographie.spec.ts:168:7 › données personnelles (/donnees-personnelles) — insécables et apostrophes du texte rendu (884ms)
+  ✓   36 [bureau-1280] › tests\e2e\typographie.spec.ts:197:7 › données personnelles (/donnees-personnelles) — aucune apostrophe droite (1.3s)
+  ✓   37 [bureau-1280] › tests\e2e\typographie.spec.ts:168:7 › espace marchand — tableau de bord (/gestion) — insécables et apostrophes du texte rendu (1.2s)
+  ✓   38 [bureau-1280] › tests\e2e\typographie.spec.ts:197:7 › espace marchand — tableau de bord (/gestion) — aucune apostrophe droite (1.2s)
+  ✓    9 [bureau-1280] › tests\e2e\liens.spec.ts:203:5 › aucune ancre interne sans cible dans le DOM (16.7s)
+  ✓    1 [bureau-1280] › tests\e2e\liens.spec.ts:132:5 › aucun lien interne mort, depuis l’accueil et de proche en proche (20.9s)
+  ✓   40 [bureau-1280] › tests\e2e\typographie.spec.ts:197:7 › espace marchand — catalogue (/gestion/catalogue) — aucune apostrophe droite (1.5s)
+  ✓   39 [bureau-1280] › tests\e2e\typographie.spec.ts:168:7 › espace marchand — catalogue (/gestion/catalogue) — insécables et apostrophes du texte rendu (1.6s)
+  ✓   41 [bureau-1280] › tests\e2e\typographie.spec.ts:168:7 › espace marchand — modèles de courriels (/gestion/modeles-de-courriels) — insécables et apostrophes du texte rendu (1.2s)
+  ✓   42 [bureau-1280] › tests\e2e\typographie.spec.ts:197:7 › espace marchand — modèles de courriels (/gestion/modeles-de-courriels) — aucune apostrophe droite (1.1s)
+  ✓   46 [bureau-1280] › tests\e2e\vitrine.spec.ts:208:5 › la galerie d’une fiche coffret n’ouvre aucun cadre plus haut que son image (1.5s)
+  ✓   47 [bureau-1280] › tests\e2e\vitrine.spec.ts:248:5 › la galerie d’une fiche ordinaire tient la même promesse (1.5s)
+  ✓   43 [bureau-1280] › tests\e2e\vitrine.spec.ts:73:5 › la bascule « Liste » recompose vraiment le rayon, et « Grille » le rend (2.6s)
+  ✓   45 [bureau-1280] › tests\e2e\vitrine.spec.ts:144:5 › la carte prend le trait de sa famille au survol, là où le survol existe (2.2s)
+  ✓   44 [bureau-1280] › tests\e2e\vitrine.spec.ts:110:5 › le bouton d’affichage reste d’accord avec le rayon après un aller-retour (3.5s)
+  ✓   10 [bureau-1280] › tests\e2e\liens.spec.ts:290:5 › chaque description de page porte le mot « démonstration » (20.6s)
+  ✓   48 [bureau-1280] › tests\e2e\vitrine.spec.ts:295:5 › le monument du héros ne sort ni de sa colonne ni sur la carte, à aucune largeur (3.6s)
+  ✓   49 [bureau-1280] › tests\e2e\vitrine.spec.ts:367:5 › le fondu d’ambiance revient aussi lentement qu’il est venu, sans rien coûter au repos (4.0s)
+  ✓   53 [mobile-390] › tests\e2e\accessibilite.spec.ts:74:7 › panier (/panier) — aucune violation grave d’accessibilité (2.7s)
+  ✓   51 [mobile-390] › tests\e2e\accessibilite.spec.ts:74:7 › accueil (/) — aucune violation grave d’accessibilité (2.9s)
+  ✓   50 [mobile-390] › tests\e2e\accessibilite.spec.ts:74:7 › fiche produit (/boutique/huile-olive-premiere-pression) — aucune violation grave d’accessibilité (3.5s)
+  ✓   54 [mobile-390] › tests\e2e\accessibilite.spec.ts:74:7 › espace marchand — commandes (/gestion/commandes) — aucune violation grave d’accessibilité (3.3s)
+  ✓   52 [mobile-390] › tests\e2e\accessibilite.spec.ts:74:7 › rayon (/boutique) — aucune violation grave d’accessibilité (5.7s)
+  ✓   55 [mobile-390] › tests\e2e\accessibilite.spec.ts:74:7 › droit de rétractation (/retractation) — aucune violation grave d’accessibilité (4.7s)
+  ✓   56 [mobile-390] › tests\e2e\accessibilite.spec.ts:74:7 › données personnelles (/donnees-personnelles) — aucune violation grave d’accessibilité (5.2s)
+  ✓   63 [mobile-390] › tests\e2e\tunnel.spec.ts:80:5 › les chiffres du panier parlent la voix du registre, et pas celle de la prose (2.8s)
+  ✓   62 [mobile-390] › tests\e2e\parcours.spec.ts:413:5 › le coffret composé exige trois pièces et fait deux lignes (4.1s)
+  ✓   61 [mobile-390] › tests\e2e\parcours.spec.ts:371:5 › l’annulation du paiement laisse le panier intact (5.3s)
+  ✓   64 [mobile-390] › tests\e2e\tunnel.spec.ts:116:5 › la largeur d’un montant ne dépend pas des chiffres qu’il contient (3.4s)
+  ✓   68 [mobile-390] › tests\e2e\typographie.spec.ts:168:7 › accueil (/) — insécables et apostrophes du texte rendu (1.4s)
+  ✓   65 [mobile-390] › tests\e2e\tunnel.spec.ts:194:5 › le fondu du nombre suit la préférence de mouvement, dans les deux sens (3.0s)
+  ✓   60 [mobile-390] › tests\e2e\parcours.spec.ts:171:5 › de l’accueil au suivi : commander, payer, préparer, suivre (8.9s)
+  ✓   67 [mobile-390] › tests\e2e\tunnel.spec.ts:254:5 › les libellés sériels du tunnel sortent en capitales, à la voix du registre (2.9s)
+  ✓   66 [mobile-390] › tests\e2e\tunnel.spec.ts:239:5 › l’écran de paiement simulé ne porte aucun organe de saisie (D22) (3.2s)
+  ✓   69 [mobile-390] › tests\e2e\typographie.spec.ts:197:7 › accueil (/) — aucune apostrophe droite (1.4s)
+  ✓   70 [mobile-390] › tests\e2e\typographie.spec.ts:168:7 › rayon (/boutique) — insécables et apostrophes du texte rendu (1.4s)
+  ✓   71 [mobile-390] › tests\e2e\typographie.spec.ts:197:7 › rayon (/boutique) — aucune apostrophe droite (1.4s)
+  ✓   72 [mobile-390] › tests\e2e\typographie.spec.ts:168:7 › fiche produit (/boutique/huile-olive-premiere-pression) — insécables et apostrophes du texte rendu (1.5s)
+  ✓   73 [mobile-390] › tests\e2e\typographie.spec.ts:197:7 › fiche produit (/boutique/huile-olive-premiere-pression) — aucune apostrophe droite (1.4s)
+  ✓   74 [mobile-390] › tests\e2e\typographie.spec.ts:168:7 › panier (/panier) — insécables et apostrophes du texte rendu (1.3s)
+  ✓   75 [mobile-390] › tests\e2e\typographie.spec.ts:197:7 › panier (/panier) — aucune apostrophe droite (1.4s)
+  ✓   76 [mobile-390] › tests\e2e\typographie.spec.ts:168:7 › espace marchand — commandes (/gestion/commandes) — insécables et apostrophes du texte rendu (1.4s)
+  ✓   77 [mobile-390] › tests\e2e\typographie.spec.ts:197:7 › espace marchand — commandes (/gestion/commandes) — aucune apostrophe droite (1.3s)
+  ✓   78 [mobile-390] › tests\e2e\typographie.spec.ts:168:7 › droit de rétractation (/retractation) — insécables et apostrophes du texte rendu (1.3s)
+  ✓   79 [mobile-390] › tests\e2e\typographie.spec.ts:197:7 › droit de rétractation (/retractation) — aucune apostrophe droite (1.5s)
+  ✓   81 [mobile-390] › tests\e2e\typographie.spec.ts:197:7 › livraison (/livraison) — aucune apostrophe droite (1.2s)
+  ✓   80 [mobile-390] › tests\e2e\typographie.spec.ts:168:7 › livraison (/livraison) — insécables et apostrophes du texte rendu (1.3s)
+  ✓   82 [mobile-390] › tests\e2e\typographie.spec.ts:197:7 › conditions générales (/conditions-generales-de-vente) — aucune apostrophe droite (1.3s)
+  ✓   83 [mobile-390] › tests\e2e\typographie.spec.ts:168:7 › conditions générales (/conditions-generales-de-vente) — insécables et apostrophes du texte rendu (1.3s)
+  ✓   57 [mobile-390] › tests\e2e\liens.spec.ts:203:5 › aucune ancre interne sans cible dans le DOM (14.6s)
+  ✓   84 [mobile-390] › tests\e2e\typographie.spec.ts:168:7 › données personnelles (/donnees-personnelles) — insécables et apostrophes du texte rendu (1.2s)
+  ✓   85 [mobile-390] › tests\e2e\typographie.spec.ts:197:7 › données personnelles (/donnees-personnelles) — aucune apostrophe droite (1.1s)
+  ✓   86 [mobile-390] › tests\e2e\typographie.spec.ts:168:7 › espace marchand — tableau de bord (/gestion) — insécables et apostrophes du texte rendu (1.2s)
+  ✓   87 [mobile-390] › tests\e2e\typographie.spec.ts:197:7 › espace marchand — tableau de bord (/gestion) — aucune apostrophe droite (1.0s)
+  ✓   88 [mobile-390] › tests\e2e\typographie.spec.ts:168:7 › espace marchand — catalogue (/gestion/catalogue) — insécables et apostrophes du texte rendu (1.2s)
+  ✓   89 [mobile-390] › tests\e2e\typographie.spec.ts:197:7 › espace marchand — catalogue (/gestion/catalogue) — aucune apostrophe droite (1.2s)
+  ✓   90 [mobile-390] › tests\e2e\typographie.spec.ts:168:7 › espace marchand — modèles de courriels (/gestion/modeles-de-courriels) — insécables et apostrophes du texte rendu (1.0s)
+  ✓   91 [mobile-390] › tests\e2e\typographie.spec.ts:197:7 › espace marchand — modèles de courriels (/gestion/modeles-de-courriels) — aucune apostrophe droite (1.1s)
+  ✓   58 [mobile-390] › tests\e2e\liens.spec.ts:132:5 › aucun lien interne mort, depuis l’accueil et de proche en proche (16.2s)
+  ✓   59 [mobile-390] › tests\e2e\liens.spec.ts:290:5 › chaque description de page porte le mot « démonstration » (16.5s)
+  ✓   94 [mobile-390] › tests\e2e\vitrine.spec.ts:144:5 › la carte prend le trait de sa famille au survol, là où le survol existe (1.2s)
+  ✓   95 [mobile-390] › tests\e2e\vitrine.spec.ts:208:5 › la galerie d’une fiche coffret n’ouvre aucun cadre plus haut que son image (1.2s)
+  ✓   96 [mobile-390] › tests\e2e\vitrine.spec.ts:248:5 › la galerie d’une fiche ordinaire tient la même promesse (1.1s)
+  ✓   92 [mobile-390] › tests\e2e\vitrine.spec.ts:73:5 › la bascule « Liste » recompose vraiment le rayon, et « Grille » le rend (2.1s)
+  ✓   93 [mobile-390] › tests\e2e\vitrine.spec.ts:110:5 › le bouton d’affichage reste d’accord avec le rayon après un aller-retour (2.8s)
+  ✓   97 [mobile-390] › tests\e2e\vitrine.spec.ts:295:5 › le monument du héros ne sort ni de sa colonne ni sur la carte, à aucune largeur (2.6s)
+  ✓   98 [mobile-390] › tests\e2e\vitrine.spec.ts:367:5 › le fondu d’ambiance revient aussi lentement qu’il est venu, sans rien coûter au repos (2.6s)
+  ✓  100 [mouvement] › tests\e2e\mouvement.spec.ts:234:5 › le fondu de route joue à la navigation, jamais au chargement, et rend la page entière (2.8s)
+  ✓   99 [mouvement] › tests\e2e\mouvement.spec.ts:106:5 › un bloc sous la flottaison est masqué, se révèle au défilement, et ne rejoue jamais (3.8s)
+  ✓  103 [mouvement] › tests\e2e\mouvement.spec.ts:699:5 › l’état masqué des révélations résiste aux couches, dans les trois zones (9.0s)
+  ✓  104 [mouvement] › tests\e2e\mouvement.spec.ts:812:5 › le héros monte derrière un masque, à froid, sans qu’aucun bloc ne le couvre (6.5s)
+  ✓  102 [mouvement] › tests\e2e\mouvement.spec.ts:549:5 › le parcours d’achat rend les mêmes montants exacts sur un site qui bouge (9.9s)
+  ✓  107 [mouvement] › tests\e2e\mouvement.spec.ts:1738:5 › l’ambiance d’une carte revient aussi lentement qu’elle est venue (6.6s)
+  ✓  105 [mouvement] › tests\e2e\mouvement.spec.ts:1161:5 › la vidéo du héros joue sous mouvement, et ne se télécharge pas sous reduce (8.9s)
+  ✓  101 [mouvement] › tests\e2e\mouvement.spec.ts:319:5 › le défilement adouci vit sur trois routes, jamais dans le tunnel, et pas du tout sous mouvement réduit (13.0s)
+  ✓  108 [mouvement] › tests\e2e\mouvement.spec.ts:1333:5 › les vidéos jouent quand on arrive sur leur page en cliquant (10.4s)
+  ✓  106 [mouvement] › tests\e2e\mouvement.spec.ts:1553:5 › les trois héros de C20 jouent à froid, et se taisent sous reduce (17.5s)
+
+  108 passed (1.2m)
+CODE_DE_SORTIE=0

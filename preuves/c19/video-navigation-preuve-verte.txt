@@ -1,0 +1,71 @@
+LA VIDÉO DU RAYON SELON LE CHEMIN EMPRUNTÉ — recette finale C19
+base : http://localhost:3000
+fenêtre 1280 × 800, mouvement AUTORISÉ (prefers-reduced-motion: no-preference)
+==============================================================================
+
+A. CHARGEMENT À FROID de /boutique (adresse tapée, ou rechargement)
+------------------------------------------------------------------------------
+  état du lecteur après six secondes :
+    marque            : data-video-heros="joue"
+    temps courant     : 0.38 s → 1.58 s sur 1,2 s d'attente
+    en pause          : non
+    readyState        : 4 (0 = rien n'a été demandé au lecteur)
+    source chargée    : boucle-1280.av1.mp4
+
+B. NAVIGATION CLIENTE : accueil, puis CLIC sur « Boutique »
+------------------------------------------------------------------------------
+  état du lecteur après six secondes :
+    marque            : data-video-heros="joue"
+    temps courant     : 0.37 s → 1.57 s sur 1,2 s d'attente
+    en pause          : non
+    readyState        : 4 (0 = rien n'a été demandé au lecteur)
+    source chargée    : boucle-1280.av1.mp4
+
+C. NAVIGATION CLIENTE EN SENS INVERSE : /boutique à froid, puis CLIC sur « Accueil »
+------------------------------------------------------------------------------
+  état du lecteur de l’ACCUEIL après six secondes :
+    marque            : data-video-heros="joue"
+    temps courant     : 5.99 s → 1.06 s sur 1,2 s d'attente (la boucle a repassé son début — durée 6.13 s)
+    en pause          : non
+    readyState        : 4 (0 = rien n'a été demandé au lecteur)
+    source chargée    : boucle-1280.av1.mp4
+
+D. RETOUR NAVIGATEUR : accueil, CLIC sur « Boutique », puis bouton « Précédent »
+------------------------------------------------------------------------------
+  état du lecteur de l’ACCUEIL après six secondes :
+    marque            : data-video-heros="joue"
+    temps courant     : 6.00 s → 1.06 s sur 1,2 s d'attente (la boucle a repassé son début — durée 6.13 s)
+    en pause          : non
+    readyState        : 4 (0 = rien n'a été demandé au lecteur)
+    source chargée    : boucle-1280.av1.mp4
+
+E. RETOUR DE DOCUMENT (cache d’avant-arrière) : /boutique à froid, / à froid, « Précédent »
+------------------------------------------------------------------------------
+  régime obtenu     : document RECHARGÉ (les effets se remontent normalement)
+  état du lecteur du RAYON après six secondes :
+    marque            : data-video-heros="joue"
+    temps courant     : 0.36 s → 1.56 s sur 1,2 s d'attente
+    en pause          : non
+    readyState        : 4 (0 = rien n'a été demandé au lecteur)
+    source chargée    : boucle-1280.av1.mp4
+
+F. MOUVEMENT RÉDUIT, APRÈS NAVIGATION CLIENTE : combien d’octets de vidéo ?
+------------------------------------------------------------------------------
+  fichiers .mp4 demandés : AUCUN
+  marque                 : data-video-heros="attente"
+  readyState             : 0
+  en pause               : oui
+
+==============================================================================
+VERDICT
+------------------------------------------------------------------------------
+  A. rayon à froid              : la vidéo JOUE
+  B. rayon en cliquant          : la vidéo JOUE
+  C. accueil en cliquant        : la vidéo JOUE
+  D. accueil par « Précédent »  : la vidéo JOUE
+  E. rayon retrouvé en arrière  : la vidéo JOUE
+  F. sous mouvement réduit      : AUCUN OCTET, lecteur au repos
+
+  LES CINQ CHEMINS DONNENT LE MÊME SITE, et le sixième ne coûte rien.
+  La vidéo ne dépend plus de la page par laquelle la visite a commencé.
+==============================================================================

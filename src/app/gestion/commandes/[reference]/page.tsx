@@ -55,17 +55,18 @@ export default async function PageDetailCommande({ params }: ProprietesPage) {
   return (
     <>
       <section className="pt-12 sm:pt-14">
-        <p className="text-xs font-semibold tracking-[0.2em] text-ocre uppercase">
-          Espace marchand
-        </p>
-        <h1 className="mt-4 font-titre text-3xl font-semibold text-encre tabular-nums sm:text-4xl">
+        <p className="etiquette text-ocre">Espace marchand</p>
+        {/* Le titre de cet écran EST une référence, donc une donnée : mono
+            capitales, à la même taille que celle de la confirmation (voir le
+            calcul de chasse écrit dans `IlotConfirmation`). */}
+        <h1 className="mt-4 font-mono text-2xl font-medium text-encre tabular-nums sm:text-3xl">
           {decodeURIComponent(reference)}
         </h1>
-        <p className="mt-5 max-w-lisible text-chapeau text-encre-douce">
+        <p className="mt-5 max-w-lisible text-chapeau text-encre" data-sur-marbre>
           Le détail complet de la commande, son journal, et les états vers lesquels
           elle peut encore passer.
         </p>
-        <p className="mt-4 max-w-lisible text-sm leading-relaxed text-encre-douce">
+        <p className="panneau mt-6 max-w-lisible text-sm leading-relaxed text-encre-douce">
           Si cette référence appartient au {LIBELLE_JEU_ESSAI}, la faire avancer en
           écrit une copie dans votre navigateur&nbsp;: l’originale reste intacte.
         </p>

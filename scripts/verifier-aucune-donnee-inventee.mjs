@@ -72,6 +72,7 @@
  *    PROUVER qu'il est un jeu d'essai (ses marqueurs) pour y avoir droit.
  */
 
+import { execFileSync } from 'node:child_process';
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { basename, join, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -83,7 +84,16 @@ import { fileURLToPath } from 'node:url';
 /** Les racines parcourues. `tests/` en est absent — voir l'en-tête. */
 const RACINES = ['src', 'contenu', 'public'];
 
-/** Extensions lues. Tout le reste est ignoré (images, polices, binaires). */
+/**
+ * Extensions lues COMME DU TEXTE. Tout le reste est ignoré.
+ *
+ * C'est une liste blanche, et elle le reste : un format inconnu n'est jamais
+ * décodé en UTF-8 par défaut. Un binaire passé au décodeur de texte rendrait
+ * une suite de caractères de remplacement dans laquelle les motifs de cette
+ * garde — un groupe de neuf chiffres, un numéro à dix chiffres — pourraient
+ * autant se former par hasard que disparaître. Le contrôle aurait l'air d'avoir
+ * eu lieu ; c'est pire que de ne pas avoir eu lieu.
+ */
 const EXTENSIONS = [
   '.ts',
   '.tsx',
@@ -97,6 +107,30 @@ const EXTENSIONS = [
   '.json',
   '.svg',
   '.html',
+];
+
+/**
+ * Extensions BINAIRES, écrites en toutes lettres (tranche C11).
+ *
+ * Elles ne sont pas lues, et la liste blanche ci-dessus y suffisait déjà. Elle
+ * est écrite pour deux raisons qui ne relèvent pas du filtrage :
+ *
+ * - le NOM d'un binaire reste analysé, lui (un « kbis-812345678.pdf » se
+ *   trahit par son nom) : cette liste dit lesquels le dépôt s'autorise à
+ *   porter, depuis que la décision D35 y fait entrer des images ;
+ * - le contenu de ces fichiers-là est sous la garde d'un AUTRE contrôle —
+ *   celui des métadonnées, dans `verifier-marques-reelles.mjs`. Écrire ici
+ *   qu'ils sont binaires, c'est écrire qu'ils ne sont pas oubliés, seulement
+ *   gardés ailleurs.
+ */
+const EXTENSIONS_BINAIRES = [
+  '.jpg',
+  '.jpeg',
+  '.png',
+  '.avif',
+  '.webp',
+  '.woff2',
+  '.mp4',
 ];
 
 /**
@@ -166,6 +200,74 @@ const UNITES =
   'centimes?|euros?|€|grammes?|kg|g|mg|cl|ml|l|%|octets?|o|Ko|Mo|Go|jours?|mois|ans?';
 const PAS_UNE_QUANTITE = `(?!${ESPACE}?(?:${UNITES})(?![\\p{L}\\d]))`;
 
+/**
+ * UN IDENTIFIANT N'EST PAS UN MORCEAU DE HACHAGE.
+ *
+ * Règle sœur de la précédente, ajoutée en C14 par un ÉCHEC RÉEL de la garde et
+ * non par prudence : `public/produits/manifeste-livre.json` porte des empreintes
+ * SHA-256, et dix-neuf d'entre elles contiennent, quelque part dans leurs
+ * soixante-quatre caractères, une suite de neuf chiffres bornée par des lettres
+ * hexadécimales. La garde y voyait dix-neuf SIREN.
+ *
+ * La correction ne pouvait pas être une exemption de fichier : la décision D30
+ * dit que cette garde n'exempte pas des FICHIERS mais des PREUVES, sans quoi la
+ * liste d'exceptions s'allonge jusqu'à ne plus rien garder. Elle est donc une
+ * règle sur le CONTEXTE, exactement comme l'unité : neuf chiffres pris à
+ * l'intérieur d'une suite hexadécimale ne sont pas un identifiant, parce qu'un
+ * SIREN écrit par un humain n'est jamais collé à une lettre a-f.
+ *
+ * Ce qu'elle ne relâche PAS : un SIREN précédé ou suivi d'une espace, d'une
+ * ponctuation, d'un guillemet, d'un deux-points ou d'un retour à la ligne — donc
+ * toutes les façons dont un identifiant réel arrive dans un fichier — reste
+ * attrapé. Trois cas de test le fixent.
+ *
+ * ---------------------------------------------------------------------------
+ * RESSERRÉE AU ROUND 1 : UN CARACTÈRE NE FAIT PAS UN HACHAGE
+ * ---------------------------------------------------------------------------
+ *
+ * La première rédaction regardait UN SEUL caractère de chaque côté :
+ * `(?<![\da-fA-F])\d{9}(?![\da-fA-F])`. Elle éteignait donc le motif dès qu'une
+ * lettre a-f touchait les neuf chiffres — et il y a des façons parfaitement
+ * banales d'écrire un vrai identifiant à côté d'une de ces six lettres :
+ * `ref552100554`, `siren=552100554e`, une clef d'objet, un nom de fichier. La
+ * garde se taisait alors sur la donnée exacte qu'elle existe pour trouver.
+ *
+ * Le critère porte désormais sur le JETON ENTIER : on étend l'occurrence à
+ * gauche et à droite tant que les caractères sont hexadécimaux, et on n'écarte
+ * le motif que si le jeton obtenu a la taille et la forme d'un hachage — au
+ * moins douze caractères, ET au moins une lettre a-f. Douze parce que c'est la
+ * plus courte abréviation d'empreinte que ce dépôt écrive (les messages du
+ * pipeline d'images tronquent à douze) ; une lettre parce qu'une suite de
+ * chiffres seuls n'est pas un hachage, c'est un nombre — et un nombre de
+ * treize chiffres est déjà traité par le motif SIRET.
+ */
+const LONGUEUR_MINIMALE_HACHAGE = 12;
+
+/** Le jeton hexadécimal MAXIMAL qui contient l'intervalle donné. */
+function jetonHexadecimal(texte, debut, fin) {
+  const estHexadecimal = (caractere) =>
+    caractere !== undefined && /[\da-fA-F]/u.test(caractere);
+
+  let gauche = debut;
+  while (gauche > 0 && estHexadecimal(texte[gauche - 1])) gauche -= 1;
+
+  let droite = fin;
+  while (droite < texte.length && estHexadecimal(texte[droite])) droite += 1;
+
+  return texte.slice(gauche, droite);
+}
+
+/** `true` si l'occurrence est un morceau d'empreinte, et non un identifiant. */
+function prisDansUnHachage(texte, occurrence) {
+  const jeton = jetonHexadecimal(
+    texte,
+    occurrence.index ?? 0,
+    (occurrence.index ?? 0) + occurrence[0].length,
+  );
+
+  return jeton.length >= LONGUEUR_MINIMALE_HACHAGE && /[a-fA-F]/u.test(jeton);
+}
+
 const MOTIFS = [
   {
     intitule: 'SIREN (neuf chiffres en groupe isolé)',
@@ -179,6 +281,10 @@ const MOTIFS = [
         `|(?<!\\d)\\d{3}${ESPACE}\\d{3}${ESPACE}\\d{3}(?!${ESPACE}?\\d)${PAS_UNE_QUANTITE}`,
       'gu',
     ),
+    /* Le contexte se juge sur le JETON ENTIER, pas sur le caractère voisin —
+       voir l'en-tête de `prisDansUnHachage`. Une expression régulière ne sait
+       pas remonter une suite de longueur inconnue ; une fonction, si. */
+    ecarter: prisDansUnHachage,
   },
   {
     intitule: 'SIRET (quatorze chiffres)',
@@ -186,6 +292,13 @@ const MOTIFS = [
       `(?<!\\d)\\d{14}(?!\\d)|(?<!\\d)\\d{3}${ESPACE}\\d{3}${ESPACE}\\d{3}${ESPACE}\\d{5}(?!\\d)`,
       'gu',
     ),
+    /* MÊME RÈGLE, ET C'EST LE ROUND 1 QUI L'A EXIGÉE. Le SIREN avait sa parade
+       depuis la livraison ; le SIRET n'en avait aucune, et le premier relevé
+       d'images produit après le round 1 a aligné deux suites de quatorze
+       chiffres au milieu de deux empreintes. La garde a échoué pour de vrai,
+       une seconde fois, sur la même cause — la parade appartenait donc au
+       CONTEXTE et non à un motif. */
+    ecarter: prisDansUnHachage,
   },
   {
     intitule: 'TVA intracommunautaire française (FR + onze chiffres)',
@@ -208,6 +321,9 @@ const MOTIFS = [
        une écriture courante — d'où l'importance du garde-fou de longueur, qui
        évite qu'une date « 2026-08-06 » soit lue comme un début de numéro. */
     expression: new RegExp(`(?<!\\d)0[1-9](?:[ .\\u00a0-]?\\d{2}){4}(?!\\d)`, 'gu'),
+    /* Dix chiffres d'affilée tiennent aussi dans une empreinte : même parade,
+       posée avant qu'un relevé ne la réclame. */
+    ecarter: prisDansUnHachage,
   },
 ];
 
@@ -348,6 +464,10 @@ function analyser(texte, motifsNeutralises) {
     motif.expression.lastIndex = 0;
 
     for (const occurrence of texte.matchAll(motif.expression)) {
+      if (motif.ecarter !== undefined && motif.ecarter(texte, occurrence)) {
+        continue;
+      }
+
       trouvailles.push({
         intitule: motif.intitule,
         extrait: occurrence[0],
@@ -581,6 +701,7 @@ controle('Le jeu d’essai porte ses marqueurs d’irréalité', (exiger, noter)
 
 controle('Aucun motif de donnée réelle dans src, contenu et public', (exiger, noter) => {
   let fichiersLus = 0;
+  let binairesEcartes = 0;
   let zonesReglementaires = 0;
   const racinesAbsentes = [];
 
@@ -606,6 +727,14 @@ controle('Aucun motif de donnée réelle dans src, contenu et public', (exiger, 
       }
 
       if (!EXTENSIONS.some((extension) => nom.endsWith(extension))) {
+        /* Un binaire DÉCLARÉ n'est pas un fichier oublié : on le compte, pour
+           que le rapport distingue « rien à lire ici » de « rien vu ici ». Son
+           contenu est gardé par le contrôle des métadonnées de la garde des
+           marques ; son nom vient d'être analysé, quelques lignes plus haut. */
+        if (EXTENSIONS_BINAIRES.some((extension) => nom.toLowerCase().endsWith(extension))) {
+          binairesEcartes += 1;
+        }
+
         continue;
       }
 
@@ -636,6 +765,13 @@ controle('Aucun motif de donnée réelle dans src, contenu et public', (exiger, 
   }
 
   noter(`${String(fichiersLus)} fichiers lus dans ${RACINES.join(', ')}`);
+
+  if (binairesEcartes > 0) {
+    noter(
+      `${String(binairesEcartes)} binaire(s) déclaré(s) non lu(s) comme du texte — ` +
+        'leur nom a été analysé, leur contenu relève de la garde des métadonnées',
+    );
+  }
   noter(
     `${String(zonesReglementaires)} zone(s) de texte réglementaire neutralisée(s)`,
   );
@@ -643,6 +779,236 @@ controle('Aucun motif de donnée réelle dans src, contenu et public', (exiger, 
   if (racinesAbsentes.length > 0) {
     noter(`racines absentes de ce périmètre : ${racinesAbsentes.join(', ')}`);
   }
+});
+
+/* -------------------------------------------------------------------------- */
+/* Rapport                                                                     */
+/* -------------------------------------------------------------------------- */
+
+/* -------------------------------------------------------------------------- */
+/* Contrôle 5 — texte et binaire restent deux catégories disjointes            */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * POURQUOI CE CONTRÔLE EXISTE, alors qu'il ne lit aucun fichier.
+ *
+ * `EXTENSIONS_BINAIRES` a été ajoutée en C11 pour dire, noir sur blanc, ce que
+ * le dépôt s'autorise à porter en binaire. La revue de C11 a relevé qu'elle ne
+ * servait alors qu'à un COMPTEUR D'AFFICHAGE : aucune assertion ne s'appuyait
+ * dessus, donc rien n'aurait échoué si elle avait divergé de la réalité, donc
+ * elle serait devenue fausse en silence — une liste que personne ne vérifie est
+ * une liste que personne ne met à jour.
+ *
+ * Ce contrôle lui donne un moyen d'échouer. Une extension déclarée à la fois
+ * texte et binaire ferait dire à cette garde deux choses contradictoires du
+ * même fichier : qu'elle l'a lu et qu'elle ne l'a pas lu. C'est le même
+ * contrôle, mot pour mot, que le huitième de la garde des marques — les deux
+ * gardes portent chacune leur paire de listes, et chacune doit tenir la sienne.
+ */
+controle('Texte et binaire restent deux catégories disjointes', (exiger, noter) => {
+  const texte = new Set(EXTENSIONS.map((extension) => extension.toLowerCase()));
+
+  for (const extension of EXTENSIONS_BINAIRES) {
+    exiger(
+      !texte.has(extension.toLowerCase()),
+      `« ${extension} » est déclarée à la fois texte et binaire : cette garde ` +
+        'dirait alors deux choses contradictoires du même fichier',
+    );
+  }
+
+  noter(
+    `${String(EXTENSIONS.length)} extension(s) lue(s) comme du texte, ` +
+      `${String(EXTENSIONS_BINAIRES.length)} tenue(s) pour binaires`,
+  );
+});
+
+/* -------------------------------------------------------------------------- */
+/* Contrôle 6 — aucun fichier de PILOTAGE PRIVÉ n'est suivi par git            */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * ===========================================================================
+ * LA CLASSE DE DÉFAUT QUE CE CONTRÔLE FERME (tranche C19)
+ * ===========================================================================
+ *
+ * Ce dépôt est PUBLIC. À côté du produit vivent des documents qui ont servi à
+ * le FABRIQUER : le journal de génération des images, les briefs et comptes
+ * rendus de tranche, des relevés de campagne. Ils portent l'adresse d'une
+ * conversation privée avec le moteur d'images, des chemins de poste nominatifs
+ * et des notes de séance. Rien de tout cela n'appartient au livrable, et
+ * publier un chemin de poste publie le nom de session de quelqu'un.
+ *
+ * Le journal a franchi la frontière DEUX FOIS sans qu'aucune relecture ne
+ * l'attrape — une fois à l'entrée (une exception `.gitignore` posée pour une
+ * bonne raison : trois documents renvoyaient à un fichier absent), une fois à
+ * la revue suivante, qui a d'ailleurs cru qu'il entrait alors qu'il était déjà
+ * poussé. Deux relectures humaines, deux passages. Une promesse faite au
+ * client ne peut pas tenir sur de la discipline : elle tient sur un contrôle
+ * qui échoue.
+ *
+ * ---------------------------------------------------------------------------
+ * IL INTERROGE GIT, ET NON LE DISQUE — c'est tout le sujet
+ * ---------------------------------------------------------------------------
+ *
+ * Les quatre contrôles précédents parcourent des dossiers. Celui-ci ne peut
+ * pas : le journal est TOUJOURS sur le poste, à sa place, et c'est très bien.
+ * La question n'est pas « ce fichier existe-t-il ? » mais « ce fichier
+ * est-il SUIVI ? ». Un `.gitignore` juste ne prouve rien non plus — une
+ * exception peut y être ajoutée, et c'est exactement ce qui s'est produit ;
+ * pire, un fichier déjà indexé reste suivi quoi qu'on écrive dans le
+ * `.gitignore`. On demande donc à git son index, qui est la seule autorité sur
+ * ce que le dépôt publie. Contrôler la propriété, pas son indice.
+ *
+ * ---------------------------------------------------------------------------
+ * DEUX RÈGLES, DEUX NATURES
+ * ---------------------------------------------------------------------------
+ *
+ * (a) Par le CHEMIN : `JOURNAL-GENERATION.md` où qu'il soit, et tout ce qui
+ *     vit sous `.superpowers/`. Ce sont les deux emplacements nommés par la
+ *     doctrine, et un nom de fichier se vérifie sans ouvrir le fichier.
+ *
+ * (b) Par le CONTENU : les trois empreintes du pilotage privé — l'adresse
+ *     d'une conversation avec le moteur d'images, un chemin de poste Windows,
+ *     un chemin de données d'application. Cette règle-ci attrape le cas que la
+ *     première ne peut pas voir : un document RENOMMÉ, ou un extrait recopié
+ *     dans un relevé de preuve.
+ *
+ * ---------------------------------------------------------------------------
+ * POURQUOI LES MOTIFS SONT ÉCRITS COMME ILS LE SONT
+ * ---------------------------------------------------------------------------
+ *
+ * Ce fichier est lui-même suivi par git, donc analysé par la règle (b). Un
+ * motif écrit en clair s'y trouverait et la garde se déclencherait sur sa
+ * propre source — le défaut classique de la garde qui mord son banc d'essai.
+ * Les trois expressions sont donc écrites avec les échappements et les classes
+ * de caractères qui vont de soi en expression régulière (`\.` pour un point,
+ * `[\\/]` pour un séparateur de chemin), et aucune de ces écritures ne
+ * contient la chaîne qu'elle cherche. Ce n'est pas une ruse : `[\\/]` est en
+ * outre PLUS JUSTE que le seul contre-oblique, puisque les mêmes chemins
+ * s'écrivent des deux façons selon l'outil qui les imprime.
+ *
+ * ---------------------------------------------------------------------------
+ * CE QU'IL NE LIT PAS
+ * ---------------------------------------------------------------------------
+ *
+ * La règle (b) saute `tests/`, pour la raison déjà écrite en tête de ce
+ * fichier à propos des fixtures : c'est là que vivent les pièces qui prouvent
+ * qu'une garde échoue quand elle doit échouer. La règle (a), elle, s'applique
+ * PARTOUT, `tests/` compris — un journal renommé n'a pas plus sa place dans un
+ * dossier de test qu'ailleurs, et aucune pièce à conviction n'a besoin de
+ * s'appeler `JOURNAL-GENERATION.md`.
+ *
+ * Elle ne lit pas non plus les binaires : même liste blanche d'extensions que
+ * le contrôle 4, et pour la même raison.
+ */
+
+const CHEMINS_INTERDITS = [
+  {
+    intitule: 'journal de génération',
+    correspond: (chemin) => basename(chemin) === 'JOURNAL-GENERATION.md',
+    motif: 'documentation opératoire privée du moteur d’images',
+  },
+  {
+    intitule: 'dossier de pilotage de tranche',
+    correspond: (chemin) => chemin === '.superpowers' || chemin.startsWith('.superpowers/'),
+    motif: 'briefs, comptes rendus et ledger — ils décrivent le travail, ils n’en font pas partie',
+  },
+];
+
+const MOTIFS_PILOTAGE = [
+  {
+    intitule: 'adresse de conversation avec le moteur d’images',
+    expression: /gemini\.google\.com\/app\//giu,
+  },
+  {
+    intitule: 'chemin de poste Windows (profil utilisateur)',
+    expression: /C:[\\/]Users[\\/]/giu,
+  },
+  {
+    intitule: 'chemin de données d’application locales',
+    expression: /AppData[\\/]/giu,
+  },
+];
+
+controle('Aucun fichier de pilotage privé n’est suivi par git', (exiger, noter) => {
+  let suivis;
+
+  try {
+    const sortie = execFileSync('git', ['ls-files', '-z'], {
+      cwd: BASE,
+      encoding: 'utf8',
+      stdio: ['ignore', 'pipe', 'pipe'],
+    });
+    suivis = sortie.split('\0').filter((chemin) => chemin.length > 0);
+  } catch (erreur) {
+    /* Pas de verdict silencieux. Si git ne répond pas, ce contrôle n'a rien
+       vérifié, et le dire est la seule conduite : un « OK » rendu sans avoir
+       lu l'index vaudrait exactement zéro. */
+    exiger(
+      false,
+      'git n’a pas rendu la liste des fichiers suivis, ce contrôle n’a donc ' +
+        `rien vérifié (${erreur instanceof Error ? erreur.message.split('\n')[0] : String(erreur)})`,
+    );
+    return;
+  }
+
+  noter(`${String(suivis.length)} fichier(s) suivi(s) par git dans ce périmètre`);
+
+  /* Règle (a) — le chemin, partout. */
+  for (const chemin of suivis) {
+    for (const interdit of CHEMINS_INTERDITS) {
+      exiger(
+        !interdit.correspond(chemin),
+        `${chemin} : ${interdit.intitule} SUIVI par git — ${interdit.motif}`,
+      );
+    }
+  }
+
+  /* Règle (b) — le contenu, hors `tests/` et hors binaires. */
+  let lus = 0;
+  let sautesBanc = 0;
+  let sautesBinaires = 0;
+
+  for (const chemin of suivis) {
+    if (chemin === 'tests' || chemin.startsWith('tests/')) {
+      sautesBanc += 1;
+      continue;
+    }
+
+    if (!EXTENSIONS.some((extension) => chemin.toLowerCase().endsWith(extension))) {
+      sautesBinaires += 1;
+      continue;
+    }
+
+    const absolu = join(BASE, chemin);
+
+    if (!existsSync(absolu)) {
+      /* Un fichier indexé mais absent du disque : la suppression n'est pas
+         encore enregistrée. Rien à lire, et rien à taire non plus. */
+      noter(`${chemin} : suivi mais absent du disque, contenu non lu`);
+      continue;
+    }
+
+    lus += 1;
+    const source = readFileSync(absolu, 'utf8');
+
+    for (const motif of MOTIFS_PILOTAGE) {
+      motif.expression.lastIndex = 0;
+
+      for (const occurrence of source.matchAll(motif.expression)) {
+        exiger(
+          false,
+          `${chemin}:${String(numeroDeLigne(source, occurrence.index ?? 0))} : ` +
+            `${motif.intitule} — « ${occurrence[0]} »`,
+        );
+      }
+    }
+  }
+
+  noter(
+    `${String(lus)} suivi(s) relu(s) pour les empreintes de pilotage ` +
+      `(${String(sautesBanc)} du banc d’essai et ${String(sautesBinaires)} binaire(s) écartés)`,
+  );
 });
 
 /* -------------------------------------------------------------------------- */

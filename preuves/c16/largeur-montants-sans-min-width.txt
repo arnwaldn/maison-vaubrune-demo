@@ -1,0 +1,10 @@
+
+=== bureau 1280 ===
+hauteur du recapitulatif : 342 -> 342
+  dt « Sous-total (1 article) » : largeur 127 -> 138 , hauteur 20 -> 20
+  dt « Expédition — France métropolitaine (colis ju » : largeur 236 -> 236 , hauteur 40 -> 40
+
+=== mobile 390 ===
+hauteur du recapitulatif : 332 -> 332
+  dt « Sous-total (1 article) » : largeur 127 -> 138 , hauteur 20 -> 20
+  dt « Expédition — France métropolitaine (colis ju » : largeur 240 -> 242 , hauteur 40 -> 40

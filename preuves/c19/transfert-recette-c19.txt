@@ -1,0 +1,29 @@
+TRANSFERT JAVASCRIPT — plafonds D36 (145 à froid / 190 cumulés)
+date   : 2026-08-11 03:16
+commit : 869ebda
+======================================================================
+
+
+> maison-vaubrune@0.1.0 mesurer-transfert
+> node scripts/mesurer-transfert.mjs
+
+
+JavaScript transféré — 2026-08-11, plafonds D36
+------------------------------------------------------------------------
+  Production servie sur http://localhost:50282
+
+  À FROID — plafond 145 Ko par page
+    Accueil                  134.0 Ko de JS (15 fichiers) · 749.2 Ko au total
+    Fiche huile d’olive      137.5 Ko de JS (17 fichiers) · 346.2 Ko au total
+    Panier                   128.4 Ko de JS (14 fichiers) · 320.2 Ko au total
+
+  PARCOURS — plafond 190 Ko cumulés, cache conservé
+    Accueil                  +134.0 Ko → 134.0 Ko cumulés
+    Rayon                    +3.5 Ko → 137.5 Ko cumulés
+    Fiche huile d’olive      +0.0 Ko → 137.5 Ko cumulés
+    Panier                   +0.0 Ko → 137.5 Ko cumulés
+
+  Relevé écrit : mesures/transfert-2026-08-11.json
+------------------------------------------------------------------------
+Les deux plafonds de navigation de D36 sont tenus.
+

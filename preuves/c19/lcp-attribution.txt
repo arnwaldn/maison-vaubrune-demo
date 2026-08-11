@@ -1,0 +1,100 @@
+ATTRIBUTION DU PLUS GRAND AFFICHAGE — tranche C19, recette finale
+date   : 2026-08-11 03 h 15 (Paris)
+commit : 869ebda
+bridage: réseau 1,6 Mb/s · latence 150 ms · processeur ÷ 4, APPLIQUÉ par le
+         protocole de débogage — à ne pas confondre avec le bridage SIMULÉ
+         du profil mobile de Lighthouse, qui est ce que mesure `mesurer-notes`.
+==============================================================================
+
+Accueil  (/)
+------------------------------------------------------------------------------
+  premier affichage    : 980 ms
+  plus grand affichage : 1004 ms  —  <img.block.h-auto.w-full>  70335 px²
+                         image : /editorial/accueil/hero-1024.avif
+
+  ce qui finit de charger dans la fenêtre du retard :
+     1180 ms    46 Ko  script     /_next/static/chunks/255-3d881dfa8c72bc56.js
+      891 ms     4 Ko  script     /_next/static/chunks/app/layout-c4072a1ebaeaa74f.js
+      814 ms     1 Ko  script     /_next/static/chunks/app/page-97766b91b8f009b0.js
+
+  les ressources les plus lourdes de la page :
+     408 Ko  fin à  4222 ms  video      /editorial/accueil/boucle-1280.av1.mp4
+      53 Ko  fin à  1395 ms  script     /_next/static/chunks/4bd1b696-c023c6e3521b1417.js
+      46 Ko  fin à  1790 ms  css        /_next/static/media/dae0c9f40ba3b9b7-s.p.woff2
+      46 Ko  fin à  1180 ms  script     /_next/static/chunks/255-3d881dfa8c72bc56.js
+      45 Ko  fin à  1798 ms  css        /_next/static/media/67480a5ef8cc4d5f-s.p.woff2
+      36 Ko  fin à  1508 ms  css        /fond/marbre-coquille.avif
+
+Rayon  (/boutique)
+------------------------------------------------------------------------------
+  premier affichage    : 1024 ms
+  plus grand affichage : 1048 ms  —  <img.block.h-auto.w-full>  61087 px²
+                         image : /editorial/boutique/affiche-1024.avif
+
+  ce qui finit de charger dans la fenêtre du retard :
+      921 ms     2 Ko  script     /_next/static/chunks/app/boutique/page-a8dca4c8864de148.js
+      920 ms     4 Ko  script     /_next/static/chunks/app/layout-c4072a1ebaeaa74f.js
+      905 ms    26 Ko  img        /editorial/boutique/affiche-1024.avif
+
+  les ressources les plus lourdes de la page :
+     614 Ko  fin à  5507 ms  video      /editorial/boutique/boucle-1280.av1.mp4
+      53 Ko  fin à  1419 ms  script     /_next/static/chunks/4bd1b696-c023c6e3521b1417.js
+      46 Ko  fin à  2056 ms  css        /_next/static/media/dae0c9f40ba3b9b7-s.p.woff2
+      46 Ko  fin à  1310 ms  script     /_next/static/chunks/255-3d881dfa8c72bc56.js
+      45 Ko  fin à  2027 ms  css        /_next/static/media/67480a5ef8cc4d5f-s.p.woff2
+      36 Ko  fin à  1451 ms  css        /fond/marbre-coquille.avif
+
+Fiche huile d’olive  (/boutique/huile-olive-premiere-pression)
+------------------------------------------------------------------------------
+  premier affichage    : 1076 ms
+  plus grand affichage : 1096 ms  —  <img.block.h-auto.w-full>  117528 px²
+                         image : /produits/huile-olive-premiere-pression/principal-640.avif
+
+  ce qui finit de charger dans la fenêtre du retard :
+     1295 ms    53 Ko  script     /_next/static/chunks/4bd1b696-c023c6e3521b1417.js
+     1186 ms    46 Ko  script     /_next/static/chunks/255-3d881dfa8c72bc56.js
+      933 ms     3 Ko  script     /_next/static/chunks/app/boutique/%5Bproduit%5D/page-d8c5215353f0c57e.js
+      886 ms     4 Ko  script     /_next/static/chunks/app/layout-c4072a1ebaeaa74f.js
+
+  les ressources les plus lourdes de la page :
+      53 Ko  fin à  1295 ms  script     /_next/static/chunks/4bd1b696-c023c6e3521b1417.js
+      46 Ko  fin à  1904 ms  css        /_next/static/media/dae0c9f40ba3b9b7-s.p.woff2
+      46 Ko  fin à  1186 ms  script     /_next/static/chunks/255-3d881dfa8c72bc56.js
+      45 Ko  fin à  1904 ms  css        /_next/static/media/67480a5ef8cc4d5f-s.p.woff2
+      36 Ko  fin à  1528 ms  css        /fond/marbre-coquille.avif
+
+Panier  (/panier)
+------------------------------------------------------------------------------
+  premier affichage    : 964 ms
+  plus grand affichage : 992 ms  —  <img.block.h-auto.w-full>  83898 px²
+                         image : /editorial/panier/illustration-1024.avif
+
+  ce qui finit de charger dans la fenêtre du retard :
+     1063 ms     3 Ko  script     /_next/static/chunks/app/panier/page-287c339ee4e0a15b.js
+     1015 ms     3 Ko  script     /_next/static/chunks/668-efff29a2cf8abb92.js
+      892 ms     4 Ko  script     /_next/static/chunks/app/layout-c4072a1ebaeaa74f.js
+      876 ms     2 Ko  script     /_next/static/chunks/528-1a52b620e89202cc.js
+      830 ms     1 Ko  script     /_next/static/chunks/app/page-97766b91b8f009b0.js
+      783 ms    22 Ko  img        /editorial/panier/illustration-1024.avif
+
+  les ressources les plus lourdes de la page :
+      53 Ko  fin à  1360 ms  script     /_next/static/chunks/4bd1b696-c023c6e3521b1417.js
+      46 Ko  fin à  1877 ms  css        /_next/static/media/dae0c9f40ba3b9b7-s.p.woff2
+      46 Ko  fin à  1220 ms  script     /_next/static/chunks/255-3d881dfa8c72bc56.js
+      45 Ko  fin à  1861 ms  css        /_next/static/media/67480a5ef8cc4d5f-s.p.woff2
+      36 Ko  fin à  1672 ms  css        /fond/marbre-coquille.avif
+      22 Ko  fin à   783 ms  img        /editorial/panier/illustration-1024.avif
+
+==============================================================================
+LA TUILE DE MARBRE EST-ELLE DEVANT LE PLUS GRAND AFFICHAGE ?
+------------------------------------------------------------------------------
+  page                    premier aff.   plus grand aff.   fin du marbre   écart
+  Accueil                     980 ms          1004 ms          1508 ms   +504 ms
+  Rayon                      1024 ms          1048 ms          1451 ms   +403 ms
+  Fiche huile d’olive        1076 ms          1096 ms          1528 ms   +432 ms
+  Panier                      964 ms           992 ms          1672 ms   +680 ms
+
+  Un écart POSITIF veut dire que la tuile finit APRÈS le plus grand
+  affichage : elle n’est pas sur son chemin. Elle est découverte par la
+  feuille de style, donc après le premier rendu, et elle arrive derrière.
+==============================================================================

@@ -79,6 +79,22 @@ export type ProduitJsonLd = {
   readonly name: string;
   readonly description: string;
   readonly url: string;
+  /**
+   * LES IMAGES DU PRODUIT (C15), en adresses ABSOLUES.
+   *
+   * Absentes tant qu'un produit n'a pas de visuel — et le champ l'est encore
+   * pour tout produit qu'on ajouterait sans photographie. Publier `image: []`
+   * ou une adresse relative serait pire que de se taire : schema.org attend une
+   * URL déréférençable par un tiers, et un moteur qui reçoit `/produits/…`
+   * n'a aucun moyen de la résoudre.
+   *
+   * Les DEUX vues sont publiées, dans l'ordre de la fiche. Le vocabulaire le
+   * permet et le recommande : plusieurs images d'un même produit valent mieux
+   * qu'une, et celle du partage — composée pour un rapport 40:21 — n'est pas la
+   * bonne à donner ici, où c'est le produit qu'on décrit et non l'aperçu d'un
+   * lien.
+   */
+  readonly image?: readonly string[];
   readonly offers: OffreJsonLd;
 };
 
@@ -130,6 +146,41 @@ export function varianteLaMoinsChere(produit: Produit): Variante {
 }
 
 /**
+ * LES ADRESSES ABSOLUES DES VUES D'UN PRODUIT, dans l'ordre de la fiche.
+ *
+ * La plus GRANDE largeur livrée pour chaque vue : un moteur qui reprend
+ * l'image la redimensionnera lui-même, et lui donner un dérivé de 320 points
+ * reviendrait à lui interdire d'en faire quoi que ce soit. La largeur est lue
+ * dans `largeurs`, jamais écrite ici — le pipeline décide de ce qu'il produit,
+ * et une constante recopiée finirait par désigner un fichier absent.
+ *
+ * Rend un tableau vide pour un produit sans visuel, ce qui fait taire le champ
+ * plutôt que de publier une liste vide.
+ */
+function imagesProduit(produit: Produit, urlSite: string): readonly string[] {
+  const visuel = produit.visuel;
+
+  if (visuel === undefined) {
+    return [];
+  }
+
+  const vues = [
+    { nom: 'principal', donnees: visuel.principal },
+    { nom: 'ambiance', donnees: visuel.ambiance },
+  ];
+
+  return vues.flatMap(({ nom, donnees }) => {
+    if (donnees === undefined) {
+      return [];
+    }
+
+    const plusGrande = donnees.largeurs[donnees.largeurs.length - 1] ?? donnees.largeur;
+
+    return [absolue(`/produits/${produit.slug}/${nom}-${String(plusGrande)}.jpg`, urlSite)];
+  });
+}
+
+/**
  * Le balisage d'une fiche produit : `Product` et son unique `Offer`.
  *
  * L'offre porte le prix du plus petit format et sa disponibilité. Deux
@@ -142,6 +193,7 @@ export function donneesProduit(produit: Produit, urlSite: string): ProduitJsonLd
   const variante = varianteLaMoinsChere(produit);
   const adresse = absolue(`/boutique/${produit.slug}`, urlSite);
   const disponible = estDisponible(produit) && variante.stock > 0;
+  const images = imagesProduit(produit, urlSite);
 
   return {
     '@context': CONTEXTE,
@@ -149,6 +201,7 @@ export function donneesProduit(produit: Produit, urlSite: string): ProduitJsonLd
     name: produit.nom,
     description: produit.resume,
     url: adresse,
+    ...(images.length === 0 ? {} : { image: images }),
     offers: {
       '@type': 'Offer',
       price: prixSchemaOrg(variante.prixCentimes),

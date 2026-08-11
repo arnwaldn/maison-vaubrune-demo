@@ -53,6 +53,7 @@ export function IlotTableauDeBord({
     return (
       <div
         aria-hidden="true"
+        data-place-reservee=""
         className="mt-10 min-h-96 rounded-sm border border-filet bg-papier"
       />
     );
@@ -78,8 +79,8 @@ export function IlotTableauDeBord({
 
   return (
     <div className="mt-10 min-h-96 space-y-12 pb-4">
-      <section aria-labelledby="titre-compteurs">
-        <h2 id="titre-compteurs" className="text-titre font-semibold text-encre">
+      <section aria-labelledby="titre-compteurs" className="panneau">
+        <h2 id="titre-compteurs" className="text-titre text-encre">
           Les commandes, par état
         </h2>
 
@@ -90,37 +91,37 @@ export function IlotTableauDeBord({
               className="rounded-sm border border-filet bg-papier px-4 py-4"
             >
               <PastilleEtat etat={etat} />
-              <p className="mt-3 font-titre text-3xl font-semibold text-encre tabular-nums">
+              <p className="mt-3 font-mono text-3xl font-medium text-encre tabular-nums">
                 {parEtat[etat]}
               </p>
             </li>
           ))}
         </ul>
 
-        <p className="mt-4 text-sm text-encre-douce tabular-nums">
+        <p className="mt-4 registre text-encre-douce">
           {commandes.length} commandes au total.
         </p>
       </section>
 
-      <section aria-labelledby="titre-chiffre">
-        <h2 id="titre-chiffre" className="text-titre font-semibold text-encre">
+      <section aria-labelledby="titre-chiffre" className="panneau">
+        <h2 id="titre-chiffre" className="text-titre text-encre">
           Chiffre d’affaires
         </h2>
 
         <dl className="mt-6 flex flex-wrap gap-x-12 gap-y-5">
           <div>
-            <dt className="text-xs font-semibold tracking-[0.12em] text-encre-douce uppercase">
+            <dt className="etiquette text-encre-douce">
               Encaissé, hors annulations
             </dt>
-            <dd className="mt-2 font-titre text-3xl font-semibold text-olive tabular-nums">
+            <dd className="mt-2 font-mono text-3xl font-medium text-olive tabular-nums">
               {formaterEuros(chiffreAffaires)}
             </dd>
           </div>
           <div>
-            <dt className="text-xs font-semibold tracking-[0.12em] text-encre-douce uppercase">
+            <dt className="etiquette text-encre-douce">
               Annulé
             </dt>
-            <dd className="mt-2 font-titre text-3xl font-semibold text-encre-douce tabular-nums">
+            <dd className="mt-2 font-mono text-3xl font-medium text-encre-douce tabular-nums">
               {formaterEuros(montantAnnule)}
             </dd>
           </div>
@@ -133,8 +134,8 @@ export function IlotTableauDeBord({
         </p>
       </section>
 
-      <section aria-labelledby="titre-stocks">
-        <h2 id="titre-stocks" className="text-titre font-semibold text-encre">
+      <section aria-labelledby="titre-stocks" className="panneau">
+        <h2 id="titre-stocks" className="text-titre text-encre">
           Stocks bas
         </h2>
 
@@ -163,7 +164,7 @@ export function IlotTableauDeBord({
                   </Link>
                   <span className="text-encre-douce">, {variante.format}</span>
                 </span>
-                <span className="font-semibold text-terre tabular-nums">
+                <span className="font-mono font-medium text-terre tabular-nums">
                   {stock} en stock
                 </span>
               </li>
@@ -172,8 +173,8 @@ export function IlotTableauDeBord({
         )}
       </section>
 
-      <section aria-labelledby="titre-raccourcis">
-        <h2 id="titre-raccourcis" className="text-titre font-semibold text-encre">
+      <section aria-labelledby="titre-raccourcis" className="panneau">
+        <h2 id="titre-raccourcis" className="text-titre text-encre">
           Où aller ensuite
         </h2>
 
@@ -184,7 +185,7 @@ export function IlotTableauDeBord({
                 href={raccourci.adresse}
                 className="block h-full rounded-sm border border-filet bg-papier px-4 py-4 no-underline hover:border-olive"
               >
-                <span className="block font-titre text-base font-semibold text-encre">
+                <span className="block sous-titre text-encre">
                   {raccourci.libelle}
                 </span>
                 <span className="mt-1.5 block text-sm leading-relaxed text-encre-douce">
