@@ -101,3 +101,25 @@ raison. Ici, elle a fait porter à une couleur validée par le client un défaut
 d'accessibilité imaginaire, jusque dans le compte rendu de publication.
 
 Un instrument se vérifie comme un livrable.
+
+
+ÉCART DE RÉDACTION — À NE PAS RECOPIER
+------------------------------------------------------------------------------
+
+Le message du commit af00b86 annonce « 44 contrôles de garde ». C'EST FAUX : le
+relevé `controle-c22.txt`, qui fait foi, en compte QUARANTE-SEPT.
+
+    18 + 6 + 8 + 12 + 1 + 2 = 47
+
+Le chiffre a été écrit de mémoire au lieu d'être lu dans la sortie, sur une
+tranche dont c'est justement le sujet — un nombre juste hier, recopié
+aujourd'hui, faux sans prévenir. La leçon se sera appliquée deux fois dans la
+même journée, dont une à celui qui l'écrivait.
+
+L'histoire poussée n'est pas réécrite pour autant : un dépôt public dont on
+force la branche pour corriger un mot coûte plus cher que l'erreur. C'est le
+relevé qui porte la correction — même remède qu'au commit c716ed7 de C15, dont
+le message écrivait « 13 » pour quinze produits.
+
+Les autres chiffres du message sont vérifiés dans `controle-c22.txt` :
+600 cas unitaires, CSS 10,16 Ko gzip sur 12, 112 parcours.
