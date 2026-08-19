@@ -309,6 +309,63 @@ export function Fournisseurs({
   }, [chemin]);
 
   /* ═══════════════════════════════════════════════════════════════════════
+     LE MENU DE L'EN-TÊTE SE REFERME — ET C'EST LA SEULE CHOSE QU'IL FAILLE
+     ÉCRIRE EN JAVASCRIPT (C23)
+     ═══════════════════════════════════════════════════════════════════════
+
+     Le repli lui-même est en CSS pur : un `<details>` que le navigateur ouvre et
+     ferme sans un octet de paquet, et qui marche sans hydratation. Ce qu'il ne
+     sait pas faire tout seul, c'est se REFERMER quand la page change.
+
+     ET LE MOTIF EST STRUCTUREL, pas accidentel. `<EnTete />` est rendu dans la
+     mise en page racine, EN FRÈRE de `<main>` et HORS de `<TransitionPage>` —
+     seul ce dernier porte la clef de route. Le nœud `<details>` est donc
+     LITTÉRALEMENT le même d'une route à l'autre, et `open` est une propriété que
+     le navigateur possède et que React ne contrôle pas. Sans cet effet, le menu
+     reste ouvert par-dessus la page qu'on vient d'atteindre.
+
+     TROIS CHEMINS, ET LE TROISIÈME NE SE DEVINE PAS. La navigation cliente et le
+     bouton « Précédent » passent tous deux par `[chemin]`. Le retour de DOCUMENT
+     ne s'y voit pas : le cache de page restaure le DOM AVEC l'attribut `open`,
+     et aucun effet React ne se rejoue à la restauration. D'où l'écouteur
+     `pageshow`, qui est le seul à couvrir ce cas-là.
+
+     C'est le raisonnement de C19 appliqué tel quel — « un observateur détruit ne
+     peut pas retenir un nœud mort » —, et il ne coûte aucun fichier : ce module
+     lit déjà `usePathname()` et porte déjà deux contrôleurs rebalayés par lui. */
+  useEffect(() => {
+    const repli = document.querySelector<HTMLDetailsElement>('[data-menu-entete]');
+
+    if (repli === null) {
+      return undefined;
+    }
+
+    repli.open = false;
+
+    const fermer = () => {
+      repli.open = false;
+    };
+
+    const surTouche = (evenement: KeyboardEvent) => {
+      if (evenement.key === 'Escape' && repli.open) {
+        repli.open = false;
+        /* Le focus revient au bouton, jamais au corps du document : sans cette
+           ligne, fermer au clavier fait perdre sa place à qui navigue au
+           clavier — c'est-à-dire précisément à qui a employé Échap. */
+        repli.querySelector('summary')?.focus();
+      }
+    };
+
+    window.addEventListener('pageshow', fermer);
+    document.addEventListener('keydown', surTouche);
+
+    return () => {
+      window.removeEventListener('pageshow', fermer);
+      document.removeEventListener('keydown', surTouche);
+    };
+  }, [chemin]);
+
+  /* ═══════════════════════════════════════════════════════════════════════
      LES VUES D'AMBIANCE — chargées à la PREMIÈRE approche, jamais au repos
      ═══════════════════════════════════════════════════════════════════════
 

@@ -770,18 +770,36 @@
     border-bottom: 1px solid var(--color-filet);
   }
 
-  @media (min-width: 48rem) {
-    .entete {
-      position: sticky;
-      top: 0;
-      z-index: 40;
-      border-bottom-color: transparent;
-    }
+  /*
+   * L'EN-TÊTE COLLE MAINTENANT À TOUTE LARGEUR (C23) — la borne `md` est levée.
+   *
+   * Elle avait été posée en C13 pour un motif juste, et daté : « sur 390 px il
+   * mesure 155 px, dix-huit pour cent de la fenêtre », donc le coller aurait
+   * retiré ces 155 px À CHAQUE ÉCRAN. Le motif tombe avec la mesure : l'en-tête
+   * compact de cette tranche fait 65 px, soit 7,7 % — il rend 92 % de la fenêtre
+   * au contenu à TOUTE hauteur de page, là où l'ancien n'en rendait 100 %
+   * qu'après avoir défilé une fois.
+   *
+   * CE QUE ÇA DÉBLOQUE VRAIMENT n'est pas un gain de pixels : c'est que la
+   * pastille du panier devient atteignable en permanence sur téléphone. Sans
+   * elle, un ajout au panier n'y laissait AUCUNE trace visible dès le premier
+   * défilement — première critique du professionnel qui a relu la boutique.
+   *
+   * LA SENTINELLE N'A RIEN À APPRENDRE, et c'est vérifié plutôt que supposé :
+   * son observateur, dans la frontière cliente unique, n'a aucune condition de
+   * largeur. Seule la feuille était bornée. Dégater le CSS suffit ; le
+   * JavaScript était déjà écrit et déjà payé.
+   */
+  .entete {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    border-bottom-color: transparent;
+  }
 
-    html[data-entete='scelle'] .entete {
-      background-color: var(--color-verre);
-      border-bottom-color: var(--color-filet);
-    }
+  html[data-entete='scelle'] .entete {
+    background-color: var(--color-verre);
+    border-bottom-color: var(--color-filet);
   }
 
   /*
@@ -942,10 +960,8 @@
    * collant sur mobile devra retirer, sans quoi toutes les ancres des pages
    * légales atterriront SOUS l'en-tête à 390 px.
    */
-  @media (min-width: 48rem) {
-    html {
-      scroll-padding-top: calc(var(--hauteur-entete) + 0.5rem);
-    }
+  html {
+    scroll-padding-top: calc(var(--hauteur-entete) + 0.5rem);
   }
 
   /*
@@ -956,25 +972,15 @@
    * dur, dans le `scroll-padding-top` juste au-dessus ; l'écrire une seconde
    * fois en dur aurait garanti qu'un jour les deux divergent.
    *
-   * Elle vaut ZÉRO en dessous de `md`, et ce n'est pas une valeur de repli :
-   * c'est la vérité à cette largeur, où l'en-tête défile avec la page (mesure
-   * de C13 — collant, il occuperait 155 px, dix-huit pour cent d'une fenêtre de
-   * téléphone).
+   * ELLE N'A PLUS QU'UNE SEULE VALEUR (C23), et c'est le signe que le dessin
+   * s'est simplifié plutôt que compliqué. Elle valait `0px` sous `md` — la
+   * vérité à cette largeur, où l'en-tête défilait avec la page — et `6rem`
+   * au-dessus. L'en-tête compact de cette tranche mesure 65 px À TOUTE LARGEUR,
+   * mesuré aux deux profils, et il colle partout : un seul nombre suffit, et
+   * une surcharge en moins est une divergence en moins.
    */
   :root {
-    --hauteur-entete: 0px;
-  }
-
-  @media (min-width: 48rem) {
-    :root {
-      /* 6 rem = 96 px. L'en-tête en mesure 92 à 1440 px de large (mesuré par
-         `preuves/c15/panneau-collant.mjs`, qui a d'abord trouvé la barre des
-         familles DOUZE PIXELS SOUS lui : la première valeur, 5 rem, venait du
-         commentaire de `scroll-padding-top` et non d'une mesure). Quatre pixels
-         de respiration, comme le `scroll-padding-top` s'en accorde deux et
-         demi de plus pour les ancres. */
-      --hauteur-entete: 6rem;
-    }
+    --hauteur-entete: 4rem;
   }
 
   /*
@@ -3419,5 +3425,217 @@ html.lenis [data-lenis-prevent] {
 .tiroir-bloc {
   border-top: 1px solid var(--color-filet);
   padding-top: 1rem;
+}
+
+
+/* ===========================================================================
+   L'EN-TÊTE COMPACT ET SON MENU REPLIABLE — HORS COUCHE (C23)
+   ===========================================================================
+
+   L'ÉCART C13 N° 2 EST FERMÉ. Il traînait depuis trois tranches, et C17 avait
+   laissé la consigne exacte : « il faut décider que le menu se replie, et
+   mettre le harnais d'accord ; la tranche qui l'ouvrira commencera par les deux
+   lignes de la campagne ». C'est ce qui a été fait, dans cet ordre.
+
+   CE QUI A CHANGÉ DEPUIS C17, ET QUI REND LE GESTE RENTABLE. C17 mesurait que
+   replier la seule navigation ne rendait que 38,6 px sur 160,9 — 24 %, ce qui
+   ne valait pas le prix. Mais ce qui pèse, C17 le disait déjà, c'est LE BLOC DE
+   MARQUE : deux lignes, nom plus baseline. En retirant la baseline sous `md` et
+   en passant le nom de `text-2xl` à `text-xl` — le plancher EXACT de l'interdit
+   n° 10 de D37, qui ferme la Bodoni sous 20 px —, l'en-tête tient sur UN rang de
+   4 rem. Mesuré : 161 px (19,1 % de la fenêtre) avant, 65 px (7,6 %) après.
+   Le gain est de 97 px SUR CHAQUE ÉCRAN, pas de 38.
+
+   ET C'EST CE GAIN QUI AUTORISE LE COLLAGE. C13 refusait l'en-tête collant sur
+   mobile parce qu'il aurait « retiré 155 px à chaque écran ». À 64 px, il en
+   rend 91 % au contenu à TOUTE hauteur de page, là où l'en-tête d'avant n'en
+   rendait 100 % qu'après avoir défilé une fois. Le vrai bénéfice n'est pas le
+   pixel : c'est que la pastille du panier devient atteignable en permanence —
+   ce qui corrige une partie du premier retour du professionnel.
+
+   LA HAUTEUR NE CHANGE JAMAIS AU DÉFILEMENT, et c'est doublement contraint :
+   animer `height` est un interdit frontal de D37 § 3, et `--hauteur-entete`
+   alimente `scroll-padding-top` — une hauteur variable ferait atterrir une
+   ancre à un endroit DIFFÉRENT selon la position de défilement au moment du
+   clic. L'état collé ne change que le fond et le filet, comme à `md+` depuis
+   C13.
+
+   HORS COUCHE, comme le socle de mouvement de C17 et les tuiles de cette même
+   tranche : `.entete-rang` porte des utilitaires (`flex`, `items-center`,
+   `gap-4`, `px-5`) et une règle d'état déclarée dans `components` perdrait
+   contre eux. Ici on ne déclare QUE `height`, qui n'a pas d'utilitaire
+   concurrent — mais le bloc reste dehors pour que la première classe ajoutée un
+   jour ne renverse rien en silence.
+   =========================================================================== */
+
+.entete-rang {
+  height: 4rem;
+}
+
+/* Le repliable ne doit pas peser dans le rang : il n'est qu'un ancrage. */
+.menu-entete {
+  position: relative;
+}
+
+/*
+ * LE BOUTON FAIT 44 × 44, ET CE N'EST PAS UNE MARGE DE CONFORT : c'est la
+ * cible tactile minimale que la campagne d'accessibilité mesure.
+ *
+ * `list-style: none` et le marqueur WebKit retirent le triangle que la feuille
+ * du navigateur pose sur un `<summary>`. Le glyphe est fait de deux
+ * pseudo-éléments en `currentColor` PLUTÔT QU'EN SVG EN LIGNE, et le motif est
+ * arithmétique : un SVG en ligne coûte ses octets dans le HTML de CHACUNE des
+ * 46 routes prérendues ; deux pseudo-éléments les coûtent UNE FOIS, ici.
+ */
+.menu-bouton {
+  display: flex;
+  height: 2.75rem;
+  width: 2.75rem;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  list-style: none;
+}
+
+.menu-bouton::-webkit-details-marker {
+  display: none;
+}
+
+.menu-glyphe,
+.menu-glyphe::before,
+.menu-glyphe::after {
+  display: block;
+  height: 1px;
+  width: 1.25rem;
+  background-color: var(--color-encre);
+}
+
+.menu-glyphe::before,
+.menu-glyphe::after {
+  position: relative;
+  content: '';
+}
+
+.menu-glyphe::before {
+  top: -0.375rem;
+}
+
+.menu-glyphe::after {
+  top: 0.313rem;
+}
+
+/*
+ * LE PANNEAU EST HORS FLUX, et c'est ce qui rend le décalage cumulé
+ * STRUCTURELLEMENT nul à l'ouverture : il n'occupe ni ne libère aucune place,
+ * donc la page dessous ne bouge pas d'un pixel — à aucune police, à aucune
+ * largeur. On ne s'appuie même pas sur l'exemption « 500 ms après une
+ * interaction » que la métrique accorde.
+ *
+ * Aucune animation d'ouverture : un panneau qui se déplie anime `height`
+ * (interdit), et 320 ms entre l'appui et le menu se lisent comme de la latence
+ * sur une surface de navigation qu'on manœuvre au pouce.
+ */
+.menu-panneau {
+  position: absolute;
+  inset-inline: auto 0;
+  top: 100%;
+  z-index: 41;
+  min-width: 12rem;
+  border: 1px solid var(--color-filet);
+  border-radius: 2px;
+  background-color: var(--color-verre);
+  padding: 0.5rem;
+}
+
+.menu-liste {
+  display: grid;
+  gap: 0.25rem;
+}
+
+/*
+ * LE REPLI EST PILOTÉ EXPLICITEMENT — ET LA RAISON N'EST PAS CELLE QU'ON CROIT.
+ *
+ * Premier diagnostic, faux : « le masquage natif de `::details-content` ne
+ * fonctionne pas, puisque le panneau mesure 192 × 126 px avec `open` à faux ».
+ * Le vrai comportement est plus fin, et il explique les DEUX symptômes observés
+ * à deux heures d'écart :
+ *
+ *   `content-visibility: hidden` retire le contenu de la PEINTURE et de l'ARBRE
+ *   D'ACCESSIBILITÉ — mais il CONSERVE LA BOÎTE.
+ *
+ * `getBoundingClientRect()` était donc la seule mesure au monde qui ne pouvait
+ * pas voir ce masquage. Mesurer la géométrie était juste dans le cas du
+ * `<dialog>` du tiroir ; c'était exactement la mauvaise propriété ici. La leçon
+ * n'est pas « mesurer la géométrie », elle est « mesurer CE QUE LA RÈGLE
+ * PRÉTEND CHANGER » — et le corollaire s'est vengé au-dessus de `md`, où le
+ * panneau paraissait posé et où Playwright ne trouvait plus le lien
+ * « Boutique » : il était hors de l'arbre d'accessibilité.
+ *
+ * `display: none` explicite reste utile et n'est pas une redondance : il retire
+ * AUSSI la boîte, ce que le natif ne fait pas. Les deux mécanismes se
+ * complètent au lieu de se doubler.
+ */
+.menu-entete:not([open]) > .menu-panneau {
+  display: none;
+}
+
+.menu-liste a {
+  display: block;
+  padding: 0.625rem 0.75rem;
+}
+
+/*
+ * AU-DESSUS DE `md`, LE DESSIN D'AVANT REVIENT — À L'IDENTIQUE.
+ *
+ * `::details-content` est le pseudo-élément qui porte le masquage natif du
+ * contenu d'un `<details>` fermé. Le remettre à `visible` est la seule façon de
+ * déplier en CSS sans toucher à l'attribut `open`, donc sans JavaScript et sans
+ * état à synchroniser.
+ *
+ * AUCUN `@supports` N'EST NÉCESSAIRE, et c'est le bénéfice du repli explicite :
+ * la règle qui déplie ici est la SYMÉTRIQUE exacte de celle qui replie plus
+ * haut. Il n'y a pas de capacité de moteur à interroger, donc pas de moteur qui
+ * pourrait laisser la navigation inatteignable sur un bureau — le cas que la
+ * première version, appuyée sur `::details-content`, obligeait à couvrir.
+ */
+@media (min-width: 48rem) {
+  .menu-bouton {
+    display: none;
+  }
+
+  /* LES DEUX MÉCANISMES, PARCE QU'IL EN FAUT DEUX. `display: block` rend la
+     BOÎTE ; `content-visibility: visible` rend le CONTENU à la peinture et à
+     l'arbre d'accessibilité. Sans la seconde ligne, le panneau occupe sa place,
+     paraît posé à l'œil — et `getByRole('navigation')` ne le trouve pas, parce
+     qu'un `<details>` fermé retire son contenu de l'arbre quoi qu'en dise
+     `display`. C'est l'échec qu'a rendu la campagne : « waiting for
+     getByRole('navigation', { name: 'Navigation principale' }) », sur le profil
+     BUREAU, là où le menu n'est même pas censé se replier. */
+  .menu-entete:not([open]) > .menu-panneau {
+    display: block;
+  }
+
+  .menu-entete::details-content {
+    content-visibility: visible;
+  }
+
+  .menu-panneau {
+    position: static;
+    z-index: auto;
+    min-width: 0;
+    border: none;
+    background-color: transparent;
+    padding: 0;
+  }
+
+  .menu-liste {
+    display: flex;
+    flex-wrap: nowrap;
+    column-gap: 2rem;
+  }
+
+  .menu-liste a {
+    padding: 0;
+  }
 }
 
