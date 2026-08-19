@@ -3700,12 +3700,6 @@ html.lenis [data-lenis-prevent] {
     transition: transform var(--ms-effleure) var(--ease-coule);
   }
 
-  .tuile-compte {
-    transition:
-      transform var(--ms-etat) var(--ease-verre),
-      opacity var(--ms-etat) var(--ease-verre);
-  }
-
   .tuile-cartouche {
     transition: opacity var(--ms-etat) var(--ease-verre);
   }
@@ -3720,10 +3714,5 @@ html.lenis [data-lenis-prevent] {
     transform: translateY(-100%);
   }
 
-  .tuile-famille:hover .tuile-compte,
-  .tuile-famille:focus-visible .tuile-compte {
-    transform: translateY(-0.15rem);
-    opacity: 0.72;
-  }
 }
 

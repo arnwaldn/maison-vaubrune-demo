@@ -66,11 +66,19 @@ export const metadata: Metadata = {
  * et la tranche a pour consigne de ne plus ouvrir de gisement d'octets.
  */
 
-/** Les sept familles, avec leur rang — le rang sert aux sélecteurs `:has()`. */
+/**
+ * Les sept familles, avec leur rang — le rang sert aux sélecteurs `:has()`.
+ *
+ * LE COMPTE PAR FAMILLE A ETE RETIRE (retour d'Arnaud, 19/08). Chaque cartouche
+ * portait le nombre de références de sa famille, formaté sur deux chiffres —
+ * « 03 », « 01 ». Le format le trahissait : un nombre cadré sur deux positions
+ * se lit comme un NUMÉRO D'ORDRE, donc comme une numérotation décorative posée
+ * sur sept tuiles qui ne forment aucune séquence. L'information utile, elle,
+ * est déjà rendue une fois et bien : « 15 RÉFÉRENCES », en tête de section.
+ */
 const RANGEE = FAMILLES.map((famille, position) => ({
   famille,
   rang: position + 1,
-  nombre: CATALOGUE.filter((produit) => produit.famille === famille).length,
 }));
 
 export default function PageAccueil() {
@@ -369,9 +377,6 @@ export default function PageAccueil() {
                     <span className="tuile-nom-ligne" aria-hidden="true">
                       {LIBELLE_FAMILLE[entree.famille]}
                     </span>
-                  </span>
-                  <span className="tuile-compte etiquette text-coquille tabular-nums">
-                    {String(entree.nombre).padStart(2, '0')}
                   </span>
                 </span>
               </Link>
