@@ -1,7 +1,11 @@
 import { describe, expect, it } from 'vitest';
 
 import { CATALOGUE } from '@/donnees/catalogue';
-import { suggestionsPourProduit } from '@/lib/suggestions';
+import {
+  suggestionsPourEnsemble,
+  suggestionsPourProduit,
+  type CandidatSuggestion,
+} from '@/lib/suggestions';
 import { type Produit } from '@/lib/types';
 
 /**
@@ -175,6 +179,117 @@ describe('suggestionsPourProduit', () => {
           expect(suggestion.disponible).not.toBe(false);
           expect(suggestion.variantes.some((variante) => variante.stock > 0)).toBe(true);
         }
+      }
+    });
+  });
+});
+
+describe('suggestionsPourEnsemble', () => {
+  /** Un pool minuscule : les cas de bord s'y lisent. */
+  const pool: CandidatSuggestion[] = [
+    { slug: 'huile-a', famille: 'huiles-et-vinaigres' },
+    { slug: 'huile-b', famille: 'huiles-et-vinaigres' },
+    { slug: 'miel-a', famille: 'miels-et-confitures' },
+    { slug: 'miel-b', famille: 'miels-et-confitures' },
+    { slug: 'infusion', famille: 'infusions' },
+  ];
+
+  describe('l’exclusion — rien de ce qui est déjà au panier', () => {
+    it('n’en propose aucun des articles du panier', () => {
+      const rendu = suggestionsPourEnsemble(pool, ['huile-a', 'miel-a'], 5).map((c) => c.slug);
+
+      expect(rendu).not.toContain('huile-a');
+      expect(rendu).not.toContain('miel-a');
+    });
+
+    it('rend un tableau VIDE quand tout le pool est au panier', () => {
+      const tous = pool.map((c) => c.slug);
+
+      expect(suggestionsPourEnsemble(pool, tous, 3)).toEqual([]);
+    });
+  });
+
+  describe('le rang — les familles déjà au panier d’abord', () => {
+    it('propose la famille du panier avant les autres', () => {
+      /* Panier : un miel. Les autres miels doivent passer devant les huiles. */
+      const rendu = suggestionsPourEnsemble(pool, ['miel-a'], 4).map((c) => c.slug);
+
+      expect(rendu[0]).toBe('miel-b');
+    });
+
+    it('mêle plusieurs familles du panier, sans en oublier', () => {
+      const rendu = suggestionsPourEnsemble(pool, ['huile-a', 'miel-a'], 4);
+      const deuxPremiers = rendu.slice(0, 2).map((c) => c.famille);
+
+      expect(deuxPremiers).not.toContain('infusions');
+    });
+  });
+
+  describe('la roue — elle s’amorce après le DERNIER ajouté', () => {
+    it('change de proposition quand le dernier article change', () => {
+      const apresHuile = suggestionsPourEnsemble(pool, ['infusion', 'huile-a'], 5).map(
+        (c) => c.slug,
+      );
+      const apresMiel = suggestionsPourEnsemble(pool, ['infusion', 'miel-a'], 5).map(
+        (c) => c.slug,
+      );
+
+      expect(apresHuile).not.toEqual(apresMiel);
+    });
+
+    it('repart au début du pool quand le dernier article lui est inconnu', () => {
+      /* Un produit retiré de la vente depuis qu'il est entré au panier :
+         il n'est plus dans le pool, mais il reste dans les lignes. */
+      const rendu = suggestionsPourEnsemble(pool, ['produit-retire'], 2);
+
+      expect(rendu).toHaveLength(2);
+      expect(rendu[0]?.slug).toBe('huile-a');
+    });
+  });
+
+  describe('les bornes — la fonction reste totale', () => {
+    it('rend le début du pool sur un panier vide, plutôt que de jeter', () => {
+      expect(suggestionsPourEnsemble(pool, [], 2).map((c) => c.slug)).toEqual([
+        'huile-a',
+        'huile-b',
+      ]);
+    });
+
+    it('rend un tableau vide quand on ne demande rien', () => {
+      expect(suggestionsPourEnsemble(pool, ['huile-a'], 0)).toEqual([]);
+    });
+
+    it('rend MOINS que demandé plutôt que d’inventer', () => {
+      expect(suggestionsPourEnsemble(pool, ['huile-a', 'huile-b', 'miel-a'], 5)).toHaveLength(2);
+    });
+
+    it('rend un tableau vide sur un pool vide', () => {
+      expect(suggestionsPourEnsemble([], ['huile-a'], 3)).toEqual([]);
+    });
+
+    it('est déterministe : deux appels rendent la même liste', () => {
+      const a = suggestionsPourEnsemble(pool, ['miel-a'], 3).map((c) => c.slug);
+      const b = suggestionsPourEnsemble(pool, ['miel-a'], 3).map((c) => c.slug);
+
+      expect(a).toEqual(b);
+    });
+  });
+
+  /*
+   * LE POOL RÉEL — le cas qui dirait qu'une famille du catalogue ne peut plus
+   * fournir, le jour où quelqu'un retire un produit.
+   */
+  describe('sur le catalogue réellement livré', () => {
+    const poolReel: CandidatSuggestion[] = CATALOGUE.filter(
+      (p) => p.disponible !== false && p.variantes.some((v) => v.stock > 0),
+    ).map((p) => ({ slug: p.slug, famille: p.famille }));
+
+    it('rend trois suggestions pour un panier d’un seul article, quel qu’il soit', () => {
+      for (const produit of CATALOGUE) {
+        const rendu = suggestionsPourEnsemble(poolReel, [produit.slug], 3);
+
+        expect(rendu, `${produit.slug} doit avoir trois suggestions`).toHaveLength(3);
+        expect(rendu.map((c) => c.slug)).not.toContain(produit.slug);
       }
     });
   });

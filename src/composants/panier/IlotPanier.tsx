@@ -1,5 +1,6 @@
 'use client';
 
+import type { ReactNode } from 'react';
 import Link from 'next/link';
 
 import { ChoixZone } from '@/composants/panier/ChoixZone';
@@ -10,6 +11,7 @@ import { RecapitulatifTotaux } from '@/composants/panier/RecapitulatifTotaux';
 import type { ArticlePanier } from '@/lib/panier/catalogue-panier';
 import { usePanier } from '@/lib/panier/contexte-panier';
 import { calculerTotaux } from '@/lib/panier/totaux';
+import { suggestionsPourEnsemble, type CandidatSuggestion } from '@/lib/suggestions';
 
 /**
  * LE CONTENU DE LA PAGE PANIER — l'unique îlot client de la route.
@@ -54,7 +56,33 @@ import { calculerTotaux } from '@/lib/panier/totaux';
  * l'empêchement : le refus se dit là où il se constate.
  */
 
-export function IlotPanier({ catalogue }: { readonly catalogue: readonly ArticlePanier[] }) {
+/** Combien de suggestions sous le panier. Trois tiennent sur un rang, à toute largeur. */
+const COMBIEN_DE_SUGGESTIONS = 3;
+
+export function IlotPanier({
+  catalogue,
+  poolSuggestions,
+  cartesSuggestions,
+}: {
+  readonly catalogue: readonly ArticlePanier[];
+  /**
+   * Le strict minimum pour CHOISIR — un slug, une famille. Déjà filtré côté
+   * serveur (disponible, en stock), donc cet îlot ne porte aucun jugement de
+   * vente : il trie, il ne décide pas.
+   */
+  readonly poolSuggestions: readonly CandidatSuggestion[];
+  /**
+   * Les cartes DÉJÀ RENDUES par le serveur, une par produit vendable.
+   *
+   * C'est le patron du tiroir de la fiche produit, étendu d'un cran. Là-bas le
+   * serveur choisissait lesquelles rendre — le slug de la page suffisait. Ici
+   * la sélection dépend du panier, qui n'existe qu'après hydratation : le
+   * serveur livre donc toutes les candidates et cet îlot n'en affiche que
+   * quelques-unes. Une carte non affichée ne coûte que son HTML — son image
+   * n'entre jamais dans le document, donc n'est jamais téléchargée.
+   */
+  readonly cartesSuggestions: Record<string, ReactNode>;
+}) {
   const { etat, pretALEmploi, envoyer } = usePanier();
 
   if (!pretALEmploi) {
@@ -72,6 +100,16 @@ export function IlotPanier({ catalogue }: { readonly catalogue: readonly Article
   if (totaux.lignes.length === 0) {
     return <PanierVide />;
   }
+
+  /* Les slugs du panier, dans l'ordre où ils y sont entrés : la roue des
+     suggestions s'amorce après le DERNIER, le signal d'intention le plus frais.
+     Dédupliqué — deux formats du même produit ne comptent qu'une fois. */
+  const slugsAuPanier = [...new Set(totaux.lignes.map((calculee) => calculee.article.slug))];
+  const suggestions = suggestionsPourEnsemble(
+    poolSuggestions,
+    slugsAuPanier,
+    COMBIEN_DE_SUGGESTIONS,
+  );
 
   const commandable = totaux.expedition.statut === 'calcule';
 
@@ -95,6 +133,43 @@ export function IlotPanier({ catalogue }: { readonly catalogue: readonly Article
         >
           Vider le panier
         </button>
+
+        {/* LE VIDE DE LA COLONNE GAUCHE DEVIENT UN RAYON (C24, retour d'Arnaud).
+
+            « Sur la page du panier il y a un grand espace vide sur la gauche en
+            bas ; tu devrais implémenter des suggestions de produits
+            complémentaires. » Le vide était mécanique : la colonne droite
+            (destination, récapitulatif, bouton, mentions) est longue et
+            collante, la gauche s'arrêtait après « Vider le panier ».
+
+            CET ÎLOT NE FAIT QUE TRIER. Les cartes sont rendues par le serveur,
+            le pool est déjà filtré sur la disponibilité et le stock — il ne
+            reste ici qu'un choix d'ordre, à partir de ce que le panier dit de
+            lui-même. C'est ce qui permet aux suggestions d'avoir des
+            photographies sans qu'un seul chemin d'image n'entre dans le paquet
+            JavaScript (D17).
+
+            LE BLOC DISPARAÎT PLUTÔT QUE DE MENTIR : panier contenant tout le
+            catalogue, ou pool épuisé, et il n'y a ni titre ni grille. */}
+        {suggestions.length > 0 && (
+          <section aria-labelledby="titre-suggestions" className="mt-10 border-t border-filet pt-6">
+            <h2 id="titre-suggestions" className="etiquette text-encre-douce">
+              Vous aimerez peut-être aussi
+            </h2>
+            {/* LES CARTES SONT BORNEES, PAS ETIREES. La colonne gauche fait
+                environ 850 points sur un ecran large : trois cartes etirees y
+                donnaient des vignettes de 270 points sous un nom en didone qui
+                passait sur trois lignes. Reduire le corps est interdit — la
+                Bodoni est deja au plancher de l interdit n° 10 de D37 — donc
+                c est la carte qui se borne. A 12 rem elle retrouve la
+                proportion du tiroir, ou le meme dessin tient depuis C23. */}
+            <ul className="mt-4 grid grid-cols-[repeat(auto-fill,minmax(0,12rem))] gap-4">
+              {suggestions.map((candidat) => (
+                <li key={candidat.slug}>{cartesSuggestions[candidat.slug]}</li>
+              ))}
+            </ul>
+          </section>
+        )}
       </div>
 
       <div className="min-w-0 space-y-8 lg:sticky lg:top-8 lg:self-start">

@@ -1,4 +1,4 @@
-import { estDisponible, type Produit } from '@/lib/types';
+import { estDisponible, type Famille, type Produit } from '@/lib/types';
 
 /**
  * LES PRODUITS QU'ON PROPOSE APRÈS UN AJOUT AU PANIER (tranche C23).
@@ -85,6 +85,80 @@ export function suggestionsPourProduit(
   const famille = catalogue[position]?.famille;
   const memeFamille = candidats.filter((produit) => produit.famille === famille);
   const autres = candidats.filter((produit) => produit.famille !== famille);
+
+  return [...memeFamille, ...autres].slice(0, Math.max(0, combien));
+}
+
+/**
+ * CE QUE LE PANIER SAIT DE LUI-MÊME, RÉDUIT À CE QUI SERT À CHOISIR (C24).
+ *
+ * La page `/panier` est `force-static` : au moment où elle est rendue, le
+ * panier n'existe pas encore — il vit dans le navigateur du visiteur. La
+ * sélection des suggestions doit donc se faire APRÈS hydratation, côté client,
+ * là où le catalogue n'a pas le droit d'aller (décision D17).
+ *
+ * Ce type est le strict minimum qui permet de choisir sans le catalogue : un
+ * slug pour désigner, une famille pour ranger. Ni nom, ni prix, ni prose. Le
+ * pool est filtré côté serveur (disponible, en stock), si bien que le client
+ * n'a plus aucun jugement de vente à porter — seulement un tri.
+ */
+export interface CandidatSuggestion {
+  readonly slug: string;
+  readonly famille: Famille;
+}
+
+/**
+ * Les produits à proposer à côté d'un PANIER, au plus `combien`.
+ *
+ * ═══════════════════════════════════════════════════════════════════════════
+ *  LA MÊME ROUE, AMORCÉE AILLEURS
+ * ═══════════════════════════════════════════════════════════════════════════
+ *
+ * `suggestionsPourProduit` ouvre l'anneau après LE produit de la fiche. Ici il
+ * n'y a pas un produit mais un panier, et l'anneau s'ouvre après le DERNIER
+ * article ajouté — le signal d'intention le plus frais, celui qui dit le mieux
+ * ce que le visiteur est en train de composer. Un anneau ouvert après le
+ * premier article donnerait, sur un panier qui grandit, toujours les mêmes
+ * voisins : le rayon cesserait de suivre le client.
+ *
+ * DEUX EXCLUSIONS, ET LA SECONDE EST CELLE QUI COMPTE. Le produit courant était
+ * exclu par construction sur la fiche ; ici il faut exclure TOUT le panier, et
+ * c'est un filtre explicite — un tableau ne s'exclut pas par la géométrie d'un
+ * anneau. C'est le seul endroit où cette fonction est structurellement plus
+ * fragile que sa sœur, donc le seul qui demande un cas de test dédié.
+ *
+ * LE RANG SUIT LE PANIER, PAS LA FICHE. On préfère les familles DÉJÀ
+ * REPRÉSENTÉES au panier : quelqu'un qui a pris deux miels est en train de
+ * faire une commande de miels. C'est l'inverse du réflexe « proposer autre
+ * chose », et c'est ce que le professionnel décrivait — « des produits
+ * complémentaires pour augmenter les paniers moyens », pas un catalogue au
+ * hasard.
+ *
+ * TOTALE, comme sa sœur : elle rend moins que `combien` si le pool ne peut pas
+ * fournir, et rien du tout si tout le catalogue est déjà au panier — auquel cas
+ * l'appelant fait disparaître le bloc plutôt que d'afficher un titre vide.
+ */
+export function suggestionsPourEnsemble(
+  pool: readonly CandidatSuggestion[],
+  slugsAuPanier: readonly string[],
+  combien: number,
+): readonly CandidatSuggestion[] {
+  const dernier = slugsAuPanier.at(-1);
+  const position = dernier === undefined ? -1 : pool.findIndex((c) => c.slug === dernier);
+
+  /* Panier vide, ou dernier article absent du pool (retiré de la vente depuis
+     qu'il y est entré) : l'anneau s'ouvre au début, ce qui reste déterministe. */
+  const roue =
+    position === -1 ? [...pool] : [...pool.slice(position + 1), ...pool.slice(0, position + 1)];
+
+  const candidats = roue.filter((c) => !slugsAuPanier.includes(c.slug));
+
+  const famillesDuPanier = new Set(
+    pool.filter((c) => slugsAuPanier.includes(c.slug)).map((c) => c.famille),
+  );
+
+  const memeFamille = candidats.filter((c) => famillesDuPanier.has(c.famille));
+  const autres = candidats.filter((c) => !famillesDuPanier.has(c.famille));
 
   return [...memeFamille, ...autres].slice(0, Math.max(0, combien));
 }

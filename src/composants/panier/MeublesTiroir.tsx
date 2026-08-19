@@ -1,6 +1,4 @@
-import Link from 'next/link';
-
-import { Visuel } from '@/composants/illustrations/Visuel';
+import { CarteSuggestion } from '@/composants/panier/CarteSuggestion';
 import { LigneContact } from '@/composants/panier/LigneContact';
 import { CATALOGUE } from '@/donnees/catalogue';
 import { BAREMES } from '@/donnees/bareme-expedition';
@@ -52,22 +50,6 @@ import { LIBELLE_ZONE } from '@/lib/types';
  * vérifiable plutôt que promis.
  */
 
-/**
- * Le prix de base le plus bas — celui du catalogue VERSIONNÉ, jamais celui de
- * la surcouche marchand.
- *
- * `prixLePlusBasAffiche()` existe et honore la surcouche, mais elle vit dans
- * `catalogue-navigateur.ts` et attend l'état d'un visiteur : ce composant est
- * SERVEUR, il n'en a pas. L'écart est celui que D33 impose déjà au balisage
- * structuré — un robot d'indexation n'a pas de stockage local, une carte
- * prérendue non plus. Écrit ici plutôt que découvert plus tard.
- */
-function prixDeBase(produit: {
-  readonly variantes: readonly { readonly prixCentimes: number }[];
-}): number {
-  return Math.min(...produit.variantes.map((variante) => variante.prixCentimes));
-}
-
 const COMBIEN_DE_SUGGESTIONS = 2;
 
 export function MeublesTiroir({ slug }: { readonly slug: string }) {
@@ -84,30 +66,7 @@ export function MeublesTiroir({ slug }: { readonly slug: string }) {
           <ul className="mt-3 grid grid-cols-2 gap-3">
             {suggestions.map((produit) => (
               <li key={produit.slug}>
-                <Link
-                  href={`/boutique/${produit.slug}`}
-                  className="block no-underline"
-                  data-suggestion
-                >
-                  {produit.visuel === undefined ? null : (
-                    <Visuel
-                      slug={produit.slug}
-                      vue="principal"
-                      donnees={produit.visuel.principal}
-                      illustration={produit.illustration}
-                      alternative="decorative"
-                      largeurMaximale={320}
-                      sizes="8rem"
-                      className="block rounded-sm"
-                    />
-                  )}
-                  <p className="mt-2 font-titre text-titre leading-tight text-encre">
-                    {produit.nom}
-                  </p>
-                  <p className="registre mt-1 text-encre-douce">
-                    dès {formaterEuros(prixDeBase(produit))}
-                  </p>
-                </Link>
+                <CarteSuggestion produit={produit} />
               </li>
             ))}
           </ul>

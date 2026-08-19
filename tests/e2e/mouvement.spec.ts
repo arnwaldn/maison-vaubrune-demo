@@ -1890,3 +1890,89 @@ test('l’ambiance d’une carte revient aussi lentement qu’elle est venue', a
 
   expect(image).toBe(true);
 });
+
+/*
+ * ═══════════════════════════════════════════════════════════════════════════
+ *  LA MOLETTE DÉFILE LE TIROIR, ET NE DÉFILE QUE LUI (C24)
+ * ═══════════════════════════════════════════════════════════════════════════
+ *
+ * CE CAS N'EXISTE QUE DANS CE FICHIER, ET C'EST TOUT LE SUJET. Les six autres
+ * campagnes jouent sous `reducedMotion: 'reduce'` — Lenis n'y est jamais
+ * instancié, la molette y est donc native, et le défaut est invisible. Il a
+ * fallu qu'un humain ouvre le site publié pour le voir : « la molette de la
+ * souris n'interagit pas avec la fenêtre du panier, on est obligé de cliquer
+ * sur le rail à côté ».
+ *
+ * DEUX ASSERTIONS, PARCE QUE LE DÉFAUT ÉTAIT DOUBLE. Mesuré avant correctif,
+ * molette au centre du tiroir ouvert :
+ *
+ *   sans Lenis — tiroir +447 px, page IMMOBILE   (le natif est parfait)
+ *   avec Lenis — tiroir    0 px, page +592 px    (le delta part à la page)
+ *
+ * Le tiroir ne défilait pas, ET la page défilait derrière un dialogue MODAL,
+ * c'est-à-dire derrière un écran que la plateforme déclare inerte. Vérifier
+ * seulement le premier laisserait passer le second, qui est le plus gênant :
+ * on revient d'un tiroir sur une page qui a bougé sous lui.
+ *
+ * ON MESURE LE DÉPLACEMENT, PAS LA POSITION. La position de départ n'est pas
+ * zéro — Playwright a fait défiler la page pour atteindre le bouton d'ajout.
+ * Un cas écrit sur `toBe(0)` passerait ou échouerait selon la hauteur de la
+ * fenêtre, ce qui n'a rien à voir avec ce qu'il prétend prouver.
+ */
+test('la molette défile le tiroir d’ajout, et la page ne bouge pas derrière lui', async ({
+  page,
+}) => {
+  await ouvrir(page, FICHE);
+  await attendreMouvement(page);
+
+  /* Lenis doit être là : sans lui, ce cas ne prouve rien. */
+  await page.waitForFunction(() => document.documentElement.classList.contains('lenis'));
+
+  await page.getByRole('button', { name: 'Ajouter au panier' }).click();
+
+  const tiroir = page.locator('[data-tiroir-ajout]');
+  await expect(tiroir).toBeVisible();
+
+  /* Le tiroir doit VRAIMENT déborder, sinon il n'y a rien à faire défiler et
+     le cas rendrait vert sur un site cassé. */
+  const debordement = await tiroir.evaluate(
+    (noeud) => noeud.scrollHeight - noeud.clientHeight,
+  );
+
+  expect(
+    debordement,
+    'le tiroir ne déborde pas : ce cas ne mesurerait rien',
+  ).toBeGreaterThan(100);
+
+  const boite = await tiroir.boundingBox();
+
+  if (boite === null) {
+    throw new Error('le tiroir n’a pas de boîte');
+  }
+
+  const avant = await page.evaluate(() => ({
+    tiroir: document.querySelector('[data-tiroir-ajout]')?.scrollTop ?? -1,
+    page: window.scrollY,
+  }));
+
+  await page.mouse.move(boite.x + boite.width / 2, boite.y + boite.height / 2);
+  await page.mouse.wheel(0, 600);
+
+  /* Lenis anime : on attend l'immobilité plutôt qu'un délai écrit à la main. */
+  await page.waitForTimeout(600);
+
+  const apres = await page.evaluate(() => ({
+    tiroir: document.querySelector('[data-tiroir-ajout]')?.scrollTop ?? -1,
+    page: window.scrollY,
+  }));
+
+  expect(
+    apres.tiroir - avant.tiroir,
+    'la molette n’a pas fait défiler le tiroir — Lenis a repris le delta',
+  ).toBeGreaterThan(100);
+
+  expect(
+    apres.page,
+    'la page a défilé derrière un dialogue modal, qui est censé la rendre inerte',
+  ).toBe(avant.page);
+});

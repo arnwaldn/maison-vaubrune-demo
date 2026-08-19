@@ -98,6 +98,31 @@ export function TiroirAjout({
     <dialog
       ref={dialogue}
       data-tiroir-ajout
+      /* LA MOLETTE REND LE TIROIR À SON PROPRE DÉFILEMENT (C24).
+
+         Retour d'Arnaud sur le site publié : la molette ne faisait rien dans le
+         tiroir, il fallait attraper la barre de défilement à la souris.
+         Reproduit et mesuré, molette au centre du tiroir ouvert :
+
+           sans Lenis (mouvement réduit) — tiroir +447 px, page IMMOBILE
+           avec Lenis                    — tiroir 0 px,   page +592 px
+
+         Le comportement natif est donc parfait : `overscroll-behavior: contain`
+         retient déjà le débordement. Lenis écoute `wheel` sur `window` en
+         NON-PASSIF et appelle `preventDefault()` dès que le chemin composé de
+         l'événement ne traverse aucun élément marqué — et la couche supérieure
+         d'un `<dialog>` est un concept de RENDU, pas de position dans l'arbre :
+         le chemin remonte donc jusqu'à `window` comme pour n'importe quel nœud.
+
+         Aucune campagne ne pouvait le voir : les six autres jouent sous
+         `reducedMotion: 'reduce'`, où Lenis n'est jamais instancié. Seul le
+         projet `mouvement` le pouvait, et il n'avait pas de cas de molette.
+
+         LA RÈGLE CSS QUI ACCOMPAGNE CET ATTRIBUT EXISTAIT DÉJÀ, ORPHELINE —
+         `html.lenis [data-lenis-prevent] { overscroll-behavior: contain }` dans
+         `globals.css`, et aucun fichier du dépôt ne posait l'attribut. Le
+         mécanisme avait été préparé et jamais branché. */
+      data-lenis-prevent
       aria-labelledby={intitule}
       /* Le navigateur peut fermer sans que React le sache (Échap, clic sur le
          voile). Sans cet écouteur, l'état React resterait à « ouvert » et le
