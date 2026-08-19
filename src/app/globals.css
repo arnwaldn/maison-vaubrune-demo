@@ -922,15 +922,29 @@
    * c'est le plus grand des deux qui décide, et les retirer aurait été une
    * modification de contenu dans des pages que C16 doit reprendre.
    *
-   * 6,5 rem = la hauteur de l'en-tête (5 rem environ) plus une respiration.
+   * LA VALEUR CESSE D'ÊTRE ÉCRITE DEUX FOIS (C23).
    *
-   * La règle est bornée à `md` comme le collage lui-même : en dessous,
+   * Cette règle portait `6.5rem` EN DUR, et son commentaire annonçait « la
+   * hauteur de l'en-tête (5 rem environ) » alors que `--hauteur-entete` vaut
+   * 6 rem à cette largeur. Deux chiffres pour une même hauteur, et un
+   * commentaire faux entre les deux : exactement la double source de vérité
+   * que la variable a été créée pour empêcher en C15 — laquelle n'avait
+   * jamais été branchée ici. Elles ont donc coexisté depuis C15, d'accord par
+   * hasard (6 + 0,5 = 6,5), et rien n'aurait signalé le jour où l'une bouge.
+   *
+   * Le rendu est INCHANGÉ à l'octet près : `calc(6rem + 0.5rem)` = `6.5rem`.
+   * Ce qui change est qu'il n'y a plus qu'un nombre à corriger.
+   *
+   * La règle reste bornée à `md` comme le collage lui-même : en dessous,
    * l'en-tête défile avec la page et ne recouvre rien, donc réserver de la
    * place au-dessus des ancres coûterait un dixième de fenêtre pour rien.
+   * C'est cette borne — et elle seule — que la tranche qui rendra l'en-tête
+   * collant sur mobile devra retirer, sans quoi toutes les ancres des pages
+   * légales atterriront SOUS l'en-tête à 390 px.
    */
   @media (min-width: 48rem) {
     html {
-      scroll-padding-top: 6.5rem;
+      scroll-padding-top: calc(var(--hauteur-entete) + 0.5rem);
     }
   }
 
