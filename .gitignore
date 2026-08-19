@@ -209,6 +209,17 @@ preuves/c23/*
 !preuves/c23/*.mjs
 !preuves/c23/*.txt
 
+# TRANCHE C24 — les trois retours d Arnaud sur le site publie. Meme regle.
+#
+# Ce que ces scripts portent : la molette. Un defaut qu aucune des sept
+# campagnes ne pouvait voir, parce que six jouent sous mouvement reduit — ou
+# la bibliotheque de defilement adouci n existe pas — et que la septieme
+# n avait pas de cas de molette. Il a fallu qu un humain ouvre le site publie.
+!preuves/c24/
+preuves/c24/*
+!preuves/c24/*.mjs
+!preuves/c24/*.txt
+
 # Atelier des visuels (tranche C11, décision D35). Les sorties BRUTES des
 # moteurs d'images sont énormes, portent leurs métadonnées — dont le texte de
 # la consigne — et ne sont pas ce qu'on livre. Seul le résultat recadré,

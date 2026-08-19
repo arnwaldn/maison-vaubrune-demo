@@ -1,11 +1,15 @@
 import type { Metadata } from 'next';
+import type { ReactNode } from 'react';
 
 import { BlocTitre } from '@/composants/mise-en-page/BlocTitre';
 import { HerosIllustre } from '@/composants/mise-en-page/HerosIllustre';
 import { HEROS_PANIER } from '@/donnees/visuels-editoriaux';
+import { CarteSuggestion } from '@/composants/panier/CarteSuggestion';
 import { IlotPanier } from '@/composants/panier/IlotPanier';
 import { CATALOGUE } from '@/donnees/catalogue';
 import { projeterCatalogue } from '@/lib/panier/catalogue-panier';
+import type { CandidatSuggestion } from '@/lib/suggestions';
+import { estDisponible } from '@/lib/types';
 
 /**
  * LA PAGE PANIER — coquille serveur, contenu client.
@@ -56,6 +60,53 @@ export const metadata: Metadata = {
 
 const CATALOGUE_PANIER = projeterCatalogue(CATALOGUE);
 
+/**
+ * LES SUGGESTIONS DU PANIER — ce que le serveur peut préparer, et ce qu'il ne
+ * peut pas décider (C24).
+ *
+ * ═══════════════════════════════════════════════════════════════════════════
+ *  POURQUOI LE PATRON DU TIROIR NE SUFFIT PAS ICI
+ * ═══════════════════════════════════════════════════════════════════════════
+ *
+ * Sur la fiche produit, les suggestions ne dépendent que du produit de la page :
+ * le serveur les CHOISIT au build et n'en rend que deux. Sur cette page-ci, la
+ * sélection dépend du contenu du panier — qui vit dans le navigateur, et que
+ * cette route (`force-static`) ne connaîtra jamais au moment du rendu.
+ *
+ * Le serveur fait donc la moitié du chemin qui lui revient : il prépare LES
+ * QUINZE cartes, déjà rendues, et un POOL réduit à ce qui sert à choisir. Le
+ * client, lui, ne fait qu'un tri — il ne porte aucun jugement de vente, parce
+ * que le pool est déjà filtré (disponible, en stock) de ce côté-ci.
+ *
+ * CE QUE ÇA COÛTE, ET CE QUE ÇA NE COÛTE PAS. Environ 250 octets gzip par
+ * carte, soit ~3,7 Ko de HTML sur cette seule page — et ZÉRO octet de premier
+ * chargement, puisque rien de tout cela n'est du JavaScript. Surtout : une
+ * carte que le client n'affiche pas n'insère jamais son `<img>` dans le
+ * document, donc son AVIF n'est jamais demandé. On paie le texte de quinze
+ * candidates, les octets d'image de deux ou trois.
+ *
+ * L'alternative — élargir la projection pour y mettre les visuels — aurait fait
+ * entrer les chemins d'image dans le paquet JavaScript de toutes les pages qui
+ * affichent un panier, et fait naître une seconde fabrique de chemins. D17
+ * l'interdit, et C14/C15 ont payé trois fois le prix d'une deuxième vérité.
+ */
+const SUGGESTIONS_VENDABLES = CATALOGUE.filter(
+  (produit) =>
+    estDisponible(produit) && produit.variantes.some((variante) => variante.stock > 0),
+);
+
+const POOL_SUGGESTIONS: readonly CandidatSuggestion[] = SUGGESTIONS_VENDABLES.map((produit) => ({
+  slug: produit.slug,
+  famille: produit.famille,
+}));
+
+const CARTES_SUGGESTIONS: Record<string, ReactNode> = Object.fromEntries(
+  SUGGESTIONS_VENDABLES.map((produit) => [
+    produit.slug,
+    <CarteSuggestion key={produit.slug} produit={produit} />,
+  ]),
+);
+
 export default function PagePanier() {
   return (
     <div className="mx-auto max-w-page px-5 sm:px-8">
@@ -93,7 +144,11 @@ export default function PagePanier() {
         />
       </HerosIllustre>
 
-      <IlotPanier catalogue={CATALOGUE_PANIER} />
+      <IlotPanier
+        catalogue={CATALOGUE_PANIER}
+        poolSuggestions={POOL_SUGGESTIONS}
+        cartesSuggestions={CARTES_SUGGESTIONS}
+      />
     </div>
   );
 }

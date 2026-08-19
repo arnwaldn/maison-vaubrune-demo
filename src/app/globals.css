@@ -1999,17 +1999,6 @@
     text-wrap: balance;
   }
 
-  @media (prefers-reduced-motion: no-preference) {
-    .tuile-famille img {
-      transition: transform var(--ms-etat) var(--ease-verre);
-    }
-
-    .tuile-famille:hover img,
-    .tuile-famille:focus-visible img {
-      transform: scale(1.03);
-    }
-  }
-
   /*
    * LE FILET PREND LA COULEUR DE SA FAMILLE — et c'est ce qui garde un emploi à
    * `styleDeFamille()`. La page pose `--scheme-trait` sur chaque `<li>` depuis
@@ -3636,6 +3625,105 @@ html.lenis [data-lenis-prevent] {
 
   .menu-liste a {
     padding: 0;
+  }
+}
+
+
+/* ===========================================================================
+   LE SURVOL DES TUILES DE FAMILLE — HORS COUCHE (C24)
+   ===========================================================================
+
+   Retour d'Arnaud sur le site publié : « les images servant de lien sur les
+   sept familles manquent d'animation au passage de la souris ». Le
+   `scale(1.03)` en 320 ms livré en C23 était imperceptible — et le constat est
+   juste : ce n'est pas l'amplitude qui manquait d'abord, c'est la DURÉE. Un
+   geste de 320 ms sur une image de 300 points se lit comme un tressaillement ;
+   le même à 620 ms se lit comme une matière qui s'approche.
+
+   TROIS GESTES QUI PARTENT ENSEMBLE ET N'ARRIVENT PAS ENSEMBLE. C'est ce
+   décalage qui fait la richesse, pas le nombre d'effets :
+
+     l'image     620 ms  (--ms-revele)     scale(1.06)
+     le nom      180 ms  (--ms-effleure)   translateY(-100%)
+     le compte   320 ms  (--ms-etat)       translateY(-0.15rem) + opacité
+     le voile    320 ms  (--ms-etat)       opacité
+
+   LE NOM ROULE, ET C'EST LE GESTE DE L'EN-TÊTE. `lien-nav-ligne` fait
+   exactement cela depuis C13 : deux copies du libellé, la seconde posée une
+   ligne plus bas dans une fenêtre à `overflow: hidden`, et la paire translate
+   d'une hauteur de ligne au survol. On ne l'importe pas de l'extérieur — on le
+   réemploie, pour que les tuiles parlent la même langue que la navigation.
+
+   DEUX DIFFÉRENCES AVEC L'EN-TÊTE, ET ELLES SONT DICTÉES PAR LE CONTEXTE :
+   la fenêtre est calée sur `--text-titre` et non `--text-label` (le nom d'une
+   famille est une didone, pas une étiquette), et elle accepte DEUX LIGNES —
+   « Miels et confitures » et « Conserves salées » n'en tiennent pas une seule à
+   169 points. D'où `2lh` plutôt qu'`1em` : la hauteur suit le nombre de lignes
+   réel, et le roulement reste juste quel que soit le libellé.
+
+   TOUT VIT SOUS `no-preference`, ET L'ÉTAT DE REPOS EST L'ÉTAT COMPLET. Sans
+   JavaScript, sous mouvement réduit, ou si la feuille ne charge pas : les sept
+   tuiles sont là, entières, lisibles. Aucune révélation, aucun état masqué
+   persistant — D37 § 3.
+
+   HORS COUCHE, comme le reste du bloc des tuiles : l'image porte les
+   utilitaires `block h-full w-full object-cover` posés par `<Visuel>`, et une
+   règle de `components` perdrait contre eux (anti-patron n° 21, déjà payé
+   quatre fois par ce dépôt).
+   =========================================================================== */
+
+/* La fenêtre du roulement : deux lignes au plus, et rien ne dépasse. */
+.tuile-nom {
+  display: block;
+  position: relative;
+  overflow: hidden;
+  height: calc(2lh);
+}
+
+.tuile-nom-ligne {
+  display: block;
+}
+
+/* La copie, posée exactement une fenêtre plus bas — hors de vue. */
+.tuile-nom-ligne + .tuile-nom-ligne {
+  position: absolute;
+  top: 100%;
+  left: 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .tuile-famille img {
+    transition: transform var(--ms-revele) var(--ease-coule);
+  }
+
+  .tuile-nom-ligne {
+    transition: transform var(--ms-effleure) var(--ease-coule);
+  }
+
+  .tuile-compte {
+    transition:
+      transform var(--ms-etat) var(--ease-verre),
+      opacity var(--ms-etat) var(--ease-verre);
+  }
+
+  .tuile-cartouche {
+    transition: opacity var(--ms-etat) var(--ease-verre);
+  }
+
+  .tuile-famille:hover img,
+  .tuile-famille:focus-visible img {
+    transform: scale(1.06);
+  }
+
+  .tuile-famille:hover .tuile-nom-ligne,
+  .tuile-famille:focus-visible .tuile-nom-ligne {
+    transform: translateY(-100%);
+  }
+
+  .tuile-famille:hover .tuile-compte,
+  .tuile-famille:focus-visible .tuile-compte {
+    transform: translateY(-0.15rem);
+    opacity: 0.72;
   }
 }
 

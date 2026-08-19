@@ -340,11 +340,37 @@ export default function PageAccueil() {
                       : '(min-width: 90rem) 20rem, (min-width: 40rem) 22vw, calc(50vw - 1.6rem)'
                   }
                 />
+                {/* LE NOM ROULE, COMME LES LIENS DE L'EN-TÊTE (C24).
+
+                    Retour d'Arnaud sur le site publié : « les images servant de
+                    lien sur les sept familles manquent d'animation au passage de
+                    la souris ». Le zoom de 3 % livré en C23 était imperceptible —
+                    constat partagé.
+
+                    Le geste retenu n'est pas emprunté ailleurs : c'est CELUI DE
+                    L'EN-TÊTE, où les trois destinations roulent depuis C13
+                    (`lien-nav-fenetre` / `lien-nav-ligne`, deux copies empilées,
+                    la seconde posée exactement une ligne plus bas, hors d'une
+                    fenêtre à `overflow: hidden`). Il se trouve que c'est aussi un
+                    classique du genre — mais surtout, il fait parler les tuiles
+                    la même langue que la navigation, ce qu'aucun effet importé
+                    n'aurait fait.
+
+                    La copie est `aria-hidden` : sans quoi le nom accessible du
+                    lien porterait deux fois « Huiles et vinaigres ». C'est déjà
+                    la précaution de l'en-tête, pour la raison écrite là-bas —
+                    Chrome inclut le contenu des pseudo-éléments dans le nom
+                    accessible, donc la copie doit être un vrai nœud, masqué. */}
                 <span className="tuile-cartouche">
-                  <span className="font-titre text-titre text-coquille">
-                    {LIBELLE_FAMILLE[entree.famille]}
+                  <span className="tuile-nom font-titre text-titre text-coquille">
+                    <span className="tuile-nom-ligne">
+                      {LIBELLE_FAMILLE[entree.famille]}
+                    </span>
+                    <span className="tuile-nom-ligne" aria-hidden="true">
+                      {LIBELLE_FAMILLE[entree.famille]}
+                    </span>
                   </span>
-                  <span className="etiquette text-coquille tabular-nums">
+                  <span className="tuile-compte etiquette text-coquille tabular-nums">
                     {String(entree.nombre).padStart(2, '0')}
                   </span>
                 </span>
