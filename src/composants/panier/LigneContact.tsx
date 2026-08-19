@@ -35,7 +35,7 @@ import Link from 'next/link';
 export function LigneContact() {
   return (
     <p className="registre text-encre-douce">
-      Une question ?{' '}
+      Une question&nbsp;?{' '}
       <Link
         href="/mentions-legales#contact"
         className="underline decoration-filet decoration-2 underline-offset-4 hover:text-terre hover:decoration-terre"

@@ -6,6 +6,7 @@ import { Silhouette } from '@/composants/illustrations/Silhouette';
 import { Visuel } from '@/composants/illustrations/Visuel';
 import { LigneEntree } from '@/composants/mise-en-page/BlocTitre';
 import { DonneesStructurees } from '@/composants/mise-en-page/DonneesStructurees';
+import { BlocReassurance } from '@/composants/panier/BlocReassurance';
 import { BoutonAjouter } from '@/composants/panier/BoutonAjouter';
 import { MeublesTiroir } from '@/composants/panier/MeublesTiroir';
 import {
@@ -369,6 +370,21 @@ export default async function PageProduit({ params }: ProprietesPage) {
               meubles={<MeublesTiroir slug={produit.slug} />}
               prix={prixDepuisCatalogue(projeterCatalogue(CATALOGUE))}
             />
+
+            {/* LA RÉASSURANCE SE LIT AVANT LE CLIC, PAS APRÈS (C25).
+
+                Elle vivait dans le tiroir depuis C23 — c'est-à-dire APRÈS
+                l'ajout, sur un écran de passage qui disparaît au clic suivant.
+                Or la remarque du professionnel disait « au niveau de la fiche
+                produit », et c'est le bon endroit : on hésite DEVANT le bouton,
+                pas après l'avoir cliqué. Vérifié sur le site publié avant
+                correction — la fiche n'en portait aucune trace.
+
+                Elle est DANS le bloc d'achat, donc sous le même
+                `data-bloc-achat` : la feuille d'impression le masque, et trois
+                garanties commerciales sur un PDF de fiche produit seraient
+                exactement ce que ce marqueur existe pour retirer. */}
+            <BlocReassurance avecContact className="mt-6 border-t border-filet pt-4" />
           </div>
         </aside>
 

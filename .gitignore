@@ -220,6 +220,11 @@ preuves/c24/*
 !preuves/c24/*.mjs
 !preuves/c24/*.txt
 
+!preuves/c25/
+preuves/c25/*
+!preuves/c25/*.mjs
+!preuves/c25/*.txt
+
 # Atelier des visuels (tranche C11, décision D35). Les sorties BRUTES des
 # moteurs d'images sont énormes, portent leurs métadonnées — dont le texte de
 # la consigne — et ne sont pas ce qu'on livre. Seul le résultat recadré,
