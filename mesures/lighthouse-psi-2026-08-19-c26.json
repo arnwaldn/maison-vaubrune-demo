@@ -1,0 +1,131 @@
+{
+  "date": "2026-08-19",
+  "lighthouseVersion": "13.4.1",
+  "profil": {
+    "appareil": "mobile",
+    "bridage": "profil par défaut de Lighthouse (mobile émulé, réseau et processeur bridés)",
+    "origine": "déploiement de production, mesuré depuis Internet (https://maison-vaubrune-demo.vercel.app)",
+    "horsLigne": false,
+    "mesurePar": "PageSpeed Insights (Lighthouse exécuté sur l’infrastructure de Google)"
+  },
+  "seuils": {
+    "performance": 90,
+    "accessibility": 100,
+    "seo": 96,
+    "best-practices": 100
+  },
+  "pages": [
+    {
+      "chemin": "/",
+      "intitule": "Accueil",
+      "notes": {
+        "performance": 97,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "mesures": {
+        "premierAffichage": {
+          "valeur": 901,
+          "affichage": "0.9 s"
+        },
+        "plusGrandAffichage": {
+          "valeur": 2420,
+          "affichage": "2.4 s"
+        },
+        "tempsDeBlocage": {
+          "valeur": 98,
+          "affichage": "100 ms"
+        },
+        "decalageCumule": {
+          "valeur": 0,
+          "affichage": "0"
+        }
+      }
+    },
+    {
+      "chemin": "/boutique",
+      "intitule": "Rayon",
+      "notes": {
+        "performance": 96,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "mesures": {
+        "premierAffichage": {
+          "valeur": 969,
+          "affichage": "1.0 s"
+        },
+        "plusGrandAffichage": {
+          "valeur": 2701,
+          "affichage": "2.7 s"
+        },
+        "tempsDeBlocage": {
+          "valeur": 108,
+          "affichage": "110 ms"
+        },
+        "decalageCumule": {
+          "valeur": 0,
+          "affichage": "0"
+        }
+      }
+    },
+    {
+      "chemin": "/boutique/huile-olive-premiere-pression",
+      "intitule": "Fiche huile d’olive",
+      "notes": {
+        "performance": 98,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "mesures": {
+        "premierAffichage": {
+          "valeur": 1223,
+          "affichage": "1.2 s"
+        },
+        "plusGrandAffichage": {
+          "valeur": 2401,
+          "affichage": "2.4 s"
+        },
+        "tempsDeBlocage": {
+          "valeur": 0,
+          "affichage": "0 ms"
+        },
+        "decalageCumule": {
+          "valeur": 0,
+          "affichage": "0"
+        }
+      }
+    },
+    {
+      "chemin": "/panier",
+      "intitule": "Panier",
+      "notes": {
+        "performance": 98,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "mesures": {
+        "premierAffichage": {
+          "valeur": 901.5,
+          "affichage": "0.9 s"
+        },
+        "plusGrandAffichage": {
+          "valeur": 2401.5,
+          "affichage": "2.4 s"
+        },
+        "tempsDeBlocage": {
+          "valeur": 1,
+          "affichage": "0 ms"
+        },
+        "decalageCumule": {
+          "valeur": 0,
+          "affichage": "0"
+        }
+      }
+    }
+  ]
+}

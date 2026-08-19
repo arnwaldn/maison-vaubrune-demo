@@ -61,6 +61,7 @@
  *
  * Usage : `node scripts/mesurer-notes.mjs [--date AAAA-MM-JJ] [--suffixe c14] [--port 4310]`
  *         `node scripts/mesurer-notes.mjs --base https://exemple.vercel.app`
+ *         `node scripts/mesurer-notes.mjs --base https://… --psi`
  */
 
 import { spawn } from 'node:child_process';
@@ -214,6 +215,84 @@ const DATE = lireOption('--date', JOUR_PARIS.format(new Date()));
  * part dans un fichier séparé.
  */
 const BASE_DISTANTE = lireOption('--base', null);
+
+/**
+ * ═══════════════════════════════════════════════════════════════════════════
+ *  `--psi` — MESURER AILLEURS QUE SUR CETTE MACHINE
+ * ═══════════════════════════════════════════════════════════════════════════
+ *
+ * Lighthouse mesure là où il tourne. Sur un poste de travail qui porte une
+ * session ouverte, il mesure donc la charge du poste autant que le site : le
+ * 19/08, deux tirages CONSÉCUTIFS contre la même production ont rendu 90 puis
+ * 71 sur l'accueil, et l'effondrement frappait les quatre pages également —
+ * signature d'une machine occupée, jamais d'une régression, qui frapperait la
+ * page modifiée.
+ *
+ * Le harnais exige « zéro node avant la mesure ». Cette exigence est
+ * INTENABLE ici : l'agent qui conduit la recette est lui-même un process node,
+ * et il ne peut pas se tuer pour se mesurer.
+ *
+ * `--psi` délègue donc la mesure à PageSpeed Insights, qui exécute Lighthouse
+ * sur l'infrastructure de Google. Le résultat ne dépend plus de ce poste. Les
+ * mêmes URL, les mêmes seuils, le même relevé — seule la MACHINE change, et
+ * c'est précisément la variable qu'on cherchait à retirer.
+ *
+ * Contrainte : la page doit être PUBLIQUE (Google doit pouvoir l'atteindre),
+ * donc `--psi` exige `--base`. Une mesure locale reste possible sans lui, en
+ * sachant ce qu'elle vaut.
+ *
+ * LA CLÉ vient de l'environnement, jamais d'un fichier du dépôt : elle est
+ * posée en variable UTILISATEUR de Windows, hors de l'arborescence, donc hors
+ * du miroir de sauvegarde. Sans clé, l'API répond quand même — mais son quota
+ * anonyme est par ADRESSE IP et s'épuise en une journée d'essais.
+ */
+const PSI = process.argv.includes('--psi');
+const CLE_PSI = process.env.PAGESPEED_API_KEY ?? null;
+
+if (PSI && BASE_DISTANTE === null) {
+  throw new Error(
+    '--psi mesure depuis les serveurs de Google : la page doit être publique. ' +
+      'Ajoutez --base https://… (une adresse locale leur est inatteignable).',
+  );
+}
+
+/**
+ * Un rapport Lighthouse obtenu par l'API PageSpeed Insights.
+ *
+ * `lighthouseResult` a EXACTEMENT la forme d'un rapport local — mêmes
+ * `categories`, mêmes `audits`, même `lighthouseVersion` —, ce qui est la
+ * raison pour laquelle ce mode tient en quelques lignes : tout ce qui lit un
+ * rapport en aval continue de fonctionner sans le savoir.
+ */
+async function mesurerParPSI(adresse) {
+  const parametres = new URLSearchParams({ url: adresse, strategy: 'mobile' });
+  for (const { clef } of CATEGORIES) {
+    parametres.append('category', clef);
+  }
+  if (CLE_PSI !== null) {
+    parametres.set('key', CLE_PSI);
+  }
+
+  const reponse = await fetch(
+    `https://www.googleapis.com/pagespeedonline/v5/runPagespeed?${parametres.toString()}`,
+  );
+  const charge = await reponse.json();
+
+  if (charge.error !== undefined) {
+    const motif =
+      charge.error.code === 429
+        ? 'quota épuisé — avec une clé, il est de 25 000 requêtes par jour ; ' +
+          'sans clé, il est partagé par adresse IP et beaucoup plus bas'
+        : charge.error.message;
+    throw new Error(`PageSpeed a refusé ${adresse} (${String(charge.error.code)}) : ${motif}`);
+  }
+
+  if (charge.lighthouseResult === undefined) {
+    throw new Error(`PageSpeed n'a rendu aucun rapport pour ${adresse}`);
+  }
+
+  return charge.lighthouseResult;
+}
 
 /**
  * LE SUFFIXE DE TRANCHE — `--suffixe c14` écrit `lighthouse-<date>-c14.json`.
@@ -475,9 +554,15 @@ async function principal() {
       const adresse = `${service.base}${chemin}`;
 
       console.log(`  ${intitule} (${chemin})…`);
-      await lancerLighthouse(adresse, fichierRapport, navigateur);
 
-      const rapport = JSON.parse(readFileSync(fichierRapport, 'utf8'));
+      let rapport;
+
+      if (PSI) {
+        rapport = await mesurerParPSI(adresse);
+      } else {
+        await lancerLighthouse(adresse, fichierRapport, navigateur);
+        rapport = JSON.parse(readFileSync(fichierRapport, 'utf8'));
+      }
       versionLighthouse = rapport.lighthouseVersion ?? versionLighthouse;
 
       const notes = {};
@@ -519,6 +604,12 @@ async function principal() {
             ? 'construction de production servie en local (next start)'
             : `déploiement de production, mesuré depuis Internet (${service.base})`,
         horsLigne: BASE_DISTANTE === null,
+        /* CE QUI SÉPARE VRAIMENT DEUX RELEVÉS : la machine qui a mesuré. Deux
+           fichiers voisins seraient indiscernables sans ce champ, alors qu'ils
+           ne valent pas la même chose — l'un porte la charge de ce poste. */
+        mesurePar: PSI
+          ? 'PageSpeed Insights (Lighthouse exécuté sur l’infrastructure de Google)'
+          : 'Lighthouse local, donc sensible à la charge de ce poste',
       },
       seuils: SEUILS,
       pages,
@@ -527,8 +618,9 @@ async function principal() {
     mkdirSync(DOSSIER_MESURES, { recursive: true });
 
     const marque = SUFFIXE === null ? '' : `-${SUFFIXE}`;
-    const nomFichier =
-      BASE_DISTANTE === null
+    const nomFichier = PSI
+      ? `lighthouse-psi-${DATE}${marque}.json`
+      : BASE_DISTANTE === null
         ? `lighthouse-${DATE}${marque}.json`
         : `lighthouse-en-ligne-${DATE}${marque}.json`;
     writeFileSync(
