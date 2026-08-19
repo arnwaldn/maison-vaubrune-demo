@@ -1,6 +1,12 @@
 import { expect, test, type Page } from '@playwright/test';
 
-import { attendrePage, euros, lienNavigation, ouvrir, pastillePanier } from './aides';
+import {
+  attendrePage,
+  cliquerNavigation,
+  euros,
+  ouvrir,
+  pastillePanier,
+} from './aides';
 
 /**
  * LE PARCOURS FUMIGATOIRE — une seule histoire, racontée en entier.
@@ -112,7 +118,7 @@ async function ouvrirFicheDepuisLeRayon(
   nom: string,
   chemin: string,
 ): Promise<void> {
-  await lienNavigation(page, 'Boutique').click();
+  await cliquerNavigation(page, 'Boutique');
   await page.waitForURL((url) => url.pathname === '/boutique');
   await expect(page.getByRole('heading', { level: 1, name: 'Boutique' })).toBeVisible();
 
