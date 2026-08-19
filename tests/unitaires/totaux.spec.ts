@@ -4,12 +4,13 @@ import { CATALOGUE } from '@/donnees/catalogue';
 import {
   nombreDePiecesAChoisir,
   projeterCatalogue,
+  prixDepuisCatalogue,
   stocksDepuisCatalogue,
   trouverArticle,
   unionAllergenes,
 } from '@/lib/panier/catalogue-panier';
 import type { LignePanier } from '@/lib/panier/reducteur';
-import { calculerTotaux } from '@/lib/panier/totaux';
+import { calculerTotaux, sousTotalDesLignes } from '@/lib/panier/totaux';
 import type { Produit } from '@/lib/types';
 
 /**
@@ -380,5 +381,72 @@ describe('calculerTotaux', () => {
       });
       expect(totaux.totalCentimes).toBeNull();
     });
+  });
+});
+
+/*
+ * LA SOMME EXTRAITE (C23) — et l'invariant qui justifie l'extraction.
+ *
+ * Le tiroir d'ajout au panier affiche un sous-total. Il aurait pu refaire
+ * l'addition de son côté : elle tient en une ligne, et c'est exactement pour
+ * cela qu'elle aurait divergé un jour. Le dernier cas de ce bloc est celui qui
+ * compte — il vérifie que les DEUX chemins rendent le même nombre.
+ */
+describe('sousTotalDesLignes', () => {
+  const catalogue = projeterCatalogue(CATALOGUE);
+  const prix = prixDepuisCatalogue(catalogue);
+  const premier = catalogue[0];
+  const second = catalogue[1];
+
+  if (premier === undefined || second === undefined) {
+    throw new Error('catalogue trop court pour ces cas');
+  }
+
+  it('additionne prix × quantité sur chaque ligne', () => {
+    const lignes: LignePanier[] = [
+      { sku: premier.sku, quantite: 3 },
+      { sku: second.sku, quantite: 2 },
+    ];
+
+    expect(sousTotalDesLignes(lignes, prix)).toBe(
+      premier.prixCentimes * 3 + second.prixCentimes * 2,
+    );
+  });
+
+  it('rend zéro sur un panier vide', () => {
+    expect(sousTotalDesLignes([], prix)).toBe(0);
+  });
+
+  it('IGNORE une ligne dont la référence est inconnue, sans jeter', () => {
+    const lignes: LignePanier[] = [
+      { sku: premier.sku, quantite: 1 },
+      { sku: 'MV-REFERENCE-RETIREE', quantite: 4 },
+    ];
+
+    expect(sousTotalDesLignes(lignes, prix)).toBe(premier.prixCentimes);
+  });
+
+  it('rend EXACTEMENT ce que calculerTotaux annonce — l’invariant de source unique', () => {
+    const lignes: LignePanier[] = [
+      { sku: premier.sku, quantite: 2 },
+      { sku: second.sku, quantite: 1 },
+    ];
+
+    expect(sousTotalDesLignes(lignes, prix)).toBe(
+      calculerTotaux(lignes, catalogue, 'metropole').sousTotalCentimes,
+    );
+  });
+});
+
+describe('prixDepuisCatalogue', () => {
+  it('rend une paire par référence, au prix du catalogue versionné', () => {
+    const catalogue = projeterCatalogue(CATALOGUE);
+    const prix = prixDepuisCatalogue(catalogue);
+
+    expect(Object.keys(prix)).toHaveLength(catalogue.length);
+
+    for (const article of catalogue) {
+      expect(prix[article.sku]).toBe(article.prixCentimes);
+    }
   });
 });

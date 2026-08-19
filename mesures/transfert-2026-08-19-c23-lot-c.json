@@ -1,0 +1,61 @@
+{
+  "date": "2026-08-19",
+  "origine": "construction de production servie en local (next start)",
+  "methode": "performance.getEntriesByType(\"resource\").transferSize — octets réseau, en-têtes compris, zéro pour une ressource servie par le cache",
+  "plafonds": {
+    "chargementKo": 145,
+    "parcoursKo": 190
+  },
+  "aFroid": [
+    {
+      "chemin": "/",
+      "intitule": "Accueil",
+      "javascriptKo": 135.53,
+      "fichiers": 16,
+      "toutesRessourcesKo": 834.91
+    },
+    {
+      "chemin": "/boutique/huile-olive-premiere-pression",
+      "intitule": "Fiche huile d’olive",
+      "javascriptKo": 138.54,
+      "fichiers": 17,
+      "toutesRessourcesKo": 350.14
+    },
+    {
+      "chemin": "/panier",
+      "intitule": "Panier",
+      "javascriptKo": 129.92,
+      "fichiers": 15,
+      "toutesRessourcesKo": 770.42
+    }
+  ],
+  "parcours": {
+    "etapes": [
+      {
+        "chemin": "/",
+        "intitule": "Accueil",
+        "javascriptKo": 135.53,
+        "cumulKo": 135.53
+      },
+      {
+        "chemin": "/boutique",
+        "intitule": "Rayon",
+        "javascriptKo": 3.01,
+        "cumulKo": 138.54
+      },
+      {
+        "chemin": "/boutique/huile-olive-premiere-pression",
+        "intitule": "Fiche huile d’olive",
+        "javascriptKo": 0,
+        "cumulKo": 138.54
+      },
+      {
+        "chemin": "/panier",
+        "intitule": "Panier",
+        "javascriptKo": 0,
+        "cumulKo": 138.54
+      }
+    ],
+    "cumulKo": 138.54
+  }
+}

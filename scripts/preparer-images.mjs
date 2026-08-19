@@ -173,7 +173,7 @@ const LARGEURS = {
      la sert à deux fois la densité ; 1440 avait été produite d'abord et ne
      servait rien — sept familles, deux formats, presque un mégaoctet de dépôt
      pour des fichiers qu'aucun `sizes` ne demande. Retirée. */
-  macro: [640, 1024],
+  macro: [320, 640, 1024],
   /* Le héros, lui, est PLEINE LARGEUR : 1440 le sert vraiment. */
   hero: [640, 1024, 1440],
   /* AJOUTÉES EN C19-ter (retours client 14 et 17).

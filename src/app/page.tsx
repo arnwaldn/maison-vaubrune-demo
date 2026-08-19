@@ -4,11 +4,12 @@ import Link from 'next/link';
 import { EncartFiction } from '@/composants/demonstration/EncartFiction';
 import { VideoHeros } from '@/composants/illustrations/VideoHeros';
 import { Visuel } from '@/composants/illustrations/Visuel';
-import { CATALOGUE } from '@/donnees/catalogue';
+import { CarteProduit } from '@/composants/boutique/CarteProduit';
+import { CATALOGUE, PRODUITS_MIS_EN_AVANT } from '@/donnees/catalogue';
 import { marchand } from '@/donnees/marchand';
 import { URL_SITE } from '@/donnees/site';
-import { CLEF_ACCUEIL, HEROS_ACCUEIL } from '@/donnees/visuels-editoriaux';
-import { fondImage, styleDeFamille } from '@/lib/vitrine';
+import { CLEF_ACCUEIL, HEROS_ACCUEIL, MACROS_FAMILLE } from '@/donnees/visuels-editoriaux';
+import { styleDeFamille } from '@/lib/vitrine';
 import { FAMILLES, LIBELLE_FAMILLE } from '@/lib/types';
 
 export const metadata: Metadata = {
@@ -279,70 +280,138 @@ export default function PageAccueil() {
           </p>
         </div>
 
-        <div className="mt-8 grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,30rem)] lg:gap-x-14">
-          <ul className="min-w-0 border-t border-filet">
-            {/* SEPT FAMILLES POUR SIX RANGS DE CASCADE : les deux dernières
-                partagent le sixième. C'est exactement ce que le plafond de D37
-                décrit — au-delà de six, on ne fait plus attendre, on aligne. */}
-            {RANGEE.map((entree) => (
-              <li
-                key={entree.famille}
-                data-revelation
-                data-revelation-retard={Math.min(entree.rang, 6)}
-                style={styleDeFamille(entree.famille)}
+        {/* LES SEPT FAMILLES SE VOIENT, SANS QU'ON AIT RIEN À SURVOLER (C23).
+
+            CE QUI ÉTAIT LÀ, ET POURQUOI ÇA NE POUVAIT PAS MARCHER. Les macros
+            montaient dans un cadre d'aperçu unique, au survol du nom, par un
+            `:has()` en CSS pur — un mécanisme élégant et mesuré, qui ne coûtait
+            rien à qui ne survolait pas. Mais le cadre portait `hidden lg:block`,
+            donc en deçà de 64 rem il était en `display: none` et AUCUNE image
+            n'était jamais demandée. Pas « pas de survol sur téléphone » : zéro
+            image sur tout écran sous 1 024 px, quel que soit le geste. Sept noms
+            de famille en texte nu, et un professionnel du commerce en ligne qui
+            écrit « d'un œil on ne comprend pas ce que fait la marque ».
+
+            LA GRILLE NE LAISSE JAMAIS D'ORPHELIN, ET C'EST CE QUI FIXE SA FORME.
+            Sept tuiles, c'est un nombre premier — toute grille régulière laisse
+            un trou. La première occupe DEUX colonnes : il reste six tuiles, donc
+            trois rangs pleins à deux colonnes et un rang et demi à quatre. Deux
+            paliers suffisent, et le remplissage est exact aux deux.
+
+            LE BRIDAGE EST ASYMÉTRIQUE, ET C'EST LUI QUI TIENT LE BUDGET. Les six
+            petites tuiles sont servies en 320 (`largeurMaximale`), la première en
+            1024 — elle est deux fois plus large, et se trouve être la plus légère
+            des sept (3,7 Ko contre 10,9 pour les infusions). Sans bridage, un
+            écran dense demanderait 131,7 Ko ; avec, ~60 Ko sur TOUS les profils.
+            C'est la leçon de C15 rejouée : le plafond cesse d'être une propriété
+            de l'appareil qui mesure. Prix assumé, écrit plutôt que tu — sur un
+            bureau à densité 2, les six petites tuiles sont adoucies d'un facteur
+            2, exactement l'échange que C15 a consenti pour les vignettes du
+            rayon, et sur des macros, qui sont floues par nature.
+
+            LE LIBELLÉ EST EN SURIMPRESSION, PAS SOUS LA TUILE. Ce n'est pas un
+            parti pris graphique : un libellé dans le flux, rendu en registre
+            mono, change de nombre de lignes à l'arrivée des polices et fait
+            refluer sept tuiles d'un coup. Hors du flux, il ne peut pas. C'est le
+            correctif de C13 appliqué d'avance plutôt que mesuré après. */}
+        <ul className="tuiles-familles mt-8">
+          {RANGEE.map((entree) => (
+            <li
+              key={entree.famille}
+              data-revelation
+              data-revelation-retard={Math.min(entree.rang, 6)}
+              style={styleDeFamille(entree.famille)}
+            >
+              <Link
+                href={`/boutique#rayon-${entree.famille}`}
+                className="tuile-famille no-underline"
               >
-                <Link
-                  href={`/boutique#rayon-${entree.famille}`}
-                  className={`famille-${String(entree.rang)} flex items-baseline justify-between gap-4 border-b border-filet py-4 no-underline`}
-                >
-                  <span className="font-titre text-titre text-encre">
+                <Visuel
+                  slug={entree.famille}
+                  racine="editorial"
+                  vue="macro"
+                  donnees={MACROS_FAMILLE[entree.famille]}
+                  alternative="decorative"
+                  arrierePlan
+                  largeurMaximale={entree.rang === 1 ? 640 : 320}
+                  sizes={
+                    entree.rang === 1
+                      ? '(min-width: 90rem) 42rem, (min-width: 40rem) 46vw, calc(100vw - 2.5rem)'
+                      : '(min-width: 90rem) 20rem, (min-width: 40rem) 22vw, calc(50vw - 1.6rem)'
+                  }
+                />
+                <span className="tuile-cartouche">
+                  <span className="font-titre text-titre text-coquille">
                     {LIBELLE_FAMILLE[entree.famille]}
                   </span>
-                  <span className="etiquette text-encre tabular-nums">
+                  <span className="etiquette text-coquille tabular-nums">
                     {String(entree.nombre).padStart(2, '0')}
                   </span>
-                </Link>
-              </li>
-            ))}
-          </ul>
-
-          {/* LE CADRE SUIT LE REGARD (retour client 13, C19-ter).
-              « Les changements de macro au survol se font trop haut pour être
-              vus quand on descend la liste » : le cadre était posé en tête de
-              colonne et la liste des sept familles fait deux fois sa hauteur,
-              si bien que le survol de la sixième ou de la septième déclenchait
-              un fondu croisé hors de vue. Il COLLE désormais sous l'en-tête.
-
-              `position` est posée dans `globals.css`, JAMAIS par un utilitaire,
-              et l'utilitaire `relative` a été RETIRÉ d'ici : la couche
-              `utilities` bat `components`, un `relative` laissé en place aurait
-              gagné contre la règle collante et celle-ci n'aurait jamais rien
-              fait — l'anti-patron n° 21 de D37 dans sa forme exacte. C'est la
-              même faute que ce dépôt a déjà payée trois fois. `.apercu-cadre`
-              porte donc les DEUX états, dans la même couche : `relative` en
-              deçà de `lg`, `sticky` au-delà. Les couches d'aperçu, qui sont en
-              `position: absolute`, gardent leur repère dans les deux cas —
-              `sticky` positionne l'élément tout autant que `relative`. */}
-          <div
-            aria-hidden="true"
-            className="apercu-cadre hidden aspect-[16/9] overflow-hidden rounded-sm border border-filet bg-papier lg:block"
-          >
-            {RANGEE.map((entree) => (
-              <span
-                key={entree.famille}
-                className={`apercu-famille apercu-${String(entree.rang)}${
-                  entree.rang === 1 ? ' apercu-defaut' : ''
-                }`}
-                style={
-                  {
-                    '--macro': fondImage('editorial', entree.famille, 'macro', 1024),
-                  } as React.CSSProperties
-                }
-              />
-            ))}
-          </div>
-        </div>
+                </span>
+              </Link>
+            </li>
+          ))}
+        </ul>
       </section>
+      {/* LA SÉLECTION — un rail, et pas un carrousel (C23).
+
+          « Faudrait direct mettre un carrousel produits » : le retour est juste,
+          la réponse ne l'est qu'à une condition. La note de rapidité de cette
+          page est déjà tombée à 86 pour un plancher de 90, et ce n'est PAS le
+          plus grand affichage qui pèche — il est stable à 2,6-3,1 s sur cinq
+          relevés — c'est le TEMPS DE BLOCAGE, qui va de 54 à 461 ms. Un
+          carrousel hydraté ajouterait du travail de fil principal sur la seule
+          page du site dont la note est déjà passée sous son seuil. D'où : zéro
+          dépendance, zéro octet de JavaScript, un rail à `scroll-snap`.
+
+          CE N'EST NI UN BANDEAU AUTO-LU NI UN DÉTOURNEMENT DE DÉFILEMENT, les
+          deux interdits qui gardent cette page. Rien ne bouge sans le doigt, et
+          l'accrochage porte sur l'axe X — celui que le visiteur pilote déjà
+          dans ce conteneur. Le défilement vertical n'est pas touché. Un bandeau
+          auto-défilant a d'ailleurs été retiré de cet accueil sur décision du
+          client en C19 : on ne le réintroduit pas par la bande.
+
+          LE RAIL RESTE UN RAIL AU-DELÀ DE `lg`, et c'est un choix. Une grille à
+          cinq colonnes sur 1 280 px donnerait des cartes de 224 points — la
+          moitié de celles du rayon — où le résumé se replierait sur cinq lignes.
+          À 30 %, la carte fait 365 points, proche des 400 du rayon, et l'on voit
+          trois cartes plus le tiers de la quatrième : c'est le débord qui dit
+          qu'il y a une suite, sans flèche à dessiner. Surtout, le rail survit au
+          jour où la sélection passera de cinq à quatre — `lg:grid-cols-5`
+          casserait en silence.
+
+          PAS DE `tabIndex` NI DE `role="region"` SUR LE `<ul>`. La règle
+          `scrollable-region-focusable` ne se déclenche que sur un conteneur
+          défilant SANS élément focalisable ; il y a cinq liens ici. Les trois
+          violations « serious » de C8 portaient sur des tableaux sans lien —
+          la distinction est déjà écrite dans `CadreDefilant.tsx`. Ajouter un
+          arrêt de tabulation inutile est exactement le coût que ce composant
+          refuse de payer. */}
+      <section aria-labelledby="titre-selection" className="pb-14 sm:pb-20">
+        <div
+          className="flex flex-wrap items-baseline justify-between gap-x-8 gap-y-2"
+          data-revelation
+        >
+          <h2 id="titre-selection" className="text-titre text-encre">
+            La sélection
+          </h2>
+          <Link href="/boutique" className="etiquette text-encre-douce">
+            Voir les {CATALOGUE.length} références
+          </Link>
+        </div>
+
+        <ul className="rail-vitrine mt-8">
+          {PRODUITS_MIS_EN_AVANT.map((produit, rang) => (
+            <CarteProduit
+              key={produit.slug}
+              produit={produit}
+              rangDansLaFamille={rang}
+              sizes="(min-width: 64rem) 22rem, (min-width: 40rem) 44vw, 74vw"
+            />
+          ))}
+        </ul>
+      </section>
+
     </div>
   );
 }

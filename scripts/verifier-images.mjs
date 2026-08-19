@@ -207,6 +207,7 @@ const PLAFONDS_KO = {
      à la livraison : macro 21,6 / 47,7 / 82,0 Ko et héros 22,0 / 47,3 / 80,4 Ko
      en AVIF ; le repli JPEG est le poste dimensionnant, et c'est lui que ces
      chiffres bornent. */
+  'macro-320': 25,
   'macro-640': 60,
   'macro-1024': 110,
   'hero-640': 40,

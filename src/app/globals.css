@@ -770,18 +770,36 @@
     border-bottom: 1px solid var(--color-filet);
   }
 
-  @media (min-width: 48rem) {
-    .entete {
-      position: sticky;
-      top: 0;
-      z-index: 40;
-      border-bottom-color: transparent;
-    }
+  /*
+   * L'EN-TÊTE COLLE MAINTENANT À TOUTE LARGEUR (C23) — la borne `md` est levée.
+   *
+   * Elle avait été posée en C13 pour un motif juste, et daté : « sur 390 px il
+   * mesure 155 px, dix-huit pour cent de la fenêtre », donc le coller aurait
+   * retiré ces 155 px À CHAQUE ÉCRAN. Le motif tombe avec la mesure : l'en-tête
+   * compact de cette tranche fait 65 px, soit 7,7 % — il rend 92 % de la fenêtre
+   * au contenu à TOUTE hauteur de page, là où l'ancien n'en rendait 100 %
+   * qu'après avoir défilé une fois.
+   *
+   * CE QUE ÇA DÉBLOQUE VRAIMENT n'est pas un gain de pixels : c'est que la
+   * pastille du panier devient atteignable en permanence sur téléphone. Sans
+   * elle, un ajout au panier n'y laissait AUCUNE trace visible dès le premier
+   * défilement — première critique du professionnel qui a relu la boutique.
+   *
+   * LA SENTINELLE N'A RIEN À APPRENDRE, et c'est vérifié plutôt que supposé :
+   * son observateur, dans la frontière cliente unique, n'a aucune condition de
+   * largeur. Seule la feuille était bornée. Dégater le CSS suffit ; le
+   * JavaScript était déjà écrit et déjà payé.
+   */
+  .entete {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    border-bottom-color: transparent;
+  }
 
-    html[data-entete='scelle'] .entete {
-      background-color: var(--color-verre);
-      border-bottom-color: var(--color-filet);
-    }
+  html[data-entete='scelle'] .entete {
+    background-color: var(--color-verre);
+    border-bottom-color: var(--color-filet);
   }
 
   /*
@@ -922,16 +940,28 @@
    * c'est le plus grand des deux qui décide, et les retirer aurait été une
    * modification de contenu dans des pages que C16 doit reprendre.
    *
-   * 6,5 rem = la hauteur de l'en-tête (5 rem environ) plus une respiration.
+   * LA VALEUR CESSE D'ÊTRE ÉCRITE DEUX FOIS (C23).
    *
-   * La règle est bornée à `md` comme le collage lui-même : en dessous,
+   * Cette règle portait `6.5rem` EN DUR, et son commentaire annonçait « la
+   * hauteur de l'en-tête (5 rem environ) » alors que `--hauteur-entete` vaut
+   * 6 rem à cette largeur. Deux chiffres pour une même hauteur, et un
+   * commentaire faux entre les deux : exactement la double source de vérité
+   * que la variable a été créée pour empêcher en C15 — laquelle n'avait
+   * jamais été branchée ici. Elles ont donc coexisté depuis C15, d'accord par
+   * hasard (6 + 0,5 = 6,5), et rien n'aurait signalé le jour où l'une bouge.
+   *
+   * Le rendu est INCHANGÉ à l'octet près : `calc(6rem + 0.5rem)` = `6.5rem`.
+   * Ce qui change est qu'il n'y a plus qu'un nombre à corriger.
+   *
+   * La règle reste bornée à `md` comme le collage lui-même : en dessous,
    * l'en-tête défile avec la page et ne recouvre rien, donc réserver de la
    * place au-dessus des ancres coûterait un dixième de fenêtre pour rien.
+   * C'est cette borne — et elle seule — que la tranche qui rendra l'en-tête
+   * collant sur mobile devra retirer, sans quoi toutes les ancres des pages
+   * légales atterriront SOUS l'en-tête à 390 px.
    */
-  @media (min-width: 48rem) {
-    html {
-      scroll-padding-top: 6.5rem;
-    }
+  html {
+    scroll-padding-top: calc(var(--hauteur-entete) + 0.5rem);
   }
 
   /*
@@ -942,25 +972,15 @@
    * dur, dans le `scroll-padding-top` juste au-dessus ; l'écrire une seconde
    * fois en dur aurait garanti qu'un jour les deux divergent.
    *
-   * Elle vaut ZÉRO en dessous de `md`, et ce n'est pas une valeur de repli :
-   * c'est la vérité à cette largeur, où l'en-tête défile avec la page (mesure
-   * de C13 — collant, il occuperait 155 px, dix-huit pour cent d'une fenêtre de
-   * téléphone).
+   * ELLE N'A PLUS QU'UNE SEULE VALEUR (C23), et c'est le signe que le dessin
+   * s'est simplifié plutôt que compliqué. Elle valait `0px` sous `md` — la
+   * vérité à cette largeur, où l'en-tête défilait avec la page — et `6rem`
+   * au-dessus. L'en-tête compact de cette tranche mesure 65 px À TOUTE LARGEUR,
+   * mesuré aux deux profils, et il colle partout : un seul nombre suffit, et
+   * une surcharge en moins est une divergence en moins.
    */
   :root {
-    --hauteur-entete: 0px;
-  }
-
-  @media (min-width: 48rem) {
-    :root {
-      /* 6 rem = 96 px. L'en-tête en mesure 92 à 1440 px de large (mesuré par
-         `preuves/c15/panneau-collant.mjs`, qui a d'abord trouvé la barre des
-         familles DOUZE PIXELS SOUS lui : la première valeur, 5 rem, venait du
-         commentaire de `scroll-padding-top` et non d'une mesure). Quatre pixels
-         de respiration, comme le `scroll-padding-top` s'en accorde deux et
-         demi de plus pour les ancres. */
-      --hauteur-entete: 6rem;
-    }
+    --hauteur-entete: 4rem;
   }
 
   /*
@@ -1821,111 +1841,190 @@
   }
 
   /*
-   * LA RANGÉE DES FAMILLES (accueil) — sept macros, un seul cadre.
+   * LA GRILLE DES SEPT FAMILLES (accueil) — C23.
    *
-   * Le survol d'un nom fait monter la macro correspondante dans le cadre
-   * d'aperçu. `:has()` porte tout le mécanisme : aucun JavaScript, aucun état.
-   * Les images sont, là encore, des fonds CSS déclarés dans la règle de survol —
-   * sept macros téléchargées d'avance sur une page d'accueil seraient le
-   * contraire de ce que cette tranche cherche.
+   * ELLE REMPLACE UN MÉCANISME QUI MARCHAIT, ET QUI NE SERVAIT PERSONNE. Le
+   * survol d'un nom faisait monter sa macro dans un cadre d'aperçu unique, par
+   * `:has()`, sans un octet de JavaScript et sans rien télécharger à qui ne
+   * survolait pas. C'était juste — et le cadre portait `hidden lg:block`, donc
+   * en deçà de 64 rem il était en `display: none` et AUCUNE image n'était jamais
+   * demandée. Pas « pas de survol sur téléphone » : zéro image sur tout écran
+   * sous 1 024 px, quel que soit le geste du visiteur.
+   *
+   * SEPT EST UN NOMBRE PREMIER, et c'est ce qui fixe la forme. Toute grille
+   * régulière laisserait un trou. La première tuile prend DEUX colonnes : il
+   * reste six tuiles, donc trois rangs pleins à deux colonnes et un rang et demi
+   * à quatre. Deux paliers suffisent, et le remplissage est exact aux deux —
+   * aucune largeur ne laisse d'orphelin.
+   *
+   * LE CARTOUCHE EST EN SURIMPRESSION, ET C'EST UNE PROTECTION, PAS UN GOÛT.
+   * Un libellé posé SOUS la tuile, dans le flux, rendu en registre mono, change
+   * de nombre de lignes à l'arrivée des polices et fait refluer sept tuiles d'un
+   * coup — le décalage cumulé de 0,0089 de C13, sur un autre organe. Hors du
+   * flux, il ne peut pas. Le dégradé monte jusqu'à l'opacité 0,92 sous le texte :
+   * la coquille sur l'encre vaut 13,93:1, et le dégradé ne doit pas être ce qui
+   * fait descendre ce rapport sous le seuil.
+   *
+   * LE SURVOL N'ANIME QUE `transform`, comme partout ailleurs (D37 § 3), et il
+   * vit sous `no-preference` : sous mouvement réduit, la tuile est simplement
+   * là. Rien n'est masqué au repos — sans JavaScript, tout se voit.
    */
   /*
-   * LE CADRE D'APERÇU — ET IL COLLE (retour client n° 13, C19-ter).
+   * LE RAIL DE LA SÉLECTION (accueil) — C23.
    *
-   * ─────────────────────────────────────────────────────────────────────────
-   * LE DÉFAUT, MESURÉ : le cadre mesure 480 × 270 et la liste des sept
-   * familles 680 × 527. Le cadre est donc DEUX FOIS PLUS COURT que la colonne
-   * qu'il accompagne : à hauteur de la sixième famille, il a déjà quitté le
-   * haut de la fenêtre, et le fondu croisé qu'on vient de déclencher joue hors
-   * de vue. Le client l'a dit exactement ainsi — « les changements se font trop
-   * haut pour être vus quand on descend la liste ».
+   * Un défilement horizontal à accrochage, en CSS pur. Le raisonnement qui
+   * l'impose est dans `page.tsx`, à l'endroit du composant : la note de cette
+   * page est déjà tombée sous son seuil par le TEMPS DE BLOCAGE, donc le
+   * carrousel demandé par le client ne peut pas coûter un octet de JavaScript.
    *
-   * LE CORRECTIF EST DU CSS PUR, et il ne coûte pas un octet de JavaScript :
-   * le cadre colle au même repère que tout ce qui colle sur ce site —
-   * `--hauteur-entete`, la variable posée en C15 pour que la barre du rayon
-   * s'arrête SOUS l'en-tête plutôt que douze pixels dessous. La respiration
-   * d'une gouttière (1,5 rem) l'en écarte, comme le `scroll-padding-top` s'en
-   * accorde une pour les ancres.
+   * `flex-basis` en pour-cent plutôt qu'une grille à N colonnes : le rail
+   * survit au jour où la sélection passera de cinq produits à quatre, là où un
+   * `grid-cols-5` casserait en silence. Le débord de la carte suivante EST
+   * l'affordance — il dit qu'il y a une suite, sans flèche à dessiner.
    *
-   * `align-self: start` est NÉCESSAIRE et n'est pas une précaution : un élément
-   * de grille étiré occupe toute la hauteur de sa rangée, et un élément qui
-   * remplit sa rangée n'a nulle part où coller. Il se trouve que le rapport
-   * 16:9 gagne déjà contre l'étirement sur ce moteur — la mesure le dit, 270 px
-   * pour une rangée de 527 — mais cette victoire est une propriété du moteur,
-   * pas de la feuille. On l'écrit.
+   * `overscroll-behavior-x: contain` empêche le geste de fuir vers la
+   * navigation arrière du navigateur une fois le rail au bout.
    *
-   * LA POSITION DE REPOS EST ÉCRITE ICI, ET C'EST L'ANTI-PATRON N° 21 DE D37
-   * QUI L'EXIGE : les couches d'aperçu sont en `position: absolute` et ont
-   * besoin d'un ancêtre positionné. L'utilitaire `relative` le donnait ; il
-   * aurait aussi BATTU cette règle-ci, la couche `utilities` passant avant
-   * `components` quelle que soit la spécificité. La règle collante aurait été
-   * écrite, lisible, plausible — et n'aurait jamais rien fait. Les deux états
-   * vivent donc dans la même couche, et un cas de campagne lit le style
-   * CALCULÉ.
+   * PAS de `scroll-snap-stop: always` : avec lui, un déplacement de focus
+   * lointain ou un `scrollIntoView` reste bloqué à la carte suivante.
+   * L'accrochage doit arrondir, pas emprisonner.
    */
-  .apercu-cadre {
-    position: relative;
+  .rail-vitrine {
+    display: flex;
+    gap: var(--gouttiere);
+    overflow-x: auto;
+    padding-bottom: 0.75rem;
+    scroll-snap-type: x mandatory;
+    scrollbar-color: var(--color-filet-fort) transparent;
+    scrollbar-width: thin;
+    overscroll-behavior-x: contain;
+  }
+
+  .rail-vitrine > * {
+    flex: 0 0 74%;
+    scroll-snap-align: start;
+  }
+
+  @media (min-width: 40rem) {
+    .rail-vitrine > * {
+      flex-basis: 44%;
+    }
   }
 
   @media (min-width: 64rem) {
-    .apercu-cadre {
-      position: sticky;
-      top: calc(var(--hauteur-entete) + 1.5rem);
-      align-self: start;
+    .rail-vitrine > * {
+      flex-basis: 30%;
     }
   }
 
-  .apercu-famille {
-    position: absolute;
-    inset: 0;
-    opacity: 0;
-    background-position: center;
-    background-size: cover;
+  .tuiles-familles {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--gouttiere);
+  }
+
+  .tuiles-familles > li:first-child {
+    grid-column: span 2;
+  }
+
+  @media (min-width: 40rem) {
+    .tuiles-familles {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
   }
 
   /*
-   * UNE MACRO EST VISIBLE AU REPOS, ET C'EST LA PREMIÈRE.
+   * LES TUILES D'UN MÊME RANG FONT LA MÊME HAUTEUR — et il faut le dire, sinon
+   * la grande en creuse deux.
    *
-   * Sans elle, le cadre d'aperçu est un rectangle gris tant que personne ne
-   * survole — et un rectangle gris dans une page finie ne se lit pas comme une
-   * attente, il se lit comme une image cassée. La première famille du rayon
-   * paie donc son image (14 Ko en AVIF), les six autres restent gratuites
-   * jusqu'au survol. C'est le bon partage : une image de plus sur une page qui
-   * en charge deux, contre sept de plus.
+   * Le remplissage est exact : la première tuile prend deux colonnes, donc
+   * 2 + 6 = 8 cellules, soit deux rangs pleins à quatre colonnes et quatre rangs
+   * pleins à deux. Mais une tuile deux fois plus large est, en 16:9, deux fois
+   * plus HAUTE : les deux petites tuiles posées à côté d'elle gardaient leur
+   * hauteur propre et laissaient un trou de marbre sous elles.
    *
-   * Les couches se recouvrent dans l'ordre du DOM : celle d'une famille
-   * survolée est écrite après celle-ci, donc elle passe dessus sans qu'il faille
-   * éteindre quoi que ce soit.
+   * Le rang est étiré (`stretch`, le défaut d'une grille), la tuile prend toute
+   * sa cellule, et c'est l'IMAGE qui s'adapte par `object-fit: cover`. Le
+   * recadrage ne coûte pas un octet de plus : le fichier servi est le même, il
+   * est seulement rogné — et sur des macros, qui sont des gros plans de matière
+   * sans sujet à cadrer, rogner ne retire rien de lisible. C'est la raison pour
+   * laquelle ce compromis est acceptable ici et ne le serait pas sur un packshot.
    */
-  .apercu-defaut {
-    opacity: 1;
-    background-image: var(--macro);
+  .tuiles-familles > li {
+    display: flex;
+  }
+
+  .tuile-famille {
+    position: relative;
+    display: block;
+    flex: 1;
+    overflow: hidden;
+    border: 1px solid var(--color-filet);
+    border-radius: 2px;
+  }
+
+
+  .tuile-cartouche {
+    position: absolute;
+    inset-inline: 0;
+    bottom: 0;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.75rem 1rem;
+    background: linear-gradient(
+      to top,
+      rgb(28 33 26 / 0.92) 0%,
+      rgb(28 33 26 / 0.72) 60%,
+      rgb(28 33 26 / 0) 100%
+    );
+  }
+
+  /*
+   * LE NOM SE RESSERRE SANS RÉTRÉCIR — et c'est D37 qui impose cette forme.
+   *
+   * « Miels et confitures » et « Conserves salées » passent sur deux lignes dans
+   * une tuile de 169 points, et l'interligne de prose y écartait les deux lignes
+   * au point que le cartouche mangeait la moitié de la photographie. La réponse
+   * évidente — réduire le corps — est INTERDITE : l'interdit n° 10 de D37 ferme
+   * la Bodoni sous 20 px, et `--text-titre` est déjà au plancher.
+   *
+   * On resserre donc l'INTERLIGNE, pas le corps. `text-wrap: balance` répartit
+   * en plus les mots entre les deux lignes au lieu de laisser un orphelin — sur
+   * sept noms dont quatre débordent, la différence se voit.
+   */
+  .tuile-cartouche > :first-child {
+    line-height: 1.05;
+    text-wrap: balance;
   }
 
   @media (prefers-reduced-motion: no-preference) {
-    .apercu-famille {
-      transition: opacity var(--ms-revele) var(--ease-verre);
+    .tuile-famille img {
+      transition: transform var(--ms-etat) var(--ease-verre);
+    }
+
+    .tuile-famille:hover img,
+    .tuile-famille:focus-visible img {
+      transform: scale(1.03);
     }
   }
 
-  @media (hover: hover) {
-    .familles:has(.famille-1:hover) .apercu-1,
-    .familles:has(.famille-1:focus-visible) .apercu-1,
-    .familles:has(.famille-2:hover) .apercu-2,
-    .familles:has(.famille-2:focus-visible) .apercu-2,
-    .familles:has(.famille-3:hover) .apercu-3,
-    .familles:has(.famille-3:focus-visible) .apercu-3,
-    .familles:has(.famille-4:hover) .apercu-4,
-    .familles:has(.famille-4:focus-visible) .apercu-4,
-    .familles:has(.famille-5:hover) .apercu-5,
-    .familles:has(.famille-5:focus-visible) .apercu-5,
-    .familles:has(.famille-6:hover) .apercu-6,
-    .familles:has(.famille-6:focus-visible) .apercu-6,
-    .familles:has(.famille-7:hover) .apercu-7,
-    .familles:has(.famille-7:focus-visible) .apercu-7 {
-      background-image: var(--macro);
-      opacity: 1;
-    }
+  /*
+   * LE FILET PREND LA COULEUR DE SA FAMILLE — et c'est ce qui garde un emploi à
+   * `styleDeFamille()`. La page pose `--scheme-trait` sur chaque `<li>` depuis
+   * C12 ; l'ancienne rangée s'en servait pour l'indicateur sous le nom, que les
+   * tuiles n'ont plus. Une variable posée que plus rien ne lit finit par être
+   * retirée par quelqu'un qui ne saura pas qu'elle servait — autant qu'elle
+   * serve. Le repli sur `--color-filet` est écrit : la tuile reste correcte si
+   * la page oublie un jour de poser le scheme.
+   *
+   * Hors de tout régime de mouvement : c'est une COULEUR d'état, pas une
+   * animation. La transition qui l'accompagne, elle, vit sous `no-preference`.
+   */
+  .tuile-famille:hover,
+  .tuile-famille:focus-visible {
+    border-color: var(--scheme-trait, var(--color-filet-fort));
   }
 
   /*
@@ -1994,6 +2093,49 @@
 }
 
 /* ===========================================================================
+   LES TUILES DE FAMILLE REMPLISSENT LEUR RANG — HORS COUCHE (C23)
+   ===========================================================================
+
+   Une tuile deux fois plus large est, en 16:9, deux fois plus haute. Les deux
+   petites tuiles posées à côté de la grande gardaient donc leur hauteur propre
+   et laissaient un trou de marbre sous elles. Le rang est étiré, la tuile prend
+   toute sa cellule, et c'est l'IMAGE qui s'adapte par `object-fit: cover`.
+
+   CES RÈGLES NE SONT DANS AUCUNE COUCHE, ET CE N'EST PAS UN OUBLI — c'est
+   l'anti-patron n° 21 de D37, payé une quatrième fois par ce dépôt et une
+   première fois par la tranche qui venait de l'écrire dans son propre
+   commentaire deux blocs plus haut.
+
+   Le fait mesuré : `<Visuel>` pose `h-auto w-full` sur son `<img>`. `h-auto`
+   vit dans la couche `utilities`, qui bat `components` QUELLE QUE SOIT la
+   spécificité — un `.tuile-famille img { height: 100% }` déclaré dans
+   `components` ne s'applique jamais. Le symptôme était trompeur : la couleur de
+   réservation du conteneur remplissait bien la cellule, donc la boîte était
+   juste et seule l'image restait courte. Une règle qui ne s'applique pas est
+   indiscernable d'une règle absente dans un fichier ; elle est parfaitement
+   discernable dans `getComputedStyle`, où `height` valait `156.641px` en face
+   d'un parent de `332px`.
+
+   La chaîne entière est ici, et pas seulement le maillon en duel : poser
+   `height: 100%` sur la seule `<img>` ne servirait à rien si son `<picture>`
+   ou le conteneur `.visuel-produit` restaient à leur hauteur naturelle. Trois
+   maillons, trois déclarations, sinon le dernier n'a rien à remplir.
+   =========================================================================== */
+
+.tuile-famille > .visuel-produit,
+.tuile-famille picture {
+  display: block;
+  height: 100%;
+}
+
+.tuile-famille img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ===========================================================================
    LE RAYON EN LISTE — HORS COUCHE, ET C'EST LA SEULE FAÇON QUE ÇA MARCHE
    ===========================================================================
 
@@ -2017,23 +2159,37 @@
    règle de base.
    =========================================================================== */
 
+/* LA BASCULE GOUVERNE LE RAYON, PAS TOUTES LES CARTES DU SITE (correctif C23).
+
+   Les trois règles ci-dessous visaient `.carte-produit` et `.carte-visuel` sans
+   ancre : elles s'appliquaient donc partout où une carte est rendue. Tant que
+   le rayon était le seul endroit, l'écart ne se voyait pas. Le rail de
+   l'accueil l'a mis à découvert, et le défaut était REPRODUIT avant d'être
+   corrigé : passer `/boutique` en « Liste », revenir à l'accueil par un clic,
+   et le rail s'y recomposait en lignes — `flexDirection: row`, visuel à 144 px.
+
+   L'attribut vit sur `<html>` et SURVIT à la navigation cliente ; le composant
+   qui le pose le dit lui-même (« l'attribut a pu survivre à un aller-retour »).
+   Ce n'est donc pas un cas de bord : c'est le chemin normal d'un visiteur qui
+   préfère la liste. `.rayon-grille` existait déjà et n'attendait qu'à servir
+   d'ancre. */
 html[data-affichage-rayon='liste'] .rayon-grille {
   grid-template-columns: 1fr;
 }
 
-html[data-affichage-rayon='liste'] .carte-produit > a {
+html[data-affichage-rayon='liste'] .rayon-grille .carte-produit > a {
   flex-direction: row;
   align-items: flex-start;
   gap: 1.25rem;
 }
 
-html[data-affichage-rayon='liste'] .carte-visuel {
+html[data-affichage-rayon='liste'] .rayon-grille .carte-visuel {
   flex: none;
   width: 6.5rem;
 }
 
 @media (min-width: 40rem) {
-  html[data-affichage-rayon='liste'] .carte-visuel {
+  html[data-affichage-rayon='liste'] .rayon-grille .carte-visuel {
     width: 9rem;
   }
 }
@@ -3102,3 +3258,384 @@ html.lenis [data-lenis-prevent] {
     border-radius: 0 !important;
   }
 }
+
+/* ===========================================================================
+   LE TIROIR D'AJOUT AU PANIER — HORS COUCHE (C23)
+   ===========================================================================
+
+   CES RÈGLES NE SONT DANS AUCUNE COUCHE, et c'est l'anti-patron n° 21 de D37
+   pris par le bon bout : on ne gagne pas le duel, on le SUPPRIME. Le `<dialog>`
+   ne porte AUCUN utilitaire Tailwind de géométrie — ni `fixed`, ni `inset-y-0`,
+   ni `max-w-*`, ni `bg-verre`. Toute sa boîte et son fond sont ici. Il n'y a
+   donc aucun utilitaire concurrent à battre, et la question de la couche ne se
+   pose pas. Le bloc reste hors couche par prudence, pour que la première classe
+   ajoutée un jour au composant ne renverse pas ces règles en silence.
+
+   IL FAUT DÉFAIRE LA FEUILLE DU NAVIGATEUR. Un `<dialog>` arrive avec
+   `margin: auto`, `padding: 1em`, `border: solid` et une largeur contrainte —
+   c'est-à-dire un cadre centré, exactement ce qu'un tiroir n'est pas.
+
+   L'ANIMATION EST UNE `@keyframes`, PAS UN `@starting-style`, et ce n'est pas
+   un goût : ce dépôt a posé quatre fois le patron `@starting-style` (pastille
+   C13, montant C16, fondu de route C17, entrée de titre C18). Il ne marche pas
+   ici. Un `<dialog>` passe de `display: none` à `display: block` au moment du
+   `showModal()`, et faire transiter ce passage exigerait
+   `transition-behavior: allow-discrete` sur `display` — que D37 § 3 interdit
+   frontalement. Une animation nommée démarre d'elle-même quand un élément
+   devient rendu ; c'est déjà le patron de `pastille-battement` (C13) et de
+   `signature-montee` (C18). Zéro vocabulaire nouveau.
+
+   DURÉE ET COURBE CHOISIES PAR LEURS NOMS, pas par leur vitesse. `--ms-etat`
+   (320 ms) est nommé « apparition d'un élément d'interface, changement d'état
+   local » ; `--ease-verre` est « ce qui se pose sans traîner ». Ce n'est pas
+   `--ms-revele` (620, « révélation d'un bloc AU DÉFILEMENT » — rien ne défile),
+   ni `--ms-signature` (900, « transition de page » — ce n'en est pas une).
+
+   `translateX(1.5rem)` ET NON `100%` : D37 ne borne pas l'amplitude, mais
+   1,5 rem est le geste « la matière se pose », cohérent avec le 1 rem des
+   révélations. Un tiroir de 432 px qui traverse l'écran en 320 ms sous
+   `--ease-verre` se lirait comme un sursaut.
+
+   LA SORTIE N'EST PAS ANIMÉE, et le précédent est écrit : C16 l'a tranché pour
+   la suppression d'une ligne de panier — « React retire le nœud à l'instant du
+   clic, il n'y a plus rien à faire transiter », et l'animer « coûterait un état
+   de sortie et une minuterie ».
+
+   SOUS `prefers-reduced-motion: reduce`, LE TIROIR EST LÀ, ENTIER, TOUT DE
+   SUITE. La déclaration `animation` vit à l'intérieur de `no-preference` ;
+   aucun état masqué n'est posé en dur, donc il n'y a rien à rétablir. La
+   géométrie, elle, est écrite HORS de tout régime de mouvement : le mouvement
+   se règle, la mise en page ne se règle pas.
+
+   LE DÉCALAGE CUMULÉ EST STRUCTURELLEMENT NUL : l'élément est en couche
+   supérieure, il n'occupe aucune place dans le flux. La question ne se pose
+   même pas.
+   =========================================================================== */
+
+/* `[open]` N'EST PAS UN ORNEMENT DANS CE SÉLECTEUR — il est ce qui rend la
+   fermeture possible. La feuille du navigateur porte
+   `dialog:not([open]) { display: none }` ; déclarer `display: flex` sur le
+   `<dialog>` nu l'écrase, et le tiroir reste alors peint EN PERMANENCE, ouvert
+   comme fermé. Défaut payé à l'écriture de cette tranche, et son symptôme ne
+   désignait pas sa cause : la campagne échouait sur « element is outside of the
+   viewport » puis « <dialog> subtree intercepts pointer events » au moment de
+   cliquer « Ajouter au panier » — c'est-à-dire que le tiroir interceptait le
+   clic censé l'ouvrir. */
+[data-tiroir-ajout][open] {
+  position: fixed;
+  inset-block: 0;
+  inset-inline-end: 0;
+  inset-inline-start: auto;
+  display: flex;
+  max-width: 27rem;
+  width: 100%;
+  max-height: 100dvh;
+  flex-direction: column;
+  gap: 1.25rem;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  margin: 0;
+  padding: 1.5rem;
+  border: none;
+  border-inline-start: 1px solid var(--color-filet);
+  background-color: var(--color-verre);
+  color: var(--color-encre);
+}
+
+[data-tiroir-ajout]::backdrop {
+  background-color: rgb(28 33 26 / 0.42);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  [data-tiroir-ajout][open] {
+    animation: tiroir-entree var(--ms-etat) var(--ease-verre) both;
+  }
+}
+
+@keyframes tiroir-entree {
+  from {
+    opacity: 0;
+    transform: translateX(1.5rem);
+  }
+}
+
+.tiroir-tete {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  border-bottom: 1px solid var(--color-filet);
+  padding-bottom: 0.75rem;
+}
+
+.tiroir-fermer {
+  font-family: var(--font-mono);
+  font-size: var(--text-label);
+  text-transform: uppercase;
+  color: var(--color-encre-douce);
+}
+
+.tiroir-fermer:hover {
+  color: var(--color-encre);
+}
+
+.tiroir-soustotal {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  border-block: 1px solid var(--color-filet);
+  padding-block: 0.75rem;
+}
+
+.tiroir-actions {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.tiroir-bouton-primaire,
+.tiroir-bouton {
+  border-radius: 2px;
+  padding: 0.625rem 1rem;
+  text-align: center;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.tiroir-bouton-primaire {
+  border: 1px solid var(--color-olive);
+  background-color: var(--color-olive);
+  color: var(--color-creme);
+}
+
+.tiroir-bouton-primaire:hover {
+  border-color: var(--color-encre);
+  background-color: var(--color-encre);
+}
+
+.tiroir-bouton {
+  border: 1px solid var(--color-filet);
+  color: var(--color-encre);
+}
+
+.tiroir-bouton:hover {
+  border-color: var(--color-filet-fort);
+}
+
+.tiroir-bloc {
+  border-top: 1px solid var(--color-filet);
+  padding-top: 1rem;
+}
+
+
+/* ===========================================================================
+   L'EN-TÊTE COMPACT ET SON MENU REPLIABLE — HORS COUCHE (C23)
+   ===========================================================================
+
+   L'ÉCART C13 N° 2 EST FERMÉ. Il traînait depuis trois tranches, et C17 avait
+   laissé la consigne exacte : « il faut décider que le menu se replie, et
+   mettre le harnais d'accord ; la tranche qui l'ouvrira commencera par les deux
+   lignes de la campagne ». C'est ce qui a été fait, dans cet ordre.
+
+   CE QUI A CHANGÉ DEPUIS C17, ET QUI REND LE GESTE RENTABLE. C17 mesurait que
+   replier la seule navigation ne rendait que 38,6 px sur 160,9 — 24 %, ce qui
+   ne valait pas le prix. Mais ce qui pèse, C17 le disait déjà, c'est LE BLOC DE
+   MARQUE : deux lignes, nom plus baseline. En retirant la baseline sous `md` et
+   en passant le nom de `text-2xl` à `text-xl` — le plancher EXACT de l'interdit
+   n° 10 de D37, qui ferme la Bodoni sous 20 px —, l'en-tête tient sur UN rang de
+   4 rem. Mesuré : 161 px (19,1 % de la fenêtre) avant, 65 px (7,6 %) après.
+   Le gain est de 97 px SUR CHAQUE ÉCRAN, pas de 38.
+
+   ET C'EST CE GAIN QUI AUTORISE LE COLLAGE. C13 refusait l'en-tête collant sur
+   mobile parce qu'il aurait « retiré 155 px à chaque écran ». À 64 px, il en
+   rend 91 % au contenu à TOUTE hauteur de page, là où l'en-tête d'avant n'en
+   rendait 100 % qu'après avoir défilé une fois. Le vrai bénéfice n'est pas le
+   pixel : c'est que la pastille du panier devient atteignable en permanence —
+   ce qui corrige une partie du premier retour du professionnel.
+
+   LA HAUTEUR NE CHANGE JAMAIS AU DÉFILEMENT, et c'est doublement contraint :
+   animer `height` est un interdit frontal de D37 § 3, et `--hauteur-entete`
+   alimente `scroll-padding-top` — une hauteur variable ferait atterrir une
+   ancre à un endroit DIFFÉRENT selon la position de défilement au moment du
+   clic. L'état collé ne change que le fond et le filet, comme à `md+` depuis
+   C13.
+
+   HORS COUCHE, comme le socle de mouvement de C17 et les tuiles de cette même
+   tranche : `.entete-rang` porte des utilitaires (`flex`, `items-center`,
+   `gap-4`, `px-5`) et une règle d'état déclarée dans `components` perdrait
+   contre eux. Ici on ne déclare QUE `height`, qui n'a pas d'utilitaire
+   concurrent — mais le bloc reste dehors pour que la première classe ajoutée un
+   jour ne renverse rien en silence.
+   =========================================================================== */
+
+.entete-rang {
+  height: 4rem;
+}
+
+/* Le repliable ne doit pas peser dans le rang : il n'est qu'un ancrage. */
+.menu-entete {
+  position: relative;
+}
+
+/*
+ * LE BOUTON FAIT 44 × 44, ET CE N'EST PAS UNE MARGE DE CONFORT : c'est la
+ * cible tactile minimale que la campagne d'accessibilité mesure.
+ *
+ * `list-style: none` et le marqueur WebKit retirent le triangle que la feuille
+ * du navigateur pose sur un `<summary>`. Le glyphe est fait de deux
+ * pseudo-éléments en `currentColor` PLUTÔT QU'EN SVG EN LIGNE, et le motif est
+ * arithmétique : un SVG en ligne coûte ses octets dans le HTML de CHACUNE des
+ * 46 routes prérendues ; deux pseudo-éléments les coûtent UNE FOIS, ici.
+ */
+.menu-bouton {
+  display: flex;
+  height: 2.75rem;
+  width: 2.75rem;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  list-style: none;
+}
+
+.menu-bouton::-webkit-details-marker {
+  display: none;
+}
+
+.menu-glyphe,
+.menu-glyphe::before,
+.menu-glyphe::after {
+  display: block;
+  height: 1px;
+  width: 1.25rem;
+  background-color: var(--color-encre);
+}
+
+.menu-glyphe::before,
+.menu-glyphe::after {
+  position: relative;
+  content: '';
+}
+
+.menu-glyphe::before {
+  top: -0.375rem;
+}
+
+.menu-glyphe::after {
+  top: 0.313rem;
+}
+
+/*
+ * LE PANNEAU EST HORS FLUX, et c'est ce qui rend le décalage cumulé
+ * STRUCTURELLEMENT nul à l'ouverture : il n'occupe ni ne libère aucune place,
+ * donc la page dessous ne bouge pas d'un pixel — à aucune police, à aucune
+ * largeur. On ne s'appuie même pas sur l'exemption « 500 ms après une
+ * interaction » que la métrique accorde.
+ *
+ * Aucune animation d'ouverture : un panneau qui se déplie anime `height`
+ * (interdit), et 320 ms entre l'appui et le menu se lisent comme de la latence
+ * sur une surface de navigation qu'on manœuvre au pouce.
+ */
+.menu-panneau {
+  position: absolute;
+  inset-inline: auto 0;
+  top: 100%;
+  z-index: 41;
+  min-width: 12rem;
+  border: 1px solid var(--color-filet);
+  border-radius: 2px;
+  background-color: var(--color-verre);
+  padding: 0.5rem;
+}
+
+.menu-liste {
+  display: grid;
+  gap: 0.25rem;
+}
+
+/*
+ * LE REPLI EST PILOTÉ EXPLICITEMENT — ET LA RAISON N'EST PAS CELLE QU'ON CROIT.
+ *
+ * Premier diagnostic, faux : « le masquage natif de `::details-content` ne
+ * fonctionne pas, puisque le panneau mesure 192 × 126 px avec `open` à faux ».
+ * Le vrai comportement est plus fin, et il explique les DEUX symptômes observés
+ * à deux heures d'écart :
+ *
+ *   `content-visibility: hidden` retire le contenu de la PEINTURE et de l'ARBRE
+ *   D'ACCESSIBILITÉ — mais il CONSERVE LA BOÎTE.
+ *
+ * `getBoundingClientRect()` était donc la seule mesure au monde qui ne pouvait
+ * pas voir ce masquage. Mesurer la géométrie était juste dans le cas du
+ * `<dialog>` du tiroir ; c'était exactement la mauvaise propriété ici. La leçon
+ * n'est pas « mesurer la géométrie », elle est « mesurer CE QUE LA RÈGLE
+ * PRÉTEND CHANGER » — et le corollaire s'est vengé au-dessus de `md`, où le
+ * panneau paraissait posé et où Playwright ne trouvait plus le lien
+ * « Boutique » : il était hors de l'arbre d'accessibilité.
+ *
+ * `display: none` explicite reste utile et n'est pas une redondance : il retire
+ * AUSSI la boîte, ce que le natif ne fait pas. Les deux mécanismes se
+ * complètent au lieu de se doubler.
+ */
+.menu-entete:not([open]) > .menu-panneau {
+  display: none;
+}
+
+.menu-liste a {
+  display: block;
+  padding: 0.625rem 0.75rem;
+}
+
+/*
+ * AU-DESSUS DE `md`, LE DESSIN D'AVANT REVIENT — À L'IDENTIQUE.
+ *
+ * `::details-content` est le pseudo-élément qui porte le masquage natif du
+ * contenu d'un `<details>` fermé. Le remettre à `visible` est la seule façon de
+ * déplier en CSS sans toucher à l'attribut `open`, donc sans JavaScript et sans
+ * état à synchroniser.
+ *
+ * AUCUN `@supports` N'EST NÉCESSAIRE, et c'est le bénéfice du repli explicite :
+ * la règle qui déplie ici est la SYMÉTRIQUE exacte de celle qui replie plus
+ * haut. Il n'y a pas de capacité de moteur à interroger, donc pas de moteur qui
+ * pourrait laisser la navigation inatteignable sur un bureau — le cas que la
+ * première version, appuyée sur `::details-content`, obligeait à couvrir.
+ */
+@media (min-width: 48rem) {
+  .menu-bouton {
+    display: none;
+  }
+
+  /* LES DEUX MÉCANISMES, PARCE QU'IL EN FAUT DEUX. `display: block` rend la
+     BOÎTE ; `content-visibility: visible` rend le CONTENU à la peinture et à
+     l'arbre d'accessibilité. Sans la seconde ligne, le panneau occupe sa place,
+     paraît posé à l'œil — et `getByRole('navigation')` ne le trouve pas, parce
+     qu'un `<details>` fermé retire son contenu de l'arbre quoi qu'en dise
+     `display`. C'est l'échec qu'a rendu la campagne : « waiting for
+     getByRole('navigation', { name: 'Navigation principale' }) », sur le profil
+     BUREAU, là où le menu n'est même pas censé se replier. */
+  .menu-entete:not([open]) > .menu-panneau {
+    display: block;
+  }
+
+  .menu-entete::details-content {
+    content-visibility: visible;
+  }
+
+  .menu-panneau {
+    position: static;
+    z-index: auto;
+    min-width: 0;
+    border: none;
+    background-color: transparent;
+    padding: 0;
+  }
+
+  .menu-liste {
+    display: flex;
+    flex-wrap: nowrap;
+    column-gap: 2rem;
+  }
+
+  .menu-liste a {
+    padding: 0;
+  }
+}
+

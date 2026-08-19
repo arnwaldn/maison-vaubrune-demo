@@ -126,35 +126,87 @@ export function EnTete() {
           page (contrôleur de mouvement, Lenis, transitions de vue), là où un
           `body > header` cesserait de correspondre sans que rien ne le dise. */}
       <header className="entete" data-chrome-entete>
-        <div className="mx-auto flex max-w-page flex-col gap-4 px-5 py-4 md:flex-row md:flex-nowrap md:items-baseline md:justify-between md:gap-10 md:py-5 sm:px-8">
-          <Link href="/" className="group inline-flex flex-col no-underline">
-            <span className="font-titre text-2xl font-medium tracking-tight text-encre [font-variant-caps:small-caps] group-hover:text-terre">
+        {/* UN SEUL RANG, TROIS ENFANTS, `flex-nowrap` — ET C'EST LA LEÇON DE
+            C13 POUSSÉE D'UN CRAN (C23).
+
+            C13 avait corrigé un décalage cumulé de 0,0089 en remplaçant un
+            `flex-wrap` par une grille à deux colonnes FIXE : le nombre de rangs
+            cessait de dépendre de la largeur du texte rendu, donc du repli de
+            police mono vers Arial. Ici il n'y a plus qu'UN RANG, par
+            construction — un flex `nowrap` ne se replie jamais. Le mécanisme du
+            défaut de C13 n'a plus de prise du tout.
+
+            L'ORDRE DU DOM EST L'ORDRE VISUEL. Aucun `order` nulle part : la
+            marque, puis le bouton de menu, puis la pastille. Le clavier
+            traverse ce qu'on voit.
+
+            LA PASTILLE EST SORTIE DE LA LISTE, et c'est le geste qui débloque
+            l'écart laissé ouvert par C17. Son expérience avait montré qu'un
+            repliable fermé par défaut « retire leur boîte aux trois liens ET à
+            la pastille du panier, et la campagne GELÉE clique l'un et lit
+            l'autre sur ce profil ». On ne répare pas le test : on sort la
+            pastille du repliable. Elle devient un frère permanent du bouton,
+            visible à toute largeur et à toute position de défilement — et c'est
+            précisément le bénéfice que cette tranche vend, l'accès permanent au
+            panier sur téléphone. */}
+        <div className="entete-rang mx-auto flex max-w-page flex-nowrap items-center gap-4 px-5 sm:px-8">
+          <Link href="/" className="group mr-auto inline-flex flex-col no-underline">
+            <span className="font-titre text-xl font-medium tracking-tight text-encre [font-variant-caps:small-caps] group-hover:text-terre md:text-2xl">
               {marchand.nom}
             </span>
-            <span className="etiquette mt-1 text-encre-douce">
+            {/* LA BASELINE NE S'AFFICHE QU'À PARTIR DE `md`, et son retrait sur
+                téléphone est ce qui fait tenir l'en-tête sur une ligne. C17
+                désignait déjà le bloc de marque comme ce qui pèse — replier la
+                seule navigation ne rendait que 38,6 px sur 160,9.
+
+                VÉRIFIÉ AVANT DE LA RETIRER : aucun test, aucune garde, aucun
+                décompte ne lit cette phrase. Et le mot « démonstration » reste
+                porté par l'encart permanent de l'accueil, les mentions légales,
+                le pied de page, et la description de chacune des 46 pages — que
+                `liens.spec.ts` garde déjà. */}
+            <span className="etiquette mt-1 hidden text-encre-douce md:block">
               Épicerie fine — démonstration
             </span>
           </Link>
 
-          <nav aria-label="Navigation principale">
-            <ul className="grid grid-cols-2 items-center gap-x-6 gap-y-3 md:flex md:flex-nowrap md:gap-x-8">
-              {LIENS_NAVIGATION.map((lien) => (
-                <li key={lien.adresse}>
-                  <Link href={lien.adresse} className={CLASSE_LIEN}>
-                    <span className="lien-nav-fenetre">
-                      <span className="lien-nav-ligne">{lien.libelle}</span>
-                      <span className="lien-nav-ligne" aria-hidden="true">
-                        {lien.libelle}
-                      </span>
-                    </span>
-                  </Link>
-                </li>
-              ))}
-              <li>
-                <PastillePanier />
-              </li>
-            </ul>
-          </nav>
+          {/* LE REPLIABLE EST EN CSS PUR, ET LE BOUTON EXISTE À TOUTE LARGEUR.
+
+              C'est la feuille qui le retire au-dessus de `md`, jamais le rendu :
+              un test décide alors sur une BOÎTE (`isVisible()`) et non sur une
+              largeur de fenêtre — c'est-à-dire sur un nombre que la feuille de
+              style connaît, au lieu d'un nombre qu'elle ignore.
+
+              PAS de `role="button"` sur le `<summary>` : il écraserait l'état
+              `expanded` que le moteur gère seul. PAS de `<nav>` NI de `<ul>`
+              DANS le `<summary>` : du contenu interactif imbriqué déclenche
+              `nested-interactive`, de gravité « serious », donc l'échec du
+              seuil d'accessibilité du projet. */}
+          <details data-menu-entete className="menu-entete">
+            <summary className="menu-bouton" aria-label="Menu">
+              <span className="menu-glyphe" aria-hidden="true" />
+            </summary>
+
+            <div className="menu-panneau">
+              <nav aria-label="Navigation principale">
+                <ul className="menu-liste">
+                  {LIENS_NAVIGATION.map((lien) => (
+                    <li key={lien.adresse}>
+                      <Link href={lien.adresse} className={CLASSE_LIEN}>
+                        <span className="lien-nav-fenetre">
+                          <span className="lien-nav-ligne">{lien.libelle}</span>
+                          <span className="lien-nav-ligne" aria-hidden="true">
+                            {lien.libelle}
+                          </span>
+                        </span>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </nav>
+            </div>
+          </details>
+
+          <PastillePanier />
         </div>
       </header>
     </>

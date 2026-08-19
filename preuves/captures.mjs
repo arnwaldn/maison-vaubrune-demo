@@ -266,13 +266,15 @@ for (const format of FORMATS) {
 
   /* Le panier canonique, monté par l'interface : 2 huiles 50 cl + 1 fromage. */
   await page.getByRole('button', { name: 'Ajouter au panier' }).click();
-  await page.getByText('Ajouté au panier.').waitFor();
+  await page.getByRole('dialog', { name: 'Ajouté au panier' }).waitFor();
+  await page.getByRole('button', { name: 'Continuer mes achats' }).click();
 
   await page.goto(`${BASE}/boutique/huile-olive-premiere-pression`);
   await page.getByLabel('Format', { exact: true }).selectOption('MV-HV-OLI-50CL');
   await page.getByLabel('Quantité').fill('2');
   await page.getByRole('button', { name: 'Ajouter au panier' }).click();
-  await page.getByText('Ajouté au panier.').waitFor();
+  await page.getByRole('dialog', { name: 'Ajouté au panier' }).waitFor();
+  await page.getByRole('button', { name: 'Continuer mes achats' }).click();
 
   /* 4 — le panier plein, sous-total 56,90 € : le franco est à 69,00 €, donc
      l'encart « Encore 12,10 € pour que le port vous soit offert » s'affiche. */

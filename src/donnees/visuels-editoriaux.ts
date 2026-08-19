@@ -1,4 +1,4 @@
-import type { VueVisuel } from '@/lib/types';
+import type { Famille, VueVisuel } from '@/lib/types';
 
 /**
  * LES VISUELS QUI N'APPARTIENNENT À AUCUN PRODUIT (tranche C15).
@@ -9,14 +9,29 @@ import type { VueVisuel } from '@/lib/types';
  * de famille n'a pas de slug de produit, et la garde des images refuse tout
  * dossier qui n'en est pas un.
  *
- * POURQUOI LE HÉROS EST ICI ET PAS LES SEPT MACROS. Le héros est du CONTENU :
- * il porte un texte alternatif, il est la plus grande image de la page, et sa
- * couleur de réservation évite un rectangle blanc sur le premier écran. Les
- * macros de famille, elles, sont DÉCORATIVES au sens strict — elles montent
- * derrière un nom de famille au survol, le nom est le contenu, et le cadre qui
- * les accueille est `aria-hidden`. Elles n'ont donc ni alternative ni
- * dimensions à déclarer : leur adresse se recompose depuis le slug de la
- * famille, exactement comme celle d'un packshot depuis le slug d'un produit.
+ * LES SEPT MACROS ONT CHANGÉ DE NATURE EN C23, ET CE PARAGRAPHE AVEC.
+ *
+ * Elles étaient DÉCORATIVES au sens strict : elles montaient derrière un nom de
+ * famille au survol, le nom était le contenu, et le cadre qui les accueillait
+ * était `aria-hidden`. Elles n'avaient donc ni alternative ni dimensions à
+ * déclarer — leur adresse se recomposait depuis le slug de la famille.
+ *
+ * Ce raisonnement tenait tant que le survol existait. Il ne tenait pas sur un
+ * téléphone, et le défaut était plus large que « pas de survol » : le cadre
+ * portait `hidden lg:block`, donc en deçà de 64 rem il était en `display: none`
+ * et AUCUNE image n'était jamais demandée, quel que soit le geste du visiteur.
+ * Sept familles, zéro image, sur tout écran sous 1 024 px. Un professionnel du
+ * commerce en ligne l'a formulé sans pouvoir le nommer : « d'un œil on ne
+ * comprend pas ce que fait la marque ».
+ *
+ * Elles deviennent donc du CONTENU : rendues d'emblée, à toute largeur, dans
+ * une grille de tuiles. Ce qui leur donne ce que le héros avait déjà — un texte
+ * alternatif et une couleur de réservation.
+ *
+ * CES DEUX CHAMPS NE SONT PAS INVENTÉS ICI. Ils étaient écrits depuis C15 dans
+ * `travaux-images/manifeste.json`, à côté de chaque master, et personne ne les
+ * avait branchés. C'est le motif de toute cette tranche, retrouvé une fois de
+ * plus : la matière était là, l'aiguillage manquait.
  *
  * Les nombres viennent de `public/editorial/manifeste-livre.json`, écrit par le
  * pipeline : ce sont les dimensions RÉELLEMENT produites.
@@ -31,6 +46,76 @@ export const HEROS_ACCUEIL: VueVisuel = {
 
 /** La clef éditoriale du héros — le dossier qui le porte sous `public/editorial/`. */
 export const CLEF_ACCUEIL = 'accueil';
+
+/**
+ * LES SEPT MACROS DE FAMILLE, une par famille du catalogue (C23).
+ *
+ * Le type `Record<Famille, …>` fait le travail d'une garde sans en écrire une :
+ * il refuse la compilation si une famille manque ou si une clef inconnue entre.
+ * Même mécanisme que `NOM_DE_SCHEME` dans `vitrine.ts` — quand le compilateur
+ * peut tenir l'invariant, on ne demande pas à un test de le tenir.
+ *
+ * `alt` et `couleurDominante` sont RECOPIÉS de `travaux-images/manifeste.json`,
+ * où le pipeline les a écrits à la génération. Ils ne sont ni choisis à l'œil,
+ * ni reformulés : le texte alternatif décrit ce que le moteur a réellement
+ * produit, et la couleur est la moyenne mesurée du cadre.
+ *
+ * Dimensions : 1024 × 576, du 16:9 exact. Ce format n'est pas négociable — le
+ * recadrer en portrait coûterait PLUS cher qu'il ne rendrait, parce qu'un
+ * `object-fit: cover` en 4:5 réclamerait une source de 750 points là où le 16:9
+ * natif s'en tient à 320.
+ */
+export const MACROS_FAMILLE: Record<Famille, VueVisuel> = {
+  'huiles-et-vinaigres': {
+    alt: 'Filet d’huile versé en gros plan, formant une couronne et des ondes concentriques à la surface d’un bain d’huile.',
+    couleurDominante: '#a69368',
+    largeur: 1024,
+    hauteur: 576,
+    largeurs: [320, 640, 1024],
+  },
+  'conserves-salees': {
+    alt: 'Tranche de terrine de campagne en gros plan, sa chair rose piquée de poivre et d’herbes, sur un fond clair.',
+    couleurDominante: '#c7aa9c',
+    largeur: 1024,
+    hauteur: 576,
+    largeurs: [320, 640, 1024],
+  },
+  'miels-et-confitures': {
+    alt: 'Miel sombre qui coule en ruban épais et s’enroule sur lui-même, en très gros plan.',
+    couleurDominante: '#ad8b78',
+    largeur: 1024,
+    hauteur: 576,
+    largeurs: [320, 640, 1024],
+  },
+  'epicerie-seche': {
+    alt: 'Lentilles blondes répandues en vrac, vues de très près, quelques graines détachées au premier plan.',
+    couleurDominante: '#d6ba9b',
+    largeur: 1024,
+    hauteur: 576,
+    largeurs: [320, 640, 1024],
+  },
+  infusions: {
+    alt: 'Feuilles et fleurs séchées répandues à plat — verveine, tilleul, camomille, lavande —, vues de très près.',
+    couleurDominante: '#c0b7a4',
+    largeur: 1024,
+    hauteur: 576,
+    largeurs: [320, 640, 1024],
+  },
+  frais: {
+    alt: 'Motte de beurre en très gros plan, striée par le passage de la spatule, avec de fines gouttes de petit-lait.',
+    couleurDominante: '#d9c19e',
+    largeur: 1024,
+    hauteur: 576,
+    largeurs: [320, 640, 1024],
+  },
+  coffrets: {
+    alt: 'Angle d’un coffret de bois clair et papier kraft froissé, vus de très près, en lumière rasante.',
+    couleurDominante: '#c6a991',
+    largeur: 1024,
+    hauteur: 576,
+    largeurs: [320, 640, 1024],
+  },
+};
 
 /**
  * LES HÉROS À DEUX COLONNES — une ENTRÉE PAR PAGE, et rien d'autre à écrire.

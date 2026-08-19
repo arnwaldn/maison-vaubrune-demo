@@ -192,6 +192,23 @@ preuves/c22/*
 !preuves/c22/*.mjs
 !preuves/c22/*.txt
 
+# TRANCHE C23 — les six retours du professionnel marketplace. Même règle.
+#
+# Ce que ces scripts portent et qu'aucune garde ne dirait : la GÉOMÉTRIE de ce
+# que le visiteur voit vraiment. Les défauts de cette tranche sont tous du même
+# genre — une règle juste, écrite au mauvais endroit — donc tous invisibles à la
+# lecture du code et tous visibles à l'écran : une confirmation d'ajout au
+# panier correcte et rendue hors de la fenêtre, un visuel déclaré au survol donc
+# jamais demandé sur un écran tactile, une réserve d'ancre écrite deux fois.
+#
+# Chaque script d'ici imprime LA LARGEUR QU'IL A MESURÉE. Ce n'est pas du zèle :
+# un relevé pris dans une fenêtre qui n'était plus celle qu'on croyait a fait
+# annoncer, dans cette tranche même, un en-tête de 92 px là où il en fait 161.
+!preuves/c23/
+preuves/c23/*
+!preuves/c23/*.mjs
+!preuves/c23/*.txt
+
 # Atelier des visuels (tranche C11, décision D35). Les sorties BRUTES des
 # moteurs d'images sont énormes, portent leurs métadonnées — dont le texte de
 # la consigne — et ne sont pas ce qu'on livre. Seul le résultat recadré,

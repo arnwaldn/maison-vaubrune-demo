@@ -121,6 +121,20 @@ export default defineConfig({
            mauvais bras de l'union discriminée ne se verrait nulle part
            ailleurs. */
         'src/lib/vitrine.ts',
+        /* AJOUTÉ EN C23 (dix-huitième fichier). `suggestions.ts` décide quel
+           produit — donc quel PRIX — s'affiche dans un bloc de vente croisée,
+           à l'instant exact de la décision d'achat. Même règle d'admission que
+           les deux précédents : il produit un chiffre destiné à l'œil du
+           visiteur, et une branche perdue publierait un produit EN RUPTURE
+           avec son prix. Cette paire n'existe sur aucune autre page du site,
+           donc aucun écran ne la contredirait.
+
+           LA RAISON QUI DÉCIDE VRAIMENT est le seuil de BRANCHES : deux des
+           quatre branches de ce module ne se déclenchent que sur quatre fiches
+           sur quinze — les familles à un ou deux membres, celles qui empruntent
+           le repli. C'est-à-dire la moitié de la valeur du lot, et exactement
+           ce que personne ne regarderait sans ce seuil. */
+        'src/lib/suggestions.ts',
       ],
       /* `skipFull` masquerait les fichiers à 100 % — c'est-à-dire, ici, les
          deux seuls qu'on regarde. Le rapport doit AFFICHER le plein, pas le

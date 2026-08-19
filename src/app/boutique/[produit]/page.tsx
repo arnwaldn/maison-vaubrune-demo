@@ -7,6 +7,7 @@ import { Visuel } from '@/composants/illustrations/Visuel';
 import { LigneEntree } from '@/composants/mise-en-page/BlocTitre';
 import { DonneesStructurees } from '@/composants/mise-en-page/DonneesStructurees';
 import { BoutonAjouter } from '@/composants/panier/BoutonAjouter';
+import { MeublesTiroir } from '@/composants/panier/MeublesTiroir';
 import {
   EtiquettesVitrine,
   PrixLePlusBasVitrine,
@@ -19,7 +20,11 @@ import { URL_SITE } from '@/donnees/site';
 import { formaterEuros } from '@/lib/argent';
 import { trouverProduitParSlug, trouverReferenceParSku } from '@/lib/catalogue';
 import { donneesProduit, filArianeProduit } from '@/lib/donnees-structurees';
-import { projeterCatalogue, type ArticlePanier } from '@/lib/panier/catalogue-panier';
+import {
+  prixDepuisCatalogue,
+  projeterCatalogue,
+  type ArticlePanier,
+} from '@/lib/panier/catalogue-panier';
 import { typographier } from '@/lib/typographie';
 import { ligneDeGarde, rangInventaire } from '@/lib/vitrine';
 import {
@@ -346,9 +351,23 @@ export default async function PageProduit({ params }: ProprietesPage) {
               mort ; sur une fiche produit, c'est même un bon de commande
               apparent. */}
           <div data-bloc-achat className="mt-8">
+            {/* `meubles` PASSE DES NŒUDS DÉJÀ RENDUS PAR LE SERVEUR, et c'est
+                ce qui permet à `<Visuel>` — composant serveur — d'entrer dans un
+                tiroir client sans le rendre client. Mesuré : +501 octets gzip
+                sur cette fiche, ZÉRO octet de premier chargement. La solution
+                symétrique (passer des données, refaire la carte côté client)
+                coûtait moins en charge RSC et 400 à 700 octets de JavaScript —
+                et elle aurait fait naître une SECONDE fabrique de chemins
+                d'image, la deuxième vérité que C14 et C15 ont payée trois fois.
+
+                `prix` est un `Record<SKU, prix>` et non la projection complète :
+                208 octets gzip contre 1 268 pour le même chiffre affiché, et
+                c'est littéralement le corollaire écrit de D17. */}
             <BoutonAjouter
               articles={projeterCatalogue([produit])}
               pieces={piecesEligiblesProjetees(produit)}
+              meubles={<MeublesTiroir slug={produit.slug} />}
+              prix={prixDepuisCatalogue(projeterCatalogue(CATALOGUE))}
             />
           </div>
         </aside>

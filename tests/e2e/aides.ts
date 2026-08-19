@@ -1,3 +1,4 @@
+import { expect } from '@playwright/test';
 import type { Locator, Page } from '@playwright/test';
 
 /**
@@ -235,9 +236,64 @@ export function pastillePanier(page: Page): Locator {
   return page.locator('header a[href="/panier"] span[aria-hidden="true"]');
 }
 
-/** Le lien du rayon dans la navigation principale, à l'exclusion du reste. */
+/**
+ * Le lien du rayon dans la navigation principale, à l'exclusion du reste.
+ *
+ * LE LOCALISATEUR NU : il ne déplie rien, et c'est délibéré. C'est lui qui
+ * permet d'écrire le cas « au chargement, les trois destinations n'ont pas de
+ * boîte sur le profil replié ». Un repère qui ouvrirait le menu tout seul
+ * rendrait ce cas-là vert quoi qu'il arrive — le défaut de C16, « un test vert
+ * ne prouve rien tant qu'on ne l'a pas vu rouge pour la raison qu'il annonce ».
+ *
+ * Pour CLIQUER une destination, employer `cliquerNavigation()` juste dessous.
+ */
 export function lienNavigation(page: Page, libelle: string): Locator {
   return page
     .getByRole('navigation', { name: 'Navigation principale' })
     .getByRole('link', { name: libelle, exact: true });
+}
+
+/**
+ * Ouvre le menu de l'en-tête S'IL EST REPLIÉ, et ne fait rien sinon.
+ *
+ * TROIS PROPRIÉTÉS, ET CHACUNE FERME UN DÉFAUT QU'ON AURAIT EU AUTREMENT.
+ *
+ * 1. LE CRITÈRE EST UNE BOÎTE, JAMAIS UNE LARGEUR DE FENÊTRE. Le bouton est
+ *    rendu à toutes les largeurs ; c'est la feuille qui le retire au-dessus de
+ *    `md`. Un repère qui lirait `viewportSize()` déciderait sur un nombre que
+ *    la feuille de style ne connaît pas, et il mentirait le jour où le point
+ *    d'arrêt bouge. `isVisible()` lit ce que le moteur a calculé.
+ * 2. IL NE COÛTE RIEN AU PROFIL BUREAU. `isVisible()` est un RELEVÉ, pas une
+ *    assertion : il rend faux immédiatement quand l'élément n'a pas de boîte,
+ *    sans attente ni délai d'expiration.
+ * 3. IL NE SUPPOSE PAS QUE LE MENU EXISTE. Tant que le repliable n'est pas
+ *    écrit, le localisateur ne trouve rien, la fonction est un passe-plat, et
+ *    la campagne reste verte À L'IDENTIQUE. C'est ce qui permet de POSER LE
+ *    HARNAIS D'ABORD — l'exigence écrite de C17 — et de PROUVER qu'il ne change
+ *    rien avant que le composant existe.
+ *
+ * IDEMPOTENT : appelé deux fois, il lit `open` et sort. Et il ne REFERME jamais
+ * rien : la fermeture à la navigation est une propriété du SITE ; la refaire
+ * ici la rendrait vraie dans la campagne et fausse chez le visiteur.
+ */
+export async function ouvrirMenuSiReplie(page: Page): Promise<void> {
+  const repliable = page.locator('[data-chrome-entete] details[data-menu-entete]');
+  const bouton = repliable.locator('summary');
+
+  if (!(await bouton.isVisible())) {
+    return;
+  }
+
+  if (await repliable.evaluate((noeud: HTMLDetailsElement) => noeud.open)) {
+    return;
+  }
+
+  await bouton.click();
+  await expect(repliable).toHaveJSProperty('open', true);
+}
+
+/** Déplie le menu si besoin, PUIS clique la destination. Le geste du visiteur. */
+export async function cliquerNavigation(page: Page, libelle: string): Promise<void> {
+  await ouvrirMenuSiReplie(page);
+  await lienNavigation(page, libelle).click();
 }

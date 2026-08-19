@@ -4,6 +4,7 @@ import Link from 'next/link';
 
 import { ChoixZone } from '@/composants/panier/ChoixZone';
 import { LignePanier } from '@/composants/panier/LignePanier';
+import { LigneContact } from '@/composants/panier/LigneContact';
 import { MentionRetractation } from '@/composants/panier/MentionRetractation';
 import { RecapitulatifTotaux } from '@/composants/panier/RecapitulatifTotaux';
 import type { ArticlePanier } from '@/lib/panier/catalogue-panier';
@@ -130,6 +131,17 @@ export function IlotPanier({ catalogue }: { readonly catalogue: readonly Article
         )}
 
         <MentionRetractation articles={totaux.articlesSansRetractation} />
+
+        {/* « UNE QUESTION ? » AU DERNIER MOMENT OÙ ELLE SE POSE (C23, retour du
+            professionnel n° 5). Le panier est l'écran où l'on hésite : c'est là
+            qu'un client veut savoir qu'un humain existe. Le bloc ne porte aucune
+            coordonnée — elles valent `null` par doctrine — et renvoie vers la
+            section « 4. Contact » des mentions légales, où les quatre
+            emplacements sont déjà rendus en `<AComplete>`. Le manque s'y lit
+            comme un gabarit, pas comme un oubli. */}
+        <div className="mt-6 border-t border-filet pt-4">
+          <LigneContact />
+        </div>
       </div>
     </div>
   );

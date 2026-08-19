@@ -101,6 +101,38 @@ export interface Totaux {
 /* Le calcul                                                                   */
 /* -------------------------------------------------------------------------- */
 
+/**
+ * LA SOMME DES LIGNES — et il n'y en a qu'UNE dans tout le projet (C23).
+ *
+ * Le tiroir d'ajout au panier doit afficher un sous-total. Il aurait pu
+ * refaire l'addition de son côté : elle tient en une ligne, et c'est
+ * exactement pour cela qu'elle aurait divergé un jour. `totaux.ts` porte
+ * depuis C4 la doctrine « TOUT montant affiché sort de `calculerTotaux()` » ;
+ * ce module extrait donc l'addition plutôt que de la laisser recopier, et
+ * `calculerTotaux` en devient le premier appelant.
+ *
+ * Une ligne dont la référence est INCONNUE du catalogue est ignorée, jamais
+ * comptée à zéro ni cause d'erreur — c'est déjà ce que faisait `calculerTotaux`
+ * (un panier restauré peut porter une référence qu'une livraison a retirée), et
+ * la branche reste couverte à l'identique.
+ */
+export function sousTotalDesLignes(
+  lignes: readonly LignePanier[],
+  prixParSku: Readonly<Record<string, number>>,
+): number {
+  let total = 0;
+
+  for (const ligne of lignes) {
+    const prix = prixParSku[ligne.sku];
+
+    if (prix !== undefined) {
+      total += prix * ligne.quantite;
+    }
+  }
+
+  return total;
+}
+
 export function calculerTotaux(
   lignes: readonly LignePanier[],
   catalogue: readonly ArticlePanier[],
@@ -124,9 +156,9 @@ export function calculerTotaux(
   }
 
   const nbArticles = calculees.reduce((total, calculee) => total + calculee.ligne.quantite, 0);
-  const sousTotalCentimes = calculees.reduce(
-    (total, calculee) => total + calculee.sousTotalCentimes,
-    0,
+  const sousTotalCentimes = sousTotalDesLignes(
+    lignes,
+    Object.fromEntries(catalogue.map((article) => [article.sku, article.prixCentimes])),
   );
 
   /* Le moteur d'expédition ne connaît ni le catalogue ni le panier : il reçoit
