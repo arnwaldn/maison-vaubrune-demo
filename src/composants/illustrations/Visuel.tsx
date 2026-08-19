@@ -134,6 +134,22 @@ interface ProprietesVisuel {
    */
   readonly prioritaire?: boolean;
   /**
+   * `true` pour une vue qui ne doit JAMAIS disputer le tuyau au plus grand
+   * affichage (C23). `loading="lazy"` ne suffit pas à l'en empêcher : sous
+   * connexion bridée, le seuil de préchargement de Chrome porte à ~1 250 px
+   * devant la fenêtre, et une tuile posée juste sous la flottaison est donc
+   * demandée PENDANT la fenêtre de mesure — en priorité `auto`, c'est-à-dire en
+   * concurrence avec le héros. Mesuré sur l'accueil : +150 à +300 ms de plus
+   * grand affichage, constants sur six tirages, à l'entrée des sept tuiles de
+   * famille. `fetchPriority="low"` laisse la tuile se charger dans le même
+   * seuil, mais derrière tout ce qui compte.
+   *
+   * Incompatible avec `prioritaire`, et le type ne peut pas l'interdire sans
+   * une union discriminée disproportionnée : l'appelant qui poserait les deux
+   * obtiendrait `prioritaire`, qui gagne — c'est écrit à l'endroit du calcul.
+   */
+  readonly arrierePlan?: boolean;
+  /**
    * CE QUE CETTE VUE DEVIENT SUR LE PAPIER.
    *
    * `'silhouette'` (défaut) : la photographie sort, le dessin de repli entre —
@@ -184,6 +200,7 @@ export function Visuel({
   sizes,
   largeurMaximale,
   prioritaire = false,
+  arrierePlan = false,
   impression = 'silhouette',
   className = '',
 }: ProprietesVisuel) {
@@ -227,7 +244,8 @@ export function Visuel({
              suite, le second dans quel ordre elle passe. Une image de premier
              écran a besoin des deux ; les autres n'ont besoin d'aucun. */
           loading={prioritaire ? 'eager' : 'lazy'}
-          fetchPriority={prioritaire ? 'high' : 'auto'}
+          /* `prioritaire` gagne si les deux sont poses — voir la doc de `arrierePlan`. */
+          fetchPriority={prioritaire ? 'high' : arrierePlan ? 'low' : 'auto'}
           decoding="async"
           className="block h-auto w-full"
         />

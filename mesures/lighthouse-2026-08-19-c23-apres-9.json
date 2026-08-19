@@ -1,0 +1,130 @@
+{
+  "date": "2026-08-19",
+  "lighthouseVersion": "13.4.1",
+  "profil": {
+    "appareil": "mobile",
+    "bridage": "profil par défaut de Lighthouse (mobile émulé, réseau et processeur bridés)",
+    "origine": "construction de production servie en local (next start)",
+    "horsLigne": true
+  },
+  "seuils": {
+    "performance": 90,
+    "accessibility": 100,
+    "seo": 96,
+    "best-practices": 100
+  },
+  "pages": [
+    {
+      "chemin": "/",
+      "intitule": "Accueil",
+      "notes": {
+        "performance": 87,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "mesures": {
+        "premierAffichage": {
+          "valeur": 1533.03765,
+          "affichage": "1.5 s"
+        },
+        "plusGrandAffichage": {
+          "valeur": 3272.0376499999998,
+          "affichage": "3.3 s"
+        },
+        "tempsDeBlocage": {
+          "valeur": 253.97489999999993,
+          "affichage": "250 ms"
+        },
+        "decalageCumule": {
+          "valeur": 0.0002404392735560512,
+          "affichage": "0"
+        }
+      }
+    },
+    {
+      "chemin": "/boutique",
+      "intitule": "Rayon",
+      "notes": {
+        "performance": 84,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "mesures": {
+        "premierAffichage": {
+          "valeur": 1849.045,
+          "affichage": "1.8 s"
+        },
+        "plusGrandAffichage": {
+          "valeur": 3270.0675,
+          "affichage": "3.3 s"
+        },
+        "tempsDeBlocage": {
+          "valeur": 329.4549999999999,
+          "affichage": "330 ms"
+        },
+        "decalageCumule": {
+          "valeur": 0,
+          "affichage": "0"
+        }
+      }
+    },
+    {
+      "chemin": "/boutique/huile-olive-premiere-pression",
+      "intitule": "Fiche huile d’olive",
+      "notes": {
+        "performance": 94,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "mesures": {
+        "premierAffichage": {
+          "valeur": 1675.3674,
+          "affichage": "1.7 s"
+        },
+        "plusGrandAffichage": {
+          "valeur": 2991.3674,
+          "affichage": "3.0 s"
+        },
+        "tempsDeBlocage": {
+          "valeur": 44.5,
+          "affichage": "40 ms"
+        },
+        "decalageCumule": {
+          "valeur": 0.0002404392735560512,
+          "affichage": "0"
+        }
+      }
+    },
+    {
+      "chemin": "/panier",
+      "intitule": "Panier",
+      "notes": {
+        "performance": 92,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "mesures": {
+        "premierAffichage": {
+          "valeur": 1521.3294,
+          "affichage": "1.5 s"
+        },
+        "plusGrandAffichage": {
+          "valeur": 2955.2196,
+          "affichage": "3.0 s"
+        },
+        "tempsDeBlocage": {
+          "valeur": 150,
+          "affichage": "150 ms"
+        },
+        "decalageCumule": {
+          "valeur": 0.0002404392735560512,
+          "affichage": "0"
+        }
+      }
+    }
+  ]
+}

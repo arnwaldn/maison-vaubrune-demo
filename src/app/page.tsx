@@ -332,7 +332,8 @@ export default function PageAccueil() {
                   vue="macro"
                   donnees={MACROS_FAMILLE[entree.famille]}
                   alternative="decorative"
-                  largeurMaximale={entree.rang === 1 ? 1024 : 320}
+                  arrierePlan
+                  largeurMaximale={entree.rang === 1 ? 640 : 320}
                   sizes={
                     entree.rang === 1
                       ? '(min-width: 90rem) 42rem, (min-width: 40rem) 46vw, calc(100vw - 2.5rem)'
