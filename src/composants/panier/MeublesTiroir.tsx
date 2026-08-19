@@ -69,7 +69,7 @@ export function MeublesTiroir({ slug }: { readonly slug: string }) {
         </section>
       ) : null}
 
-      <BlocReassurance className="tiroir-bloc" />
+      <BlocReassurance identifiant="reassurance-tiroir" className="tiroir-bloc" />
     </>
   );
 }

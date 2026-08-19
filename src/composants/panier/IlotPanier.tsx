@@ -216,7 +216,7 @@ export function IlotPanier({
             SANS le renvoi au service client : `LigneContact` est déjà posée
             deux blocs plus bas depuis C23, et la répéter à cette distance se
             lirait comme une maladresse plutôt que comme une insistance. */}
-        <BlocReassurance avecContact={false} />
+        <BlocReassurance identifiant="reassurance-panier" avecContact={false} />
 
         <MentionRetractation articles={totaux.articlesSansRetractation} />
 

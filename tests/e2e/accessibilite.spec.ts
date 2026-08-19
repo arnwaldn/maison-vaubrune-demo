@@ -107,4 +107,39 @@ for (const { chemin, intitule } of PAGES) {
       bloquantes.map((violation) => `${violation.impact ?? '?'} : ${violation.id}`),
     ).toEqual([]);
   });
+
+  /**
+   * L'UNICITÉ DES IDENTIFIANTS, QU'AXE NE CONTRÔLE PLUS.
+   *
+   * `duplicate-id` et `duplicate-id-active` ont été dépréciées dans axe-core
+   * 4.10, `duplicate-id-aria` retirée ensuite : la campagne ci-dessus balaye
+   * cette page depuis C8 et n'aurait rien dit. Constaté sur le site publié le
+   * 19/08 — le bloc de réassurance de C25, posé une seconde fois sur la fiche
+   * produit, y rendait deux `<section aria-labelledby>` liées au même
+   * identifiant, seul doublon du document.
+   *
+   * Un identifiant dupliqué n'est pas une question de goût : `aria-labelledby`,
+   * `aria-describedby`, `<label for>` et les ancres résolvent tous vers le
+   * PREMIER élément trouvé. Le jour où deux titres homonymes cessent de porter
+   * le même texte, le nom annoncé devient faux sans qu'aucune ligne n'ait
+   * changé à l'endroit qu'on lit.
+   *
+   * Le contrôle porte sur le document ENTIER — un doublon né dans la coquille
+   * serait tout aussi faux — et il ne nomme aucun identifiant : il compte.
+   */
+  test(`${intitule} (${chemin}) — aucun identifiant dupliqué`, async ({ page }) => {
+    await ouvrir(page, chemin);
+
+    const doublons = await page.evaluate(() => {
+      const vus = new Map<string, number>();
+      for (const element of document.querySelectorAll('[id]')) {
+        vus.set(element.id, (vus.get(element.id) ?? 0) + 1);
+      }
+      return [...vus.entries()]
+        .filter(([, combien]) => combien > 1)
+        .map(([identifiant, combien]) => `${identifiant} (${String(combien)} fois)`);
+    });
+
+    expect(doublons).toEqual([]);
+  });
 }

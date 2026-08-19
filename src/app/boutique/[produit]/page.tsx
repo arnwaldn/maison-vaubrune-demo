@@ -384,7 +384,11 @@ export default async function PageProduit({ params }: ProprietesPage) {
                 `data-bloc-achat` : la feuille d'impression le masque, et trois
                 garanties commerciales sur un PDF de fiche produit seraient
                 exactement ce que ce marqueur existe pour retirer. */}
-            <BlocReassurance avecContact className="mt-6 border-t border-filet pt-4" />
+            <BlocReassurance
+            identifiant="reassurance-fiche"
+            avecContact
+            className="mt-6 border-t border-filet pt-4"
+          />
           </div>
         </aside>
 

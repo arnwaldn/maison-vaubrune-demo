@@ -39,11 +39,37 @@ import { LIBELLE_ZONE } from '@/lib/types';
  *
  * Composant SERVEUR, sans état : il peut donc entrer aussi bien dans une page
  * statique que dans un nœud passé à un îlot client.
+ *
+ * ═══════════════════════════════════════════════════════════════════════════
+ *  L'IDENTIFIANT EST À LA CHARGE DE L'APPELANT, ET C'EST OBLIGATOIRE
+ * ═══════════════════════════════════════════════════════════════════════════
+ *
+ * Le bloc portait un `id` écrit en dur. Tant qu'il ne vivait que dans le
+ * tiroir, l'identifiant était unique par construction. En le posant AUSSI sur
+ * la fiche produit, la page s'est mise à rendre DEUX `<section>` liées au même
+ * identifiant — le seul doublon du document, mesuré sur le site publié.
+ *
+ * Un identifiant se doit d'être unique : c'est une règle du langage, pas une
+ * préférence. La conséquence pratique est qu'`aria-labelledby` résout vers le
+ * PREMIER élément trouvé, donc les deux sections empruntaient le titre du
+ * tiroir. Les deux textes étant identiques, rien ne s'entendait — mais rien ne
+ * garantit qu'ils le resteront.
+ *
+ * AXE NE L'AURAIT PAS DIT : la règle `duplicate-id-aria` a été retirée
+ * d'axe-core après la 4.10, et la campagne d'accessibilité balaye pourtant
+ * cette fiche depuis C8. L'outil a cessé de regarder ; le dépôt regarde à sa
+ * place (contrôle d'unicité dans `tests/e2e/accessibilite.spec.ts`).
+ *
+ * Le nom est donc REQUIS et sans valeur par défaut : un quatrième emplacement
+ * ne pourra pas naître sans que son auteur choisisse comment l'appeler.
  */
 export function BlocReassurance({
+  identifiant,
   avecContact = true,
   className = '',
 }: {
+  /** Identifiant du titre, UNIQUE dans la page qui rend ce bloc. */
+  readonly identifiant: string;
   /**
    * Le renvoi vers le service client accompagne-t-il les trois garanties ?
    *
@@ -57,8 +83,8 @@ export function BlocReassurance({
   const metropole = BAREMES.metropole;
 
   return (
-    <section aria-labelledby="titre-reassurance" className={className}>
-      <h2 id="titre-reassurance" className="sr-only">
+    <section aria-labelledby={identifiant} className={className}>
+      <h2 id={identifiant} className="sr-only">
         Ce que la maison garantit
       </h2>
       <ul className="registre space-y-1.5 text-encre-douce">
