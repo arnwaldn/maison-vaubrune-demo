@@ -111,11 +111,30 @@ const LARGEUR_CARTE = 320;
  */
 const RANGS_DE_CASCADE = 6;
 
+/**
+ * La place que la carte occupe VRAIMENT, selon qui la pose.
+ *
+ * Le rayon la range en grille (trois colonnes au plus) ; le rail de l'accueil
+ * la range en file, où elle vaut 74 % de la fenêtre sur un téléphone. Deux
+ * places différentes, donc deux `sizes` — et `Visuel` avertit qu'« un `sizes`
+ * faux est pire qu'absent ».
+ *
+ * En pratique `largeurMaximale` réduit le `srcset` à une seule entrée, donc
+ * `sizes` n'a rien à départager et reste inerte. Il est quand même juste :
+ * laisser dans le HTML livré une chaîne qui décrit une grille à trois colonnes
+ * sous un rail à 30 % serait un commentaire faux, et un commentaire faux
+ * survit à la raison qui l'avait rendu inoffensif.
+ */
+const SIZES_RAYON = '(min-width: 64rem) 25rem, (min-width: 40rem) 45vw, 81vw';
+
 export function CarteProduit({
   produit,
   rangDansLaFamille = 0,
+  sizes = SIZES_RAYON,
 }: {
   readonly produit: Produit;
+  /** La place occupée, si l'appelant ne range pas la carte comme le rayon. */
+  readonly sizes?: string;
   /**
    * Le rang de la vignette dans sa famille, pour la cascade de révélation.
    *
@@ -262,8 +281,10 @@ export function CarteProduit({
                    de 390. L'ancienne valeur (20 rem / 16 rem / 40vw) sous-disait
                    la place partout, ce qui est une façon de tenir un budget sans
                    le dire. Le budget est désormais tenu par `largeurMaximale`,
-                   qui est une décision ; `sizes` peut donc redire la vérité. */
-                sizes="(min-width: 64rem) 25rem, (min-width: 40rem) 45vw, 81vw"
+                   qui est une décision ; `sizes` peut donc redire la vérité.
+                   Depuis C23, la valeur vient de l'appelant : le rail de
+                   l'accueil range la même carte tout autrement. */
+                sizes={sizes}
                 largeurMaximale={LARGEUR_CARTE}
                 className="block"
               />

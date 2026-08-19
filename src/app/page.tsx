@@ -4,7 +4,8 @@ import Link from 'next/link';
 import { EncartFiction } from '@/composants/demonstration/EncartFiction';
 import { VideoHeros } from '@/composants/illustrations/VideoHeros';
 import { Visuel } from '@/composants/illustrations/Visuel';
-import { CATALOGUE } from '@/donnees/catalogue';
+import { CarteProduit } from '@/composants/boutique/CarteProduit';
+import { CATALOGUE, PRODUITS_MIS_EN_AVANT } from '@/donnees/catalogue';
 import { marchand } from '@/donnees/marchand';
 import { URL_SITE } from '@/donnees/site';
 import { CLEF_ACCUEIL, HEROS_ACCUEIL, MACROS_FAMILLE } from '@/donnees/visuels-editoriaux';
@@ -351,6 +352,65 @@ export default function PageAccueil() {
           ))}
         </ul>
       </section>
+      {/* LA SÉLECTION — un rail, et pas un carrousel (C23).
+
+          « Faudrait direct mettre un carrousel produits » : le retour est juste,
+          la réponse ne l'est qu'à une condition. La note de rapidité de cette
+          page est déjà tombée à 86 pour un plancher de 90, et ce n'est PAS le
+          plus grand affichage qui pèche — il est stable à 2,6-3,1 s sur cinq
+          relevés — c'est le TEMPS DE BLOCAGE, qui va de 54 à 461 ms. Un
+          carrousel hydraté ajouterait du travail de fil principal sur la seule
+          page du site dont la note est déjà passée sous son seuil. D'où : zéro
+          dépendance, zéro octet de JavaScript, un rail à `scroll-snap`.
+
+          CE N'EST NI UN BANDEAU AUTO-LU NI UN DÉTOURNEMENT DE DÉFILEMENT, les
+          deux interdits qui gardent cette page. Rien ne bouge sans le doigt, et
+          l'accrochage porte sur l'axe X — celui que le visiteur pilote déjà
+          dans ce conteneur. Le défilement vertical n'est pas touché. Un bandeau
+          auto-défilant a d'ailleurs été retiré de cet accueil sur décision du
+          client en C19 : on ne le réintroduit pas par la bande.
+
+          LE RAIL RESTE UN RAIL AU-DELÀ DE `lg`, et c'est un choix. Une grille à
+          cinq colonnes sur 1 280 px donnerait des cartes de 224 points — la
+          moitié de celles du rayon — où le résumé se replierait sur cinq lignes.
+          À 30 %, la carte fait 365 points, proche des 400 du rayon, et l'on voit
+          trois cartes plus le tiers de la quatrième : c'est le débord qui dit
+          qu'il y a une suite, sans flèche à dessiner. Surtout, le rail survit au
+          jour où la sélection passera de cinq à quatre — `lg:grid-cols-5`
+          casserait en silence.
+
+          PAS DE `tabIndex` NI DE `role="region"` SUR LE `<ul>`. La règle
+          `scrollable-region-focusable` ne se déclenche que sur un conteneur
+          défilant SANS élément focalisable ; il y a cinq liens ici. Les trois
+          violations « serious » de C8 portaient sur des tableaux sans lien —
+          la distinction est déjà écrite dans `CadreDefilant.tsx`. Ajouter un
+          arrêt de tabulation inutile est exactement le coût que ce composant
+          refuse de payer. */}
+      <section aria-labelledby="titre-selection" className="pb-14 sm:pb-20">
+        <div
+          className="flex flex-wrap items-baseline justify-between gap-x-8 gap-y-2"
+          data-revelation
+        >
+          <h2 id="titre-selection" className="text-titre text-encre">
+            La sélection
+          </h2>
+          <Link href="/boutique" className="etiquette text-encre-douce">
+            Voir les {CATALOGUE.length} références
+          </Link>
+        </div>
+
+        <ul className="rail-vitrine mt-8">
+          {PRODUITS_MIS_EN_AVANT.map((produit, rang) => (
+            <CarteProduit
+              key={produit.slug}
+              produit={produit}
+              rangDansLaFamille={rang}
+              sizes="(min-width: 64rem) 22rem, (min-width: 40rem) 44vw, 74vw"
+            />
+          ))}
+        </ul>
+      </section>
+
     </div>
   );
 }

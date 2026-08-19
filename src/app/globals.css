@@ -1863,6 +1863,54 @@
    * vit sous `no-preference` : sous mouvement réduit, la tuile est simplement
    * là. Rien n'est masqué au repos — sans JavaScript, tout se voit.
    */
+  /*
+   * LE RAIL DE LA SÉLECTION (accueil) — C23.
+   *
+   * Un défilement horizontal à accrochage, en CSS pur. Le raisonnement qui
+   * l'impose est dans `page.tsx`, à l'endroit du composant : la note de cette
+   * page est déjà tombée sous son seuil par le TEMPS DE BLOCAGE, donc le
+   * carrousel demandé par le client ne peut pas coûter un octet de JavaScript.
+   *
+   * `flex-basis` en pour-cent plutôt qu'une grille à N colonnes : le rail
+   * survit au jour où la sélection passera de cinq produits à quatre, là où un
+   * `grid-cols-5` casserait en silence. Le débord de la carte suivante EST
+   * l'affordance — il dit qu'il y a une suite, sans flèche à dessiner.
+   *
+   * `overscroll-behavior-x: contain` empêche le geste de fuir vers la
+   * navigation arrière du navigateur une fois le rail au bout.
+   *
+   * PAS de `scroll-snap-stop: always` : avec lui, un déplacement de focus
+   * lointain ou un `scrollIntoView` reste bloqué à la carte suivante.
+   * L'accrochage doit arrondir, pas emprisonner.
+   */
+  .rail-vitrine {
+    display: flex;
+    gap: var(--gouttiere);
+    overflow-x: auto;
+    padding-bottom: 0.75rem;
+    scroll-snap-type: x mandatory;
+    scrollbar-color: var(--color-filet-fort) transparent;
+    scrollbar-width: thin;
+    overscroll-behavior-x: contain;
+  }
+
+  .rail-vitrine > * {
+    flex: 0 0 74%;
+    scroll-snap-align: start;
+  }
+
+  @media (min-width: 40rem) {
+    .rail-vitrine > * {
+      flex-basis: 44%;
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .rail-vitrine > * {
+      flex-basis: 30%;
+    }
+  }
+
   .tuiles-familles {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -2105,23 +2153,37 @@
    règle de base.
    =========================================================================== */
 
+/* LA BASCULE GOUVERNE LE RAYON, PAS TOUTES LES CARTES DU SITE (correctif C23).
+
+   Les trois règles ci-dessous visaient `.carte-produit` et `.carte-visuel` sans
+   ancre : elles s'appliquaient donc partout où une carte est rendue. Tant que
+   le rayon était le seul endroit, l'écart ne se voyait pas. Le rail de
+   l'accueil l'a mis à découvert, et le défaut était REPRODUIT avant d'être
+   corrigé : passer `/boutique` en « Liste », revenir à l'accueil par un clic,
+   et le rail s'y recomposait en lignes — `flexDirection: row`, visuel à 144 px.
+
+   L'attribut vit sur `<html>` et SURVIT à la navigation cliente ; le composant
+   qui le pose le dit lui-même (« l'attribut a pu survivre à un aller-retour »).
+   Ce n'est donc pas un cas de bord : c'est le chemin normal d'un visiteur qui
+   préfère la liste. `.rayon-grille` existait déjà et n'attendait qu'à servir
+   d'ancre. */
 html[data-affichage-rayon='liste'] .rayon-grille {
   grid-template-columns: 1fr;
 }
 
-html[data-affichage-rayon='liste'] .carte-produit > a {
+html[data-affichage-rayon='liste'] .rayon-grille .carte-produit > a {
   flex-direction: row;
   align-items: flex-start;
   gap: 1.25rem;
 }
 
-html[data-affichage-rayon='liste'] .carte-visuel {
+html[data-affichage-rayon='liste'] .rayon-grille .carte-visuel {
   flex: none;
   width: 6.5rem;
 }
 
 @media (min-width: 40rem) {
-  html[data-affichage-rayon='liste'] .carte-visuel {
+  html[data-affichage-rayon='liste'] .rayon-grille .carte-visuel {
     width: 9rem;
   }
 }
