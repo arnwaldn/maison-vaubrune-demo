@@ -1,10 +1,7 @@
 import { CarteSuggestion } from '@/composants/panier/CarteSuggestion';
-import { LigneContact } from '@/composants/panier/LigneContact';
+import { BlocReassurance } from '@/composants/panier/BlocReassurance';
 import { CATALOGUE } from '@/donnees/catalogue';
-import { BAREMES } from '@/donnees/bareme-expedition';
-import { formaterEuros } from '@/lib/argent';
 import { suggestionsPourProduit } from '@/lib/suggestions';
-import { LIBELLE_ZONE } from '@/lib/types';
 
 /**
  * CE QUE LE TIROIR D'AJOUT MONTRE, ET QUI NE DÉPEND PAS DE L'ACTION (C23).
@@ -54,7 +51,6 @@ const COMBIEN_DE_SUGGESTIONS = 2;
 
 export function MeublesTiroir({ slug }: { readonly slug: string }) {
   const suggestions = suggestionsPourProduit(CATALOGUE, slug, COMBIEN_DE_SUGGESTIONS);
-  const metropole = BAREMES.metropole;
 
   return (
     <>
@@ -73,27 +69,7 @@ export function MeublesTiroir({ slug }: { readonly slug: string }) {
         </section>
       ) : null}
 
-      <section aria-labelledby="tiroir-reassurance" className="tiroir-bloc">
-        <h3 id="tiroir-reassurance" className="sr-only">
-          Ce que la maison garantit
-        </h3>
-        <ul className="registre space-y-1.5 text-encre-douce">
-          <li>Quatorze jours pour changer d’avis</li>
-          {/* PAS de `.toLowerCase()` sur le libellé de zone : « France » est un
-              nom propre, et le mettre en bas de casse est une faute de
-              typographie française — celle que la garde `verifier-typographie`
-              ne voit pas, parce qu'elle contrôle les espaces et les apostrophes,
-              pas la casse des noms propres. Vue à la capture, pas au test. */}
-          <li>
-            Port offert dès {formaterEuros(metropole.seuilFrancoCentimes ?? 0)} en{' '}
-            {LIBELLE_ZONE.metropole}
-          </li>
-          <li>Paiement sécurisé par prestataire agréé</li>
-        </ul>
-        <div className="mt-3">
-          <LigneContact />
-        </div>
-      </section>
+      <BlocReassurance className="tiroir-bloc" />
     </>
   );
 }

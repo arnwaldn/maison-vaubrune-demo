@@ -3,6 +3,7 @@
 import type { ReactNode } from 'react';
 import Link from 'next/link';
 
+import { BlocReassurance } from '@/composants/panier/BlocReassurance';
 import { ChoixZone } from '@/composants/panier/ChoixZone';
 import { LignePanier } from '@/composants/panier/LignePanier';
 import { LigneContact } from '@/composants/panier/LigneContact';
@@ -204,6 +205,18 @@ export function IlotPanier({
             </p>
           </div>
         )}
+
+        {/* LA REASSURANCE, AU DERNIER ECRAN AVANT LE PAIEMENT (C25).
+
+            La remarque du professionnel disait « dans le panier OU au niveau
+            de la fiche produit ». C23 ne l avait posee que dans le tiroir —
+            un ecran de passage, ni l un ni l autre. Ici, elle se lit juste
+            au-dessus du bouton qui engage.
+
+            SANS le renvoi au service client : `LigneContact` est déjà posée
+            deux blocs plus bas depuis C23, et la répéter à cette distance se
+            lirait comme une maladresse plutôt que comme une insistance. */}
+        <BlocReassurance avecContact={false} />
 
         <MentionRetractation articles={totaux.articlesSansRetractation} />
 
