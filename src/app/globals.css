@@ -1835,111 +1835,142 @@
   }
 
   /*
-   * LA RANGÉE DES FAMILLES (accueil) — sept macros, un seul cadre.
+   * LA GRILLE DES SEPT FAMILLES (accueil) — C23.
    *
-   * Le survol d'un nom fait monter la macro correspondante dans le cadre
-   * d'aperçu. `:has()` porte tout le mécanisme : aucun JavaScript, aucun état.
-   * Les images sont, là encore, des fonds CSS déclarés dans la règle de survol —
-   * sept macros téléchargées d'avance sur une page d'accueil seraient le
-   * contraire de ce que cette tranche cherche.
+   * ELLE REMPLACE UN MÉCANISME QUI MARCHAIT, ET QUI NE SERVAIT PERSONNE. Le
+   * survol d'un nom faisait monter sa macro dans un cadre d'aperçu unique, par
+   * `:has()`, sans un octet de JavaScript et sans rien télécharger à qui ne
+   * survolait pas. C'était juste — et le cadre portait `hidden lg:block`, donc
+   * en deçà de 64 rem il était en `display: none` et AUCUNE image n'était jamais
+   * demandée. Pas « pas de survol sur téléphone » : zéro image sur tout écran
+   * sous 1 024 px, quel que soit le geste du visiteur.
+   *
+   * SEPT EST UN NOMBRE PREMIER, et c'est ce qui fixe la forme. Toute grille
+   * régulière laisserait un trou. La première tuile prend DEUX colonnes : il
+   * reste six tuiles, donc trois rangs pleins à deux colonnes et un rang et demi
+   * à quatre. Deux paliers suffisent, et le remplissage est exact aux deux —
+   * aucune largeur ne laisse d'orphelin.
+   *
+   * LE CARTOUCHE EST EN SURIMPRESSION, ET C'EST UNE PROTECTION, PAS UN GOÛT.
+   * Un libellé posé SOUS la tuile, dans le flux, rendu en registre mono, change
+   * de nombre de lignes à l'arrivée des polices et fait refluer sept tuiles d'un
+   * coup — le décalage cumulé de 0,0089 de C13, sur un autre organe. Hors du
+   * flux, il ne peut pas. Le dégradé monte jusqu'à l'opacité 0,92 sous le texte :
+   * la coquille sur l'encre vaut 13,93:1, et le dégradé ne doit pas être ce qui
+   * fait descendre ce rapport sous le seuil.
+   *
+   * LE SURVOL N'ANIME QUE `transform`, comme partout ailleurs (D37 § 3), et il
+   * vit sous `no-preference` : sous mouvement réduit, la tuile est simplement
+   * là. Rien n'est masqué au repos — sans JavaScript, tout se voit.
    */
-  /*
-   * LE CADRE D'APERÇU — ET IL COLLE (retour client n° 13, C19-ter).
-   *
-   * ─────────────────────────────────────────────────────────────────────────
-   * LE DÉFAUT, MESURÉ : le cadre mesure 480 × 270 et la liste des sept
-   * familles 680 × 527. Le cadre est donc DEUX FOIS PLUS COURT que la colonne
-   * qu'il accompagne : à hauteur de la sixième famille, il a déjà quitté le
-   * haut de la fenêtre, et le fondu croisé qu'on vient de déclencher joue hors
-   * de vue. Le client l'a dit exactement ainsi — « les changements se font trop
-   * haut pour être vus quand on descend la liste ».
-   *
-   * LE CORRECTIF EST DU CSS PUR, et il ne coûte pas un octet de JavaScript :
-   * le cadre colle au même repère que tout ce qui colle sur ce site —
-   * `--hauteur-entete`, la variable posée en C15 pour que la barre du rayon
-   * s'arrête SOUS l'en-tête plutôt que douze pixels dessous. La respiration
-   * d'une gouttière (1,5 rem) l'en écarte, comme le `scroll-padding-top` s'en
-   * accorde une pour les ancres.
-   *
-   * `align-self: start` est NÉCESSAIRE et n'est pas une précaution : un élément
-   * de grille étiré occupe toute la hauteur de sa rangée, et un élément qui
-   * remplit sa rangée n'a nulle part où coller. Il se trouve que le rapport
-   * 16:9 gagne déjà contre l'étirement sur ce moteur — la mesure le dit, 270 px
-   * pour une rangée de 527 — mais cette victoire est une propriété du moteur,
-   * pas de la feuille. On l'écrit.
-   *
-   * LA POSITION DE REPOS EST ÉCRITE ICI, ET C'EST L'ANTI-PATRON N° 21 DE D37
-   * QUI L'EXIGE : les couches d'aperçu sont en `position: absolute` et ont
-   * besoin d'un ancêtre positionné. L'utilitaire `relative` le donnait ; il
-   * aurait aussi BATTU cette règle-ci, la couche `utilities` passant avant
-   * `components` quelle que soit la spécificité. La règle collante aurait été
-   * écrite, lisible, plausible — et n'aurait jamais rien fait. Les deux états
-   * vivent donc dans la même couche, et un cas de campagne lit le style
-   * CALCULÉ.
-   */
-  .apercu-cadre {
-    position: relative;
+  .tuiles-familles {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--gouttiere);
   }
 
-  @media (min-width: 64rem) {
-    .apercu-cadre {
-      position: sticky;
-      top: calc(var(--hauteur-entete) + 1.5rem);
-      align-self: start;
+  .tuiles-familles > li:first-child {
+    grid-column: span 2;
+  }
+
+  @media (min-width: 40rem) {
+    .tuiles-familles {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
     }
   }
 
-  .apercu-famille {
+  /*
+   * LES TUILES D'UN MÊME RANG FONT LA MÊME HAUTEUR — et il faut le dire, sinon
+   * la grande en creuse deux.
+   *
+   * Le remplissage est exact : la première tuile prend deux colonnes, donc
+   * 2 + 6 = 8 cellules, soit deux rangs pleins à quatre colonnes et quatre rangs
+   * pleins à deux. Mais une tuile deux fois plus large est, en 16:9, deux fois
+   * plus HAUTE : les deux petites tuiles posées à côté d'elle gardaient leur
+   * hauteur propre et laissaient un trou de marbre sous elles.
+   *
+   * Le rang est étiré (`stretch`, le défaut d'une grille), la tuile prend toute
+   * sa cellule, et c'est l'IMAGE qui s'adapte par `object-fit: cover`. Le
+   * recadrage ne coûte pas un octet de plus : le fichier servi est le même, il
+   * est seulement rogné — et sur des macros, qui sont des gros plans de matière
+   * sans sujet à cadrer, rogner ne retire rien de lisible. C'est la raison pour
+   * laquelle ce compromis est acceptable ici et ne le serait pas sur un packshot.
+   */
+  .tuiles-familles > li {
+    display: flex;
+  }
+
+  .tuile-famille {
+    position: relative;
+    display: block;
+    flex: 1;
+    overflow: hidden;
+    border: 1px solid var(--color-filet);
+    border-radius: 2px;
+  }
+
+
+  .tuile-cartouche {
     position: absolute;
-    inset: 0;
-    opacity: 0;
-    background-position: center;
-    background-size: cover;
+    inset-inline: 0;
+    bottom: 0;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.75rem 1rem;
+    background: linear-gradient(
+      to top,
+      rgb(28 33 26 / 0.92) 0%,
+      rgb(28 33 26 / 0.72) 60%,
+      rgb(28 33 26 / 0) 100%
+    );
   }
 
   /*
-   * UNE MACRO EST VISIBLE AU REPOS, ET C'EST LA PREMIÈRE.
+   * LE NOM SE RESSERRE SANS RÉTRÉCIR — et c'est D37 qui impose cette forme.
    *
-   * Sans elle, le cadre d'aperçu est un rectangle gris tant que personne ne
-   * survole — et un rectangle gris dans une page finie ne se lit pas comme une
-   * attente, il se lit comme une image cassée. La première famille du rayon
-   * paie donc son image (14 Ko en AVIF), les six autres restent gratuites
-   * jusqu'au survol. C'est le bon partage : une image de plus sur une page qui
-   * en charge deux, contre sept de plus.
+   * « Miels et confitures » et « Conserves salées » passent sur deux lignes dans
+   * une tuile de 169 points, et l'interligne de prose y écartait les deux lignes
+   * au point que le cartouche mangeait la moitié de la photographie. La réponse
+   * évidente — réduire le corps — est INTERDITE : l'interdit n° 10 de D37 ferme
+   * la Bodoni sous 20 px, et `--text-titre` est déjà au plancher.
    *
-   * Les couches se recouvrent dans l'ordre du DOM : celle d'une famille
-   * survolée est écrite après celle-ci, donc elle passe dessus sans qu'il faille
-   * éteindre quoi que ce soit.
+   * On resserre donc l'INTERLIGNE, pas le corps. `text-wrap: balance` répartit
+   * en plus les mots entre les deux lignes au lieu de laisser un orphelin — sur
+   * sept noms dont quatre débordent, la différence se voit.
    */
-  .apercu-defaut {
-    opacity: 1;
-    background-image: var(--macro);
+  .tuile-cartouche > :first-child {
+    line-height: 1.05;
+    text-wrap: balance;
   }
 
   @media (prefers-reduced-motion: no-preference) {
-    .apercu-famille {
-      transition: opacity var(--ms-revele) var(--ease-verre);
+    .tuile-famille img {
+      transition: transform var(--ms-etat) var(--ease-verre);
+    }
+
+    .tuile-famille:hover img,
+    .tuile-famille:focus-visible img {
+      transform: scale(1.03);
     }
   }
 
-  @media (hover: hover) {
-    .familles:has(.famille-1:hover) .apercu-1,
-    .familles:has(.famille-1:focus-visible) .apercu-1,
-    .familles:has(.famille-2:hover) .apercu-2,
-    .familles:has(.famille-2:focus-visible) .apercu-2,
-    .familles:has(.famille-3:hover) .apercu-3,
-    .familles:has(.famille-3:focus-visible) .apercu-3,
-    .familles:has(.famille-4:hover) .apercu-4,
-    .familles:has(.famille-4:focus-visible) .apercu-4,
-    .familles:has(.famille-5:hover) .apercu-5,
-    .familles:has(.famille-5:focus-visible) .apercu-5,
-    .familles:has(.famille-6:hover) .apercu-6,
-    .familles:has(.famille-6:focus-visible) .apercu-6,
-    .familles:has(.famille-7:hover) .apercu-7,
-    .familles:has(.famille-7:focus-visible) .apercu-7 {
-      background-image: var(--macro);
-      opacity: 1;
-    }
+  /*
+   * LE FILET PREND LA COULEUR DE SA FAMILLE — et c'est ce qui garde un emploi à
+   * `styleDeFamille()`. La page pose `--scheme-trait` sur chaque `<li>` depuis
+   * C12 ; l'ancienne rangée s'en servait pour l'indicateur sous le nom, que les
+   * tuiles n'ont plus. Une variable posée que plus rien ne lit finit par être
+   * retirée par quelqu'un qui ne saura pas qu'elle servait — autant qu'elle
+   * serve. Le repli sur `--color-filet` est écrit : la tuile reste correcte si
+   * la page oublie un jour de poser le scheme.
+   *
+   * Hors de tout régime de mouvement : c'est une COULEUR d'état, pas une
+   * animation. La transition qui l'accompagne, elle, vit sous `no-preference`.
+   */
+  .tuile-famille:hover,
+  .tuile-famille:focus-visible {
+    border-color: var(--scheme-trait, var(--color-filet-fort));
   }
 
   /*
@@ -2005,6 +2036,49 @@
       animation: none;
     }
   }
+}
+
+/* ===========================================================================
+   LES TUILES DE FAMILLE REMPLISSENT LEUR RANG — HORS COUCHE (C23)
+   ===========================================================================
+
+   Une tuile deux fois plus large est, en 16:9, deux fois plus haute. Les deux
+   petites tuiles posées à côté de la grande gardaient donc leur hauteur propre
+   et laissaient un trou de marbre sous elles. Le rang est étiré, la tuile prend
+   toute sa cellule, et c'est l'IMAGE qui s'adapte par `object-fit: cover`.
+
+   CES RÈGLES NE SONT DANS AUCUNE COUCHE, ET CE N'EST PAS UN OUBLI — c'est
+   l'anti-patron n° 21 de D37, payé une quatrième fois par ce dépôt et une
+   première fois par la tranche qui venait de l'écrire dans son propre
+   commentaire deux blocs plus haut.
+
+   Le fait mesuré : `<Visuel>` pose `h-auto w-full` sur son `<img>`. `h-auto`
+   vit dans la couche `utilities`, qui bat `components` QUELLE QUE SOIT la
+   spécificité — un `.tuile-famille img { height: 100% }` déclaré dans
+   `components` ne s'applique jamais. Le symptôme était trompeur : la couleur de
+   réservation du conteneur remplissait bien la cellule, donc la boîte était
+   juste et seule l'image restait courte. Une règle qui ne s'applique pas est
+   indiscernable d'une règle absente dans un fichier ; elle est parfaitement
+   discernable dans `getComputedStyle`, où `height` valait `156.641px` en face
+   d'un parent de `332px`.
+
+   La chaîne entière est ici, et pas seulement le maillon en duel : poser
+   `height: 100%` sur la seule `<img>` ne servirait à rien si son `<picture>`
+   ou le conteneur `.visuel-produit` restaient à leur hauteur naturelle. Trois
+   maillons, trois déclarations, sinon le dernier n'a rien à remplir.
+   =========================================================================== */
+
+.tuile-famille > .visuel-produit,
+.tuile-famille picture {
+  display: block;
+  height: 100%;
+}
+
+.tuile-famille img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 /* ===========================================================================
