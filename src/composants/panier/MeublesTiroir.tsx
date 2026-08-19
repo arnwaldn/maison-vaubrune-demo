@@ -1,6 +1,7 @@
 import Link from 'next/link';
 
 import { Visuel } from '@/composants/illustrations/Visuel';
+import { LigneContact } from '@/composants/panier/LigneContact';
 import { CATALOGUE } from '@/donnees/catalogue';
 import { BAREMES } from '@/donnees/bareme-expedition';
 import { formaterEuros } from '@/lib/argent';
@@ -130,6 +131,9 @@ export function MeublesTiroir({ slug }: { readonly slug: string }) {
           </li>
           <li>Paiement sécurisé par prestataire agréé</li>
         </ul>
+        <div className="mt-3">
+          <LigneContact />
+        </div>
       </section>
     </>
   );
