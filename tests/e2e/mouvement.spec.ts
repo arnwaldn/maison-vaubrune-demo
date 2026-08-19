@@ -566,7 +566,13 @@ test('le parcours d’achat rend les mêmes montants exacts sur un site qui boug
   await page.getByLabel('Format', { exact: true }).selectOption('MV-HV-OLI-50CL');
   await page.getByLabel('Quantité').fill('2');
   await page.getByRole('button', { name: 'Ajouter au panier' }).click();
-  await expect(page.getByText('Ajouté au panier.')).toBeVisible();
+  await expect(page.getByRole('dialog', { name: 'Ajouté au panier' })).toBeVisible();
+  /* LE TIROIR SE FERME AVANT DE RENDRE LA MAIN (C23). Il est MODAL : tant
+     qu'il est ouvert, le reste du document est inerte et Playwright échoue à
+     l'actionnabilité sur le premier élément cliqué ensuite. Le geste appartient
+     au parcours du visiteur, pas à un contournement — il continue ses achats. */
+  await page.getByRole('button', { name: 'Continuer mes achats' }).click();
+  await expect(page.getByRole('dialog', { name: 'Ajouté au panier' })).toBeHidden();
   await expect(pastillePanier(page)).toHaveText('2');
 
   await page
@@ -583,7 +589,13 @@ test('le parcours d’achat rend les mêmes montants exacts sur un site qui boug
   await attendrePage(page, '/boutique/fromage-fermier-brebis');
 
   await page.getByRole('button', { name: 'Ajouter au panier' }).click();
-  await expect(page.getByText('Ajouté au panier.')).toBeVisible();
+  await expect(page.getByRole('dialog', { name: 'Ajouté au panier' })).toBeVisible();
+  /* LE TIROIR SE FERME AVANT DE RENDRE LA MAIN (C23). Il est MODAL : tant
+     qu'il est ouvert, le reste du document est inerte et Playwright échoue à
+     l'actionnabilité sur le premier élément cliqué ensuite. Le geste appartient
+     au parcours du visiteur, pas à un contournement — il continue ses achats. */
+  await page.getByRole('button', { name: 'Continuer mes achats' }).click();
+  await expect(page.getByRole('dialog', { name: 'Ajouté au panier' })).toBeHidden();
   await expect(pastillePanier(page)).toHaveText('3');
 
   await page.getByRole('link', { name: /^Panier/ }).click();

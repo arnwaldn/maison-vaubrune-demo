@@ -3252,3 +3252,172 @@ html.lenis [data-lenis-prevent] {
     border-radius: 0 !important;
   }
 }
+
+/* ===========================================================================
+   LE TIROIR D'AJOUT AU PANIER — HORS COUCHE (C23)
+   ===========================================================================
+
+   CES RÈGLES NE SONT DANS AUCUNE COUCHE, et c'est l'anti-patron n° 21 de D37
+   pris par le bon bout : on ne gagne pas le duel, on le SUPPRIME. Le `<dialog>`
+   ne porte AUCUN utilitaire Tailwind de géométrie — ni `fixed`, ni `inset-y-0`,
+   ni `max-w-*`, ni `bg-verre`. Toute sa boîte et son fond sont ici. Il n'y a
+   donc aucun utilitaire concurrent à battre, et la question de la couche ne se
+   pose pas. Le bloc reste hors couche par prudence, pour que la première classe
+   ajoutée un jour au composant ne renverse pas ces règles en silence.
+
+   IL FAUT DÉFAIRE LA FEUILLE DU NAVIGATEUR. Un `<dialog>` arrive avec
+   `margin: auto`, `padding: 1em`, `border: solid` et une largeur contrainte —
+   c'est-à-dire un cadre centré, exactement ce qu'un tiroir n'est pas.
+
+   L'ANIMATION EST UNE `@keyframes`, PAS UN `@starting-style`, et ce n'est pas
+   un goût : ce dépôt a posé quatre fois le patron `@starting-style` (pastille
+   C13, montant C16, fondu de route C17, entrée de titre C18). Il ne marche pas
+   ici. Un `<dialog>` passe de `display: none` à `display: block` au moment du
+   `showModal()`, et faire transiter ce passage exigerait
+   `transition-behavior: allow-discrete` sur `display` — que D37 § 3 interdit
+   frontalement. Une animation nommée démarre d'elle-même quand un élément
+   devient rendu ; c'est déjà le patron de `pastille-battement` (C13) et de
+   `signature-montee` (C18). Zéro vocabulaire nouveau.
+
+   DURÉE ET COURBE CHOISIES PAR LEURS NOMS, pas par leur vitesse. `--ms-etat`
+   (320 ms) est nommé « apparition d'un élément d'interface, changement d'état
+   local » ; `--ease-verre` est « ce qui se pose sans traîner ». Ce n'est pas
+   `--ms-revele` (620, « révélation d'un bloc AU DÉFILEMENT » — rien ne défile),
+   ni `--ms-signature` (900, « transition de page » — ce n'en est pas une).
+
+   `translateX(1.5rem)` ET NON `100%` : D37 ne borne pas l'amplitude, mais
+   1,5 rem est le geste « la matière se pose », cohérent avec le 1 rem des
+   révélations. Un tiroir de 432 px qui traverse l'écran en 320 ms sous
+   `--ease-verre` se lirait comme un sursaut.
+
+   LA SORTIE N'EST PAS ANIMÉE, et le précédent est écrit : C16 l'a tranché pour
+   la suppression d'une ligne de panier — « React retire le nœud à l'instant du
+   clic, il n'y a plus rien à faire transiter », et l'animer « coûterait un état
+   de sortie et une minuterie ».
+
+   SOUS `prefers-reduced-motion: reduce`, LE TIROIR EST LÀ, ENTIER, TOUT DE
+   SUITE. La déclaration `animation` vit à l'intérieur de `no-preference` ;
+   aucun état masqué n'est posé en dur, donc il n'y a rien à rétablir. La
+   géométrie, elle, est écrite HORS de tout régime de mouvement : le mouvement
+   se règle, la mise en page ne se règle pas.
+
+   LE DÉCALAGE CUMULÉ EST STRUCTURELLEMENT NUL : l'élément est en couche
+   supérieure, il n'occupe aucune place dans le flux. La question ne se pose
+   même pas.
+   =========================================================================== */
+
+/* `[open]` N'EST PAS UN ORNEMENT DANS CE SÉLECTEUR — il est ce qui rend la
+   fermeture possible. La feuille du navigateur porte
+   `dialog:not([open]) { display: none }` ; déclarer `display: flex` sur le
+   `<dialog>` nu l'écrase, et le tiroir reste alors peint EN PERMANENCE, ouvert
+   comme fermé. Défaut payé à l'écriture de cette tranche, et son symptôme ne
+   désignait pas sa cause : la campagne échouait sur « element is outside of the
+   viewport » puis « <dialog> subtree intercepts pointer events » au moment de
+   cliquer « Ajouter au panier » — c'est-à-dire que le tiroir interceptait le
+   clic censé l'ouvrir. */
+[data-tiroir-ajout][open] {
+  position: fixed;
+  inset-block: 0;
+  inset-inline-end: 0;
+  inset-inline-start: auto;
+  display: flex;
+  max-width: 27rem;
+  width: 100%;
+  max-height: 100dvh;
+  flex-direction: column;
+  gap: 1.25rem;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  margin: 0;
+  padding: 1.5rem;
+  border: none;
+  border-inline-start: 1px solid var(--color-filet);
+  background-color: var(--color-verre);
+  color: var(--color-encre);
+}
+
+[data-tiroir-ajout]::backdrop {
+  background-color: rgb(28 33 26 / 0.42);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  [data-tiroir-ajout][open] {
+    animation: tiroir-entree var(--ms-etat) var(--ease-verre) both;
+  }
+}
+
+@keyframes tiroir-entree {
+  from {
+    opacity: 0;
+    transform: translateX(1.5rem);
+  }
+}
+
+.tiroir-tete {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  border-bottom: 1px solid var(--color-filet);
+  padding-bottom: 0.75rem;
+}
+
+.tiroir-fermer {
+  font-family: var(--font-mono);
+  font-size: var(--text-label);
+  text-transform: uppercase;
+  color: var(--color-encre-douce);
+}
+
+.tiroir-fermer:hover {
+  color: var(--color-encre);
+}
+
+.tiroir-soustotal {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  border-block: 1px solid var(--color-filet);
+  padding-block: 0.75rem;
+}
+
+.tiroir-actions {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.tiroir-bouton-primaire,
+.tiroir-bouton {
+  border-radius: 2px;
+  padding: 0.625rem 1rem;
+  text-align: center;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.tiroir-bouton-primaire {
+  border: 1px solid var(--color-olive);
+  background-color: var(--color-olive);
+  color: var(--color-creme);
+}
+
+.tiroir-bouton-primaire:hover {
+  border-color: var(--color-encre);
+  background-color: var(--color-encre);
+}
+
+.tiroir-bouton {
+  border: 1px solid var(--color-filet);
+  color: var(--color-encre);
+}
+
+.tiroir-bouton:hover {
+  border-color: var(--color-filet-fort);
+}
+
+.tiroir-bloc {
+  border-top: 1px solid var(--color-filet);
+  padding-top: 1rem;
+}
+

@@ -155,6 +155,31 @@ export function stocksDepuisCatalogue(catalogue: readonly ArticlePanier[]): Stoc
   return stocks;
 }
 
+/**
+ * Les prix, seule chose que le TIROIR D'AJOUT emprunte au catalogue (C23).
+ *
+ * Jumelle exacte de `stocksDepuisCatalogue`, et pour le même motif — celui que
+ * D17 écrit noir sur blanc : « le réducteur ne reçoit que `Record<SKU, stock>` ».
+ * Le tiroir doit afficher le sous-total du panier, donc connaître un prix par
+ * référence ; il n'a besoin de rien d'autre.
+ *
+ * L'ÉCART SE MESURE, ET IL EST DE SIX POUR UN : passer la projection complète
+ * (vingt-trois articles, avec noms, poids, régimes de rétractation) coûte
+ * 1 268 octets gzip sur CHAQUE fiche ; ces vingt-trois paires en coûtent 208.
+ * Six fois moins, pour exactement le même chiffre affiché.
+ */
+export function prixDepuisCatalogue(
+  catalogue: readonly ArticlePanier[],
+): Readonly<Record<string, number>> {
+  const prix: Record<string, number> = {};
+
+  for (const article of catalogue) {
+    prix[article.sku] = article.prixCentimes;
+  }
+
+  return prix;
+}
+
 /* -------------------------------------------------------------------------- */
 /* Allergènes d'une composition                                                */
 /* -------------------------------------------------------------------------- */

@@ -66,7 +66,13 @@ const FICHE = '/boutique/huile-olive-premiere-pression';
 async function panierDUneLigne(page: Page): Promise<void> {
   await ouvrir(page, FICHE);
   await page.getByRole('button', { name: 'Ajouter au panier' }).click();
-  await expect(page.getByText('Ajouté au panier.')).toBeVisible();
+  await expect(page.getByRole('dialog', { name: 'Ajouté au panier' })).toBeVisible();
+  /* LE TIROIR SE FERME AVANT DE RENDRE LA MAIN (C23). Il est MODAL : tant
+     qu'il est ouvert, le reste du document est inerte et Playwright échoue à
+     l'actionnabilité sur le premier élément cliqué ensuite. Le geste appartient
+     au parcours du visiteur, pas à un contournement — il continue ses achats. */
+  await page.getByRole('button', { name: 'Continuer mes achats' }).click();
+  await expect(page.getByRole('dialog', { name: 'Ajouté au panier' })).toBeHidden();
 
   await ouvrir(page, '/panier');
 }

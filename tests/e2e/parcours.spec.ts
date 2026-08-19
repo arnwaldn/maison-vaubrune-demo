@@ -146,7 +146,13 @@ async function ajouterAuPanier(
   }
 
   await page.getByRole('button', { name: 'Ajouter au panier' }).click();
-  await expect(page.getByText('Ajouté au panier.')).toBeVisible();
+  await expect(page.getByRole('dialog', { name: 'Ajouté au panier' })).toBeVisible();
+  /* LE TIROIR SE FERME AVANT DE RENDRE LA MAIN (C23). Il est MODAL : tant
+     qu'il est ouvert, le reste du document est inerte et Playwright échoue à
+     l'actionnabilité sur le premier élément cliqué ensuite. Le geste appartient
+     au parcours du visiteur, pas à un contournement — il continue ses achats. */
+  await page.getByRole('button', { name: 'Continuer mes achats' }).click();
+  await expect(page.getByRole('dialog', { name: 'Ajouté au panier' })).toBeHidden();
 }
 
 /** Le récapitulatif de la colonne de droite, sur `/panier` comme sur `/commande`. */
@@ -508,7 +514,13 @@ test('le coffret composé exige trois pièces et fait deux lignes', async ({ pag
   });
 
   await bouton.click();
-  await expect(page.getByText('Ajouté au panier.')).toBeVisible();
+  await expect(page.getByRole('dialog', { name: 'Ajouté au panier' })).toBeVisible();
+  /* LE TIROIR SE FERME AVANT DE RENDRE LA MAIN (C23). Il est MODAL : tant
+     qu'il est ouvert, le reste du document est inerte et Playwright échoue à
+     l'actionnabilité sur le premier élément cliqué ensuite. Le geste appartient
+     au parcours du visiteur, pas à un contournement — il continue ses achats. */
+  await page.getByRole('button', { name: 'Continuer mes achats' }).click();
+  await expect(page.getByRole('dialog', { name: 'Ajouté au panier' })).toBeHidden();
 
   await test.step('une seconde composition fait une seconde ligne', async () => {
     for (const piece of COFFRET.seconde) {

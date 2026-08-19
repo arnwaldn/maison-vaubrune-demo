@@ -216,7 +216,8 @@ try {
   await page.getByLabel('Format', { exact: true }).selectOption('MV-HV-OLI-50CL');
   await page.getByLabel('Quantité').fill('2');
   await page.getByRole('button', { name: 'Ajouter au panier' }).click();
-  await page.getByText('Ajouté au panier.').waitFor();
+  await page.getByRole('dialog', { name: 'Ajouté au panier' }).waitFor();
+  await page.getByRole('button', { name: 'Continuer mes achats' }).click();
 
   etape('un fromage de brebis les rejoint');
   await page.getByRole('link', { name: 'Boutique', exact: true }).first().click();
@@ -224,7 +225,8 @@ try {
   await page.getByRole('link', { name: /^Fromage fermier de brebis/ }).click();
   await page.waitForURL((u) => u.pathname === '/boutique/fromage-fermier-brebis');
   await page.getByRole('button', { name: 'Ajouter au panier' }).click();
-  await page.getByText('Ajouté au panier.').waitFor();
+  await page.getByRole('dialog', { name: 'Ajouté au panier' }).waitFor();
+  await page.getByRole('button', { name: 'Continuer mes achats' }).click();
 
   etape(`panier — vérification du total ${TOTAL_ATTENDU}`);
   await page.getByRole('link', { name: /^Panier/ }).click();

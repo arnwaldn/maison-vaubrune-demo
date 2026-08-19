@@ -1,7 +1,6 @@
 'use client';
 
-import Link from 'next/link';
-import { useId, useState } from 'react';
+import { useId, useState, type ReactNode } from 'react';
 
 import { formaterEuros } from '@/lib/argent';
 import {
@@ -12,6 +11,8 @@ import {
 import { useSurcouche } from '@/lib/contexte-surcouche';
 import { unionAllergenes, type ArticlePanier } from '@/lib/panier/catalogue-panier';
 import { usePanier } from '@/lib/panier/contexte-panier';
+import { sousTotalDesLignes } from '@/lib/panier/totaux';
+import { TiroirAjout } from '@/composants/panier/TiroirAjout';
 
 /**
  * L'AJOUT AU PANIER, sur la fiche produit.
@@ -60,13 +61,19 @@ import { usePanier } from '@/lib/panier/contexte-panier';
 export function BoutonAjouter({
   articles,
   pieces,
+  meubles,
+  prix,
 }: {
   /** Les variantes de CE produit, projetées côté serveur. */
   readonly articles: readonly ArticlePanier[];
   /** Les pièces éligibles d'un coffret personnalisable ; vide sinon. */
   readonly pieces: readonly ArticlePanier[];
+  /** Suggestions et reassurance, RENDUES PAR LE SERVEUR (voir MeublesTiroir). */
+  readonly meubles: ReactNode;
+  /** Un prix par reference — le corollaire de D17, six fois moins lourd que la projection. */
+  readonly prix: Readonly<Record<string, number>>;
 }) {
-  const { envoyer } = usePanier();
+  const { etat, envoyer } = usePanier();
   const { surcouche } = useSurcouche();
   const identifiant = useId();
 
@@ -223,19 +230,23 @@ export function BoutonAjouter({
         </p>
       )}
 
-      <p aria-live="polite" className="mt-3 text-xs leading-relaxed text-olive">
-        {confirmation ? (
-          <>
-            Ajouté au panier.{' '}
-            <Link
-              href="/panier"
-              className="font-semibold underline decoration-filet decoration-2 underline-offset-4 hover:text-terre hover:decoration-terre"
-            >
-              Voir le panier
-            </Link>
-          </>
-        ) : null}
-      </p>
+      {/* LE RETOUR D'AJOUT A CHANGÉ DE NATURE (C23).
+
+          Ici vivait un `<p aria-live="polite">` de douze pixels, en olive, sans
+          fond ni icône. Il était correct, annoncé aux lecteurs d'écran, jamais
+          effacé — et mesuré sur le site publié après un vrai clic : ZÉRO pixel
+          visible dans la fenêtre. Il est REMPLACÉ, pas doublé : un dialogue
+          modal annonce déjà son nom et son contenu à l'ouverture, et une région
+          vivante en plus produirait une double annonce. */}
+      <TiroirAjout
+        ouvert={confirmation}
+        fermer={() => setConfirmation(false)}
+        nom={article.nomProduit}
+        format={article.format}
+        prixCentimes={article.prixCentimes}
+        sousTotalCentimes={sousTotalDesLignes(etat.lignes, prix)}
+        meubles={meubles}
+      />
     </div>
   );
 }
