@@ -135,6 +135,13 @@ export default defineConfig({
            le repli. C'est-à-dire la moitié de la valeur du lot, et exactement
            ce que personne ne regarderait sans ce seuil. */
         'src/lib/suggestions.ts',
+        /* AJOUTÉ EN C26 (dix-neuvième fichier). `achat-vignette.ts` décide ce
+           que la ligne d'achat d'une vignette MONTRE : le prix du format choisi
+           (surcouche appliquée, D24), la quantité au panier, le plafond du « + ».
+           Même règle d'admission que ses voisins : un chiffre montré, qu'un oubli
+           de surcouche ferait diverger de la fiche sans qu'aucun autre écran le
+           contredise. */
+        'src/lib/panier/achat-vignette.ts',
       ],
       /* `skipFull` masquerait les fichiers à 100 % — c'est-à-dire, ici, les
          deux seuls qu'on regarde. Le rapport doit AFFICHER le plein, pas le
