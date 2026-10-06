@@ -55,10 +55,12 @@ import { typographier } from '@/lib/typographie';
  * - « − » ET « + » SONT DES SVG, jamais des caractères : la mono du registre
  *   est sous-ensemblée (143 points de code) et un U+2212 partirait sur une
  *   police de repli étrangère.
- * - LE NOM DU BOUTON D'AJOUT NE CONTIENT JAMAIS « Ajouter au panier » : les
- *   campagnes de la fiche cherchent cette suite exacte, et leur correspondance
- *   par sous-chaîne rendrait deux boutons sur une page qui porterait aussi des
- *   vignettes. Le prix y revient, puisqu'il a quitté le nom du lien.
+ * - LE NOM DU BOUTON D'AJOUT COMMENCE PAR SON TEXTE VISIBLE (WCAG 2.5.3,
+ *   « étiquette dans le nom ») : qui dicte « Ajouter au panier » à une commande
+ *   vocale doit toucher ce bouton. Suivent le produit, le format et le prix —
+ *   le prix y revient, puisqu'il a quitté le nom du lien. Aucune page qui porte
+ *   des vignettes ne porte aussi le bouton de la fiche : les campagnes qui
+ *   cherchent « Ajouter au panier » sur une fiche restent sans ambiguïté.
  */
 
 const TEXTE_AJOUT = 'Ajouter au panier';
@@ -209,7 +211,7 @@ export function AchatVignette({
                 aria-describedby={
                   decision.mode === 'ajouter' ? undefined : `${identifiant}-motif`
                 }
-                aria-label={typographier(`Ajouter ${designation}, ${prix}, au panier`)}
+                aria-label={typographier(`${TEXTE_AJOUT} : ${designation}, ${prix}`)}
                 className="vignette-bouton text-sm font-semibold"
               >
                 {TEXTE_AJOUT}

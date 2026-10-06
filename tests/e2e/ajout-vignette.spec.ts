@@ -33,7 +33,7 @@ function carte(page: Page, slug: string): Locator {
 }
 
 function boutonAjout(carteProduit: Locator): Locator {
-  return carteProduit.getByRole('button', { name: /^Ajouter .*, au panier$/ });
+  return carteProduit.getByRole('button', { name: /^Ajouter au panier\s:\s/ });
 }
 
 function boutonPlus(carteProduit: Locator): Locator {
@@ -103,7 +103,7 @@ for (const { nom, chemin } of PAGES) {
 
     await test.step('Ajouter (25 cl) : pastille 1, adresse inchangée, sélecteur dans la fenêtre', async () => {
       await expect(boutonAjout(huile)).toHaveAccessibleName(
-        new RegExp(`^Ajouter ${OLIVE.nom}, 25\\scl, 12,90\\s€, au panier$`),
+        new RegExp(`^Ajouter au panier\\s:\\s${OLIVE.nom}, 25\\scl, 12,90\\s€$`),
       );
       await expect(boutonAjout(huile)).toHaveText('Ajouter au panier');
       const adresse = page.url();
@@ -127,7 +127,7 @@ for (const { nom, chemin } of PAGES) {
       await pastille(huile, '50').click();
 
       await expect(boutonAjout(huile)).toHaveAccessibleName(
-        new RegExp(`^Ajouter ${OLIVE.nom}, 50\\scl, 22,50\\s€, au panier$`),
+        new RegExp(`^Ajouter au panier\\s:\\s${OLIVE.nom}, 50\\scl, 22,50\\s€$`),
       );
       await expect(huile.locator('.vignette-prix')).toContainText(euros('22,50'));
       await expect(pas(huile)).toHaveCount(0);
@@ -334,7 +334,7 @@ test('un prix modifié dans la surcouche s’affiche sur la vignette, comme sur 
   const huile = carte(page, OLIVE.slug);
 
   await expect(huile.locator('.vignette-prix')).toContainText(euros('9,99'));
-  await expect(boutonAjout(huile)).toHaveAccessibleName(/25\scl, 9,99\s€, au panier$/);
+  await expect(boutonAjout(huile)).toHaveAccessibleName(/25\scl, 9,99\s€$/);
 });
 
 test('les états se lisent au style calculé : pastille cochée, bouton, focus', async ({
