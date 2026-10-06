@@ -109,9 +109,10 @@ const CLIENT = {
 /**
  * Ouvre une fiche depuis le rayon, en cliquant — jamais par `goto`.
  *
- * Le lien de la vignette porte le nom du produit ET son résumé ET son prix :
- * son nom accessible est donc long, et c'est voulu (voir `CarteProduit`). On
- * le désigne par le début de ce nom.
+ * Le lien de la vignette porte le nom du produit ET son résumé — plus son prix
+ * depuis C26 : la ligne d'achat (format, prix, bouton) vit hors du lien, et son
+ * nom accessible est donc plus court, c'est voulu (voir `CarteProduit`). On le
+ * désigne par le début de ce nom, qui n'a pas changé.
  */
 async function ouvrirFicheDepuisLeRayon(
   page: Page,
