@@ -1,0 +1,5 @@
+Mesures AVANT C26 — 06/10/2026, branche tranche-c26 = main a52321c, meme machine
+First Load JS : / 109 kB, /boutique 109 kB, fiche 115, /panier 114, socle 103 (plafond 125)
+CSS : 10.92 Ko gzip (plafond 12)
+HTML : index 88253 brut / 13388 gz ; boutique 151183 brut / 17974 gz
+Transfert JS a froid : accueil 135.5, fiche 139.2, panier 129.9 (plafond 145) ; parcours 139.2 cumules (plafond 190)
