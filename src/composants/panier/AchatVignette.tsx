@@ -67,9 +67,10 @@ import { typographier } from '@/lib/typographie';
  *   « étiquette dans le nom ») : qui dicte « Ajouter au panier » à une commande
  *   vocale doit toucher ce bouton. Suivent le produit, le format et le prix —
  *   le prix y revient, puisqu'il a quitté le nom du lien. Sur une fiche, les
- *   cartes de suggestion vivent dans le tiroir : fermé, il ne rend rien ;
- *   ouvert, il est modal et le bouton de la fiche est inerte derrière lui. Une
- *   recherche de « Ajouter au panier » n'y trouve donc jamais deux boutons.
+ *   cartes de suggestion vivent dans le tiroir : fermé, ses enfants sont
+ *   rendus mais MASQUÉS (absents de l'arbre d'accessibilité) ; ouvert, il est
+ *   modal et le bouton de la fiche est inerte derrière lui. Une recherche de
+ *   « Ajouter au panier » par rôle n'y trouve donc jamais deux boutons.
  */
 
 const TEXTE_AJOUT = 'Ajouter au panier';

@@ -483,19 +483,37 @@ test('le tiroir de la fiche : une suggestion s’ajoute sans fermer le tiroir', 
   await expect(page).toHaveURL(new RegExp(`/boutique/${OLIVE.slug}$`));
 });
 
-test('le panier : une suggestion s’ajoute et devient une ligne du panier', async ({ page }) => {
+test('le panier : une suggestion s’ajoute, reste en place et devient une ligne', async ({
+  page,
+}) => {
   await ouvrir(page, '/boutique');
   await boutonAjout(carte(page, OLIVE.slug)).click();
   await expect(pastillePanier(page)).toHaveText('1');
 
   await ouvrir(page, '/panier');
+  const lignes = page.locator('main ul.border-t > li');
+  await expect(lignes).toHaveCount(1);
   const section = page.locator('section', { has: page.locator('[data-suggestion]') });
   const premiere = suggestions(section).first();
-  const nom = (await premiere.locator('[data-suggestion] p').innerText()).trim();
+  const lien = await premiere.locator('[data-suggestion]').getAttribute('href');
 
-  await boutonAjout(premiere).click();
+  /* Au clavier : le focus doit passer sur « + » de LA MÊME carte, qui reste
+     affichée — figée jusqu'à la navigation suivante. */
+  await boutonAjout(premiere).focus();
+  await page.keyboard.press('Enter');
 
   await expect(pastillePanier(page)).toHaveText('2');
+  await expect(lignes).toHaveCount(2);
+  await expect(section.locator(`[data-suggestion][href="${String(lien)}"]`)).toHaveCount(1);
+  await expect(pas(premiere)).toContainText('1');
+  await expect(boutonPlus(premiere)).toBeFocused();
   await expect(page).toHaveURL(/\/panier$/);
-  await expect(page.locator('main').getByText(nom, { exact: false }).first()).toBeVisible();
+
+  /* À la souris, un double clic impulsif sur la carte voisine n'ajoute qu'UN
+     produit : la carte ne glisse pas sous le pointeur. */
+  const seconde = suggestions(section).nth(1);
+  await boutonAjout(seconde).dblclick();
+  await expect(lignes).toHaveCount(3);
+  await expect(pastillePanier(page)).toHaveText('3');
+  await expect(pas(seconde)).toContainText('1');
 });

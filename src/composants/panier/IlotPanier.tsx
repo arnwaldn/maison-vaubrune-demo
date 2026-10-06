@@ -1,6 +1,6 @@
 'use client';
 
-import type { ReactNode } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
 import Link from 'next/link';
 
 import { BlocReassurance } from '@/composants/panier/BlocReassurance';
@@ -85,6 +85,36 @@ export function IlotPanier({
   readonly cartesSuggestions: Record<string, ReactNode>;
 }) {
   const { etat, pretALEmploi, envoyer } = usePanier();
+  const totaux = calculerTotaux(etat.lignes, catalogue, etat.zone);
+
+  /* Les slugs du panier, dans l'ordre où ils y sont entrés : la roue des
+     suggestions s'amorce après le DERNIER, le signal d'intention le plus frais.
+     Dédupliqué — deux formats du même produit ne comptent qu'une fois. */
+  const slugsAuPanier = [...new Set(totaux.lignes.map((calculee) => calculee.article.slug))];
+  const calculees = suggestionsPourEnsemble(
+    poolSuggestions,
+    slugsAuPanier,
+    COMBIEN_DE_SUGGESTIONS,
+  );
+
+  /* LES SUGGESTIONS SONT FIGÉES À L'ARRIVÉE SUR LA PAGE (C26). Depuis qu'une
+     suggestion s'ajoute au panier sur place, la liste recalculée à chaque
+     ajout faisait DISPARAÎTRE la carte cliquée (un produit au panier n'est plus
+     suggéré) : le focus tombait sur `body`, l'annonce partait avec la carte, et
+     la carte suivante glissait sous le pointeur — un double clic impulsif
+     ajoutait un second produit jamais choisi. Figée, la carte reste et passe
+     en « − 1 + », comme une vignette du rayon. Elle se recalcule à la
+     navigation suivante, ou quand le panier se vide. */
+  const [figees, setFigees] = useState<readonly CandidatSuggestion[] | null>(null);
+  const panierRempli = pretALEmploi && slugsAuPanier.length > 0;
+
+  useEffect(() => {
+    if (!panierRempli) {
+      setFigees(null);
+    } else if (figees === null) {
+      setFigees(calculees);
+    }
+  }, [panierRempli, figees, calculees]);
 
   if (!pretALEmploi) {
     return (
@@ -96,21 +126,11 @@ export function IlotPanier({
     );
   }
 
-  const totaux = calculerTotaux(etat.lignes, catalogue, etat.zone);
-
   if (totaux.lignes.length === 0) {
     return <PanierVide />;
   }
 
-  /* Les slugs du panier, dans l'ordre où ils y sont entrés : la roue des
-     suggestions s'amorce après le DERNIER, le signal d'intention le plus frais.
-     Dédupliqué — deux formats du même produit ne comptent qu'une fois. */
-  const slugsAuPanier = [...new Set(totaux.lignes.map((calculee) => calculee.article.slug))];
-  const suggestions = suggestionsPourEnsemble(
-    poolSuggestions,
-    slugsAuPanier,
-    COMBIEN_DE_SUGGESTIONS,
-  );
+  const suggestions = figees ?? calculees;
 
   const commandable = totaux.expedition.statut === 'calcule';
 
