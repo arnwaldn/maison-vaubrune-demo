@@ -1,0 +1,28 @@
+[vide] http://localhost:3200
+clic a +1123 ms apres peinture (hydrate au clic: non) -> olive 1
+clic a +1151 ms apres peinture (hydrate au clic: oui) -> olive 1
+clic a + 772 ms apres peinture (hydrate au clic: oui) -> olive 1
+clic a +1417 ms apres peinture (hydrate au clic: oui) -> olive 1
+clic a +1147 ms apres peinture (hydrate au clic: oui) -> olive 1
+clic a +1383 ms apres peinture (hydrate au clic: oui) -> olive 1
+clic a +1591 ms apres peinture (hydrate au clic: oui) -> olive 1
+clic a +2142 ms apres peinture (hydrate au clic: oui) -> olive 1
+clic a +1968 ms apres peinture (hydrate au clic: oui) -> olive 1
+clic a +2613 ms apres peinture (hydrate au clic: oui) -> olive 1
+clic a +2414 ms apres peinture (hydrate au clic: oui) -> olive 1
+clic a +2563 ms apres peinture (hydrate au clic: oui) -> olive 1
+clic a +3162 ms apres peinture (hydrate au clic: oui) -> olive 1
+[rempli] http://localhost:3200
+clic a +1156 ms apres peinture (hydrate au clic: non) -> olive 1, noix 2 (attendu 2)
+clic a +1194 ms apres peinture (hydrate au clic: oui) -> olive 1, noix 2 (attendu 2)
+clic a +1228 ms apres peinture (hydrate au clic: oui) -> olive 1, noix 2 (attendu 2)
+clic a + 969 ms apres peinture (hydrate au clic: oui) -> olive 1, noix 2 (attendu 2)
+clic a +1123 ms apres peinture (hydrate au clic: oui) -> olive 1, noix 2 (attendu 2)
+clic a +1916 ms apres peinture (hydrate au clic: oui) -> olive 1, noix 2 (attendu 2)
+clic a +2000 ms apres peinture (hydrate au clic: oui) -> olive 1, noix 2 (attendu 2)
+clic a +1751 ms apres peinture (hydrate au clic: oui) -> olive 1, noix 2 (attendu 2)
+clic a +2397 ms apres peinture (hydrate au clic: oui) -> olive 1, noix 2 (attendu 2)
+clic a +2178 ms apres peinture (hydrate au clic: oui) -> olive 1, noix 2 (attendu 2)
+clic a +2819 ms apres peinture (hydrate au clic: oui) -> olive 1, noix 2 (attendu 2)
+clic a +2806 ms apres peinture (hydrate au clic: oui) -> olive 1, noix 2 (attendu 2)
+clic a +3178 ms apres peinture (hydrate au clic: oui) -> olive 1, noix 2 (attendu 2)

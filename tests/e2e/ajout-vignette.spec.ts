@@ -426,7 +426,7 @@ test('mode liste : la ligne d’achat reste dans la carte, sous la colonne de te
   await verifierVisibleEtTouchable(pas(huile));
 });
 
-test('avant l’hydratation la ligne est inerte et garde sa taille', async ({
+test('avant l’hydratation la ligne n’est pas inerte et garde sa taille', async ({
   browser,
   page,
   baseURL,
@@ -435,8 +435,13 @@ test('avant l’hydratation la ligne est inerte et garde sa taille', async ({
   const statique = await sansScript.newPage();
   await statique.goto('/boutique');
 
+  /* Pas d'`inert` dans le HTML servi : un élément inerte ne reçoit aucun
+     clic, et React ne pourrait pas rejouer celui qui arrive pendant
+     l'hydratation. Le clic précoce est GARDÉ par l'îlot et envoyé quand le
+     panier est prêt — mesuré à la souris, processeur bridé ×4, par
+     `preuves/c26/sonde-premier-clic.mjs` (relevés `premier-clic-*.txt`). */
   const corps = carte(statique, OLIVE.slug).locator('.vignette-corps');
-  await expect(corps).toHaveAttribute('inert', '');
+  await expect(corps).not.toHaveAttribute('inert', /.*/);
   const hauteurAvant = (await carte(statique, OLIVE.slug).locator('.vignette-ligne').boundingBox())
     ?.height;
   await sansScript.close();

@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useId, useRef, useState } from 'react';
+import { useEffect, useId, useRef, useState } from 'react';
 import { flushSync } from 'react-dom';
 
 import { formaterEuros } from '@/lib/argent';
@@ -17,6 +17,7 @@ import {
   type FormatVignette,
 } from '@/lib/panier/achat-vignette';
 import { usePanier } from '@/lib/panier/contexte-panier';
+import type { ActionPanier } from '@/lib/panier/reducteur';
 import { typographier } from '@/lib/typographie';
 
 /**
@@ -43,9 +44,14 @@ import { typographier } from '@/lib/typographie';
  * - AUCUN `id` EN DUR : quinze vignettes par page. Le `name` des radios vient
  *   de `useId()`, sans quoi les groupes n'en formeraient qu'un et cocher
  *   50 cl sur une carte décocherait la voisine.
- * - INERTE TANT QUE LE PANIER N'A PAS RELU SON STOCKAGE (`pretALEmploi`) : un
- *   clic avant la restauration serait écrasé par `restaurer`. `inert` rend la
- *   ligne non cliquable SANS la griser — elle garde sa taille et son dessin.
+ * - UN CLIC REÇU AVANT QUE LE PANIER AIT RELU SON STOCKAGE (`pretALEmploi`)
+ *   N'EST NI PERDU NI ÉCRASÉ : il est GARDÉ dans une ref et envoyé dès que le
+ *   panier est prêt. Envoyé tout de suite, `restaurer` l'écraserait. Rendu
+ *   `inert` (premier jet de C26), le bouton avait l'air actif et mangeait le
+ *   clic : 1,8 s de clics dans le vide sous un processeur bridé ×4, mesurés
+ *   à la souris par `preuves/c26/sonde-premier-clic.mjs` — et `inert` écrit
+ *   dans le HTML serveur empêchait même React de rejouer un clic arrivé
+ *   pendant l'hydratation.
  * - LA MÊME TAILLE DANS TOUS LES MODES (`.vignette-action`) : bouton, pas et
  *   lien occupent la même cellule, donc rien ne bouge à l'hydratation ni au
  *   passage d'un mode à l'autre.
@@ -84,6 +90,10 @@ export function AchatVignette({
   const [annonce, setAnnonce] = useState('');
   const plusRef = useRef<HTMLButtonElement>(null);
   const ajouterRef = useRef<HTMLButtonElement>(null);
+  const intention = useRef<{ readonly action: ActionPanier; readonly annonce: string } | null>(
+    null,
+  );
+  const [focaliserPlus, setFocaliserPlus] = useState(false);
 
   const decision = decrireAchat({ slug, formats, skuChoisi, lignes: etat.lignes, surcouche });
   const prix = formaterEuros(decision.prixCentimes);
@@ -95,10 +105,39 @@ export function AchatVignette({
      « dès » de la vitrine, surcouche comprise. */
   const aComposer = formats.every((format) => format.piecesRequises !== null);
 
+  /* Le clic gardé part dès que le panier est prêt, APRÈS sa restauration. */
+  useEffect(() => {
+    const gardee = intention.current;
+
+    if (!pretALEmploi || gardee === null) {
+      return;
+    }
+
+    intention.current = null;
+    envoyer(gardee.action);
+    setAnnonce(gardee.annonce);
+    setFocaliserPlus(true);
+  }, [pretALEmploi, envoyer]);
+
+  useEffect(() => {
+    if (focaliserPlus) {
+      plusRef.current?.focus();
+      setFocaliserPlus(false);
+    }
+  }, [focaliserPlus]);
+
   const ajouter = () => {
     const action = actionAjouter(decision);
 
     if (action === null) {
+      return;
+    }
+
+    if (!pretALEmploi) {
+      intention.current = {
+        action,
+        annonce: typographier(`${designation} : 1 au panier.`),
+      };
       return;
     }
 
@@ -142,7 +181,7 @@ export function AchatVignette({
 
   return (
     <div className="vignette-achat">
-      <div className="vignette-corps" inert={!pretALEmploi}>
+      <div className="vignette-corps">
         {formats.length > 1 && !aComposer ? (
           <fieldset className="vignette-formats">
             <legend className="sr-only">{typographier(`Format de ${nom}`)}</legend>
