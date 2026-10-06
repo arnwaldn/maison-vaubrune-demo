@@ -1898,9 +1898,14 @@
        révélations (translation de 36 px vers le bas) et ouvraient une barre de
        défilement VERTICALE de 24 px dans le rail — en ligne depuis C18,
        relevée au bêta-test du 06/10. Ce qui dépasse est invisible (opacité
-       nulle) : on le coupe. La marge basse garde la place des bagues de focus. */
+       nulle) : on le coupe. Mais la carte qui ENTRE dans le rail se révèle
+       depuis ces 36 px : avec 12 px de marge basse, son bord bas était rogné
+       pendant ~120 ms (revue DA, seconde passe). La marge basse vaut donc la
+       course de la révélation, et une marge négative rend la place à la section
+       suivante : l'espace sous le rail ne bouge pas. */
     overflow-y: hidden;
-    padding-bottom: 0.75rem;
+    padding-bottom: 2.25rem;
+    margin-bottom: -1.5rem;
     scroll-snap-type: x mandatory;
     scrollbar-color: var(--color-filet-fort) transparent;
     scrollbar-width: thin;
@@ -2312,6 +2317,14 @@ html[data-affichage-rayon='liste'] .rayon-grille .carte-visuel {
   background: transparent;
   color: var(--color-encre);
   cursor: pointer;
+}
+
+.vignette-pas button:first-child {
+  border-radius: 4px 0 0 4px;
+}
+
+.vignette-pas button:last-child {
+  border-radius: 0 4px 4px 0;
 }
 
 .vignette-pas svg {
