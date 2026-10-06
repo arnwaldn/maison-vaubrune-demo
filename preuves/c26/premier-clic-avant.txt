@@ -1,0 +1,14 @@
+[vide] http://localhost:3200
+clic a +1874 ms apres peinture (hydrate au clic: non) -> olive 0
+clic a +1836 ms apres peinture (hydrate au clic: oui) -> olive 1
+clic a +1929 ms apres peinture (hydrate au clic: oui) -> olive 1
+clic a +2014 ms apres peinture (hydrate au clic: oui) -> olive 1
+clic a +2120 ms apres peinture (hydrate au clic: oui) -> olive 1
+clic a +2263 ms apres peinture (hydrate au clic: oui) -> olive 1
+clic a +2522 ms apres peinture (hydrate au clic: oui) -> olive 1
+clic a +2730 ms apres peinture (hydrate au clic: oui) -> olive 1
+clic a +2928 ms apres peinture (hydrate au clic: oui) -> olive 1
+clic a +2954 ms apres peinture (hydrate au clic: oui) -> olive 1
+clic a +3249 ms apres peinture (hydrate au clic: oui) -> olive 1
+clic a +3352 ms apres peinture (hydrate au clic: oui) -> olive 1
+clic a +3651 ms apres peinture (hydrate au clic: oui) -> olive 1

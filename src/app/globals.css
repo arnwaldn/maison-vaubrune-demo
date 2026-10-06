@@ -1893,7 +1893,19 @@
     display: flex;
     gap: var(--gouttiere);
     overflow-x: auto;
-    padding-bottom: 0.75rem;
+    /* `overflow-x: auto` rend `overflow-y` calculé à `auto` lui aussi : les
+       cartes encore hors champ, à droite, gardent l'état masqué des
+       révélations (translation de 36 px vers le bas) et ouvraient une barre de
+       défilement VERTICALE de 24 px dans le rail — en ligne depuis C18,
+       relevée au bêta-test du 06/10. Ce qui dépasse est invisible (opacité
+       nulle) : on le coupe. Mais la carte qui ENTRE dans le rail se révèle
+       depuis ces 36 px : avec 12 px de marge basse, son bord bas était rogné
+       pendant ~120 ms (revue DA, seconde passe). La marge basse vaut donc la
+       course de la révélation, et une marge négative rend la place à la section
+       suivante : l'espace sous le rail ne bouge pas. */
+    overflow-y: hidden;
+    padding-bottom: 2.25rem;
+    margin-bottom: -1.5rem;
     scroll-snap-type: x mandatory;
     scrollbar-color: var(--color-filet-fort) transparent;
     scrollbar-width: thin;
@@ -2180,6 +2192,187 @@ html[data-affichage-rayon='liste'] .rayon-grille .carte-visuel {
 @media (min-width: 40rem) {
   html[data-affichage-rayon='liste'] .rayon-grille .carte-visuel {
     width: 9rem;
+  }
+}
+
+/* ===========================================================================
+   LA LIGNE D'ACHAT DES VIGNETTES (C26) — HORS COUCHE, ET C'EST UNE RÈGLE
+   ===========================================================================
+
+   Anti-patron n° 21 de D37 : une règle d'état écrite dans `components` perd
+   contre l'utilitaire concurrent. Tout ce bloc vit donc hors couche, et AUCUN
+   utilitaire n'est posé sur ces éléments pour les propriétés qu'il règle
+   (fond, bordure, couleur, taille des cibles) ; la campagne lit le style
+   calculé de chaque état (coché, désactivé, au plafond, au focus).
+
+   UNE CELLULE, TROIS CONTENUS : le bouton d'ajout, le pas `[ − ] N [ + ]` et le
+   lien « Composer mon coffret » occupent la même `.vignette-action`, donc la
+   ligne ne change ni de largeur ni de hauteur d'un mode à l'autre ni à
+   l'hydratation. Les cibles font 2,75 rem (44 px) : le dessin des signes est
+   plus petit, la zone touchable non. */
+.vignette-achat {
+  position: relative;
+  margin-top: 0.75rem;
+}
+
+.vignette-corps {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.vignette-formats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.375rem;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.vignette-pastille {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.75rem;
+  min-height: 2.75rem;
+  padding: 0 0.625rem;
+  border: 1px solid var(--color-filet-fort);
+  border-radius: 4px;
+  color: var(--color-encre);
+  cursor: pointer;
+}
+
+.vignette-pastille:has(input:checked) {
+  border-color: var(--color-encre);
+  background-color: var(--color-encre);
+  color: var(--color-coquille);
+}
+
+.vignette-pastille[data-epuise] .etiquette {
+  color: var(--color-encre-douce);
+  text-decoration: line-through;
+}
+
+.vignette-ligne {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.vignette-prix {
+  margin: 0;
+  font-weight: 500;
+}
+
+.vignette-action {
+  flex: 0 0 9rem;
+}
+
+.vignette-bouton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 2.75rem;
+  padding: 0 0.5rem;
+  border: 1px solid var(--color-olive);
+  border-radius: 4px;
+  background-color: var(--color-olive);
+  color: var(--color-creme);
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.vignette-bouton:disabled {
+  border-color: color-mix(in srgb, var(--color-encre-douce) 40%, transparent);
+  background-color: var(--color-creme);
+  color: var(--color-encre-douce);
+  cursor: not-allowed;
+}
+
+.vignette-pas {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 2.75rem;
+  /* Le cadre est un CONTOUR rentré, pas une bordure : il ne prend aucune
+     place. Avec une bordure, le pas mesurait 46 px contre 44 pour le bouton
+     qu'il remplace et la rangée sautait de 2 px à l'ajout (revue DA) ; rogner
+     les boutons à 42 aurait fait passer les cibles sous 44. Le contour d'un
+     élément se peint après ses enfants : le fond de survol ne le cache pas. */
+  outline: 1px solid var(--color-encre);
+  outline-offset: -1px;
+  border-radius: 4px;
+}
+
+.vignette-pas button {
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 0;
+  background: transparent;
+  color: var(--color-encre);
+  cursor: pointer;
+}
+
+.vignette-pas button:first-child {
+  border-radius: 4px 0 0 4px;
+}
+
+.vignette-pas button:last-child {
+  border-radius: 0 4px 4px 0;
+}
+
+.vignette-pas svg {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+}
+
+.vignette-pas [aria-disabled='true'] {
+  color: var(--color-encre-douce);
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.vignette-pastille:has(input:focus-visible),
+.vignette-bouton:focus-visible,
+.vignette-pas button:focus-visible {
+  outline: 3px solid var(--color-encre);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 6px var(--color-coquille);
+}
+
+@media (hover: hover) {
+  .vignette-bouton:enabled:hover {
+    border-color: var(--color-encre);
+    background-color: var(--color-encre);
+  }
+
+  .vignette-pastille:hover:not(:has(input:checked)),
+  .vignette-pas button:not([aria-disabled='true']):hover {
+    background-color: var(--color-papier);
+  }
+}
+
+/* EN MODE LISTE, la ligne d'achat s'aligne sous la colonne de texte et non
+   sous l'image : même largeur de visuel et même gouttière que les règles
+   ci-dessus (6,5 rem + 1,25 rem, puis 9 rem + 1,25 rem). */
+html[data-affichage-rayon='liste'] .rayon-grille .vignette-ligne {
+  justify-content: flex-start;
+  gap: 1.5rem;
+}
+
+/* Sous 40 rem, la ligne d'achat prend toute la largeur de la carte : décalée
+   de 7,75 rem, elle faisait déborder le document de 13 px à 390 et de 43 px
+   à 360 (revue DA du 06/10). */
+@media (min-width: 40rem) {
+  html[data-affichage-rayon='liste'] .rayon-grille .vignette-achat {
+    margin-left: 10.25rem;
   }
 }
 
