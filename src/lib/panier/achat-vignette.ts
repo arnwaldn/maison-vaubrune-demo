@@ -129,6 +129,20 @@ export function decrireAchat({
 }
 
 /** L'action du bouton « Ajouter » ; `null` hors du mode `ajouter`. */
+/**
+ * Un format épuisé À LA VITRINE (stock du catalogue ou de la surcouche à zéro).
+ * Sert à barrer sa pastille : le visiteur voit avant de cliquer qu'il n'y a
+ * plus rien à ajouter dans ce format, et la pastille reste choisissable — elle
+ * mène au motif « épuisé », jamais à un ajout.
+ */
+export function formatEpuise(
+  surcouche: SurcoucheCatalogue,
+  slug: string,
+  format: FormatVignette,
+): boolean {
+  return Math.min(stockAffiche(surcouche, slug, format.sku, format.stock), format.stock) <= 0;
+}
+
 export function actionAjouter(decision: DecisionAchat): ActionPanier | null {
   return decision.mode === 'ajouter'
     ? { type: 'ajouter', sku: decision.sku, quantite: 1 }

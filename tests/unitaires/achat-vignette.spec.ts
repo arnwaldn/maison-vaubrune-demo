@@ -6,6 +6,7 @@ import {
   actionMoins,
   actionPlus,
   decrireAchat,
+  formatEpuise,
   formatParDefaut,
   type FormatVignette,
 } from '@/lib/panier/achat-vignette';
@@ -256,6 +257,18 @@ describe('la surcouche marchand, par les mêmes chemins que la fiche (D24)', () 
     expect(
       decider({ surcouche, lignes: [{ sku: 'A-25', quantite: 1 }] }).mode,
     ).toBe('indisponible');
+  });
+});
+
+describe('la pastille d’un format épuisé', () => {
+  it('se barre quand la surcouche ou le catalogue met le stock à zéro, et pas autrement', () => {
+    const [vingtCinq, cinquante] = FORMATS;
+    const surcouche: SurcoucheCatalogue = { [SLUG]: { variantes: [{ sku: 'A-25', stock: 0 }] } };
+
+    expect(formatEpuise(surcouche, SLUG, vingtCinq)).toBe(true);
+    expect(formatEpuise(surcouche, SLUG, cinquante!)).toBe(false);
+    expect(formatEpuise({}, SLUG, { ...vingtCinq, stock: 0 })).toBe(true);
+    expect(formatEpuise({}, SLUG, vingtCinq)).toBe(false);
   });
 });
 

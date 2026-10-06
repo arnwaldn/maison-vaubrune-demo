@@ -161,7 +161,13 @@ export function CarteProduit({
     ...autresFormats.map(versFormat),
   ];
   const rang = rangInventaire(CATALOGUE, produit.slug);
-  const garde = ligneDeGarde(produit);
+  /* LE POIDS QUITTE LA LIGNE DE GARDE DÈS QUE LA CARTE PORTE DES PASTILLES.
+     Il est celui du PREMIER format ; depuis C26 le visiteur choisit son format
+     sur la carte, et « 520 g » resterait affiché sous une huile de noix passée
+     en 50 cl (bêta-test du 06/10). La pastille dit déjà la contenance ; le
+     poids exact de chaque format est sur la fiche. */
+  const garde =
+    produit.variantes.length > 1 ? ligneDeGarde(produit).slice(1) : ligneDeGarde(produit);
   const principal = produit.visuel?.principal;
   const ambiance = produit.visuel?.ambiance;
 

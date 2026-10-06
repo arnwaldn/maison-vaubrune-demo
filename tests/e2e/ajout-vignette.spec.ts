@@ -200,7 +200,7 @@ for (const { nom, chemin } of PAGES) {
     await expect(boutonAjout(coffret)).toHaveCount(0);
     await expect(pas(coffret)).toHaveCount(0);
 
-    const lien = coffret.getByRole('link', { name: 'Composer mon coffret' });
+    const lien = coffret.getByRole('link', { name: /^Composer\s/ });
     await expect(lien).toHaveAttribute('href', `/boutique/${COFFRET.slug}`);
 
     await lien.click();
@@ -225,8 +225,9 @@ test('choisir une pastille sur une carte ne change pas la sélection d’une aut
     .evaluateAll((entrees) => entrees.map((entree) => (entree as HTMLInputElement).name));
   const groupes = new Set(noms);
 
-  /* Sept produits à plusieurs formats, sept groupes — et aucun nom en dur. */
-  expect(groupes.size).toBe(7);
+  /* Sept produits à plusieurs formats, dont le coffret qui se compose sur sa
+     fiche et ne porte pas de pastilles : six groupes — et aucun nom en dur. */
+  expect(groupes.size).toBe(6);
   expect([...groupes].every((nomGroupe) => nomGroupe !== '' && !/^format$/.test(nomGroupe))).toBe(
     true,
   );
@@ -253,8 +254,16 @@ test('les cibles de « − », « + » et des pastilles font au moins 44 × 44 p
 }) => {
   await ouvrir(page, '/boutique');
   const huile = carte(page, OLIVE.slug);
+  const hauteurLigne = () =>
+    huile.locator('.vignette-ligne').evaluate((noeud) => noeud.getBoundingClientRect().height);
+  const avant = await hauteurLigne();
 
   await boutonAjout(huile).click();
+
+  /* Le pas remplace le bouton SANS changer la hauteur de la rangée : un
+     saut de 2 px déplaçait toute la grille en dessous (revue DA du 06/10). */
+  await expect(pas(huile)).toBeVisible();
+  expect(await hauteurLigne()).toBe(avant);
 
   const cibles = [
     boutonMoins(huile),
@@ -375,9 +384,15 @@ test('mode liste : la ligne d’achat reste dans la carte, sous la colonne de te
 
   /* La bascule passe par une transition de vue : le style calculé est relu
      jusqu'à ce que la règle de la liste s'applique, au lieu d'être supposé. */
+  const large = (page.viewportSize()?.width ?? 0) >= 640;
   await expect
-    .poll(() => style(huile.locator('.vignette-achat'), 'margin-left'))
-    .not.toBe('0px');
+    .poll(() => style(huile.locator('.vignette-ligne'), 'justify-content'))
+    .toBe('flex-start');
+  if (large) {
+    await expect
+      .poll(() => style(huile.locator('.vignette-achat'), 'margin-left'))
+      .not.toBe('0px');
+  }
 
   const mesure = await huile.evaluate((noeud) => {
     const c = noeud.getBoundingClientRect();
@@ -394,8 +409,16 @@ test('mode liste : la ligne d’achat reste dans la carte, sous la colonne de te
     };
   });
 
-  expect(mesure.achatGauche).toBeGreaterThanOrEqual(mesure.visuelDroite);
+  /* Au-dessus de 40 rem la ligne d'achat se range sous la colonne de texte ;
+     en dessous elle prend toute la largeur de la carte, sans quoi le document
+     débordait de 13 px à 390 (revue DA). */
+  if (large) {
+    expect(mesure.achatGauche).toBeGreaterThanOrEqual(mesure.visuelDroite);
+  }
   expect(mesure.achatDroite).toBeLessThanOrEqual(mesure.carteDroite);
+  expect(
+    await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth),
+  ).toBeLessThanOrEqual(0);
   expect(mesure.achatBas).toBeLessThanOrEqual(mesure.carteBas);
 
   await boutonAjout(huile).click();

@@ -1893,6 +1893,13 @@
     display: flex;
     gap: var(--gouttiere);
     overflow-x: auto;
+    /* `overflow-x: auto` rend `overflow-y` calculé à `auto` lui aussi : les
+       cartes encore hors champ, à droite, gardent l'état masqué des
+       révélations (translation de 36 px vers le bas) et ouvraient une barre de
+       défilement VERTICALE de 24 px dans le rail — en ligne depuis C18,
+       relevée au bêta-test du 06/10. Ce qui dépasse est invisible (opacité
+       nulle) : on le coupe. La marge basse garde la place des bagues de focus. */
+    overflow-y: hidden;
     padding-bottom: 0.75rem;
     scroll-snap-type: x mandatory;
     scrollbar-color: var(--color-filet-fort) transparent;
@@ -2227,7 +2234,7 @@ html[data-affichage-rayon='liste'] .rayon-grille .carte-visuel {
   min-height: 2.75rem;
   padding: 0 0.625rem;
   border: 1px solid var(--color-filet-fort);
-  border-radius: 2px;
+  border-radius: 4px;
   color: var(--color-encre);
   cursor: pointer;
 }
@@ -2236,6 +2243,11 @@ html[data-affichage-rayon='liste'] .rayon-grille .carte-visuel {
   border-color: var(--color-encre);
   background-color: var(--color-encre);
   color: var(--color-coquille);
+}
+
+.vignette-pastille[data-epuise] .etiquette {
+  color: var(--color-encre-douce);
+  text-decoration: line-through;
 }
 
 .vignette-ligne {
@@ -2247,10 +2259,11 @@ html[data-affichage-rayon='liste'] .rayon-grille .carte-visuel {
 
 .vignette-prix {
   margin: 0;
+  font-weight: 500;
 }
 
 .vignette-action {
-  flex: 0 0 9.75rem;
+  flex: 0 0 9rem;
 }
 
 .vignette-bouton {
@@ -2261,7 +2274,7 @@ html[data-affichage-rayon='liste'] .rayon-grille .carte-visuel {
   min-height: 2.75rem;
   padding: 0 0.5rem;
   border: 1px solid var(--color-olive);
-  border-radius: 2px;
+  border-radius: 4px;
   background-color: var(--color-olive);
   color: var(--color-creme);
   white-space: nowrap;
@@ -2269,7 +2282,7 @@ html[data-affichage-rayon='liste'] .rayon-grille .carte-visuel {
 }
 
 .vignette-bouton:disabled {
-  border-color: var(--color-filet-fort);
+  border-color: color-mix(in srgb, var(--color-encre-douce) 40%, transparent);
   background-color: var(--color-creme);
   color: var(--color-encre-douce);
   cursor: not-allowed;
@@ -2280,8 +2293,14 @@ html[data-affichage-rayon='liste'] .rayon-grille .carte-visuel {
   align-items: center;
   justify-content: space-between;
   min-height: 2.75rem;
-  border: 1px solid var(--color-encre);
-  border-radius: 2px;
+  /* Le cadre est un CONTOUR rentré, pas une bordure : il ne prend aucune
+     place. Avec une bordure, le pas mesurait 46 px contre 44 pour le bouton
+     qu'il remplace et la rangée sautait de 2 px à l'ajout (revue DA) ; rogner
+     les boutons à 42 aurait fait passer les cibles sous 44. Le contour d'un
+     élément se peint après ses enfants : le fond de survol ne le cache pas. */
+  outline: 1px solid var(--color-encre);
+  outline-offset: -1px;
+  border-radius: 4px;
 }
 
 .vignette-pas button {
@@ -2330,10 +2349,14 @@ html[data-affichage-rayon='liste'] .rayon-grille .carte-visuel {
 /* EN MODE LISTE, la ligne d'achat s'aligne sous la colonne de texte et non
    sous l'image : même largeur de visuel et même gouttière que les règles
    ci-dessus (6,5 rem + 1,25 rem, puis 9 rem + 1,25 rem). */
-html[data-affichage-rayon='liste'] .rayon-grille .vignette-achat {
-  margin-left: 7.75rem;
+html[data-affichage-rayon='liste'] .rayon-grille .vignette-ligne {
+  justify-content: flex-start;
+  gap: 1.5rem;
 }
 
+/* Sous 40 rem, la ligne d'achat prend toute la largeur de la carte : décalée
+   de 7,75 rem, elle faisait déborder le document de 13 px à 390 et de 43 px
+   à 360 (revue DA du 06/10). */
 @media (min-width: 40rem) {
   html[data-affichage-rayon='liste'] .rayon-grille .vignette-achat {
     margin-left: 10.25rem;

@@ -5,12 +5,14 @@ import { useId, useRef, useState } from 'react';
 import { flushSync } from 'react-dom';
 
 import { formaterEuros } from '@/lib/argent';
+import { PrixLePlusBasVitrine } from '@/composants/surcouche/FeuillesVitrine';
 import { useSurcouche } from '@/lib/contexte-surcouche';
 import {
   actionAjouter,
   actionMoins,
   actionPlus,
   decrireAchat,
+  formatEpuise,
   type DecisionAchat,
   type FormatVignette,
 } from '@/lib/panier/achat-vignette';
@@ -86,6 +88,12 @@ export function AchatVignette({
   const decision = decrireAchat({ slug, formats, skuChoisi, lignes: etat.lignes, surcouche });
   const prix = formaterEuros(decision.prixCentimes);
   const designation = `${nom}, ${decision.format}`;
+  /* LE COFFRET À COMPOSER N'A PAS DE PASTILLES : le format se choisit sur la
+     fiche, avec les pièces. Une pastille « 5 pièces » cochée ici serait perdue
+     à l'arrivée sur la fiche, qui ouvre sur 3 (bêta-test du 06/10) : on
+     n'offre pas un choix qu'on ne sait pas transmettre. Le prix redevient le
+     « dès » de la vitrine, surcouche comprise. */
+  const aComposer = formats.every((format) => format.piecesRequises !== null);
 
   const ajouter = () => {
     const action = actionAjouter(decision);
@@ -135,11 +143,15 @@ export function AchatVignette({
   return (
     <div className="vignette-achat">
       <div className="vignette-corps" inert={!pretALEmploi}>
-        {formats.length > 1 ? (
+        {formats.length > 1 && !aComposer ? (
           <fieldset className="vignette-formats">
             <legend className="sr-only">{typographier(`Format de ${nom}`)}</legend>
             {formats.map((format) => (
-              <label key={format.sku} className="vignette-pastille">
+              <label
+                key={format.sku}
+                className="vignette-pastille"
+                data-epuise={formatEpuise(surcouche, slug, format) ? '' : undefined}
+              >
                 <input
                   type="radio"
                   name={`${identifiant}-format`}
@@ -158,7 +170,13 @@ export function AchatVignette({
 
         <div className="vignette-ligne">
           <p className="vignette-prix registre text-encre tabular-nums">
-            {prix}
+            {aComposer ? (
+              <>
+                dès <PrixLePlusBasVitrine slug={slug} variantes={formats} />
+              </>
+            ) : (
+              prix
+            )}
             {motifCourt(decision) === null ? null : (
               <span id={`${identifiant}-motif`} className="etiquette block text-encre-douce">
                 {motifCourt(decision)}
@@ -198,9 +216,10 @@ export function AchatVignette({
             ) : decision.mode === 'composer' ? (
               <Link
                 href={`/boutique/${slug}`}
+                aria-label={typographier(`Composer ${nom}`)}
                 className="vignette-bouton text-sm font-semibold no-underline"
               >
-                Composer mon coffret
+                Composer
               </Link>
             ) : (
               <button
