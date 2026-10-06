@@ -347,10 +347,13 @@ export function CarteProduit({
 
             {/* LE PRIX A QUITTÉ LE LIEN (C26) : il vit dans la ligne d'achat,
                 avec le format qu'il décrit. Restent les étiquettes, sur une
-                rangée dont la hauteur est RÉSERVÉE — la surcouche en ajoute
-                après le montage (« Indisponible »), et une rangée qui naîtrait
-                alors décalerait la grille. */}
-            <span className="mt-2 flex min-h-6 flex-wrap items-center gap-x-3 gap-y-2">
+                rangée qui DISPARAÎT quand elle est vide (`.carte-etiquettes`) :
+                réservée, elle laissait 32 px de vide sur chaque carte sans
+                étiquette, c'est-à-dire chez tous les visiteurs. Prix assumé :
+                quand le marchand rend un produit indisponible, l'étiquette
+                naît après le montage et décale la carte une fois — ce cas ne
+                touche que la surcouche locale du marchand. */}
+            <span className="carte-etiquettes mt-2 flex flex-wrap items-center gap-x-3 gap-y-2">
               <EtiquettesVitrine
                 slug={produit.slug}
                 frais={frais}

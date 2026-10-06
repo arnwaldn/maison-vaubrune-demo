@@ -2210,6 +2210,12 @@ html[data-affichage-rayon='liste'] .rayon-grille .carte-visuel {
    ligne ne change ni de largeur ni de hauteur d'un mode à l'autre ni à
    l'hydratation. Les cibles font 2,75 rem (44 px) : le dessin des signes est
    plus petit, la zone touchable non. */
+/* Une rangée d'étiquettes vide ne prend aucune place (voir `CarteProduit`).
+   Hors couche : elle doit battre l'utilitaire `flex` de la même balise. */
+.carte-etiquettes:empty {
+  display: none;
+}
+
 .vignette-achat {
   position: relative;
   margin-top: 0.75rem;
