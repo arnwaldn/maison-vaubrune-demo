@@ -2,14 +2,13 @@ import Link from 'next/link';
 
 import { Silhouette } from '@/composants/illustrations/Silhouette';
 import { Visuel } from '@/composants/illustrations/Visuel';
-import {
-  EtiquettesVitrine,
-  PrixLePlusBasVitrine,
-  ResumeVitrine,
-} from '@/composants/surcouche/FeuillesVitrine';
+import { AchatVignette } from '@/composants/panier/AchatVignette';
+import { EtiquettesVitrine, ResumeVitrine } from '@/composants/surcouche/FeuillesVitrine';
 import { CATALOGUE } from '@/donnees/catalogue';
+import type { FormatVignette } from '@/lib/panier/achat-vignette';
+import { nombreDePiecesAChoisir } from '@/lib/panier/catalogue-panier';
 import { fondImage, ligneDeGarde, rangInventaire, styleDeFamille } from '@/lib/vitrine';
-import { exigeChaineDuFroid, type Produit } from '@/lib/types';
+import { exigeChaineDuFroid, type Produit, type Variante } from '@/lib/types';
 
 /**
  * UNE VIGNETTE DU RAYON.
@@ -18,13 +17,14 @@ import { exigeChaineDuFroid, type Produit } from '@/lib/types';
  *  CE QUI NE CHANGE PAS DEPUIS C6
  * ═══════════════════════════════════════════════════════════════════════════
  *
- * - Le prix affiché est un « à partir de » DÉRIVÉ des variantes, jamais une
- *   valeur saisie une seconde fois. Un prix recopié dans la grille finit par
- *   contredire la fiche.
+ * - Le prix affiché est DÉRIVÉ des variantes, jamais une valeur saisie une
+ *   seconde fois. Depuis C26 il est celui du FORMAT choisi, rendu par la ligne
+ *   d'achat (surcouche appliquée) et non plus un « dès » dans le lien.
  * - Le badge « frais » se déduit de la chaîne du froid, pas de la famille
  *   (décision D9) : le jour où un coffret contiendra du beurre, il portera le
  *   badge sans qu'on y touche.
- * - La carte entière est cliquable, mais le nom du produit reste le texte du
+ * - La partie haute de la carte est cliquable (depuis C26 : la ligne d'achat
+ *   vit HORS du lien, voir `AchatVignette`), et le nom du produit reste le texte du
  *   lien : c'est lui qu'annonce un lecteur d'écran, pas « lire la suite ».
  * - La carte reste un composant SERVEUR. Trois de ses valeurs (le résumé, le
  *   « à partir de », les étiquettes) passent par des feuilles clientes qui
@@ -146,10 +146,20 @@ export function CarteProduit({
   readonly rangDansLaFamille?: number;
 }) {
   const frais = exigeChaineDuFroid(produit.conservation);
-  const prix = produit.variantes.map((variante) => ({
+  /* LA PROJECTION ÉTROITE DE L'ÎLOT D'ACHAT (C26, D17) : cinq champs par
+     format, jamais l'article du panier ni le catalogue. */
+  const versFormat = (variante: Variante): FormatVignette => ({
     sku: variante.sku,
+    format: variante.format,
     prixCentimes: variante.prixCentimes,
-  }));
+    stock: variante.stock,
+    piecesRequises: nombreDePiecesAChoisir(produit, variante),
+  });
+  const [premierFormat, ...autresFormats] = produit.variantes;
+  const formats: readonly [FormatVignette, ...FormatVignette[]] = [
+    versFormat(premierFormat),
+    ...autresFormats.map(versFormat),
+  ];
   const rang = rangInventaire(CATALOGUE, produit.slug);
   const garde = ligneDeGarde(produit);
   const principal = produit.visuel?.principal;
@@ -240,7 +250,7 @@ export function CarteProduit({
          changement de couleur au survol perdrait contre l'utilitaire — il l'a
          perdu de la livraison au round 1. Le raisonnement complet est écrit à
          l'endroit de la règle. */
-      className="carte-produit rounded-sm border p-3 sm:p-4"
+      className="carte-produit flex flex-col rounded-sm border p-3 sm:p-4"
       /* LE GESTE DE RÉVÉLATION EST UN ATTRIBUT POSÉ PAR LE SERVEUR (C17, D37).
          Il ne rend pas ce composant client, il ne coûte pas un octet de
          JavaScript, et sans script il ne fait rien : l'état masqué n'existe que
@@ -253,7 +263,7 @@ export function CarteProduit({
     >
       <Link
         href={`/boutique/${produit.slug}`}
-        className="group flex h-full flex-col gap-4 no-underline"
+        className="group flex flex-1 flex-col gap-4 no-underline"
       >
         <span className="carte-visuel block rounded-sm">
           {produit.visuel === undefined ? (
@@ -329,10 +339,12 @@ export function CarteProduit({
               ))}
             </span>
 
-            <span className="mt-2 flex flex-wrap items-baseline gap-x-3 gap-y-2">
-              <span className="registre text-encre">
-                dès <PrixLePlusBasVitrine slug={produit.slug} variantes={prix} />
-              </span>
+            {/* LE PRIX A QUITTÉ LE LIEN (C26) : il vit dans la ligne d'achat,
+                avec le format qu'il décrit. Restent les étiquettes, sur une
+                rangée dont la hauteur est RÉSERVÉE — la surcouche en ajoute
+                après le montage (« Indisponible »), et une rangée qui naîtrait
+                alors décalerait la grille. */}
+            <span className="mt-2 flex min-h-6 flex-wrap items-center gap-x-3 gap-y-2">
               <EtiquettesVitrine
                 slug={produit.slug}
                 frais={frais}
@@ -342,6 +354,8 @@ export function CarteProduit({
           </span>
         </span>
       </Link>
+
+      <AchatVignette slug={produit.slug} nom={produit.nom} formats={formats} />
     </li>
   );
 }

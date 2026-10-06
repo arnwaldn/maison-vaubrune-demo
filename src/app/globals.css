@@ -2184,6 +2184,163 @@ html[data-affichage-rayon='liste'] .rayon-grille .carte-visuel {
 }
 
 /* ===========================================================================
+   LA LIGNE D'ACHAT DES VIGNETTES (C26) — HORS COUCHE, ET C'EST UNE RÈGLE
+   ===========================================================================
+
+   Anti-patron n° 21 de D37 : une règle d'état écrite dans `components` perd
+   contre l'utilitaire concurrent. Tout ce bloc vit donc hors couche, et AUCUN
+   utilitaire n'est posé sur ces éléments pour les propriétés qu'il règle
+   (fond, bordure, couleur, taille des cibles) ; la campagne lit le style
+   calculé de chaque état (coché, désactivé, au plafond, au focus).
+
+   UNE CELLULE, TROIS CONTENUS : le bouton d'ajout, le pas `[ − ] N [ + ]` et le
+   lien « Composer mon coffret » occupent la même `.vignette-action`, donc la
+   ligne ne change ni de largeur ni de hauteur d'un mode à l'autre ni à
+   l'hydratation. Les cibles font 2,75 rem (44 px) : le dessin des signes est
+   plus petit, la zone touchable non. */
+.vignette-achat {
+  position: relative;
+  margin-top: 0.75rem;
+}
+
+.vignette-corps {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.vignette-formats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.375rem;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.vignette-pastille {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.75rem;
+  min-height: 2.75rem;
+  padding: 0 0.625rem;
+  border: 1px solid var(--color-filet-fort);
+  border-radius: 2px;
+  color: var(--color-encre);
+  cursor: pointer;
+}
+
+.vignette-pastille:has(input:checked) {
+  border-color: var(--color-encre);
+  background-color: var(--color-encre);
+  color: var(--color-coquille);
+}
+
+.vignette-ligne {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.vignette-prix {
+  margin: 0;
+}
+
+.vignette-action {
+  flex: 0 0 9.75rem;
+}
+
+.vignette-bouton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 2.75rem;
+  padding: 0 0.5rem;
+  border: 1px solid var(--color-olive);
+  border-radius: 2px;
+  background-color: var(--color-olive);
+  color: var(--color-creme);
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.vignette-bouton:disabled {
+  border-color: var(--color-filet-fort);
+  background-color: var(--color-creme);
+  color: var(--color-encre-douce);
+  cursor: not-allowed;
+}
+
+.vignette-pas {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 2.75rem;
+  border: 1px solid var(--color-encre);
+  border-radius: 2px;
+}
+
+.vignette-pas button {
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 0;
+  background: transparent;
+  color: var(--color-encre);
+  cursor: pointer;
+}
+
+.vignette-pas svg {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+}
+
+.vignette-pas [aria-disabled='true'] {
+  color: var(--color-encre-douce);
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.vignette-pastille:has(input:focus-visible),
+.vignette-bouton:focus-visible,
+.vignette-pas button:focus-visible {
+  outline: 3px solid var(--color-encre);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 6px var(--color-coquille);
+}
+
+@media (hover: hover) {
+  .vignette-bouton:enabled:hover {
+    border-color: var(--color-encre);
+    background-color: var(--color-encre);
+  }
+
+  .vignette-pastille:hover:not(:has(input:checked)),
+  .vignette-pas button:not([aria-disabled='true']):hover {
+    background-color: var(--color-papier);
+  }
+}
+
+/* EN MODE LISTE, la ligne d'achat s'aligne sous la colonne de texte et non
+   sous l'image : même largeur de visuel et même gouttière que les règles
+   ci-dessus (6,5 rem + 1,25 rem, puis 9 rem + 1,25 rem). */
+html[data-affichage-rayon='liste'] .rayon-grille .vignette-achat {
+  margin-left: 7.75rem;
+}
+
+@media (min-width: 40rem) {
+  html[data-affichage-rayon='liste'] .rayon-grille .vignette-achat {
+    margin-left: 10.25rem;
+  }
+}
+
+/* ===========================================================================
    LE MONUMENT DU HÉROS (C18) — UN MOT NE SORT JAMAIS DE SA COLONNE
    ===========================================================================
 
