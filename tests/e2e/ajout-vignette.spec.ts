@@ -455,3 +455,47 @@ test('avant l’hydratation la ligne n’est pas inerte et garde sa taille', asy
   expect(hauteurAvant).toBeDefined();
   expect(hauteurApres).toBe(hauteurAvant);
 });
+
+/* -------------------------------------------------------------------------- */
+/* Les cartes de suggestion portent la même ligne d'achat (C26, décision OODA   */
+/* d'Arnaud du 07/10 : la règle vaut pour tout produit affiché).               */
+/* -------------------------------------------------------------------------- */
+
+const suggestions = (racine: Locator) =>
+  racine.locator('li', { has: racine.page().locator('[data-suggestion]') });
+
+test('le tiroir de la fiche : une suggestion s’ajoute sans fermer le tiroir', async ({
+  page,
+}) => {
+  await ouvrir(page, `/boutique/${OLIVE.slug}`);
+  await page.getByRole('button', { name: 'Ajouter au panier', exact: true }).click();
+
+  const tiroir = page.getByRole('dialog', { name: 'Ajouté au panier' });
+  await expect(tiroir).toBeVisible();
+  await expect(pastillePanier(page)).toHaveText('1');
+
+  const premiere = suggestions(tiroir).first();
+  await boutonAjout(premiere).click();
+
+  await expect(pas(premiere)).toContainText('1');
+  await expect(pastillePanier(page)).toHaveText('2');
+  await expect(tiroir).toBeVisible();
+  await expect(page).toHaveURL(new RegExp(`/boutique/${OLIVE.slug}$`));
+});
+
+test('le panier : une suggestion s’ajoute et devient une ligne du panier', async ({ page }) => {
+  await ouvrir(page, '/boutique');
+  await boutonAjout(carte(page, OLIVE.slug)).click();
+  await expect(pastillePanier(page)).toHaveText('1');
+
+  await ouvrir(page, '/panier');
+  const section = page.locator('section', { has: page.locator('[data-suggestion]') });
+  const premiere = suggestions(section).first();
+  const nom = (await premiere.locator('[data-suggestion] p').innerText()).trim();
+
+  await boutonAjout(premiere).click();
+
+  await expect(pastillePanier(page)).toHaveText('2');
+  await expect(page).toHaveURL(/\/panier$/);
+  await expect(page.locator('main').getByText(nom, { exact: false }).first()).toBeVisible();
+});

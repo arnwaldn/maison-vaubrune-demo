@@ -10,7 +10,7 @@ import {
   formatParDefaut,
   type FormatVignette,
 } from '@/lib/panier/achat-vignette';
-import { projeterCatalogue } from '@/lib/panier/catalogue-panier';
+import { formatsDeVignette, projeterCatalogue } from '@/lib/panier/catalogue-panier';
 import type { SurcoucheCatalogue } from '@/lib/catalogue';
 
 /**
@@ -318,6 +318,24 @@ describe('le catalogue réel, projeté comme la vignette le reçoit', () => {
 
       expect(decision.mode, produit.slug).toBe(produit.personnalisable ? 'composer' : 'ajouter');
       expect(decision.sku, produit.slug).toBe(produit.variantes[0].sku);
+    }
+  });
+});
+
+describe('formatsDeVignette, la fabrique serveur des deux cartes', () => {
+  it('rend les formats dans l’ordre du catalogue, réduits à cinq champs', () => {
+    for (const produit of CATALOGUE) {
+      const formats = formatsDeVignette(produit);
+
+      expect(formats.map((format) => format.sku), produit.slug).toEqual(
+        produit.variantes.map((variante) => variante.sku),
+      );
+      for (const format of formats) {
+        expect(Object.keys(format).sort()).toEqual(
+          ['format', 'piecesRequises', 'prixCentimes', 'sku', 'stock'],
+        );
+        expect(format.piecesRequises === null, produit.slug).toBe(!produit.personnalisable);
+      }
     }
   });
 });

@@ -66,9 +66,10 @@ import { typographier } from '@/lib/typographie';
  * - LE NOM DU BOUTON D'AJOUT COMMENCE PAR SON TEXTE VISIBLE (WCAG 2.5.3,
  *   « étiquette dans le nom ») : qui dicte « Ajouter au panier » à une commande
  *   vocale doit toucher ce bouton. Suivent le produit, le format et le prix —
- *   le prix y revient, puisqu'il a quitté le nom du lien. Aucune page qui porte
- *   des vignettes ne porte aussi le bouton de la fiche : les campagnes qui
- *   cherchent « Ajouter au panier » sur une fiche restent sans ambiguïté.
+ *   le prix y revient, puisqu'il a quitté le nom du lien. Sur une fiche, les
+ *   cartes de suggestion vivent dans le tiroir : fermé, il ne rend rien ;
+ *   ouvert, il est modal et le bouton de la fiche est inerte derrière lui. Une
+ *   recherche de « Ajouter au panier » n'y trouve donc jamais deux boutons.
  */
 
 const TEXTE_AJOUT = 'Ajouter au panier';
@@ -77,10 +78,13 @@ export function AchatVignette({
   slug,
   nom,
   formats,
+  compacte = false,
 }: {
   readonly slug: string;
   readonly nom: string;
   readonly formats: readonly [FormatVignette, ...FormatVignette[]];
+  /** Carte étroite (suggestions) : le prix passe au-dessus du bouton, pleine largeur. */
+  readonly compacte?: boolean;
 }) {
   const { etat, pretALEmploi, envoyer } = usePanier();
   const { surcouche } = useSurcouche();
@@ -180,7 +184,7 @@ export function AchatVignette({
   };
 
   return (
-    <div className="vignette-achat">
+    <div className={compacte ? 'vignette-achat vignette-achat--compacte' : 'vignette-achat'}>
       <div className="vignette-corps">
         {formats.length > 1 && !aComposer ? (
           <fieldset className="vignette-formats">

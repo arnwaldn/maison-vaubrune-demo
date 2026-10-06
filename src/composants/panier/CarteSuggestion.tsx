@@ -1,8 +1,9 @@
-import Link from 'next/link';
+import Link from "next/link";
 
-import { Visuel } from '@/composants/illustrations/Visuel';
-import { formaterEuros } from '@/lib/argent';
-import type { Produit } from '@/lib/types';
+import { Visuel } from "@/composants/illustrations/Visuel";
+import { AchatVignette } from "@/composants/panier/AchatVignette";
+import { formatsDeVignette } from "@/lib/panier/catalogue-panier";
+import type { Produit } from "@/lib/types";
 
 /**
  * UNE CARTE DE VENTE CROISÉE — un seul dessin pour tout le dépôt (C24).
@@ -18,9 +19,11 @@ import type { Produit } from '@/lib/types';
  * refuse depuis C14. La carte est donc rendue au build et voyage en nœud —
  * environ 250 octets gzip pièce, zéro octet de premier chargement.
  *
- * LE PRIX EST CELUI DU CATALOGUE VERSIONNÉ, jamais celui de la surcouche
- * marchand : ce composant n'a pas d'état de visiteur, comme le balisage
- * structuré n'en a pas (D33). L'écart est écrit plutôt que découvert.
+ * DEPUIS C26 ELLE PORTE LA LIGNE D'ACHAT DES VIGNETTES (version compacte) :
+ * tout produit affiché doit pouvoir s'ajouter sur une impulsion, et une
+ * suggestion n'existe que pour ça. Le lien ne garde que l'image et le nom ; le
+ * prix passe dans l'îlot, donc PAR LA SURCOUCHE MARCHAND (D24) — l'écart avec
+ * le prix de base que C24 avait écrit ici est refermé.
  */
 export function CarteSuggestion({ produit }: { readonly produit: Produit }) {
   return (
@@ -30,46 +33,40 @@ export function CarteSuggestion({ produit }: { readonly produit: Produit }) {
        escalier. `mt-auto` les ramène sur une ligne, quelle que soit la hauteur
        du nom au-dessus. `h-full` est nécessaire : sans lui la carte se contente
        de son contenu et le `mt-auto` n'a rien à repousser. */
-    <Link
-      href={`/boutique/${produit.slug}`}
-      className="flex h-full flex-col no-underline"
-      data-suggestion
-    >
-      {produit.visuel === undefined ? null : (
-        <Visuel
-          slug={produit.slug}
-          vue="principal"
-          donnees={produit.visuel.principal}
-          illustration={produit.illustration}
-          alternative="decorative"
-          largeurMaximale={320}
-          sizes="12rem"
-          className="block rounded-sm"
-        />
-      )}
-      {/* `text-balance` répartit les mots entre les lignes au lieu de laisser
+    <div className="flex h-full flex-col">
+      <Link
+        href={`/boutique/${produit.slug}`}
+        className="block no-underline"
+        data-suggestion
+      >
+        {produit.visuel === undefined ? null : (
+          <Visuel
+            slug={produit.slug}
+            vue="principal"
+            donnees={produit.visuel.principal}
+            illustration={produit.illustration}
+            alternative="decorative"
+            largeurMaximale={320}
+            sizes="12rem"
+            className="block rounded-sm"
+          />
+        )}
+        {/* `text-balance` répartit les mots entre les lignes au lieu de laisser
           un orphelin — sur des noms de trois lignes dans 12 rem, la différence
           se voit. */}
-      <p className="mt-2 text-balance font-titre text-titre leading-tight text-encre">
-        {produit.nom}
-      </p>
-      <p className="registre mt-auto pt-1 text-encre-douce">
-        dès {formaterEuros(prixDeBase(produit))}
-      </p>
-    </Link>
+        <p className="mt-2 text-balance font-titre text-titre leading-tight text-encre">
+          {produit.nom}
+        </p>
+      </Link>
+      <div className="mt-auto">
+        <AchatVignette
+          slug={produit.slug}
+          nom={produit.nom}
+          formats={formatsDeVignette(produit)}
+          compacte
+        />
+      </div>
+    </div>
   );
 }
 
-/**
- * Le plus bas des prix de base d'un produit.
- *
- * Exportée parce que deux composants la lisent désormais. `prixLePlusBasAffiche()`
- * existe et honore la surcouche marchand, mais elle vit dans
- * `catalogue-navigateur.ts` et attend l'état d'un visiteur : ces composants
- * sont SERVEUR, ils n'en ont pas.
- */
-export function prixDeBase(produit: {
-  readonly variantes: readonly { readonly prixCentimes: number }[];
-}): number {
-  return Math.min(...produit.variantes.map((variante) => variante.prixCentimes));
-}

@@ -5,10 +5,9 @@ import { Visuel } from '@/composants/illustrations/Visuel';
 import { AchatVignette } from '@/composants/panier/AchatVignette';
 import { EtiquettesVitrine, ResumeVitrine } from '@/composants/surcouche/FeuillesVitrine';
 import { CATALOGUE } from '@/donnees/catalogue';
-import type { FormatVignette } from '@/lib/panier/achat-vignette';
-import { nombreDePiecesAChoisir } from '@/lib/panier/catalogue-panier';
+import { formatsDeVignette } from '@/lib/panier/catalogue-panier';
 import { fondImage, ligneDeGarde, rangInventaire, styleDeFamille } from '@/lib/vitrine';
-import { exigeChaineDuFroid, type Produit, type Variante } from '@/lib/types';
+import { exigeChaineDuFroid, type Produit } from '@/lib/types';
 
 /**
  * UNE VIGNETTE DU RAYON.
@@ -146,20 +145,8 @@ export function CarteProduit({
   readonly rangDansLaFamille?: number;
 }) {
   const frais = exigeChaineDuFroid(produit.conservation);
-  /* LA PROJECTION ÉTROITE DE L'ÎLOT D'ACHAT (C26, D17) : cinq champs par
-     format, jamais l'article du panier ni le catalogue. */
-  const versFormat = (variante: Variante): FormatVignette => ({
-    sku: variante.sku,
-    format: variante.format,
-    prixCentimes: variante.prixCentimes,
-    stock: variante.stock,
-    piecesRequises: nombreDePiecesAChoisir(produit, variante),
-  });
-  const [premierFormat, ...autresFormats] = produit.variantes;
-  const formats: readonly [FormatVignette, ...FormatVignette[]] = [
-    versFormat(premierFormat),
-    ...autresFormats.map(versFormat),
-  ];
+  /* La projection étroite de l'îlot d'achat (C26, D17). */
+  const formats = formatsDeVignette(produit);
   const rang = rangInventaire(CATALOGUE, produit.slug);
   /* LE POIDS QUITTE LA LIGNE DE GARDE DÈS QUE LA CARTE PORTE DES PASTILLES.
      Il est celui du PREMIER format ; depuis C26 le visiteur choisit son format

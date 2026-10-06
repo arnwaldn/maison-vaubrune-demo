@@ -1,3 +1,4 @@
+import type { FormatVignette } from '@/lib/panier/achat-vignette';
 import type { StocksParSku } from '@/lib/panier/reducteur';
 import { regimeRetractation, type Fondement } from '@/lib/retractation';
 import { exigeChaineDuFroid, type Produit, type Variante } from '@/lib/types';
@@ -220,4 +221,26 @@ export function unionAllergenes(
   }
 
   return union.length === 0 ? [MENTION_AUCUN] : union;
+}
+
+/**
+ * LA PROJECTION ÉTROITE DE LA LIGNE D'ACHAT (C26, D17) : cinq champs par
+ * format, jamais l'article du panier ni le catalogue. Une seule fabrique pour
+ * les deux cartes qui portent la ligne d'achat — la vignette du rayon et la
+ * carte de suggestion —, appelée côté SERVEUR : ce module n'entre pas dans le
+ * paquet client.
+ */
+export function formatsDeVignette(
+  produit: Pick<Produit, 'personnalisable' | 'variantes'>,
+): readonly [FormatVignette, ...FormatVignette[]] {
+  const versFormat = (variante: Variante): FormatVignette => ({
+    sku: variante.sku,
+    format: variante.format,
+    prixCentimes: variante.prixCentimes,
+    stock: variante.stock,
+    piecesRequises: nombreDePiecesAChoisir(produit, variante),
+  });
+  const [premier, ...autres] = produit.variantes;
+
+  return [versFormat(premier), ...autres.map(versFormat)];
 }

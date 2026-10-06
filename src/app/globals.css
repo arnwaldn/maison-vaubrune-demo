@@ -2216,6 +2216,19 @@ html[data-affichage-rayon='liste'] .rayon-grille .carte-visuel {
   display: none;
 }
 
+/* LA LIGNE D'ACHAT DES CARTES DE SUGGESTION (C26) : une colonne de 12 rem ne
+   loge pas le prix et un bouton de 9 rem côte à côte. Le prix passe dessus,
+   le bouton prend toute la largeur. */
+.vignette-achat--compacte .vignette-ligne {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.5rem;
+}
+
+.vignette-achat--compacte .vignette-action {
+  flex-basis: auto;
+}
+
 .vignette-achat {
   position: relative;
   margin-top: 0.75rem;
