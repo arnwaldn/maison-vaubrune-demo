@@ -311,8 +311,10 @@ test('le « + » s’éteint au plafond de stock, par le style calculé', async 
 
   await expect(pas(huile)).toContainText('2');
   await expect(boutonPlus(huile)).toBeDisabled();
-  expect(await style(boutonPlus(huile), 'opacity')).toBe('0.45');
-  expect(await style(boutonPlus(huile), 'cursor')).toBe('not-allowed');
+  /* Relu jusqu'à stabilité : l'intégration continue a lu « 1 » une fois, au
+     premier passage, juste après le changement d'état (07/10). */
+  await expect.poll(() => style(boutonPlus(huile), 'opacity')).toBe('0.45');
+  await expect.poll(() => style(boutonPlus(huile), 'cursor')).toBe('not-allowed');
 
   await boutonPlus(huile).click({ force: true });
   await expect(pas(huile)).toContainText('2');

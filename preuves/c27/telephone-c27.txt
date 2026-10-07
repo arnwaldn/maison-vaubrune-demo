@@ -1,0 +1,4 @@
+tiroir : miniature [{"src":"huile-olive-premiere-pression/miniature-160.avif","w":64,"h":64,"ok":true}]
+panier : miniatures [{"src":"huile-olive-premiere-pression/miniature-160.avif","w":64,"h":64,"ok":true}]
+saisie clavier (1 puis 2) : champ = 12 | sous-total = 154,80 € | geometrie {"prixDroite":340,"ligneDroite":340,"retirerSousPrix":true}
+recapitulatif : miniatures [{"src":"huile-olive-premiere-pression/miniature-160.avif","w":64,"h":64,"ok":true}]
