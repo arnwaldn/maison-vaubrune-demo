@@ -1,0 +1,93 @@
+COUTURES DES MINIATURES — mesurées sur les octets livrés (C27)
+----------------------------------------------------------------------------------------------------
+Maximum toléré : 8 niveaux sur 255, fenêtres de 16 points.
+Chaque valeur est le plus grand écart de fenêtre, sur le plus grand des trois canaux, entre la
+rangée de photographie qui touche le côté et la rangée étendue voisine. « — » : la photographie
+touche ce côté, il n’y a rien à coudre.
+
+produit                         fichier               haut   bas  gauche droite   (niveaux sur 255)
+----------------------------------------------------------------------------------------------------
+beurre-baratte-demi-sel         miniature-160.avif       —     —    0.0    0.4
+beurre-baratte-demi-sel         miniature-160.jpg        —     —    0.0    1.0
+beurre-baratte-demi-sel         miniature-320.avif       —     —    0.4    0.3
+beurre-baratte-demi-sel         miniature-320.jpg        —     —    0.0    0.6
+coffret-composez-le-votre       miniature-160.avif     0.1   0.3      —      —
+coffret-composez-le-votre       miniature-160.jpg      0.1   0.6      —      —
+coffret-composez-le-votre       miniature-320.avif     0.5   0.2      —      —
+coffret-composez-le-votre       miniature-320.jpg      0.5   0.5      —      —
+coffret-table-du-dimanche       miniature-160.avif     0.7   0.3      —      —
+coffret-table-du-dimanche       miniature-160.jpg      0.1   0.6      —      —
+coffret-table-du-dimanche       miniature-320.avif     1.9   0.1      —      —
+coffret-table-du-dimanche       miniature-320.jpg      0.0   0.5      —      —
+confit-oignons-vin-doux         miniature-160.avif       —     —    0.3    0.6
+confit-oignons-vin-doux         miniature-160.jpg        —     —    0.3    5.4
+confit-oignons-vin-doux         miniature-320.avif       —     —    0.1    0.4
+confit-oignons-vin-doux         miniature-320.jpg        —     —    2.0    1.0
+confiture-abricots-plein-vent   miniature-160.avif       —     —    1.4    0.2
+confiture-abricots-plein-vent   miniature-160.jpg        —     —    0.0    1.0
+confiture-abricots-plein-vent   miniature-320.avif       —     —    2.0    0.3
+confiture-abricots-plein-vent   miniature-320.jpg        —     —    0.0    1.0
+fromage-fermier-brebis          miniature-160.avif       —     —    0.9    1.1
+fromage-fermier-brebis          miniature-160.jpg        —     —    1.4    2.4
+fromage-fermier-brebis          miniature-320.avif       —     —    0.6    0.8
+fromage-fermier-brebis          miniature-320.jpg        —     —    1.1    2.5
+huile-noix-moulin               miniature-160.avif       —     —    0.3    0.4
+huile-noix-moulin               miniature-160.jpg        —     —    2.0    2.0
+huile-noix-moulin               miniature-320.avif       —     —    0.3    0.9
+huile-noix-moulin               miniature-320.jpg        —     —    0.0    0.5
+huile-olive-premiere-pression   miniature-160.avif       —     —    0.0    1.0
+huile-olive-premiere-pression   miniature-160.jpg        —     —    1.0    0.9
+huile-olive-premiere-pression   miniature-320.avif       —     —    0.1    0.7
+huile-olive-premiere-pression   miniature-320.jpg        —     —    0.1    0.8
+infusion-du-soir-sept-plantes   miniature-160.avif       —     —    0.8    0.4
+infusion-du-soir-sept-plantes   miniature-160.jpg        —     —    2.0    2.0
+infusion-du-soir-sept-plantes   miniature-320.avif       —     —    1.2    0.6
+infusion-du-soir-sept-plantes   miniature-320.jpg        —     —    1.7    0.6
+lentilles-blondes-plateau       miniature-160.avif       —     —    0.0    0.5
+lentilles-blondes-plateau       miniature-160.jpg        —     —    0.1    0.6
+lentilles-blondes-plateau       miniature-320.avif       —     —    0.1    0.8
+lentilles-blondes-plateau       miniature-320.jpg        —     —    0.1    1.3
+miel-bruyere-blanche            miniature-160.avif       —     —    0.1    0.4
+miel-bruyere-blanche            miniature-160.jpg        —     —    0.1    0.8
+miel-bruyere-blanche            miniature-320.avif       —     —    0.1    0.3
+miel-bruyere-blanche            miniature-320.jpg        —     —    0.1    0.9
+miel-chataignier                miniature-160.avif       —     —    0.0    0.3
+miel-chataignier                miniature-160.jpg        —     —    0.0    0.8
+miel-chataignier                miniature-320.avif       —     —    0.0    0.4
+miel-chataignier                miniature-320.jpg        —     —    0.1    0.8
+rillettes-canard-echalotes      miniature-160.avif       —     —    0.1    0.3
+rillettes-canard-echalotes      miniature-160.jpg        —     —    0.0    2.4
+rillettes-canard-echalotes      miniature-320.avif       —     —    0.2    0.4
+rillettes-canard-echalotes      miniature-320.jpg        —     —    0.1    1.0
+terrine-campagne-poivre-noir    miniature-160.avif       —     —    0.0    0.4
+terrine-campagne-poivre-noir    miniature-160.jpg        —     —    0.0    1.9
+terrine-campagne-poivre-noir    miniature-320.avif       —     —    0.9    0.2
+terrine-campagne-poivre-noir    miniature-320.jpg        —     —    0.0    0.8
+vinaigre-cidre-vieilli-fut      miniature-160.avif       —     —    0.1    1.1
+vinaigre-cidre-vieilli-fut      miniature-160.jpg        —     —    2.0    0.5
+vinaigre-cidre-vieilli-fut      miniature-320.avif       —     —    0.0    0.4
+vinaigre-cidre-vieilli-fut      miniature-320.jpg        —     —    0.0    1.1
+----------------------------------------------------------------------------------------------------
+60 fichier(s) mesuré(s) ; plus forte couture : 5.4 sur 8 tolérés.
+
+PART DU PRODUIT DANS LE CARRÉ — sa plus grande dimension rapportée au côté (cible du directeur artistique : ≥ ~85 %)
+----------------------------------------------------------------------------------------------------
+produit                         calculée    mesurée sur miniature-320.jpg     recadrage entier
+beurre-baratte-demi-sel         89.3 %      90.0 %                            non
+coffret-composez-le-votre       89.3 %      89.7 %                            non
+coffret-table-du-dimanche       89.3 %      89.7 %                            non
+confit-oignons-vin-doux         91.0 %      91.3 %                            non
+confiture-abricots-plein-vent   89.4 %      90.0 %                            non
+fromage-fermier-brebis          90.6 %      92.2 %                            non
+huile-noix-moulin               91.1 %      92.2 %                            non
+huile-olive-premiere-pression   91.1 %      92.2 %                            non
+infusion-du-soir-sept-plantes   89.2 %      90.0 %                            non
+lentilles-blondes-plateau       89.3 %      90.0 %                            non
+miel-bruyere-blanche            89.4 %      90.3 %                            non
+miel-chataignier                89.4 %      90.3 %                            non
+rillettes-canard-echalotes      90.2 %      90.6 %                            non
+terrine-campagne-poivre-noir    90.2 %      90.6 %                            non
+vinaigre-cidre-vieilli-fut      92.8 %      93.4 %                            non
+----------------------------------------------------------------------------------------------------
+calculée : min 89.2 %, max 92.8 % — mesurée : min 89.7 %, max 93.4 %
+AUCUN ÉCHEC.
