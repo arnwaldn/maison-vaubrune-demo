@@ -1,6 +1,6 @@
 import { expect, test, type Locator, type Page } from '@playwright/test';
 
-import { attendrePage, ouvrir, pastillePanier } from './aides';
+import { INSECABLE, attendrePage, ouvrir, pastillePanier } from './aides';
 
 /**
  * LES MINIATURES DES PRODUITS ACHETÉS ET LE « − [CHAMP] + » DU PANIER (C27).
@@ -13,10 +13,21 @@ import { attendrePage, ouvrir, pastillePanier } from './aides';
  *
  * Les deux profils du dépôt jouent ce fichier (bureau 1280, mobile 390) : le
  * cadre fait 4,5 rem au-dessus de 40 rem et 4 rem en dessous, soit 72 et 64 px.
+ *
+ * LA MINIATURE EST UN CARRÉ COMPOSÉ, ET LE TEST LE DIT (revue du directeur
+ * artistique, P1). La première rédaction posait la vue principale (5:8, 4:3 des
+ * coffrets) en `object-fit: cover` : le carré central retirait 37,5 % de la
+ * hauteur d'une bouteille. Le dérivé servi doit donc être le dérivé `miniature`
+ * — celui que le pipeline compose —, il doit être CARRÉ dans ses octets
+ * (`naturalWidth === naturalHeight`), et le navigateur ne doit plus rien
+ * recadrer (`object-fit` calculé : `fill`, jamais `cover`). Les trois tombent si
+ * l'on remet l'ancien dérivé ou l'ancienne règle (preuves rouges au rapport).
  */
 
 const HUILE = { slug: 'huile-olive-premiere-pression' } as const;
 const NOIX = { slug: 'huile-noix-moulin' } as const;
+/** Le pire cas du panier : un coffret à 46,00 €, stock 14, soit 644,00 € la ligne. */
+const COFFRET = { slug: 'coffret-table-du-dimanche', stock: 14 } as const;
 
 const CLIENT = {
   nom: 'Client d’essai',
@@ -89,6 +100,14 @@ async function verifierMiniature(
 
     return {
       source: img === null ? '' : img.currentSrc,
+      largeurNaturelle: img === null ? 0 : img.naturalWidth,
+      hauteurNaturelle: img === null ? -1 : img.naturalHeight,
+      ajustement: img === null ? '' : getComputedStyle(img).objectFit,
+      /* L'image remplit son carré EXACTEMENT : ni plus petite, ni plus grande. */
+      remplitLeCadre:
+        boiteImage !== null &&
+        Math.abs(boiteImage.width - boite.width) < 0.5 &&
+        Math.abs(boiteImage.height - boite.height) < 0.5,
       alternative: img === null ? null : img.getAttribute('alt'),
       largeur: boite.width,
       hauteur: boite.height,
@@ -102,13 +121,50 @@ async function verifierMiniature(
     };
   });
 
-  expect(releve.source).toContain(`/produits/${slug}/`);
+  /* LE BON DÉRIVÉ : le slug ET le nom de la miniature composée — « principal »
+     serait le dérivé 5:8 que `cover` recadrait. */
+  expect(releve.source).toContain(`/produits/${slug}/miniature-`);
+  expect(releve.source).not.toContain('/principal-');
+  /* UN CARRÉ, dans les octets : l'image décodée, pas le cadre qui la porte. */
+  expect(releve.largeurNaturelle).toBeGreaterThan(0);
+  expect(releve.largeurNaturelle).toBe(releve.hauteurNaturelle);
+  /* Et le navigateur ne recadre rien : `cover` retirerait de la hauteur. */
+  expect(releve.ajustement).toBe('fill');
   expect(releve.largeur).toBe(cote(page));
   expect(releve.hauteur).toBe(cote(page));
   expect(releve.imageDansLeCadre).toBe(true);
+  expect(releve.remplitLeCadre).toBe(true);
   /* Décorative : le nom du produit est juste à côté, et c'est lui qui porte le lien. */
   expect(releve.alternative).toBe('');
   expect(releve.dansUnLien).toBe(false);
+}
+
+/**
+ * Le bord droit de CHAQUE prix d'une liste de lignes, et celui de la ligne qui le
+ * porte. Deux relevés, parce que la retouche dit deux choses : les prix forment
+ * une COLONNE (bords égaux entre eux), et cette colonne est à DROITE (égale au
+ * bord de la ligne) — une colonne alignée à gauche aurait des bords inégaux, une
+ * colonne alignée sur un mauvais bord aussi.
+ */
+async function bordsDroitsDesPrix(
+  lignesMesurees: Locator,
+  selecteurPrix: string,
+): Promise<{ prix: number[]; ligne: number[] }> {
+  return lignesMesurees.evaluateAll((noeuds, selecteur) => {
+    const prix: number[] = [];
+    const ligne: number[] = [];
+
+    for (const noeud of noeuds) {
+      const cible = noeud.querySelector(selecteur);
+
+      if (cible !== null) {
+        prix.push(Math.round(cible.getBoundingClientRect().right * 10) / 10);
+        ligne.push(Math.round(noeud.getBoundingClientRect().right * 10) / 10);
+      }
+    }
+
+    return { prix, ligne };
+  }, selecteurPrix);
 }
 
 /** Les lignes du panier : celles qui portent un champ de quantité. */
@@ -211,6 +267,70 @@ test('le récapitulatif de la commande porte les mêmes miniatures', async ({ pa
   await sansDebordement(page);
 });
 
+/* ========================================================================== */
+/* LES PRIX, ALIGNÉS À DROITE (retouches P2 du directeur artistique)           */
+/* ========================================================================== */
+
+test('les sous-totaux du panier forment une colonne, bords droits égaux, à 360 et à 390', async ({
+  page,
+}) => {
+  /* LE PIRE CAS : trois lignes aux montants de largeurs très différentes —
+     14 × 46,00 € = 644,00 € (le plus long), puis deux huiles. */
+  await ajouterDepuisLaFiche(page, COFFRET.slug);
+  await ajouterDepuisLaFiche(page, HUILE.slug);
+  await ajouterDepuisLaFiche(page, NOIX.slug);
+  await ouvrir(page, '/panier');
+
+  const coffret = lignes(page).filter({ hasText: 'Coffret' }).first();
+  await coffret.getByRole('spinbutton', { name: 'Qté', exact: true }).fill(String(COFFRET.stock));
+  await expect(coffret.locator('[data-chiffre]')).toHaveText(`644,00${INSECABLE}€`);
+
+  for (const largeur of [360, 390]) {
+    await page.setViewportSize({ width: largeur, height: 800 });
+    await expect(lignes(page)).toHaveCount(3);
+    await sansDebordement(page);
+
+    const bords = await bordsDroitsDesPrix(lignes(page), '[data-chiffre]');
+
+    expect(bords.prix).toHaveLength(3);
+    /* Une COLONNE : tous les bords droits sont les mêmes. Le bord de la ligne,
+       lui, n'est PAS celui des prix — « Retirer » occupe la fin de la rangée —,
+       et ce n'est pas ce que la retouche promet : elle promet que le décalage
+       ne dépend plus de la largeur du montant. */
+    expect(new Set(bords.prix).size).toBe(1);
+
+    /* Le test ne vaut que si les montants n'ont PAS tous la même largeur : sans
+       cela, une colonne alignée à gauche passerait aussi. */
+    const largeurs = await lignes(page)
+      .locator('[data-chiffre]')
+      .evaluateAll((noeuds) => noeuds.map((noeud) => Math.round(noeud.getBoundingClientRect().width)));
+
+    expect(new Set(largeurs).size).toBeGreaterThan(1);
+  }
+});
+
+test('le prix de chaque ligne du récapitulatif de la commande est aligné à droite sur mobile', async ({
+  page,
+}) => {
+  await ajouterDepuisLaFiche(page, COFFRET.slug);
+  await ajouterDepuisLaFiche(page, HUILE.slug);
+  await ouvrir(page, '/commande');
+
+  const lignesFigees = page.locator('li', { has: page.locator('[data-miniature]') });
+  await expect(lignesFigees).toHaveCount(2);
+
+  for (const largeur of [360, 390]) {
+    await page.setViewportSize({ width: largeur, height: 800 });
+    await sansDebordement(page);
+
+    const bords = await bordsDroitsDesPrix(lignesFigees, 'p.font-mono');
+
+    expect(bords.prix).toHaveLength(2);
+    expect(new Set(bords.prix).size).toBe(1);
+    expect(bords.prix[0]).toBeCloseTo(bords.ligne[0] ?? Number.NaN, 0);
+  }
+});
+
 /**
  * La page qu'un client IMPRIME. Un seul parcours joue le tunnel entier : le
  * récapitulatif, le paiement simulé, la confirmation — puis le papier.
@@ -238,6 +358,22 @@ test('la confirmation montre les miniatures, et le papier les remplace par des s
   await verifierMiniature(page, lignesCommande.nth(0), HUILE.slug);
   await verifierMiniature(page, lignesCommande.nth(1), NOIX.slug);
   await sansDebordement(page);
+
+  /* Le prix de la ligne de confirmation est lui aussi calé à droite, sous la
+     miniature comme à côté d'elle (retouche P2 du directeur artistique). */
+  const fenetreInitiale = page.viewportSize() ?? { width: 1280, height: 800 };
+
+  for (const largeur of [360, 390]) {
+    await page.setViewportSize({ width: largeur, height: 800 });
+
+    const bords = await bordsDroitsDesPrix(lignesCommande, 'p.font-mono');
+
+    expect(bords.prix).toHaveLength(2);
+    expect(new Set(bords.prix).size).toBe(1);
+    expect(bords.prix[0]).toBeCloseTo(bords.ligne[0] ?? Number.NaN, 0);
+  }
+
+  await page.setViewportSize(fenetreInitiale);
 
   /* ─── LE PAPIER ─────────────────────────────────────────────────────────
      Convention de C12 et C14 : `.visuel-produit img` sort, `[data-repli-

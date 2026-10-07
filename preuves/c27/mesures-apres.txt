@@ -1,0 +1,16 @@
+Mesures APRES la miniature carrée de C27 — 07/10/2026, branche tranche-c27, meme machine que mesures-avant.txt
+First Load JS : fiche 117 kB, /commande 119, /commande/confirmation 113, /panier 118 (plafond 125) — inchange sur les quatre routes
+CSS : 11.67 Ko gzip (plafond 12). Identique au premier jet de C27 (a376047, 11.67) : le retrait de `object-fit: cover`
+      et l'ajout de trois `ml-auto` ne coutent aucun octet mesurable. Avant C27 : 11.42.
+HTML gz (niveau 9) : panier 11856 ; commande 10007 ; confirmation 8378 ; fiche huile d'olive 14316
+      premier jet de C27 (a376047) : 11594 ; 9846 ; 8230 ; 14200 — soit +262, +161, +148, +116 octets
+      (le <picture> de chaque miniature porte deux candidats au lieu d'un, plus un <source> AVIF)
+Images transferees de la fiche : 67.9 Ko (plafond 120) ; avant C27 66.5 ; premier jet 71.7.
+      La miniature du tiroir est miniature-160.avif : 1.4 Ko pour l'huile d'olive (le premier jet chargeait
+      principal-320.avif : 5.2 Ko). /panier a panier vide : 58.0 Ko, inchange (aucune miniature n'y est demandee).
+Poids du depot ajoute par les derives : 60 fichiers, 316.4 Ko ; relevé de livraison +56.4 Ko (170657 o contre 112936)
+Poids des miniatures (60 fichiers) : AVIF 160 35.6 Ko / AVIF 320 96.1 Ko / JPEG 160 48.0 Ko / JPEG 320 136.7 Ko
+      pour quinze produits ; le plus lourd : 4.8 Ko (160) et 15.3 Ko (320, JPEG) sous des plafonds de 7 et 20 Ko.
+npm run controle : gardes 18 + 6 + 8 + 12 + 1 sans anomalie, 684 cas unitaires (30 fichiers), build, poids CSS 2/2,
+      187 parcours reussis sur trois projets (bureau, mobile, mouvement). mouvement.spec.ts:319 : vert dans la
+      campagne complete ET joue seul.
