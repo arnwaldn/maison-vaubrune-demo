@@ -1,0 +1,8 @@
+origine: auto=1 user=0
+/panier portrait au chargement {"fenetre":360,"ecart":0,"coupables":[]}
+/panier paysage sans rechargement {"fenetre":672,"ecart":0,"coupables":[]}
+/panier retour portrait sans rechargement {"fenetre":360,"ecart":0,"coupables":[]}
+/commande portrait au chargement {"fenetre":360,"ecart":0,"coupables":[]}
+/commande paysage sans rechargement {"fenetre":672,"ecart":0,"coupables":[]}
+/commande retour portrait sans rechargement {"fenetre":360,"ecart":0,"coupables":[]}
+restaure: auto=1 user=0
