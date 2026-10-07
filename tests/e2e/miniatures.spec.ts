@@ -1,6 +1,6 @@
 import { expect, test, type Locator, type Page } from '@playwright/test';
 
-import { INSECABLE, attendrePage, ouvrir, pastillePanier } from './aides';
+import { INSECABLE, attendreHydratation, attendrePage, ouvrir, pastillePanier } from './aides';
 
 /**
  * LES MINIATURES DES PRODUITS ACHETÉS ET LE « − [CHAMP] + » DU PANIER (C27).
@@ -58,12 +58,45 @@ async function panierDeDeuxLignes(page: Page): Promise<void> {
 }
 
 async function sansDebordement(page: Page): Promise<void> {
-  const mesure = await page.evaluate(() => ({
-    contenu: document.documentElement.scrollWidth,
-    fenetre: document.documentElement.clientWidth,
-  }));
+  const ecart = () =>
+    page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
 
-  expect(mesure.contenu).toBeLessThanOrEqual(mesure.fenetre);
+  try {
+    await expect.poll(ecart, { timeout: 3000 }).toBeLessThanOrEqual(0);
+  } catch {
+    /* LE MESSAGE D'ÉCHEC NOMME LES COUPABLES : l'intégration continue a lu
+       773 px dans une fenêtre de 360 sans que rien ne dise quoi (07/10). Les
+       trois éléments qui dépassent le plus le bord droit, avec de quoi les
+       retrouver — un rouge se diagnostique sans être rejoué. */
+    const coupables = await page.evaluate(() =>
+      [...document.querySelectorAll('body *')]
+        .map((element) => ({ element, boite: element.getBoundingClientRect() }))
+        .filter(({ boite }) => boite.right > document.documentElement.clientWidth + 0.5)
+        .sort((a, b) => b.boite.right - a.boite.right)
+        .slice(0, 3)
+        .map(({ element, boite }) => ({
+          balise: element.tagName.toLowerCase(),
+          classe: String(element.getAttribute('class') ?? '').slice(0, 80),
+          id: element.id,
+          droite: Math.round(boite.right),
+          largeur: Math.round(boite.width),
+        })),
+    );
+
+    expect(await ecart(), JSON.stringify(coupables)).toBeLessThanOrEqual(0);
+  }
+}
+
+/**
+ * La page À CETTE LARGEUR, comme un téléphone la voit : il n'y arrive jamais en
+ * partant de 1280. Redimensionner un onglet déjà rendu est un autre cas — une
+ * fenêtre de bureau qu'on rétrécit —, et c'est celui que l'intégration continue
+ * lisait à 773 px sous Linux, cause non établie (07/10, journal du projet).
+ */
+async function aLaLargeur(page: Page, largeur: number): Promise<void> {
+  await page.setViewportSize({ width: largeur, height: 800 });
+  await page.reload();
+  await attendreHydratation(page);
 }
 
 /**
@@ -286,7 +319,7 @@ test('les sous-totaux du panier forment une colonne, bords droits égaux, à 360
   await expect(coffret.locator('[data-chiffre]')).toHaveText(`644,00${INSECABLE}€`);
 
   for (const largeur of [360, 390]) {
-    await page.setViewportSize({ width: largeur, height: 800 });
+    await aLaLargeur(page, largeur);
     await expect(lignes(page)).toHaveCount(3);
     await sansDebordement(page);
 
@@ -330,7 +363,7 @@ test('le prix de chaque ligne du récapitulatif de la commande est aligné à dr
   await expect(lignesFigees).toHaveCount(2);
 
   for (const largeur of [360, 390]) {
-    await page.setViewportSize({ width: largeur, height: 800 });
+    await aLaLargeur(page, largeur);
     await sansDebordement(page);
 
     /* Les métriques de police décident des retours à la ligne : on mesure
@@ -377,7 +410,9 @@ test('la confirmation montre les miniatures, et le papier les remplace par des s
   const fenetreInitiale = page.viewportSize() ?? { width: 1280, height: 800 };
 
   for (const largeur of [360, 390]) {
-    await page.setViewportSize({ width: largeur, height: 800 });
+    await aLaLargeur(page, largeur);
+    await sansDebordement(page);
+    await page.evaluate(() => document.fonts.ready);
 
     const bords = await bordsDroitsDesPrix(lignesCommande, 'p.font-mono');
 
@@ -386,7 +421,7 @@ test('la confirmation montre les miniatures, et le papier les remplace par des s
     expect(bords.prix[0]).toBeCloseTo(bords.ligne[0] ?? Number.NaN, 0);
   }
 
-  await page.setViewportSize(fenetreInitiale);
+  await aLaLargeur(page, fenetreInitiale.width);
 
   /* ─── LE PAPIER ─────────────────────────────────────────────────────────
      Convention de C12 et C14 : `.visuel-produit img` sort, `[data-repli-
