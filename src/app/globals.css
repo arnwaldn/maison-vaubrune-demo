@@ -2397,10 +2397,13 @@ html[data-affichage-rayon='liste'] .rayon-grille .carte-visuel {
 }
 
 /* LA MINIATURE D'UN PRODUIT ACHETÉ (C27) — le cadre est FIXE : un carré de
-   4,5 rem (4 rem sous 40 rem), `cover`, donc la place est réservée avant le
-   premier octet et la photographie, quelle que soit sa proportion (4:5, 4:3 des
-   coffrets), ne déplace rien. Hors couche : elle doit battre `h-auto`/`w-full`
-   que `<Visuel>` pose sur son `<img>` (anti-patron n° 21). */
+   4,5 rem (4 rem sous 40 rem), donc la place est réservée avant le premier octet.
+   L'image qu'il porte est ELLE-MÊME un carré, composé par le pipeline (le produit
+   entier, 6 % d'air, le papier étendu) : elle remplit le cadre exactement, SANS
+   `object-fit`. Le `cover` de la première rédaction retirait 37,5 % de la hauteur
+   d'un 5:8 — bouchon et base d'une bouteille — et « un produit coupé serait une
+   faute ». Hors couche : elle doit battre `h-auto`/`w-full` que `<Visuel>` pose sur
+   son `<img>` (anti-patron n° 21). */
 .miniature-produit {
   display: grid;
   flex: none;
@@ -2425,10 +2428,6 @@ html[data-affichage-rayon='liste'] .rayon-grille .carte-visuel {
   display: block;
   width: 100%;
   height: 100%;
-}
-
-.miniature-produit img {
-  object-fit: cover;
 }
 
 /* Le tiroir de la fiche : la miniature à gauche du nom, alignée en haut. */

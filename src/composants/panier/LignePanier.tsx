@@ -155,7 +155,7 @@ export function LignePanier({
             La clé React est le montant lui-même : quand il change, React
             échange le nœud, et `@starting-style` fait fondre le NOMBRE SEUL —
             zéro état, zéro minuterie, c'est le patron de la pastille de C13. */}
-        <p className="text-right">
+        <p className="ml-auto text-right">
           <span
             key={calculee.sousTotalCentimes}
             data-chiffre=""

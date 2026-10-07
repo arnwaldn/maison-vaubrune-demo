@@ -21,9 +21,21 @@ import type { Produit } from '@/lib/types';
  * d'image ni de `Visuel` ne franchit la frontière cliente.
  *
  * LE CADRE EST FIXE, ET C'EST CE QUI TIENT LE DÉCALAGE. Un carré de 4,5 rem
- * (4 rem sous 40 rem), `object-fit: cover` — voir `.miniature-produit` dans
- * `globals.css` : la place est réservée avant le premier octet, quelle que soit
- * la proportion de la photographie (4:5, 4:3 pour les coffrets).
+ * (4 rem sous 40 rem) — voir `.miniature-produit` dans `globals.css` : la place
+ * est réservée avant le premier octet.
+ *
+ * L'IMAGE EST ELLE-MÊME UN CARRÉ, ET NE SE RECADRE PLUS. La première rédaction
+ * servait la vue principale (5:8 pour les pots et les bouteilles, 4:3 pour les
+ * coffrets) en `object-fit: cover` : un carré central retire 37,5 % de la hauteur
+ * d'un 5:8, et la bouteille perdait son bouchon et sa base — « un produit coupé
+ * serait une faute » (revue du directeur artistique). Le dérivé `miniature` est
+ * COMPOSÉ par le pipeline (`scripts/miniature.mjs`) : le produit entier, 6 % d'air,
+ * le papier étendu côté par côté. Le navigateur n'a plus rien à recadrer ; il
+ * remplit le carré, et la couleur de réservation est le papier de ce carré.
+ *
+ * Les chemins viennent de `<Visuel>`, la seule fabrique : `miniature` en est une
+ * vue comme les autres, avec ses deux largeurs (160 et 320, pour les densités 2
+ * et 3 d'un cadre de 72 ou 64 points).
  *
  * DÉCORATIVE (`alternative="decorative"`) : le nom du produit est juste à côté,
  * et c'est lui qui porte le lien. Une alternative rendue ferait lire le nom
@@ -37,11 +49,14 @@ import type { Produit } from '@/lib/types';
  * dessin au trait dans le même carré.
  */
 
-/** Une seule largeur est jamais servie : le dérivé 320, ~5 Ko, suffit à 4,5 rem à toute densité. */
-const LARGEUR_MINIATURE = 320;
-
-/** Ce que la miniature occupe : 4,5 rem. Un seul candidat dans le `srcset`, `sizes` reste donc juste et inerte. */
-const SIZES_MINIATURE = '4.5rem';
+/**
+ * Ce que la miniature occupe : 4,5 rem, 4 rem sous 40 rem (la même coupure que
+ * `.miniature-produit`). Le `sizes` est JUSTE — il n'y a pas de `largeurMaximale`
+ * pour le brider : à la densité 2 le navigateur prend le 160 (144 points
+ * demandés), à la densité 3 le 320 (216), et le plus lourd des deux fichiers
+ * pèse 15 Ko.
+ */
+const SIZES_MINIATURE = '(max-width: 39.9375rem) 4rem, 4.5rem';
 
 /**
  * La miniature d'UN produit.
@@ -52,9 +67,12 @@ const SIZES_MINIATURE = '4.5rem';
  * la galerie qui porte le plus grand affichage de la page.
  */
 export function miniatureProduit(produit: Produit, eager = false): ReactNode {
+  const visuel = produit.visuel;
+  const miniature = visuel?.miniature;
+
   return (
     <div className="miniature-produit" data-miniature={produit.slug}>
-      {produit.visuel === undefined ? (
+      {visuel === undefined || miniature === undefined ? (
         <Silhouette
           forme={produit.illustration.forme}
           teinte={produit.illustration.teinte}
@@ -63,11 +81,10 @@ export function miniatureProduit(produit: Produit, eager = false): ReactNode {
       ) : (
         <Visuel
           slug={produit.slug}
-          vue="principal"
-          donnees={produit.visuel.principal}
+          vue="miniature"
+          donnees={{ ...miniature, alt: visuel.principal.alt }}
           illustration={produit.illustration}
           alternative="decorative"
-          largeurMaximale={LARGEUR_MINIATURE}
           sizes={SIZES_MINIATURE}
           {...(eager ? { chargement: 'eager', arrierePlan: true } : {})}
         />

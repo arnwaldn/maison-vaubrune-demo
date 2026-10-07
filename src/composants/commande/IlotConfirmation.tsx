@@ -219,7 +219,7 @@ function RecapitulatifCommande({
                     </p>
                   </div>
                 </div>
-                <p className="font-mono font-medium text-encre tabular-nums">
+                <p className="ml-auto font-mono font-medium text-encre tabular-nums">
                   {formaterEuros(calculee.sousTotalCentimes)}
                 </p>
               </li>

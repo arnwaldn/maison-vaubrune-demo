@@ -74,7 +74,7 @@ interface ProprietesVisuel {
    * slug EXACT du catalogue, et une macro de famille n'en est pas un.
    */
   readonly racine?: 'produits' | 'editorial';
-  readonly vue: NomVueVisuel | 'macro' | 'hero' | 'illustration' | 'affiche';
+  readonly vue: NomVueVisuel | 'miniature' | 'macro' | 'hero' | 'illustration' | 'affiche';
   readonly donnees: VueVisuel;
   /**
    * La silhouette de repli — celle du produit, jamais une générique.
