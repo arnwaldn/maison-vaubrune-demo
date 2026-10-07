@@ -154,6 +154,12 @@ const REFERENCES: readonly Produit[] = [
         hauteur: 1024,
         largeurs: [320, 480, 640],
       },
+      miniature: {
+        couleurDominante: '#eadecb',
+        largeur: 320,
+        hauteur: 320,
+        largeurs: [160, 320],
+      },
       ambiance: {
         alt: 'Bouteille d’huile d’olive débouchée, son bouchon de liège posé à plat à côté ; devant elle, une cuillère de céramique blanche remplie d’huile vert doré, une goutte perlant au bord.',
         couleurDominante: '#dacbb4',
@@ -197,6 +203,12 @@ const REFERENCES: readonly Produit[] = [
         largeur: 640,
         hauteur: 1024,
         largeurs: [320, 480, 640],
+      },
+      miniature: {
+        couleurDominante: '#ebdecb',
+        largeur: 320,
+        hauteur: 320,
+        largeurs: [160, 320],
       },
       ambiance: {
         alt: 'Bouteille d’huile de noix débouchée, bouchon de liège posé à droite, et devant elle une cuillère de céramique blanche emplie d’huile ambrée.',
@@ -242,6 +254,12 @@ const REFERENCES: readonly Produit[] = [
         largeur: 640,
         hauteur: 1024,
         largeurs: [320, 480, 640],
+      },
+      miniature: {
+        couleurDominante: '#dfd7c6',
+        largeur: 320,
+        hauteur: 320,
+        largeurs: [160, 320],
       },
       ambiance: {
         alt: 'Bouteille de vinaigre de cidre débouchée, bouchon de liège posé à droite, cuillère de céramique blanche emplie de vinaigre ambré devant elle.',
@@ -289,6 +307,12 @@ const REFERENCES: readonly Produit[] = [
         hauteur: 1024,
         largeurs: [320, 480, 640],
       },
+      miniature: {
+        couleurDominante: '#e2dacb',
+        largeur: 320,
+        hauteur: 320,
+        largeurs: [160, 320],
+      },
       ambiance: {
         alt: 'Bocal de terrine de campagne ouvert, son couvercle de verre appuyé contre le flanc, la surface de la farce et ses grains de poivre visibles.',
         couleurDominante: '#d2c4b1',
@@ -333,6 +357,12 @@ const REFERENCES: readonly Produit[] = [
         largeur: 640,
         hauteur: 1024,
         largeurs: [320, 480, 640],
+      },
+      miniature: {
+        couleurDominante: '#e3dacb',
+        largeur: 320,
+        hauteur: 320,
+        largeurs: [160, 320],
       },
       ambiance: {
         alt: 'Bocal de rillettes de canard ouvert, couvercle de verre appuyé contre le flanc, la chair effilochée et sa fine couche de graisse à découvert.',
@@ -380,6 +410,12 @@ const REFERENCES: readonly Produit[] = [
         hauteur: 1024,
         largeurs: [320, 480, 640],
       },
+      miniature: {
+        couleurDominante: '#e1d9ca',
+        largeur: 320,
+        hauteur: 320,
+        largeurs: [160, 320],
+      },
       ambiance: {
         alt: 'Bocal de confit d’oignons ouvert, couvercle de verre appuyé contre le flanc, les lamelles brunes et brillantes affleurant au bord.',
         couleurDominante: '#cdc0b0',
@@ -424,6 +460,12 @@ const REFERENCES: readonly Produit[] = [
         hauteur: 1024,
         largeurs: [320, 480, 640],
       },
+      miniature: {
+        couleurDominante: '#eae2d2',
+        largeur: 320,
+        hauteur: 320,
+        largeurs: [160, 320],
+      },
       ambiance: {
         alt: 'Pot de miel de châtaignier ouvert, une cuillère de céramique blanche devant lui laissant filer un ruban de miel sombre.',
         couleurDominante: '#d0bfab',
@@ -466,6 +508,12 @@ const REFERENCES: readonly Produit[] = [
         largeur: 640,
         hauteur: 1024,
         largeurs: [320, 480, 640],
+      },
+      miniature: {
+        couleurDominante: '#e9e0d0',
+        largeur: 320,
+        hauteur: 320,
+        largeurs: [160, 320],
       },
       ambiance: {
         alt: 'Pot de miel de bruyère ouvert, une cuillère de céramique blanche devant lui portant une motte de miel cristallisé qui ne coule pas.',
@@ -513,6 +561,12 @@ const REFERENCES: readonly Produit[] = [
         hauteur: 1024,
         largeurs: [320, 480, 640],
       },
+      miniature: {
+        couleurDominante: '#e8dfcf',
+        largeur: 320,
+        hauteur: 320,
+        largeurs: [160, 320],
+      },
       ambiance: {
         alt: 'Pot de confiture d’abricots ouvert, son couvercle doré posé de chant contre lui, et devant, une cuillère de céramique blanche chargée de confiture.',
         couleurDominante: '#d6c2a6',
@@ -555,6 +609,12 @@ const REFERENCES: readonly Produit[] = [
         largeur: 640,
         hauteur: 1024,
         largeurs: [320, 480, 640],
+      },
+      miniature: {
+        couleurDominante: '#ece3d5',
+        largeur: 320,
+        hauteur: 320,
+        largeurs: [160, 320],
       },
       ambiance: {
         alt: 'Sachet de kraft déroulé et ouvert, laissant voir les lentilles blondes ; devant lui, une cuillère de céramique blanche remplie de graines.',
@@ -601,6 +661,12 @@ const REFERENCES: readonly Produit[] = [
         hauteur: 1024,
         largeurs: [320, 480, 640],
       },
+      miniature: {
+        couleurDominante: '#ebe2d4',
+        largeur: 320,
+        hauteur: 320,
+        largeurs: [160, 320],
+      },
       ambiance: {
         alt: 'Sachet de kraft ouvert d’où débordent des feuilles et des fleurs séchées ; devant lui, une cuillère de céramique blanche et quelques brins tombés.',
         couleurDominante: '#d9cbb6',
@@ -644,6 +710,12 @@ const REFERENCES: readonly Produit[] = [
         largeur: 640,
         hauteur: 1024,
         largeurs: [320, 480, 640],
+      },
+      miniature: {
+        couleurDominante: '#ece3d7',
+        largeur: 320,
+        hauteur: 320,
+        largeurs: [160, 320],
       },
       ambiance: {
         alt: 'Pot de grès ouvert laissant voir la motte de beurre striée par la spatule, le couvercle dressé sur la tranche contre le flanc du pot.',
@@ -692,6 +764,12 @@ const REFERENCES: readonly Produit[] = [
         largeur: 640,
         hauteur: 1024,
         largeurs: [320, 480, 640],
+      },
+      miniature: {
+        couleurDominante: '#e9e2d7',
+        largeur: 320,
+        hauteur: 320,
+        largeurs: [160, 320],
       },
       ambiance: {
         alt: 'Meule de fromage de brebis posée sur son papier déplié, un quartier coupé posé devant elle, la pâte claire et serrée à la tranche.',
@@ -742,6 +820,12 @@ const REFERENCES: readonly Produit[] = [
         largeur: 640,
         hauteur: 480,
         largeurs: [320, 480, 640],
+      },
+      miniature: {
+        couleurDominante: '#eae1d5',
+        largeur: 320,
+        hauteur: 320,
+        largeurs: [160, 320],
       },
       ambiance: {
         alt: 'Coffret de bois ouvert vu de dessus, garni de papier kraft froissé : une bouteille couchée, deux bocaux à fermeture métallique et un plus petit bocal de confit ; le couvercle repose à côté, étiquette visible.',
@@ -820,6 +904,12 @@ const REFERENCES: readonly Produit[] = [
         largeur: 640,
         hauteur: 480,
         largeurs: [320, 480, 640],
+      },
+      miniature: {
+        couleurDominante: '#eae1d4',
+        largeur: 320,
+        hauteur: 320,
+        largeurs: [160, 320],
       },
       ambiance: {
         alt: 'Coffret de bois ouvert vu de dessus, garni de papier kraft froissé : une bouteille couchée, un pot de miel à couvercle doré et un sachet de kraft ; le couvercle repose à côté, étiquette visible.',

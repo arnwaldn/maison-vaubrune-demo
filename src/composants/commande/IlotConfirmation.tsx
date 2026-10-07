@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
 
 import { formaterEuros } from '@/lib/argent';
 import { promouvoirEnPayee } from '@/lib/commandes/depot-local';
@@ -57,7 +57,12 @@ import { LIBELLE_ZONE } from '@/lib/types';
  * croire à un encaissement.
  */
 
-export function IlotConfirmation() {
+export function IlotConfirmation({
+  miniatures,
+}: {
+  /** Rendues par le serveur et rétablies en silhouettes à l'impression (C27). */
+  readonly miniatures: Record<string, ReactNode>;
+}) {
   const { envoyer } = usePanier();
 
   const [reference, setReference] = useState('');
@@ -101,14 +106,20 @@ export function IlotConfirmation() {
     return <CommandeIntrouvable reference={reference} />;
   }
 
-  return <RecapitulatifCommande commande={commande} />;
+  return <RecapitulatifCommande commande={commande} miniatures={miniatures} />;
 }
 
 /* -------------------------------------------------------------------------- */
 /* Le récapitulatif                                                            */
 /* -------------------------------------------------------------------------- */
 
-function RecapitulatifCommande({ commande }: { readonly commande: Commande }) {
+function RecapitulatifCommande({
+  commande,
+  miniatures,
+}: {
+  readonly commande: Commande;
+  readonly miniatures: Record<string, ReactNode>;
+}) {
   const simule = commande.modePaiement === 'simule';
 
   return (
@@ -193,19 +204,22 @@ function RecapitulatifCommande({ commande }: { readonly commande: Commande }) {
             {commande.lignes.map((calculee) => (
               <li
                 key={calculee.cle}
-                className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2 border-b border-filet py-4"
+                className="flex flex-wrap items-start justify-between gap-x-6 gap-y-2 border-b border-filet py-4"
               >
-                <div className="min-w-0">
-                  <p className="text-encre">
-                    <span className="font-semibold">{calculee.article.nomProduit}</span>
-                    <span className="text-encre-douce">, {calculee.article.format}</span>
-                  </p>
-                  <p className="mt-1 text-sm text-encre-douce">
-                    {calculee.ligne.quantite} ×{' '}
-                    {formaterEuros(calculee.article.prixCentimes)}
-                  </p>
+                <div className="flex min-w-0 items-start gap-4">
+                  {miniatures[calculee.article.slug]}
+                  <div className="min-w-0">
+                    <p className="text-encre">
+                      <span className="font-semibold">{calculee.article.nomProduit}</span>
+                      <span className="text-encre-douce">, {calculee.article.format}</span>
+                    </p>
+                    <p className="mt-1 text-sm text-encre-douce">
+                      {calculee.ligne.quantite} ×{' '}
+                      {formaterEuros(calculee.article.prixCentimes)}
+                    </p>
+                  </div>
                 </div>
-                <p className="font-mono font-medium text-encre tabular-nums">
+                <p className="ml-auto font-mono font-medium text-encre tabular-nums">
                   {formaterEuros(calculee.sousTotalCentimes)}
                 </p>
               </li>

@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useId } from 'react';
+import { useId, type ReactNode } from 'react';
 
 import { formaterEuros } from '@/lib/argent';
 import {
@@ -11,6 +11,7 @@ import {
 } from '@/lib/panier/catalogue-panier';
 import { usePanier } from '@/lib/panier/contexte-panier';
 import type { LigneCalculee } from '@/lib/panier/totaux';
+import { typographier } from '@/lib/typographie';
 
 /**
  * UNE LIGNE DU PANIER, modifiable.
@@ -24,21 +25,42 @@ import type { LigneCalculee } from '@/lib/panier/totaux';
  * La composition d'un coffret « Composez le vôtre » est affichée intégralement,
  * avec l'union de ses allergènes : c'est cette ligne-là, et pas la fiche
  * produit, qui dit ce que le client a réellement mis dans son panier.
+ *
+ * LA MINIATURE (C27) vient du serveur, en nœud déjà rendu (voir
+ * `Miniatures.tsx`) : cet îlot ne fabrique aucun chemin d'image. Elle n'est
+ * pas cliquable — le nom porte déjà le lien vers la fiche.
+ *
+ * LA QUANTITÉ EST UN « − [champ] + » (C27). Le champ numérique RESTE : on peut
+ * toujours taper « 12 » au lieu d'appuyer onze fois, et il garde son libellé,
+ * sa sémantique `spinbutton` et son correctif `onBlur`. Les deux boutons
+ * réemploient le cadre `.vignette-pas` des vignettes (contour rentré, cibles de
+ * 44 px). DIFFÉRENCE ASSUMÉE avec la vignette : ici « − » est éteint à 1 au lieu
+ * de retirer la ligne — « Retirer » est juste à côté, et une ligne perdue par un
+ * appui de trop coûte plus cher dans un panier qu'en vitrine.
  */
 
 export function LignePanier({
   calculee,
   catalogue,
+  miniature,
 }: {
   readonly calculee: LigneCalculee;
   readonly catalogue: readonly ArticlePanier[];
+  readonly miniature: ReactNode;
 }) {
   const { envoyer } = usePanier();
   const identifiant = useId();
   const { article, ligne, cle } = calculee;
+  const designation = `${article.nomProduit}, ${article.format}`;
+
+  const changer = (quantite: number) => {
+    envoyer({ type: 'changerQuantite', cle, quantite });
+  };
 
   return (
-    <li className="grid gap-x-6 gap-y-3 border-b border-filet py-5 sm:grid-cols-[minmax(0,1fr)_auto]">
+    <li className="grid grid-cols-[auto_minmax(0,1fr)] gap-x-4 gap-y-3 border-b border-filet py-5 sm:grid-cols-[auto_minmax(0,1fr)_auto] sm:gap-x-6">
+      {miniature}
+
       <div className="min-w-0">
         <p className="text-encre">
           <Link
@@ -61,36 +83,66 @@ export function LignePanier({
         )}
       </div>
 
-      <div className="flex flex-wrap items-center justify-between gap-4 sm:flex-col sm:items-end sm:justify-start">
+      <div className="col-span-2 flex flex-wrap items-center justify-between gap-4 sm:col-span-1 sm:flex-col sm:items-end sm:justify-start">
         <div className="flex items-center gap-2">
           <label htmlFor={`${identifiant}-quantite`} className="etiquette text-encre-douce">
             Qté
           </label>
-          <input
-            id={`${identifiant}-quantite`}
-            type="number"
-            inputMode="numeric"
-            min={1}
-            max={article.stock}
-            step={1}
-            value={ligne.quantite}
-            onChange={(evenement) => {
-              envoyer({
-                type: 'changerQuantite',
-                cle,
-                quantite: Number.parseInt(evenement.target.value, 10),
-              });
-            }}
-            /* Le champ vidé au clavier laisse le réducteur indifférent (voir
-               `fixerQuantite`) : la quantité tenue est donc l'ancienne, mais le
-               champ, lui, est resté vide à l'écran. Ce renvoi de la quantité
-               courante à la sortie du champ recrée un état neuf, ce qui suffit
-               à React pour remettre le nombre dans le champ. */
-            onBlur={() => {
-              envoyer({ type: 'changerQuantite', cle, quantite: ligne.quantite });
-            }}
-            className="w-20 rounded-sm border border-filet bg-creme px-3 py-2 font-mono text-sm text-encre tabular-nums"
-          />
+          <div
+            role="group"
+            aria-label={typographier(`Quantité de ${designation}`)}
+            className="vignette-pas vignette-pas--panier"
+          >
+            <button
+              type="button"
+              onClick={() => {
+                if (ligne.quantite > 1) {
+                  changer(ligne.quantite - 1);
+                }
+              }}
+              aria-disabled={ligne.quantite <= 1}
+              aria-label={typographier(`Retirer un exemplaire de ${designation}`)}
+            >
+              <svg viewBox="0 0 12 12" width="12" height="12" aria-hidden="true" focusable="false">
+                <path d="M2 6h8" />
+              </svg>
+            </button>
+            <input
+              id={`${identifiant}-quantite`}
+              type="number"
+              inputMode="numeric"
+              min={1}
+              max={article.stock}
+              step={1}
+              value={ligne.quantite}
+              onChange={(evenement) => {
+                changer(Number.parseInt(evenement.target.value, 10));
+              }}
+              /* Le champ vidé au clavier laisse le réducteur indifférent (voir
+                 `fixerQuantite`) : la quantité tenue est donc l'ancienne, mais le
+                 champ, lui, est resté vide à l'écran. Ce renvoi de la quantité
+                 courante à la sortie du champ recrée un état neuf, ce qui suffit
+                 à React pour remettre le nombre dans le champ. */
+              onBlur={() => {
+                changer(ligne.quantite);
+              }}
+              className="registre tabular-nums text-encre"
+            />
+            <button
+              type="button"
+              onClick={() => {
+                if (ligne.quantite < article.stock) {
+                  changer(ligne.quantite + 1);
+                }
+              }}
+              aria-disabled={ligne.quantite >= article.stock}
+              aria-label={typographier(`Ajouter un exemplaire de ${designation}`)}
+            >
+              <svg viewBox="0 0 12 12" width="12" height="12" aria-hidden="true" focusable="false">
+                <path d="M2 6h8M6 2v8" />
+              </svg>
+            </button>
+          </div>
         </div>
 
         {/* LE SOUS-TOTAL D'UNE LIGNE — mono, chiffres tabulaires.
@@ -103,7 +155,7 @@ export function LignePanier({
             La clé React est le montant lui-même : quand il change, React
             échange le nœud, et `@starting-style` fait fondre le NOMBRE SEUL —
             zéro état, zéro minuterie, c'est le patron de la pastille de C13. */}
-        <p className="text-right">
+        <p className="ml-auto text-right">
           <span
             key={calculee.sousTotalCentimes}
             data-chiffre=""

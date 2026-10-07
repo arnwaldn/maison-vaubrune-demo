@@ -6,6 +6,7 @@ import { HerosIllustre } from '@/composants/mise-en-page/HerosIllustre';
 import { HEROS_PANIER } from '@/donnees/visuels-editoriaux';
 import { CarteSuggestion } from '@/composants/panier/CarteSuggestion';
 import { IlotPanier } from '@/composants/panier/IlotPanier';
+import { miniaturesProduits } from '@/composants/panier/Miniatures';
 import { CATALOGUE } from '@/donnees/catalogue';
 import { projeterCatalogue } from '@/lib/panier/catalogue-panier';
 import type { CandidatSuggestion } from '@/lib/suggestions';
@@ -107,6 +108,13 @@ const CARTES_SUGGESTIONS: Record<string, ReactNode> = Object.fromEntries(
   ]),
 );
 
+/**
+ * LES MINIATURES DES LIGNES (C27) — même patron que les cartes ci-dessus : le
+ * serveur rend les quinze, l'îlot n'affiche que celles dont une ligne a besoin,
+ * et une miniature non affichée n'insère jamais son `<img>`.
+ */
+const MINIATURES = miniaturesProduits(CATALOGUE);
+
 export default function PagePanier() {
   return (
     <div className="mx-auto max-w-page px-5 sm:px-8">
@@ -148,6 +156,7 @@ export default function PagePanier() {
         catalogue={CATALOGUE_PANIER}
         poolSuggestions={POOL_SUGGESTIONS}
         cartesSuggestions={CARTES_SUGGESTIONS}
+        miniatures={MINIATURES}
       />
     </div>
   );

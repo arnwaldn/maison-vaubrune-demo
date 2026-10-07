@@ -168,6 +168,27 @@ const vueVisuelSchema = z
     },
   );
 
+/* La miniature carrée de C27 : une vue SANS `alt` (elle est décorative, voir
+   `types.ts`), dont les deux dimensions sont égales. Une miniature qui ne serait
+   pas un carré se déformerait dans son cadre de 4,5 rem — ou s'y recadrerait, ce
+   que la tranche existe pour ne plus faire. */
+const miniatureSchema = z
+  .strictObject({
+    couleurDominante: z.string().regex(/^#[0-9a-f]{6}$/),
+    largeur: z.number().int().positive(),
+    hauteur: z.number().int().positive(),
+    largeurs: z.array(z.number().int().positive()).min(1),
+  })
+  .refine((vue) => vue.largeur === vue.hauteur, {
+    message: 'une miniature est un carré : largeur et hauteur doivent être égales',
+  })
+  .refine(
+    (vue) =>
+      vue.largeurs.every((valeur, rang) => rang === 0 || valeur > vue.largeurs[rang - 1]) &&
+      vue.largeurs[vue.largeurs.length - 1] === vue.largeur,
+    { message: 'largeurs doit être croissante et finir sur le côté du carré' },
+  );
+
 const produitSchema = z.strictObject({
   slug: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
   nom: z.string().min(3),
@@ -200,6 +221,7 @@ const produitSchema = z.strictObject({
     .strictObject({
       principal: vueVisuelSchema,
       ambiance: vueVisuelSchema.optional(),
+      miniature: miniatureSchema.optional(),
     })
     .optional(),
   composition: z

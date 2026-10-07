@@ -67,6 +67,7 @@ export function TiroirAjout({
   prixCentimes,
   sousTotalCentimes,
   meubles,
+  miniature,
 }: {
   readonly ouvert: boolean;
   readonly fermer: () => void;
@@ -76,6 +77,8 @@ export function TiroirAjout({
   readonly sousTotalCentimes: number;
   /** Les suggestions et la réassurance, RENDUES PAR LE SERVEUR (voir MeublesTiroir). */
   readonly meubles: ReactNode;
+  /** La miniature du produit ajouté : UN nœud, rendu par le serveur (C27). */
+  readonly miniature: ReactNode;
 }) {
   const dialogue = useRef<HTMLDialogElement>(null);
   const intitule = useId();
@@ -150,12 +153,15 @@ export function TiroirAjout({
         </button>
       </div>
 
-      <p className="tiroir-article">
-        <span className="font-titre text-titre text-encre">{nom}</span>
-        <span className="registre block text-encre-douce">
-          {format} · {formaterEuros(prixCentimes)}
-        </span>
-      </p>
+      <div className="tiroir-article">
+        {miniature}
+        <p className="min-w-0">
+          <span className="font-titre text-titre text-encre">{nom}</span>
+          <span className="registre block text-encre-douce">
+            {format} · {formaterEuros(prixCentimes)}
+          </span>
+        </p>
+      </div>
 
       <p className="tiroir-soustotal">
         <span className="etiquette text-encre-douce">Sous-total</span>

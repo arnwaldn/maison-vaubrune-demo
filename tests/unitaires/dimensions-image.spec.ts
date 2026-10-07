@@ -224,6 +224,24 @@ describe('les dimensions annoncées par le nom', () => {
     });
   });
 
+  it('lit un CARRÉ dans le nom d’une miniature : un seul nombre, deux dimensions', () => {
+    expect(dimensionsAnnonceesParLeNom('miniature-160.avif')).toEqual({
+      largeur: 160,
+      hauteur: 160,
+    });
+    expect(dimensionsAnnonceesParLeNom('miel-chataignier/miniature-320.jpg')).toEqual({
+      largeur: 320,
+      hauteur: 320,
+    });
+  });
+
+  it('ne prend pas pour un carré un nom qui contient seulement « miniature »', () => {
+    expect(dimensionsAnnonceesParLeNom('grande-miniature-320.jpg')).toEqual({
+      largeur: 320,
+      hauteur: null,
+    });
+  });
+
   it('rend null quand le nom n’annonce aucun nombre', () => {
     expect(dimensionsAnnonceesParLeNom('manifeste-livre.json')).toBeNull();
   });

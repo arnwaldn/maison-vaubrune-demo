@@ -165,6 +165,20 @@ export interface VueVisuel {
 export interface Visuel {
   readonly principal: VueVisuel;
   readonly ambiance?: VueVisuel;
+  /**
+   * LA MINIATURE CARRÉE (C27) : le produit ENTIER sur son papier, composée par
+   * le pipeline (`scripts/miniature.mjs`), pour les quatre écrans où le client
+   * revoit ce qu'il achète.
+   *
+   * Sans `alt` : la miniature est toujours DÉCORATIVE, le nom du produit est
+   * juste à côté — et son texte, s'il fallait un jour en rendre un, serait celui
+   * de `principal`, jamais une seconde description à tenir. `couleurDominante`
+   * est ici le PAPIER du carré (le pourtour du fichier livré), pas la moyenne du
+   * recadrage : c'est la couleur de réservation d'une image qui est, sur ses
+   * bords, exactement cette couleur-là. `largeur` = `hauteur` = le plus grand
+   * côté livré.
+   */
+  readonly miniature?: Omit<VueVisuel, 'alt'>;
 }
 
 /** Les vues, dans l'ordre d'apparition sur une fiche. */

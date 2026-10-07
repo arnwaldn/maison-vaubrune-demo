@@ -1,0 +1,5 @@
+Mesures AVANT C27 — 07/10/2026, branche tranche-c27 = main c602121, meme machine
+First Load JS : fiche 117 kB, /commande 119, /commande/confirmation 113, /panier 118 (plafond 125)
+CSS : 11.42 Ko gzip (plafond 12)
+HTML gz : panier 10952 ; commande 8312 ; confirmation 6376 ; fiche huile d'olive 14047
+Images transferees : voir images-avant.txt (fiche plafond 120 Ko)

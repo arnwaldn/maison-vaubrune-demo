@@ -1,0 +1,36 @@
+
+Octets d’image transférés — deux profils bridés, plafonds D36
+------------------------------------------------------------------------------
+
+PROFIL mobile 412 x 823, densite 1,75
+/boutique/huile-olive-premiere-pression
+          au chargement :   67.9 Ko (5 image(s))
+          après défilement :   67.9 Ko (5 image(s)) — plafond 120 Ko
+            /fond/marbre-coquille.avif                                   35.8 Ko
+            /produits/huile-olive-premiere-pression/ambiance-640.avif    16.8 Ko
+            /produits/huile-olive-premiere-pression/principal-640.avif   13.4 Ko
+            /produits/huile-olive-premiere-pression/miniature-160.avif    1.4 Ko
+/panier
+          au chargement :   58.0 Ko (3 image(s))
+          après défilement :   58.0 Ko (3 image(s))
+            /fond/marbre-coquille.avif                                   35.8 Ko
+            /editorial/panier/affiche-1024.avif                          21.7 Ko
+            /icon.svg                                                     0.4 Ko
+
+PROFIL bureau 1440 x 900, densite 2
+/boutique/huile-olive-premiere-pression
+          au chargement :   67.9 Ko (5 image(s))
+          après défilement :   67.9 Ko (5 image(s)) — plafond 120 Ko
+            /fond/marbre-coquille.avif                                   35.8 Ko
+            /produits/huile-olive-premiere-pression/ambiance-640.avif    16.8 Ko
+            /produits/huile-olive-premiere-pression/principal-640.avif   13.4 Ko
+            /produits/huile-olive-premiere-pression/miniature-160.avif    1.4 Ko
+/panier
+          au chargement :   58.0 Ko (3 image(s))
+          après défilement :   58.0 Ko (3 image(s))
+            /fond/marbre-coquille.avif                                   35.8 Ko
+            /editorial/panier/affiche-1024.avif                          21.7 Ko
+            /icon.svg                                                     0.4 Ko
+------------------------------------------------------------------------------
+Tous les plafonds sont tenus.
+

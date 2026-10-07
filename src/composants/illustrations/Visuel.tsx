@@ -74,7 +74,7 @@ interface ProprietesVisuel {
    * slug EXACT du catalogue, et une macro de famille n'en est pas un.
    */
   readonly racine?: 'produits' | 'editorial';
-  readonly vue: NomVueVisuel | 'macro' | 'hero' | 'illustration' | 'affiche';
+  readonly vue: NomVueVisuel | 'miniature' | 'macro' | 'hero' | 'illustration' | 'affiche';
   readonly donnees: VueVisuel;
   /**
    * La silhouette de repli — celle du produit, jamais une générique.
@@ -133,6 +133,18 @@ interface ProprietesVisuel {
    * toutes les autres restent paresseuses.
    */
   readonly prioritaire?: boolean;
+  /**
+   * LE MOMENT OÙ L'IMAGE EST DEMANDÉE, quand `prioritaire` ne dit rien (C27).
+   *
+   * `'lazy'` par défaut — c'est le comportement de tous les appelants
+   * antérieurs, et il ne change pas d'un octet. `'eager'` existe pour une
+   * image posée dans un `<dialog>` FERMÉ : le navigateur ne la voit pas
+   * (`display: none`), une image paresseuse n'y est demandée qu'à l'ouverture,
+   * et le tiroir de la fiche s'ouvrirait sur un carré vide au moment même où
+   * l'on confirme l'ajout. Contrairement à `prioritaire`, il ne change pas
+   * `fetchPriority` : l'image est demandée tout de suite, derrière le reste.
+   */
+  readonly chargement?: 'lazy' | 'eager';
   /**
    * `true` pour une vue qui ne doit JAMAIS disputer le tuyau au plus grand
    * affichage (C23). `loading="lazy"` ne suffit pas à l'en empêcher : sous
@@ -200,6 +212,7 @@ export function Visuel({
   sizes,
   largeurMaximale,
   prioritaire = false,
+  chargement = 'lazy',
   arrierePlan = false,
   impression = 'silhouette',
   className = '',
@@ -243,7 +256,7 @@ export function Visuel({
              registres : le premier décide SI l'image est demandée tout de
              suite, le second dans quel ordre elle passe. Une image de premier
              écran a besoin des deux ; les autres n'ont besoin d'aucun. */
-          loading={prioritaire ? 'eager' : 'lazy'}
+          loading={prioritaire ? 'eager' : chargement}
           /* `prioritaire` gagne si les deux sont poses — voir la doc de `arrierePlan`. */
           fetchPriority={prioritaire ? 'high' : arrierePlan ? 'low' : 'auto'}
           decoding="async"

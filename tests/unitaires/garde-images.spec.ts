@@ -723,6 +723,80 @@ describe('garde des images produit', () => {
     expect(verdict.sortie).toContain('dimensions illisibles');
   });
 
+  /* ------------------------------------------------------------------------ */
+  /* La miniature carrée, entrée en C27                                        */
+  /* ------------------------------------------------------------------------ */
+
+  it('laisse passer des miniatures carrées sous leur plafond, relevé confronté', () => {
+    const base = depot({
+      [`public/produits/${SLUG}/miniature-160.avif`]: avifNu(3_000, 160, 160),
+      [`public/produits/${SLUG}/miniature-160.jpg`]: jpegNu(4_000, 160, 160),
+      [`public/produits/${SLUG}/miniature-320.avif`]: avifNu(9_000, 320, 320),
+      [`public/produits/${SLUG}/miniature-320.jpg`]: jpegNu(12_000, 320, 320),
+      'public/produits/manifeste-livre.json': JSON.stringify({
+        fichiers: [
+          `${SLUG}/miniature-160.avif`,
+          `${SLUG}/miniature-160.jpg`,
+          `${SLUG}/miniature-320.avif`,
+          `${SLUG}/miniature-320.jpg`,
+        ],
+        derives: [
+          { fichier: `${SLUG}/miniature-160.avif`, largeur: 160, hauteur: 160 },
+          { fichier: `${SLUG}/miniature-320.jpg`, largeur: 320, hauteur: 320 },
+        ],
+      }),
+    });
+
+    const verdict = lancerGardeImages(base);
+
+    expect(verdict.sortie).toContain('aucune anomalie');
+    expect(verdict.code).toBe(0);
+    expect(verdict.sortie).toContain('4 fichier(s) mesuré(s) sur leurs octets, 2 confronté(s) au relevé');
+  });
+
+  it('échoue sur une miniature qui n’est pas un carré, sous un nom qui en promet un', () => {
+    /* L'ancien dérivé de la première rédaction : 5:8, sous le nom d'une
+       miniature. Le nom ne dit qu'un côté — c'est le module des dimensions qui
+       en tire un carré, et la garde qui l'exige des octets. */
+    const verdict = lancerGardeImages(
+      depot({ [`public/produits/${SLUG}/miniature-160.avif`]: avifNu(3_000, 160, 256) }),
+    );
+
+    expect(verdict.code).toBe(1);
+    expect(verdict.sortie).toContain('le nom annonce 160 points de haut');
+    expect(verdict.sortie).toContain('le fichier en mesure 256');
+    expect(verdict.sortie).toContain('1 en échec');
+  });
+
+  it('échoue sur une miniature qui dépasse son plafond, et sur un côté sans plafond', () => {
+    const lourde = lancerGardeImages(
+      depot({ [`public/produits/${SLUG}/miniature-160.jpg`]: jpegNu(9 * 1024, 160, 160) }),
+    );
+
+    expect(lourde.code).toBe(1);
+    expect(lourde.sortie).toContain('pour un plafond de 7 Ko');
+
+    /* 480 appartient au vocabulaire et n'a pas de plafond de miniature : la
+       garde REFUSE, comme pour tout format neuf. */
+    const sansPlafond = lancerGardeImages(
+      depot({ [`public/produits/${SLUG}/miniature-480.avif`]: avifNu(3_000, 480, 480) }),
+    );
+
+    expect(sansPlafond.code).toBe(1);
+    expect(sansPlafond.sortie).toContain('aucun plafond déclaré');
+    expect(sansPlafond.sortie).toContain('miniature-480');
+  });
+
+  it('refuse une miniature dans l’espace éditorial : elle n’appartient à aucun produit', () => {
+    const verdict = lancerGardeImages(
+      depot({ 'public/editorial/infusions/miniature-160.avif': avifNu(3_000, 160, 160) }),
+    );
+
+    expect(verdict.code).toBe(1);
+    expect(verdict.sortie).toContain('hors vocabulaire');
+    expect(verdict.sortie).toContain('miniature-160.avif');
+  });
+
   it('ne reproche AUCUNE dimension à un nom hors vocabulaire', () => {
     /* `principal-2.jpg` se termine par un nombre, mais ce n'est pas une
        largeur : c'est un nom que le contrôle 2 refuse déjà. Le sixième doit se

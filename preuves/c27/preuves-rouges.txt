@@ -1,0 +1,21 @@
+PREUVES ROUGES DE C27 — tests/e2e/miniatures.spec.ts (20 cas : 10 sur chacun des deux profils)
+-----------------------------------------------------------------------------------------------
+
+ÉTAT SAIN (sommet de la tranche) : 20 réussis.
+
+ROUGE A — « object-fit: cover » remis sur .miniature-produit img, et « ml-auto » retiré des trois prix
+(LignePanier, IlotCommande, IlotConfirmation). Construction refaite, campagne rejouée :
+  12 échoués / 8 réussis.
+8     Expected: "fill"
+8     Received: "cover"
+  Colonne des sous-totaux du panier : « Expected: 1 / Received: 2 » (deux bords droits distincts).
+  Prix du récapitulatif de /commande : bord droit « Expected: 340 / Received: 87.2 » — le prix
+  retombait seul sous la miniature, à gauche.
+
+ROUGE B — la miniature servie depuis l'ANCIEN dérivé (vue « principal », 5:8) avec « cover » :
+  8 échoués / 12 réussis (les quatre cas d'affichage de la miniature, sur les deux profils).
+7     Received string:    "http://localhost:3000/produits/huile-olive-premiere-pression/principal-320.avif"
+1     Received string:    "http://localhost:3000/produits/huile-olive-premiere-pression/principal-640.avif"
+  « Expected substring: /produits/<slug>/miniature- » — le dérivé servi n'est pas le dérivé composé.
+
+Les deux états rouges ont été rétablis avant le commit ; la construction finale est celle du sommet.

@@ -92,11 +92,16 @@ import {
  * et une macro de famille n'en est pas un. Les mélanger aurait forcé à relâcher
  * ce contrôle-là, qui est le premier des cinq et le plus utile.
  *
- * Cinq largeurs, deux formats d'encodage. Plus une image de partage, à la
+ * Six largeurs, deux formats d'encodage. Plus une image de partage, à la
  * taille imposée par les réseaux sociaux, qui n'existe qu'en `jpg` parce que
  * c'est le seul format que tous acceptent.
+ *
+ * `160` n'est entrée qu'avec la miniature carrée de C27 (`miniature-160`,
+ * `miniature-320`) : un côté, deux densités pour un cadre de 72 points CSS.
+ * Le nom d'une miniature annonce un CARRÉ — `dimensions-image.mjs` en tire la
+ * hauteur, et le sixième contrôle exige que les octets le soient.
  */
-const LARGEURS = ['320', '480', '640', '960', '1024', '1440'];
+const LARGEURS = ['160', '320', '480', '640', '960', '1024', '1440'];
 const ENCODAGES = ['avif', 'jpg'];
 const PARTAGE = 'partage-1200x630.jpg';
 
@@ -180,6 +185,14 @@ const CLEFS_EDITORIALES = [
  * pèse le double du plafond coûte le même réseau au visiteur qui le reçoit.
  */
 const PLAFONDS_KO = {
+  /* AJOUTÉS EN C27 avec la miniature carrée : un carré de côté 160 et 320, le
+     produit entier posé sur son papier étendu (voir `miniature.mjs`). Le papier
+     étendu est lisse, donc presque gratuit : mesurés sur les quinze produits, le
+     plus lourd pèse 4,8 Ko en 160 et 15,3 Ko en 320 (repli JPEG, dimensionnant ;
+     l'AVIF plafonne à 4,3 et 12,4). Plafonds posés ~30 % au-dessus, ce qui
+     laisse la place d'un produit plus riche sans laisser la place d'un oubli. */
+  'miniature-160': 7,
+  'miniature-320': 20,
   'principal-320': 30,
   /* AJOUTÉ AU ROUND 1 DE C14, avec `ambiance-480` : la marche de 320 à 640 était
      trop grossière. Une place de 240 points CSS à la densité 1,75 du profil
@@ -327,7 +340,7 @@ const ESPACES = [
   {
     nom: 'produits',
     racine: join(BASE, 'public', 'produits'),
-    vues: ['principal', 'ambiance'],
+    vues: ['principal', 'ambiance', 'miniature'],
     dossiersAdmis: SLUGS,
     regleDossier: 'un slug exact du catalogue',
     tranche: 'C14',

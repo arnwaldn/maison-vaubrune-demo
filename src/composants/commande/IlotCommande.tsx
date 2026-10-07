@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useState } from 'react';
+import { useState, type ReactNode } from 'react';
 
 import { MentionRetractation } from '@/composants/panier/MentionRetractation';
 import { RecapitulatifTotaux } from '@/composants/panier/RecapitulatifTotaux';
@@ -117,8 +117,11 @@ function lireMessageRefus(charge: unknown): string | null {
 
 export function IlotCommande({
   catalogue,
+  miniatures,
 }: {
   readonly catalogue: readonly ArticlePanier[];
+  /** Rendues par le serveur : AUCUNE aide d'image n'entre dans cet îlot (budget de la route, C27). */
+  readonly miniatures: Record<string, ReactNode>;
 }) {
   const { etat, pretALEmploi } = usePanier();
   const { surcouche } = useSurcouche();
@@ -290,7 +293,12 @@ export function IlotCommande({
 
           <ul className="mt-6 border-t border-filet">
             {totaux.lignes.map((calculee) => (
-              <LigneFigee key={calculee.cle} calculee={calculee} catalogue={catalogue} />
+              <LigneFigee
+                key={calculee.cle}
+                calculee={calculee}
+                catalogue={catalogue}
+                miniature={miniatures[calculee.article.slug]}
+              />
             ))}
           </ul>
 
@@ -396,45 +404,50 @@ function NotePrixMarchand() {
 function LigneFigee({
   calculee,
   catalogue,
+  miniature,
 }: {
   readonly calculee: LigneCalculee;
   readonly catalogue: readonly ArticlePanier[];
+  readonly miniature: ReactNode;
 }) {
   const { article, ligne } = calculee;
   const composition = ligne.composition;
 
   return (
-    <li className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2 border-b border-filet py-4">
-      <div className="min-w-0">
-        <p className="text-encre">
-          <span className="font-semibold">{article.nomProduit}</span>
-          <span className="text-encre-douce">, {article.format}</span>
-        </p>
-        <p className="mt-1 text-sm text-encre-douce">
-          {ligne.quantite} × {formaterEuros(article.prixCentimes)}
-        </p>
+    <li className="flex flex-wrap items-start justify-between gap-x-6 gap-y-2 border-b border-filet py-4">
+      <div className="flex min-w-0 items-start gap-4">
+        {miniature}
+        <div className="min-w-0">
+          <p className="text-encre">
+            <span className="font-semibold">{article.nomProduit}</span>
+            <span className="text-encre-douce">, {article.format}</span>
+          </p>
+          <p className="mt-1 text-sm text-encre-douce">
+            {ligne.quantite} × {formaterEuros(article.prixCentimes)}
+          </p>
 
-        {composition === undefined ? null : (
-          <div className="mt-2 border-l-2 border-filet pl-4 text-sm text-encre-douce">
-            <ul className="space-y-0.5">
-              {composition.map((sku) => {
-                const piece = trouverArticle(catalogue, sku);
+          {composition === undefined ? null : (
+            <div className="mt-2 border-l-2 border-filet pl-4 text-sm text-encre-douce">
+              <ul className="space-y-0.5">
+                {composition.map((sku) => {
+                  const piece = trouverArticle(catalogue, sku);
 
-                return piece === undefined ? null : (
-                  <li key={sku}>
-                    {piece.nomProduit}, {piece.format}
-                  </li>
-                );
-              })}
-            </ul>
-            <p className="mt-1.5 text-xs">
-              Allergènes&nbsp;: {unionAllergenes(composition, catalogue).join(', ')}.
-            </p>
-          </div>
-        )}
+                  return piece === undefined ? null : (
+                    <li key={sku}>
+                      {piece.nomProduit}, {piece.format}
+                    </li>
+                  );
+                })}
+              </ul>
+              <p className="mt-1.5 text-xs">
+                Allergènes&nbsp;: {unionAllergenes(composition, catalogue).join(', ')}.
+              </p>
+            </div>
+          )}
+        </div>
       </div>
 
-      <p className="font-mono font-medium text-encre tabular-nums">
+      <p className="ml-auto font-mono font-medium text-encre tabular-nums">
         {formaterEuros(calculee.sousTotalCentimes)}
       </p>
     </li>

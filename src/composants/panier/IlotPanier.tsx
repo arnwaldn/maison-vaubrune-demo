@@ -64,6 +64,7 @@ export function IlotPanier({
   catalogue,
   poolSuggestions,
   cartesSuggestions,
+  miniatures,
 }: {
   readonly catalogue: readonly ArticlePanier[];
   /**
@@ -83,6 +84,8 @@ export function IlotPanier({
    * n'entre jamais dans le document, donc n'est jamais téléchargée.
    */
   readonly cartesSuggestions: Record<string, ReactNode>;
+  /** Les miniatures des lignes, rendues par le serveur : même patron que les cartes (C27). */
+  readonly miniatures: Record<string, ReactNode>;
 }) {
   const { etat, pretALEmploi, envoyer } = usePanier();
   const totaux = calculerTotaux(etat.lignes, catalogue, etat.zone);
@@ -141,7 +144,12 @@ export function IlotPanier({
 
         <ul className="border-t border-filet">
           {totaux.lignes.map((calculee) => (
-            <LignePanier key={calculee.cle} calculee={calculee} catalogue={catalogue} />
+            <LignePanier
+              key={calculee.cle}
+              calculee={calculee}
+              catalogue={catalogue}
+              miniature={miniatures[calculee.article.slug]}
+            />
           ))}
         </ul>
 

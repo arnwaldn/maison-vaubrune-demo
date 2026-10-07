@@ -2360,10 +2360,81 @@ html[data-affichage-rayon='liste'] .rayon-grille .carte-visuel {
 
 .vignette-pastille:has(input:focus-visible),
 .vignette-bouton:focus-visible,
-.vignette-pas button:focus-visible {
+.vignette-pas button:focus-visible,
+.vignette-pas input:focus-visible {
   outline: 3px solid var(--color-encre);
   outline-offset: 3px;
   box-shadow: 0 0 0 6px var(--color-coquille);
+}
+
+/* LE CHAMP NUMÉRIQUE DU PANIER, ENCADRÉ ENTRE « − » ET « + » (C27).
+
+   Il reste un `<input type="number">` (on tape « 12 » au lieu d'appuyer onze
+   fois, sémantique `spinbutton` intacte), mais il perd ce qui ferait doublon
+   dans le cadre : sa bordure propre — le contour rentré du pas la remplace — et
+   ses flèches natives, sans quoi un bureau montrerait deux jeux de contrôles.
+   Hors couche, comme tout ce bloc : la bordure et le fond que le préambule de
+   Tailwind pose sur les champs sont dans une couche, et celle-ci les bat. Les
+   cibles gardent 44 px : le champ fait la même hauteur que les boutons. */
+.vignette-pas input[type='number'] {
+  width: 3.25rem;
+  height: 2.75rem;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  text-align: center;
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
+
+.vignette-pas input[type='number']::-webkit-inner-spin-button,
+.vignette-pas input[type='number']::-webkit-outer-spin-button {
+  margin: 0;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+/* LA MINIATURE D'UN PRODUIT ACHETÉ (C27) — le cadre est FIXE : un carré de
+   4,5 rem (4 rem sous 40 rem), donc la place est réservée avant le premier octet.
+   L'image qu'il porte est ELLE-MÊME un carré, composé par le pipeline (le produit
+   entier, 6 % d'air, le papier étendu) : elle remplit le cadre exactement, SANS
+   `object-fit`. Le `cover` de la première rédaction retirait 37,5 % de la hauteur
+   d'un 5:8 — bouchon et base d'une bouteille — et « un produit coupé serait une
+   faute ». Hors couche : elle doit battre `h-auto`/`w-full` que `<Visuel>` pose sur
+   son `<img>` (anti-patron n° 21). */
+.miniature-produit {
+  display: grid;
+  flex: none;
+  place-items: center;
+  align-self: start;
+  width: 4.5rem;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  border-radius: 4px;
+  background-color: var(--color-papier);
+}
+
+@media (width < 40rem) {
+  .miniature-produit {
+    width: 4rem;
+  }
+}
+
+.miniature-produit .visuel-produit,
+.miniature-produit picture,
+.miniature-produit img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Le tiroir de la fiche : la miniature à gauche du nom, alignée en haut. */
+.tiroir-article {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
 }
 
 @media (hover: hover) {
@@ -3293,6 +3364,24 @@ html.lenis [data-lenis-prevent] {
 
   .visuel-produit [data-repli-silhouette] {
     display: block !important;
+  }
+
+  /* LA MINIATURE IMPRIMÉE (C27) : la silhouette de repli, posée dans le même
+     carré que la photographie, sans le remplissage de 1,5 rem ni les 168
+     points qui la feraient déborder d'un cadre de 4,5 rem. */
+  .miniature-produit [data-repli-silhouette] {
+    height: 100%;
+    padding: 0;
+  }
+
+  .miniature-produit [data-repli-silhouette] svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .miniature-produit {
+    background: transparent;
   }
 
   /*
