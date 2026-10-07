@@ -296,11 +296,18 @@ test('les sous-totaux du panier forment une colonne, bords droits égaux, à 360
     const bords = await bordsDroitsDesPrix(lignes(page), '[data-chiffre]');
 
     expect(bords.prix).toHaveLength(3);
-    /* Une COLONNE : tous les bords droits sont les mêmes. Le bord de la ligne,
-       lui, n'est PAS celui des prix — « Retirer » occupe la fin de la rangée —,
-       et ce n'est pas ce que la retouche promet : elle promet que le décalage
-       ne dépend plus de la largeur du montant. */
-    expect(new Set(bords.prix).size).toBe(1);
+    /* Une COLONNE, CALÉE AU BORD DROIT DE LA LIGNE : sous 40 rem, « Retirer »
+       passe toujours à la ligne suivante (C27, correctif de l'intégration
+       continue), donc le sous-total finit au bord de la rangée quelle que soit
+       la largeur du montant ou la police du système. Le bord seul ne suffirait
+       pas : sous Windows il restait égal d'une ligne à l'autre alors que la
+       rangée cassait sous Linux — c'est le calage au bord qui ne dépend plus
+       des métriques de police. Les mesures sont jointes au message d'échec. */
+    const releve = JSON.stringify(bords);
+    expect(new Set(bords.prix).size, releve).toBe(1);
+    bords.prix.forEach((bord, rang) => {
+      expect(bord, releve).toBeCloseTo(bords.ligne[rang] ?? Number.NaN, 0);
+    });
 
     /* Le test ne vaut que si les montants n'ont PAS tous la même largeur : sans
        cela, une colonne alignée à gauche passerait aussi. */
@@ -332,7 +339,7 @@ test('le prix de chaque ligne du récapitulatif de la commande est aligné à dr
     const bords = await bordsDroitsDesPrix(lignesFigees, 'p.font-mono');
 
     expect(bords.prix).toHaveLength(2);
-    expect(new Set(bords.prix).size).toBe(1);
+    expect(new Set(bords.prix).size, JSON.stringify(bords)).toBe(1);
     expect(bords.prix[0]).toBeCloseTo(bords.ligne[0] ?? Number.NaN, 0);
   }
 });
@@ -375,7 +382,7 @@ test('la confirmation montre les miniatures, et le papier les remplace par des s
     const bords = await bordsDroitsDesPrix(lignesCommande, 'p.font-mono');
 
     expect(bords.prix).toHaveLength(2);
-    expect(new Set(bords.prix).size).toBe(1);
+    expect(new Set(bords.prix).size, JSON.stringify(bords)).toBe(1);
     expect(bords.prix[0]).toBeCloseTo(bords.ligne[0] ?? Number.NaN, 0);
   }
 

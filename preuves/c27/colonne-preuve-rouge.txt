@@ -1,0 +1,6 @@
+    Error: {"prix":[286.7,286.7,286.7],"ligne":[340,340,340]}
+    Expected: 340
+    Received: 286.7
+    Expected precision:    0
+    Expected difference: < 0.5
+    Received difference:   53.30000000000001
