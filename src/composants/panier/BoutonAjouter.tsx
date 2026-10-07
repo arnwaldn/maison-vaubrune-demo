@@ -62,6 +62,7 @@ export function BoutonAjouter({
   articles,
   pieces,
   meubles,
+  miniature,
   prix,
 }: {
   /** Les variantes de CE produit, projetées côté serveur. */
@@ -70,6 +71,8 @@ export function BoutonAjouter({
   readonly pieces: readonly ArticlePanier[];
   /** Suggestions et reassurance, RENDUES PAR LE SERVEUR (voir MeublesTiroir). */
   readonly meubles: ReactNode;
+  /** La miniature du produit de la fiche, rendue par le serveur (C27). */
+  readonly miniature: ReactNode;
   /** Un prix par reference — le corollaire de D17, six fois moins lourd que la projection. */
   readonly prix: Readonly<Record<string, number>>;
 }) {
@@ -246,6 +249,7 @@ export function BoutonAjouter({
         prixCentimes={article.prixCentimes}
         sousTotalCentimes={sousTotalDesLignes(etat.lignes, prix)}
         meubles={meubles}
+        miniature={miniature}
       />
     </div>
   );

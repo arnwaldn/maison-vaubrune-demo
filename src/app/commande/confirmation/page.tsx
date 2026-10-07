@@ -3,6 +3,8 @@ import type { Metadata } from 'next';
 import { IlotConfirmation } from '@/composants/commande/IlotConfirmation';
 import { BlocTitre } from '@/composants/mise-en-page/BlocTitre';
 import { HerosIllustre } from '@/composants/mise-en-page/HerosIllustre';
+import { miniaturesProduits } from '@/composants/panier/Miniatures';
+import { CATALOGUE } from '@/donnees/catalogue';
 import { HEROS_COMMANDE_CONFIRMATION } from '@/donnees/visuels-editoriaux';
 
 /**
@@ -41,6 +43,11 @@ export const metadata: Metadata = {
     'récapitulatif, état de la commande et journal.',
   alternates: { canonical: '/commande/confirmation' },
 };
+
+/* Les miniatures de la commande (C27), rendues par le serveur : l'îlot lit la
+   commande dans le navigateur et n'affiche que celles dont une ligne a besoin.
+   À l'impression, chacune devient la silhouette de son produit (D35). */
+const MINIATURES = miniaturesProduits(CATALOGUE);
 
 export default function PageConfirmation() {
   return (
@@ -89,7 +96,7 @@ export default function PageConfirmation() {
         </p>
       </HerosIllustre>
 
-      <IlotConfirmation />
+      <IlotConfirmation miniatures={MINIATURES} />
     </div>
   );
 }

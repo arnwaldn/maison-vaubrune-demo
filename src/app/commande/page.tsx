@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 
 import { IlotCommande } from '@/composants/commande/IlotCommande';
+import { miniaturesProduits } from '@/composants/panier/Miniatures';
 import { BlocTitre } from '@/composants/mise-en-page/BlocTitre';
 import { HerosIllustre } from '@/composants/mise-en-page/HerosIllustre';
 import { CATALOGUE } from '@/donnees/catalogue';
@@ -42,6 +43,10 @@ export const metadata: Metadata = {
 
 const CATALOGUE_PANIER = projeterCatalogue(CATALOGUE);
 
+/* Les miniatures du récapitulatif (C27) : rendues ICI, jamais dans l'îlot — la
+   route la plus serrée du budget n'importe aucune aide d'image. */
+const MINIATURES = miniaturesProduits(CATALOGUE);
+
 export default function PageCommande() {
   return (
     <div className="mx-auto max-w-page px-5 sm:px-8">
@@ -72,7 +77,7 @@ export default function PageCommande() {
         />
       </HerosIllustre>
 
-      <IlotCommande catalogue={CATALOGUE_PANIER} />
+      <IlotCommande catalogue={CATALOGUE_PANIER} miniatures={MINIATURES} />
     </div>
   );
 }

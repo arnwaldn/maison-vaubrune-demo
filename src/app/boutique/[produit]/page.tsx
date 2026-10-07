@@ -9,6 +9,7 @@ import { DonneesStructurees } from '@/composants/mise-en-page/DonneesStructurees
 import { BlocReassurance } from '@/composants/panier/BlocReassurance';
 import { BoutonAjouter } from '@/composants/panier/BoutonAjouter';
 import { MeublesTiroir } from '@/composants/panier/MeublesTiroir';
+import { miniatureProduit } from '@/composants/panier/Miniatures';
 import {
   EtiquettesVitrine,
   PrixLePlusBasVitrine,
@@ -368,6 +369,7 @@ export default async function PageProduit({ params }: ProprietesPage) {
               articles={projeterCatalogue([produit])}
               pieces={piecesEligiblesProjetees(produit)}
               meubles={<MeublesTiroir slug={produit.slug} />}
+              miniature={miniatureProduit(produit, true)}
               prix={prixDepuisCatalogue(projeterCatalogue(CATALOGUE))}
             />
 
