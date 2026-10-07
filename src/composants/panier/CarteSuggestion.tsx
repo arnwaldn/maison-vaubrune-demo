@@ -1,9 +1,9 @@
-import Link from "next/link";
+import Link from 'next/link';
 
-import { Visuel } from "@/composants/illustrations/Visuel";
-import { AchatVignette } from "@/composants/panier/AchatVignette";
-import { formatsDeVignette } from "@/lib/panier/catalogue-panier";
-import type { Produit } from "@/lib/types";
+import { Visuel } from '@/composants/illustrations/Visuel';
+import { AchatVignette } from '@/composants/panier/AchatVignette';
+import { formatsDeVignette } from '@/lib/panier/catalogue-panier';
+import type { Produit } from '@/lib/types';
 
 /**
  * UNE CARTE DE VENTE CROISÉE — un seul dessin pour tout le dépôt (C24).
@@ -34,11 +34,7 @@ export function CarteSuggestion({ produit }: { readonly produit: Produit }) {
        du nom au-dessus. `h-full` est nécessaire : sans lui la carte se contente
        de son contenu et le `mt-auto` n'a rien à repousser. */
     <div className="flex h-full flex-col">
-      <Link
-        href={`/boutique/${produit.slug}`}
-        className="block no-underline"
-        data-suggestion
-      >
+      <Link href={`/boutique/${produit.slug}`} className="block no-underline" data-suggestion>
         {produit.visuel === undefined ? null : (
           <Visuel
             slug={produit.slug}
@@ -69,4 +65,3 @@ export function CarteSuggestion({ produit }: { readonly produit: Produit }) {
     </div>
   );
 }
-
