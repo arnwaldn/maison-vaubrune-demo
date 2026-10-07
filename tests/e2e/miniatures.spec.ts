@@ -290,6 +290,9 @@ test('les sous-totaux du panier forment une colonne, bords droits égaux, à 360
     await expect(lignes(page)).toHaveCount(3);
     await sansDebordement(page);
 
+    /* Les métriques de police décident des retours à la ligne : on mesure
+       après le chargement des polices, jamais pendant. */
+    await page.evaluate(() => document.fonts.ready);
     const bords = await bordsDroitsDesPrix(lignes(page), '[data-chiffre]');
 
     expect(bords.prix).toHaveLength(3);
@@ -323,6 +326,9 @@ test('le prix de chaque ligne du récapitulatif de la commande est aligné à dr
     await page.setViewportSize({ width: largeur, height: 800 });
     await sansDebordement(page);
 
+    /* Les métriques de police décident des retours à la ligne : on mesure
+       après le chargement des polices, jamais pendant. */
+    await page.evaluate(() => document.fonts.ready);
     const bords = await bordsDroitsDesPrix(lignesFigees, 'p.font-mono');
 
     expect(bords.prix).toHaveLength(2);
