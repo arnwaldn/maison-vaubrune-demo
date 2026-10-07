@@ -281,9 +281,9 @@ export function dimensionsDepuisOctets(octets) {
 /**
  * LES DIMENSIONS QUE LE NOM ANNONCE, s'il en annonce.
  *
- * Deux formes dans le vocabulaire fermé de `verifier-images.mjs` :
+ * Trois formes dans le vocabulaire fermé de `verifier-images.mjs` :
  * `<vue>-<largeur>.<format>` n'annonce qu'une LARGEUR, `partage-1200x630.jpg`
- * annonce les deux. Rendre `null` pour le reste laisse la garde dire « nom hors
+ * annonce les deux, et `miniature-<côté>.<format>` annonce un CARRÉ. Rendre `null` pour le reste laisse la garde dire « nom hors
  * vocabulaire » sous son propre intitulé, au lieu de le redire ici.
  */
 export function dimensionsAnnonceesParLeNom(nom) {
@@ -302,6 +302,17 @@ export function dimensionsAnnonceesParLeNom(nom) {
 
   if (avecCodec !== null) {
     return { largeur: Number(avecCodec[1]), hauteur: null };
+  }
+
+  /* QUATRIÈME FORME, ajoutée en C27 : la miniature est un CARRÉ, et son nom
+     (`miniature-160.avif`) ne donne qu'un côté. La hauteur est donc la même
+     valeur — c'est ce qui fait échouer la garde sur une miniature de 160 × 256
+     qui aurait gardé le nom d'un carré, au lieu de la laisser passer parce que
+     « le nom ne promet que la largeur ». */
+  const carre = /(?:^|\/)miniature-(\d+)\.[a-z0-9]+$/.exec(nom);
+
+  if (carre !== null) {
+    return { largeur: Number(carre[1]), hauteur: Number(carre[1]) };
   }
 
   const largeurSeule = /-(\d+)\.[a-z0-9]+$/.exec(nom);

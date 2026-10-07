@@ -116,6 +116,16 @@ import {
   verdictSignature,
 } from './etincelle.mjs';
 import { lireDimensions } from './dimensions-image.mjs';
+import {
+  REGLAGES as REGLAGES_MINIATURE,
+  boiteDuProduit,
+  cadrageMiniature,
+  composer,
+  coutures as couturesDuCarre,
+  papierDuCarre,
+  partDuProduit,
+  placerPhoto,
+} from './miniature.mjs';
 import { detecterMetadonnees, libelleMarqueur } from './metadonnees-binaires.mjs';
 import { refaireSortie } from './sortie-images.mjs';
 
@@ -643,6 +653,13 @@ async function produire(sharp, entree) {
     derives.push(await produirePartage(sharp, entree, dossier));
   }
 
+  /* LA MINIATURE CARRÉE (C27) naît de la vue principale d'un PRODUIT : c'est le
+     seul paquet dont le panier, le récapitulatif, la confirmation et le tiroir
+     ont besoin, et c'est lui qui porte le recadrage que la miniature resserre. */
+  if (entree.vue === 'principal' && entree.espace === 'produits') {
+    derives.push(...(await produireMiniatures(sharp, entree, dossier)));
+  }
+
   return derives;
 }
 
@@ -776,6 +793,170 @@ async function produirePartage(sharp, entree, dossier) {
     sha256: sha256(destination),
     master: entree.sha256,
   };
+}
+
+/**
+ * LA MINIATURE CARRÉE — le produit ENTIER, posé sur son papier (C27).
+ *
+ * Quatre écrans montrent au client ce qu'il achète dans un carré de 72 points
+ * (64 sous 40 rem). La première rédaction y posait la vue principale en
+ * `object-fit: cover` : un carré central retire 37,5 % de la hauteur d'un 5:8, et
+ * la bouteille perdait son bouchon et sa base. « Un produit coupé serait une
+ * faute » (C15) : la miniature est donc COMPOSÉE par le pipeline, comme l'image
+ * de partage, et le navigateur ne recadre plus rien.
+ *
+ * Trois gestes, dont toute l'arithmétique est dans `miniature.mjs` (module pur,
+ * éprouvé sans sharp) :
+ *
+ *   1. LE PRODUIT EST CHERCHÉ dans le recadrage de la vue principale — par ses
+ *      arêtes, parce que l'écart au papier confond l'ombre portée avec un sachet
+ *      de kraft — et le cadre est sa boîte englobante plus 6 % d'air. Si la boîte
+ *      touche un bord du recadrage, on garde le recadrage ENTIER : on perd de la
+ *      taille, jamais de produit.
+ *   2. LE CADRE EST POSÉ dans le carré par UN SEUL `resize()` (la leçon du round 1
+ *      de C15 : sharp ne retient que le dernier). Les dimensions sont calculées
+ *      ici et non laissées à `contain` — c'est ce qui permet de savoir où se
+ *      trouve la couture, donc de la mesurer.
+ *   3. LE CARRÉ EST COMPLÉTÉ côté par côté avec la ligne de bord de la
+ *      photographie, lissée (voir `composer`) : pas d'aplat unique, qui laissait
+ *      24 niveaux sur 255 au bord droit du coffret.
+ *
+ * La couture est MESURÉE SUR LES OCTETS LIVRÉS — le fichier écrit est relu et
+ * décodé, jamais le tampon d'avant l'encodeur — et plus de
+ * `REGLAGES_MINIATURE.coutureMax` niveaux sur un côté fait échouer la livraison.
+ * Le relevé porte, pour chaque fichier, le cadre prélevé, la boîte du produit,
+ * son placement dans le carré, sa part, les coutures, et le papier (la couleur de
+ * réservation du composant).
+ */
+async function produireMiniatures(sharp, entree, dossier) {
+  const derives = [];
+  const boite = entree.boite;
+
+  const recadrage = await sharp(entree.chemin)
+    .extract({ left: boite.x, top: boite.y, width: boite.largeur, height: boite.hauteur })
+    .toColourspace('srgb')
+    .removeAlpha()
+    .raw()
+    .toBuffer({ resolveWithObject: true });
+
+  const produit = boiteDuProduit({
+    pixels: recadrage.data,
+    largeur: recadrage.info.width,
+    hauteur: recadrage.info.height,
+    canaux: recadrage.info.channels,
+  });
+
+  if (produit === null) {
+    anomalie(`${entree.master} — aucun produit trouvé dans le recadrage : miniature impossible`);
+    return derives;
+  }
+
+  const cadre = cadrageMiniature(produit, { largeur: boite.largeur, hauteur: boite.hauteur });
+
+  noter(
+    `${entree.dossier} — miniature : produit ${String(produit.largeur)}×${String(produit.hauteur)} ` +
+      `en x ${String(produit.x)}, y ${String(produit.y)}` +
+      (cadre.entier ? ', recadrage ENTIER gardé (la boîte touche un bord)' : '') +
+      `, ${(partDuProduit(produit, cadre) * 100).toFixed(1)} % du carré`,
+  );
+
+  for (const cote of REGLAGES_MINIATURE.cotes) {
+    const placement = placerPhoto(cadre, cote);
+
+    /* UN SEUL `resize()`, aux dimensions exactes du placement. */
+    const photo = await sharp(entree.chemin)
+      .extract({
+        left: boite.x + cadre.x,
+        top: boite.y + cadre.y,
+        width: cadre.largeur,
+        height: cadre.hauteur,
+      })
+      .resize({ width: placement.largeur, height: placement.hauteur, fit: 'fill' })
+      .toColourspace('srgb')
+      .removeAlpha()
+      .raw()
+      .toBuffer({ resolveWithObject: true });
+
+    const carre = composer(
+      { pixels: photo.data, largeur: placement.largeur, hauteur: placement.hauteur },
+      cote,
+      placement,
+    );
+    const papier = papierDuCarre(carre, cote);
+    const hex = `#${[papier.r, papier.g, papier.b]
+      .map((valeur) => valeur.toString(16).padStart(2, '0'))
+      .join('')}`;
+
+    for (const format of ['avif', 'jpg']) {
+      const nom = `miniature-${String(cote)}.${format}`;
+      const destination = join(dossier, nom);
+      const canal = sharp(Buffer.from(carre), { raw: { width: cote, height: cote, channels: 3 } });
+
+      await (format === 'avif'
+        ? canal.avif(QUALITES.avif)
+        : canal.jpeg(QUALITES.jpeg)
+      ).toFile(destination);
+
+      for (const { motif, trahit } of detecterMetadonnees(destination)) {
+        anomalie(
+          `${entree.dossier}/${nom} — marqueur « ${libelleMarqueur(motif)} » survivant : ${trahit}`,
+        );
+      }
+
+      const mesure = mesurer(destination, `${entree.dossier}/${nom}`);
+
+      /* LE NOM PROMET UN CARRÉ : les octets doivent l'être, aux dimensions près. */
+      if (mesure !== null && (mesure.largeur !== cote || mesure.hauteur !== cote)) {
+        anomalie(
+          `${entree.dossier}/${nom} — ${String(cote)}×${String(cote)} demandés, ` +
+            `${String(mesure.largeur)}×${String(mesure.hauteur)} produits`,
+        );
+      }
+
+      /* LA COUTURE, SUR LE FICHIER ÉCRIT : on le relit et on le décode. */
+      const relu = await sharp(destination)
+        .toColourspace('srgb')
+        .removeAlpha()
+        .raw()
+        .toBuffer({ resolveWithObject: true });
+      const coutures = couturesDuCarre(relu.data, cote, placement);
+
+      for (const [bord, valeur] of Object.entries(coutures)) {
+        if (valeur !== null && valeur > REGLAGES_MINIATURE.coutureMax) {
+          anomalie(
+            `${entree.dossier}/${nom} — couture ${bord} de ${String(valeur)} niveaux sur 255, ` +
+              `pour un maximum de ${String(REGLAGES_MINIATURE.coutureMax)}`,
+          );
+        }
+      }
+
+      derives.push({
+        espace: entree.espace,
+        fichier: `${entree.dossier}/${nom}`,
+        vue: 'miniature',
+        largeur: mesure?.largeur ?? null,
+        hauteur: mesure?.hauteur ?? null,
+        format,
+        octets: statSync(destination).size,
+        sha256: sha256(destination),
+        master: entree.sha256,
+        /* Ce qui rend la couture re-mesurable sans rouvrir le master. */
+        cadre,
+        produit: {
+          x: produit.x,
+          y: produit.y,
+          largeur: produit.largeur,
+          hauteur: produit.hauteur,
+        },
+        placement,
+        part: Math.round(partDuProduit(produit, cadre) * 1000) / 1000,
+        coutures,
+        papier: hex,
+      });
+    }
+  }
+
+  return derives;
 }
 
 /* -------------------------------------------------------------------------- */
@@ -953,6 +1134,18 @@ try {
     `          rayon entier, quinze principales AVIF 320 : ${ko(rayon(320))} sur 180 Ko`,
   );
   console.log(`          rayon entier, quinze principales AVIF 480 : ${ko(rayon(480))}`);
+
+  const miniatures = (largeur, format) =>
+    somme(
+      (d) =>
+        d.espace === 'produits' && d.vue === 'miniature' && d.format === format && d.largeur === largeur,
+    );
+
+  console.log(
+    `          miniatures carrées, quinze produits : AVIF 160 ${ko(miniatures(160, 'avif'))}, ` +
+      `AVIF 320 ${ko(miniatures(320, 'avif'))}, JPEG 160 ${ko(miniatures(160, 'jpg'))}, ` +
+      `JPEG 320 ${ko(miniatures(320, 'jpg'))}`,
+  );
 
   for (const observation of observations) {
     console.log(`          ${observation}`);
