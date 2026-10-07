@@ -165,19 +165,31 @@ export function LignePanier({
           </span>
         </p>
 
-        <button
-          type="button"
-          onClick={() => {
-            envoyer({ type: 'retirer', cle });
-          }}
-          className="text-xs text-encre-douce underline decoration-filet decoration-2 underline-offset-4 hover:text-terre hover:decoration-terre"
-        >
-          Retirer
-          <span className="sr-only">
-            {' '}
-            {article.nomProduit}, {article.format}
-          </span>
-        </button>
+        {/* SUR TÉLÉPHONE, « RETIRER » PASSE TOUJOURS À LA LIGNE (C27). Sur une
+            même rangée que « Qté − N + » et le sous-total, il ne tenait que si
+            le montant était court : « 644,00 € » faisait passer « Retirer » à la
+            ligne sur les polices de Linux et pas sur celles de Windows, et les
+            sous-totaux cessaient de former une colonne (intégration continue
+            rouge, 07/10). Le saut est donc imposé — une enveloppe de largeur
+            pleine, calée à droite — au lieu d'être laissé aux métriques de
+            police : le sous-total finit toujours au bord droit de la rangée. Le
+            bouton garde sa taille naturelle : pas de zone de retrait invisible
+            sur toute la largeur. */}
+        <div className="basis-full text-right sm:basis-auto">
+          <button
+            type="button"
+            onClick={() => {
+              envoyer({ type: 'retirer', cle });
+            }}
+            className="text-xs text-encre-douce underline decoration-filet decoration-2 underline-offset-4 hover:text-terre hover:decoration-terre"
+          >
+            Retirer
+            <span className="sr-only">
+              {' '}
+              {article.nomProduit}, {article.format}
+            </span>
+          </button>
+        </div>
       </div>
     </li>
   );
